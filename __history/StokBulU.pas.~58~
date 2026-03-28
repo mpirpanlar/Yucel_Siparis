@@ -1,0 +1,360 @@
+unit StokBulU;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics,
+  Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
+  uniGUIClasses, uniGUIForm, uniGUIBaseClasses, uniPanel, Data.DB, DBAccess,
+  Uni, MemDS, uniBasicGrid, uniDBGrid, uniButton, uniEdit, uniMultiItem,
+  uniComboBox, uniDBComboBox, uniDBLookupComboBox, uniCheckBox;
+
+type
+  TfrmStokBul = class(TUniForm)
+    UniContainerPanel1: TUniContainerPanel;
+    UniPanel8: TUniPanel;
+    edStokKod: TUniEdit;
+    btnStokListele: TUniButton;
+    btnSecileniKullan: TUniButton;
+    UniDBGrid2: TUniDBGrid;
+    qStokListe: TUniQuery;
+    dStokListe: TUniDataSource;
+    BirimCombo: TUniComboBox;
+    edMiktar: TUniNumberEdit;
+    dovizCombo: TUniDBLookupComboBox;
+    chkOzel1: TUniCheckBox;
+    spStokListe: TUniStoredProc;
+    edEk1: TUniEdit;
+    edEk2: TUniEdit;
+    procedure btnStokListeleClick(Sender: TObject);
+    procedure btnSecileniKullanClick(Sender: TObject);
+    procedure UniFormShow(Sender: TObject);
+    procedure UniDBGrid2CellClick(Column: TUniDBGridColumn);
+    procedure edStokKodKeyPress(Sender: TObject; var Key: Char);
+    procedure edMiktarKeyPress(Sender: TObject; var Key: Char);
+    procedure edMiktarClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+function frmStokBul: TfrmStokBul;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  MainModule, uniGUIApplication, DMU, SiparisU, SiparisDMU, Genel, TmpU;
+
+function frmStokBul: TfrmStokBul;
+begin
+  Result := TfrmStokBul(UniMainModule.GetFormInstance(TfrmStokBul));
+end;
+
+procedure TfrmStokBul.btnStokListeleClick(Sender: TObject);
+  Var
+    SQL : String;
+begin
+
+  spStokListe.Close;
+  spStokListe.Prepare;
+  spStokListe.ParamByName('sube').AsInteger := tmp.xSubeKodu;
+  spStokListe.ParamByName('depo').AsInteger := Tmp.xKullaniciDepo;
+  spStokListe.ParamByName('stok').AsString := edStokKod.Text;
+  spStokListe.ExecProc;
+  Application.ProcessMessages;
+
+//      qStokListe.SQL.Add(' where (STOK_ADI LIKE :StokKod) ');
+//      qStokListe.SQL.Add(' where (STOK_ADI LIKE :StokKod) ');
+//      qStokListe.ParamByName('StokKod').AsString:='%'+edStokKod.Text+'%';
+
+//        Sorgu:= Sorgu+' and ((stok_ad like''%'+StokAdi+'%'') or (orj_parca like''%'+StokAdi+'%'') or (ozel_1 like''%'+StokAdi+'%''))  ';
+
+
+
+
+//  qStokListe.Close;
+//  qStokListe.SQL.Clear;
+//  qStokListe.SQL.Add('');
+//  qStokListe.SQL.Add(' SELECT ');
+//  qStokListe.SQL.Add('  TBLSTSABIT.SUBE_KODU ');
+//  qStokListe.SQL.Add(' ,ISLETME_KODU ');
+//  qStokListe.SQL.Add(' ,STOK_KODU ');
+//  qStokListe.SQL.Add(' ,URETICI_KODU ');
+//  qStokListe.SQL.Add(' ,STOK_ADI ');
+//  qStokListe.SQL.Add(' ,GRUP_KODU ');
+//  qStokListe.SQL.Add(' ,KOD_1 ');
+//  qStokListe.SQL.Add(' ,KOD_2 ');
+//  qStokListe.SQL.Add(' ,KOD_3 ');
+//  qStokListe.SQL.Add(' ,KOD_4 ');
+//  qStokListe.SQL.Add(' ,KOD_5 ');
+//  qStokListe.SQL.Add(' ,SATICI_KODU ');
+//  qStokListe.SQL.Add(' ,OLCU_BR1 ');
+//  qStokListe.SQL.Add(' ,OLCU_BR2 ');
+//  qStokListe.SQL.Add(' ,PAY_1 ');
+//  qStokListe.SQL.Add(' ,PAYDA_1 ');
+//  qStokListe.SQL.Add(' ,OLCU_BR3 ');
+//  qStokListe.SQL.Add(' ,PAY2 ');
+//  qStokListe.SQL.Add(' ,PAYDA2 ');
+//  qStokListe.SQL.Add(' ,FIAT_BIRIMI ');
+//  qStokListe.SQL.Add(' ,AZAMI_STOK ');
+//  qStokListe.SQL.Add(' ,ASGARI_STOK ');
+//  qStokListe.SQL.Add(' ,TEMIN_SURESI ');
+//  qStokListe.SQL.Add(' ,KUL_MIK ');
+//  qStokListe.SQL.Add(' ,RISK_SURESI ');
+//  qStokListe.SQL.Add(' ,ZAMAN_BIRIMI ');
+//  qStokListe.SQL.Add(' ,SATIS_FIAT1 ');
+//  qStokListe.SQL.Add(' ,SATIS_FIAT2 ');
+//  qStokListe.SQL.Add(' ,SATIS_FIAT3 ');
+//  qStokListe.SQL.Add(' ,SATIS_FIAT4 ');
+//  qStokListe.SQL.Add(' ,SAT_DOV_TIP ');
+//  qStokListe.SQL.Add(' ,DOV_ALIS_FIAT ');
+//  qStokListe.SQL.Add(' ,DOV_MAL_FIAT ');
+//  qStokListe.SQL.Add(' ,DOV_SATIS_FIAT ');
+//  qStokListe.SQL.Add(' ,MUH_DETAYKODU ');
+//  qStokListe.SQL.Add(' ,BIRIM_AGIRLIK ');
+//  qStokListe.SQL.Add(' ,NAKLIYET_TUT ');
+//  qStokListe.SQL.Add(' ,KDV_ORANI ');
+//  qStokListe.SQL.Add(' ,ALIS_DOV_TIP ');
+//  qStokListe.SQL.Add(' ,DEPO_KODU ');
+//  qStokListe.SQL.Add(' ,DOV_TUR ');
+//  qStokListe.SQL.Add(' ,URET_OLCU_BR ');
+//  qStokListe.SQL.Add(' ,BILESENMI ');
+//  qStokListe.SQL.Add(' ,MAMULMU ');
+//  qStokListe.SQL.Add(' ,FORMUL_TOPLAMI ');
+//  qStokListe.SQL.Add(' ,UPDATE_KODU ');
+//  qStokListe.SQL.Add(' ,MAX_ISKONTO ');
+//  qStokListe.SQL.Add(' ,ECZACI_KARI ');
+//  qStokListe.SQL.Add(' ,MIKTAR ');
+//  qStokListe.SQL.Add(' ,MAL_FAZLASI ');
+//  qStokListe.SQL.Add(' ,KDV_TENZIL_ORAN ');
+//  qStokListe.SQL.Add(' ,KILIT ');
+//  qStokListe.SQL.Add(' ,ONCEKI_KOD ');
+//  qStokListe.SQL.Add(' ,SONRAKI_KOD ');
+//  qStokListe.SQL.Add(' ,BARKOD1 ');
+//  qStokListe.SQL.Add(' ,BARKOD2 ');
+//  qStokListe.SQL.Add(' ,BARKOD3 ');
+//  qStokListe.SQL.Add(' ,ALIS_KDV_KODU ');
+//  qStokListe.SQL.Add(' ,ALIS_FIAT1 ');
+//  qStokListe.SQL.Add(' ,ALIS_FIAT2 ');
+//  qStokListe.SQL.Add(' ,ALIS_FIAT3 ');
+//  qStokListe.SQL.Add(' ,ALIS_FIAT4 ');
+//  qStokListe.SQL.Add(' ,LOT_SIZE ');
+//  qStokListe.SQL.Add(' ,MIN_SIP_MIKTAR ');
+//  qStokListe.SQL.Add(' ,SABIT_SIP_ARALIK ');
+//  qStokListe.SQL.Add(' ,SIP_POLITIKASI ');
+//  qStokListe.SQL.Add(' ,OZELLIK_KODU1 ');
+//  qStokListe.SQL.Add(' ,OZELLIK_KODU2 ');
+//  qStokListe.SQL.Add(' ,OZELLIK_KODU3 ');
+//  qStokListe.SQL.Add(' ,OZELLIK_KODU4 ');
+//  qStokListe.SQL.Add(' ,OZELLIK_KODU5 ');
+//  qStokListe.SQL.Add(' ,OPSIYON_KODU1 ');
+//  qStokListe.SQL.Add(' ,OPSIYON_KODU2 ');
+//  qStokListe.SQL.Add(' ,OPSIYON_KODU3 ');
+//  qStokListe.SQL.Add(' ,OPSIYON_KODU4 ');
+//  qStokListe.SQL.Add(' ,OPSIYON_KODU5 ');
+//  qStokListe.SQL.Add(' ,BILESEN_OP_KODU ');
+//  qStokListe.SQL.Add(' ,SIP_VER_MAL ');
+//  qStokListe.SQL.Add(' ,ELDE_BUL_MAL ');
+//  qStokListe.SQL.Add(' ,YIL_TAH_KUL_MIK ');
+//  qStokListe.SQL.Add(' ,EKON_SIP_MIKTAR ');
+//  qStokListe.SQL.Add(' ,ESKI_RECETE ');
+//  qStokListe.SQL.Add(' ,OTOMATIK_URETIM ');
+//  qStokListe.SQL.Add(' ,ALFKOD ');
+//  qStokListe.SQL.Add(' ,SAFKOD ');
+//  qStokListe.SQL.Add(' ,KODTURU ');
+//  qStokListe.SQL.Add(' ,S_YEDEK1 ');
+//  qStokListe.SQL.Add(' ,S_YEDEK2 ');
+//  qStokListe.SQL.Add(' ,F_YEDEK3 ');
+//  qStokListe.SQL.Add(' ,F_YEDEK4 ');
+//  qStokListe.SQL.Add(' ,C_YEDEK5 ');
+//  qStokListe.SQL.Add(' ,C_YEDEK6 ');
+//  qStokListe.SQL.Add(' ,B_YEDEK7 ');
+//  qStokListe.SQL.Add(' ,I_YEDEK8 ');
+//  qStokListe.SQL.Add(' ,L_YEDEK9 ');
+//  qStokListe.SQL.Add(' ,D_YEDEK10 ');
+//  qStokListe.SQL.Add(' ,GIRIS_SERI ');
+//  qStokListe.SQL.Add(' ,CIKIS_SERI ');
+//  qStokListe.SQL.Add(' ,SERI_BAK ');
+//  qStokListe.SQL.Add(' ,SERI_MIK ');
+//  qStokListe.SQL.Add(' ,SERI_GIR_OT ');
+//  qStokListe.SQL.Add(' ,SERI_CIK_OT ');
+//  qStokListe.SQL.Add(' ,SERI_BASLANGIC ');
+//  qStokListe.SQL.Add(' ,FIYATKODU ');
+//  qStokListe.SQL.Add(' ,FIYATSIRASI ');
+//  qStokListe.SQL.Add(' ,PLANLANACAK ');
+//  qStokListe.SQL.Add(' ,LOT_SIZECUSTOMER ');
+//  qStokListe.SQL.Add(' ,MIN_SIP_MIKTARCUSTOMER ');
+//  qStokListe.SQL.Add(' ,GUMRUKTARIFEKODU ');
+//  qStokListe.SQL.Add(' ,ABCKODU ');
+//  qStokListe.SQL.Add(' ,PERFORMANSKODU ');
+//  qStokListe.SQL.Add(' ,SATICISIPKILIT ');
+//  qStokListe.SQL.Add(' ,MUSTERISIPKILIT ');
+//  qStokListe.SQL.Add(' ,SATINALMAKILIT ');
+//  qStokListe.SQL.Add(' ,SATISKILIT ');
+//  qStokListe.SQL.Add(' ,EN ');
+//  qStokListe.SQL.Add(' ,BOY ');
+//  qStokListe.SQL.Add(' ,GENISLIK ');
+//  qStokListe.SQL.Add(' ,SIPLIMITVAR ');
+//  qStokListe.SQL.Add(' ,SONSTOKKODU ');
+//  qStokListe.SQL.Add(' ,ONAYTIPI ');
+//  qStokListe.SQL.Add(' ,ONAYNUM ');
+//  qStokListe.SQL.Add(' ,FIKTIF_MAM ');
+//  qStokListe.SQL.Add(' ,YAPILANDIR ');
+//  qStokListe.SQL.Add(' ,SBOMVARMI ');
+//  qStokListe.SQL.Add(' ,BAGLISTOKKOD ');
+//  qStokListe.SQL.Add(' ,YAPKOD ');
+//  qStokListe.SQL.Add(' ,ALISTALTEKKILIT ');
+//  qStokListe.SQL.Add(' ,SATISTALTEKKILIT ');
+//  qStokListe.SQL.Add(' ,S_YEDEK3 ');
+//  qStokListe.SQL.Add(' ,STOKMEVZUAT ');
+//  qStokListe.SQL.Add(' ,OTVTEVKIFAT ');
+//  qStokListe.SQL.Add(' ,SERIBARKOD ');
+//  qStokListe.SQL.Add(' , ISNULL((SELECT MIKTAR1_BAKIYE FROM HV_STOK_DEPO_BAKIYE P WITH(NOLOCK) WHERE (P.SUBE_KODU = '''+ IntToStr(Tmp.xSubeKodu) +''') AND (P.STOK_KODU = TBLSTSABIT.STOK_KODU) AND (DEPO_KODU = '''+ IntToStr(Tmp.xKullaniciDepo) +''')),0) AS DEPO_MIKTAR ');
+//  qStokListe.SQL.Add(' ,ISNULL(Y.ACIK_YUKLEME_TOPLAM,0) AS ''ACIK_YUKLEME_TOPLAM'' ');
+//  qStokListe.SQL.Add(' , ((ISNULL((SELECT MIKTAR1_BAKIYE FROM HV_STOK_DEPO_BAKIYE P WITH(NOLOCK) WHERE (P.SUBE_KODU = '''+ IntToStr(Tmp.xSubeKodu) +''') AND (P.STOK_KODU = TBLSTSABIT.STOK_KODU) AND (DEPO_KODU = '''+ IntToStr(Tmp.xKullaniciDepo) +''')),0)) - ');
+//  qStokListe.SQL.Add(' (ISNULL(Y.ACIK_YUKLEME_TOPLAM,0))) AS ''KULLANILABILIR_BAKIYE'' ');
+//  qStokListe.SQL.Add(' , D.ISIM AS KUR');
+//  qStokListe.SQL.Add(' FROM TBLSTSABIT ');
+//  qStokListe.SQL.Add(' LEFT JOIN ASYA_ENTEGRE.DBO.HV_STOK_ACIKYUKLEME Y WITH(NOLOCK) ON (Y.STOKKODU = STOK_KODU) AND (Y.SUBE_KODU = 0) ');
+//  qStokListe.SQL.Add(' LEFT JOIN NETSIS.DBO.KUR D WITH(NOLOCK) ON (D.SIRA=SAT_DOV_TIP) ');
+//  if edStokKod.Text <> '' then
+//    begin
+//      qStokListe.SQL.Add(' where (STOK_ADI LIKE :StokKod) ');
+//      qStokListe.ParamByName('StokKod').AsString:='%'+edStokKod.Text+'%';
+//
+////        Sorgu:= Sorgu+' and ((stok_ad like''%'+StokAdi+'%'') or (orj_parca like''%'+StokAdi+'%'') or (ozel_1 like''%'+StokAdi+'%''))  ';
+//
+//
+//      qStokListe.Open;
+//      Application.ProcessMessages;
+//    end else
+//    begin
+//      qStokListe.Open;
+//      Application.ProcessMessages;
+//    end;
+
+//
+//  SQL:=' SELECT * FROM TBLSTSABIT '+
+//  ' , 0 AS ''CM_BORCT'', 0 AS ''CM_ALACT'', 0 AS ''BAKIYE'', 0 as VADE_GUNU, 0 AS ISKONTO_ORANI, 0 AS ''RISKLIMITI'' '+
+//  ' FROM PLT_CARIKAYDET '+
+//  ' WHERE CARI_ISIM LIKE ''%' + edCariKod.Text + '%'' ';
+//
+//    if chkMuhtelif.Checked = True then
+//      begin
+//        SQL :=SQL+ ' AND CARI_KODU=''000000'' ';
+//      end;
+//
+//   SQL :=SQL+' UNION ';
+//  SQL :=SQL+' SELECT ''CARIKART'' AS ''KAYNAK'' ';
+////  frmSiparisDM.qCari.SQL.Add(', VERGI_NUMARASI ');
+//   SQL :=SQL+' , CASE WHEN VERGI_NUMARASI IS NULL THEN (SELECT E.TCKIMLIKNO FROM TBLCASABITEK E WHERE E.CARI_KOD = TBLCASABIT.CARI_KOD) ELSE VERGI_NUMARASI END ''VERGI_NUMARASI'' ';
+//   SQL :=SQL+', CARI_KOD, CARI_ISIM, CARI_ADRES, CARI_IL, CARI_ILCE, EMAIL, CARI_TEL, '''' AS ''KULLANICI_ADI'', VERGI_DAIRESI ';
+//   SQL :=SQL+' , CM_BORCT, CM_ALACT, (CM_BORCT-CM_ALACT) AS ''BAKIYE'', VADE_GUNU, ISKONTO_ORANI, ISNULL(R.RISKLIMITI,0) AS RISKLIMITI ';
+//   SQL :=SQL+' FROM TBLCASABIT ';
+//   SQL :=SQL+' 	LEFT JOIN TBLCARISK R WITH(NOLOCK) ON (R.CARIKOD = TBLCASABIT.CARI_KOD) ';
+//   SQL :=SQL+' WHERE CARI_TIP = ''A'' ';
+//   SQL :=SQL+' AND CARI_ISIM LIKE ''%' + edCariKod.Text + '%'' ';
+//
+//    if chkMuhtelif.Checked = True then
+//      begin
+//         SQL :=SQL+' AND CARI_KOD = ''000000'' ';
+//      end;
+//
+//  Genel.xTabloAc(qCari,SQL);
+//
+//
+//
+//
+//  qStokListe.Open;
+end;
+
+procedure TfrmStokBul.edMiktarClick(Sender: TObject);
+begin
+  edMiktar.SelectAll;
+end;
+
+procedure TfrmStokBul.edMiktarKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    begin
+      btnSecileniKullan.SetFocus;
+      btnSecileniKullan.Click;
+    end;
+
+end;
+
+procedure TfrmStokBul.edStokKodKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    begin
+      btnStokListele.SetFocus;
+      btnStokListele.Click;
+    end;
+end;
+
+procedure TfrmStokBul.btnSecileniKullanClick(Sender: TObject);
+var
+  Ek1,Ek2 : String;
+begin
+  if edMiktar.Value = 0 then
+    begin
+      UniMainModule.saHata.Show('Miktar 0 olamaz...');
+      Abort;
+    end;
+
+  if BirimCombo.Text = '' then
+    begin
+      UniMainModule.saHata.Show('Birim seçilmelidir...');
+      Abort;
+    end;
+
+  if dovizCombo.Text = '' then
+    begin
+      UniMainModule.saHata.Show('Döviz Tipi seçilmelidir...');
+      Abort;
+    end;
+
+  if edEk1.Text = '' then Ek1 := 'BOS' else Ek1 := edEk1.Text;
+  if edEk2.Text = '' then Ek2 := 'BOS' else Ek2 := edEk2.Text;
+
+  if chkOzel1.Checked = True then
+    begin
+      frmSiparisDM.StokEkle(spStokListe.FieldByName('STOK_KODU').AsString, BirimCombo.Text, edMiktar.Value,dovizCombo.Text,1,0,Ek1,Ek2);
+    end else
+    begin
+      frmSiparisDM.StokEkle(spStokListe.FieldByName('STOK_KODU').AsString, BirimCombo.Text, edMiktar.Value,dovizCombo.Text,0,0,Ek1,Ek2);
+    end;
+
+
+  if frmSiparisDM.qFisBaslik.State IN [dsEdit,dsInsert] then frmSiparisDM.qFisBaslik.Post;
+
+  if frmSiparisDM.qFisDetay.State IN [dsEdit,dsInsert] then frmSiparisDM.qFisDetay.Post;
+      frmSiparisDM.qFisDetay.ApplyUpdates;
+
+  if frmSiparisDM.qEk.State IN [dsEdit,dsInsert] then frmSiparisDM.qEk.Post;
+      frmSiparisDM.qEk.ApplyUpdates;
+
+  Close;
+
+end;
+
+procedure TfrmStokBul.UniDBGrid2CellClick(Column: TUniDBGridColumn);
+begin
+  BirimCombo.Items.Clear;
+  BirimCombo.Items.Add(spStokListe.FieldByName('OLCU_BR1').AsString);
+  BirimCombo.Items.Add(spStokListe.FieldByName('OLCU_BR2').AsString);
+  BirimCombo.Items.Add(spStokListe.FieldByName('OLCU_BR3').AsString);
+  BirimCombo.ItemIndex := 0;
+  dovizCombo.KeyValue := spStokListe.FieldByName('SAT_DOV_TIP').Value;
+  chkOzel1.Checked := False;
+end;
+
+procedure TfrmStokBul.UniFormShow(Sender: TObject);
+begin
+//  btnStokListele.Click;
+end;
+
+end.

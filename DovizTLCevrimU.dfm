@@ -1,0 +1,93 @@
+object frmDovizTLCevrim: TfrmDovizTLCevrim
+  Left = 270
+  Top = 80
+  ClientHeight = 73
+  ClientWidth = 411
+  Caption = 'D'#246'viz-TL '#199'evrim'
+  OnShow = UniFormShow
+  BorderStyle = bsSingle
+  Position = poDesigned
+  OldCreateOrder = False
+  BorderIcons = [biSystemMenu]
+  MonitoredKeys.Keys = <>
+  TextHeight = 15
+  object UniPanel1: TUniPanel
+    Left = 0
+    Top = 0
+    Width = 411
+    Height = 57
+    Hint = ''
+    Align = alTop
+    TabOrder = 0
+    BorderStyle = ubsNone
+    Caption = ''
+    Layout = 'hbox'
+    LayoutConfig.Width = '100%'
+    object btnAktar: TUniButton
+      Left = 152
+      Top = 4
+      Width = 125
+      Height = 50
+      Hint = ''
+      Caption = 'Sat'#305'ra Aktar'
+      ParentFont = False
+      Font.Charset = TURKISH_CHARSET
+      Font.Color = clWhite
+      Font.Height = -13
+      Font.Name = 'Segoe UI Semibold'
+      Font.Style = [fsBold]
+      TabOrder = 1
+      ClientEvents.UniEvents.Strings = (
+        
+          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+          'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'warning'#39';'#13#10'}')
+      ScreenMask.Enabled = True
+      Images = UniMainModule.Resim_24
+      ImageIndex = 0
+      IconAlign = iaRight
+      LayoutConfig.Margin = '7 5 7 30'
+      OnClick = btnAktarClick
+    end
+    object txtTLFiyat: TUniFormattedNumberEdit
+      Left = 16
+      Top = 19
+      Width = 113
+      Hint = ''
+      Alignment = taRightJustify
+      TabOrder = 2
+      DecimalSeparator = ','
+      ThousandSeparator = '.'
+      OnKeyPress = txtTLFiyatKeyPress
+    end
+  end
+  object lblStokKodu: TUniLabel
+    Left = 32
+    Top = 88
+    Width = 63
+    Height = 13
+    Hint = ''
+    Visible = False
+    Caption = 'lblStokKodu'
+    TabOrder = 1
+  end
+  object txtDovizFiyat: TUniFormattedNumberEdit
+    Left = 104
+    Top = 131
+    Width = 121
+    Hint = ''
+    Visible = False
+    TabOrder = 2
+    DecimalSeparator = ','
+    ThousandSeparator = '.'
+  end
+  object txtKur: TUniFormattedNumberEdit
+    Left = 244
+    Top = 131
+    Width = 121
+    Hint = ''
+    Visible = False
+    TabOrder = 3
+    DecimalSeparator = ','
+    ThousandSeparator = '.'
+  end
+end

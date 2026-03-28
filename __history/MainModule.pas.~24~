@@ -1,0 +1,50 @@
+unit MainModule;
+
+interface
+
+uses
+  uniGUIMainModule, SysUtils, Classes, uniGUIBaseClasses, uniGUIClasses,
+  uniSweetAlert, uniImageList;
+
+type
+  TUniMainModule = class(TUniGUIMainModule)
+    saYetki: TUniSweetAlert;
+    saHata: TUniSweetAlert;
+    Resim_24: TUniNativeImageList;
+    saKaydet: TUniSweetAlert;
+    saHata_1: TUniSweetAlert;
+    procedure UniGUIMainModuleSessionTimeout(ASession: TObject;
+      var ExtendTimeOut: Integer);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+  var
+  xKullaniciGrupID, xSubeKodu, xKullaniciDepo, xKullaniciId, xKullaniciAdmin : Integer;
+  xParaBirimi, xNetsisProjeUygulamasi, xNetsisSirketKodu, xKullaniciAdi, xNetsisKullanici, xNetsisSifre, xNetsisPlasiyer : String;
+
+function UniMainModule: TUniMainModule;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  UniGUIVars, ServerModule, uniGUIApplication, SiparisU, SiparisDMU;
+
+function UniMainModule: TUniMainModule;
+begin
+  Result := TUniMainModule(UniApplication.UniMainModule)
+end;
+
+procedure TUniMainModule.UniGUIMainModuleSessionTimeout(ASession: TObject;
+  var ExtendTimeOut: Integer);
+begin
+  ExtendTimeOut := 1800000;
+end;
+
+initialization
+  RegisterMainModuleClass(TUniMainModule);
+end.

@@ -1,0 +1,120 @@
+unit KullanicilarU;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics,
+  Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
+  uniGUIClasses, uniGUIForm, uniBasicGrid, uniDBGrid, uniMultiItem, uniComboBox,
+  uniPanel, uniEdit, uniBitBtn, uniMenuButton, uniButton, uniGUIBaseClasses,
+  Data.DB, DBAccess, Uni, MemDS, uniDBComboBox, uniDBLookupComboBox,
+  uniSweetAlert, uniDBEdit;
+
+type
+  TfrmKullanicilar = class(TUniForm)
+    UniContainerPanel1: TUniContainerPanel;
+    UniPanel2: TUniPanel;
+    UniButton1: TUniButton;
+    bntKaydet: TUniButton;
+    btnDuzenle: TUniButton;
+    btnSil: TUniButton;
+    UniButton2: TUniButton;
+    UniPanel1: TUniPanel;
+    edRenkKod: TUniEdit;
+    btnListele: TUniButton;
+    UniSimplePanel4: TUniSimplePanel;
+    cbGrupla: TUniComboBox;
+    UniSimplePanel2: TUniSimplePanel;
+    UniDBGrid1: TUniDBGrid;
+    qKullanici: TUniQuery;
+    dsKullanici: TUniDataSource;
+    UniHiddenPanel1: TUniHiddenPanel;
+    qKullaniciGrup: TUniQuery;
+    dsKullaniciGrup: TUniDataSource;
+    qDepo: TUniQuery;
+    dsDepo: TUniDataSource;
+    saSil: TUniSweetAlert;
+    edSifre: TUniDBEdit;
+    qKullaniciKullaniciID: TIntegerField;
+    qKullaniciKullaniciAd: TStringField;
+    qKullaniciKullaniciSifre: TStringField;
+    qKullaniciKullaniciGrupID: TIntegerField;
+    qKullaniciKullaniciDepoID: TIntegerField;
+    qKullaniciSkin: TStringField;
+    qKullaniciNetsisSirketKodu: TStringField;
+    qKullaniciNetsisSubeKodu: TIntegerField;
+    qKullaniciNetsisDepoKodu: TIntegerField;
+    UniDBLookupComboBox1: TUniDBLookupComboBox;
+    qKullaniciGrupKullaniciGrupID: TIntegerField;
+    qKullaniciGrupKullaniciGrupAd: TStringField;
+    qKullaniciLKullaniciGrup: TStringField;
+    qKullaniciNetsisPlasiyerKodu: TStringField;
+    qKullaniciDovizTakipHangisi: TSmallintField;
+    procedure UniFormShow(Sender: TObject);
+    procedure UniButton1Click(Sender: TObject);
+    procedure bntKaydetClick(Sender: TObject);
+    procedure btnDuzenleClick(Sender: TObject);
+    procedure btnSilClick(Sender: TObject);
+    procedure saSilConfirm(Sender: TObject);
+    procedure UniButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+function frmKullanicilar: TfrmKullanicilar;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  MainModule, uniGUIApplication, Genel, Main, DMU;
+
+function frmKullanicilar: TfrmKullanicilar;
+begin
+  Result := TfrmKullanicilar(UniMainModule.GetFormInstance(TfrmKullanicilar));
+end;
+
+procedure TfrmKullanicilar.bntKaydetClick(Sender: TObject);
+begin
+  if qKullanici.State IN [dsEdit,dsInsert] then qKullanici.Post;
+  UniMainModule.saKaydet.Show;
+end;
+
+procedure TfrmKullanicilar.btnDuzenleClick(Sender: TObject);
+begin
+  UniDBGrid1.Options := UniDBGrid1.Options + [dgEditing];
+end;
+
+procedure TfrmKullanicilar.btnSilClick(Sender: TObject);
+begin
+  saSil.Show();
+end;
+
+procedure TfrmKullanicilar.saSilConfirm(Sender: TObject);
+begin
+    qKullanici.Delete;
+    UniMainModule.saHata.Show('Silme iþlemi tamamlandý.');
+end;
+
+procedure TfrmKullanicilar.UniButton1Click(Sender: TObject);
+begin
+  UniDBGrid1.Options := UniDBGrid1.Options + [dgEditing];
+  qKullanici.Append;
+end;
+
+procedure TfrmKullanicilar.UniButton2Click(Sender: TObject);
+begin
+    MainForm.NavPage.ActivePage.Close;
+end;
+
+procedure TfrmKullanicilar.UniFormShow(Sender: TObject);
+begin
+  qDepo.Open;
+  qKullaniciGrup.Open;
+  qKullanici.Open;
+end;
+
+end.

@@ -1,0 +1,83 @@
+Siparis.exe: 00003364: 01:16:56 []:>--------------------------------------------------------------<
+Siparis.exe: 00003364: 01:16:56 [TUniServerModule]:Server First Init.
+Siparis.exe: 00003364: 01:16:56 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00003364: 01:16:56 [TUniServerModule]:Global Cache Folder Erased. <6> Files deleted.
+Siparis.exe: 00003364: 01:16:56 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00003364: 01:16:56 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00003898: 01:18:55 []:>--------------------------------------------------------------<
+Siparis.exe: 00003898: 01:18:55 [TUniServerModule]:Server First Init.
+Siparis.exe: 00003898: 01:18:55 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00003898: 01:18:55 [TUniServerModule]:Global Cache Folder Erased. <10> Files deleted.
+Siparis.exe: 00003898: 01:18:55 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00003898: 01:18:55 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00002FE4: 01:19:04 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: mbp1KHosH810A5059E7 ) : Addr: $0078E97E
+Siparis.exe: 00003B30: 01:20:21 []:>--------------------------------------------------------------<
+Siparis.exe: 00003B30: 01:20:21 [TUniServerModule]:Server First Init.
+Siparis.exe: 00003B30: 01:20:21 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00003B30: 01:20:21 [TUniServerModule]:Global Cache Folder Erased. <10> Files deleted.
+Siparis.exe: 00003B30: 01:20:21 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00003B30: 01:20:21 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00003F70: 01:20:23 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: dVS2unGf5G10A505A6C ) : Addr: $0078E97E
+Siparis.exe: 000001D0: 01:39:13 []:>--------------------------------------------------------------<
+Siparis.exe: 000001D0: 01:39:13 [TUniServerModule]:Server First Init.
+Siparis.exe: 000001D0: 01:39:13 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 000001D0: 01:39:13 [TUniServerModule]:Global Cache Folder Erased. <10> Files deleted.
+Siparis.exe: 000001D0: 01:39:13 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 000001D0: 01:39:13 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00003644: 01:39:20 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: Y6oYS9BKtJ10A505ACC ) : Addr: $0078E97E
+Siparis.exe: 00003B14: 01:39:59 [127.0.0.1]:Exception : uniDBGrid: Error while getting group field data: qSiparisListesi: Field 'FisTip' not found : Addr: $008082F7
+Siparis.exe: 00004A40: 01:40:37 [127.0.0.1]:Exception : uniDBGrid.OnColumnSort/OnMultiColumnSort" event must be handled when "uniDBGrid.Grouping" is enabled. : Addr: $0080A495
+Siparis.exe: 00003F44: 01:41:24 []:>--------------------------------------------------------------<
+Siparis.exe: 00003F44: 01:41:24 [TUniServerModule]:Server First Init.
+Siparis.exe: 00003F44: 01:41:24 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00003F44: 01:41:24 [TUniServerModule]:Global Cache Folder Erased. <11> Files deleted.
+Siparis.exe: 00003F44: 01:41:24 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00003F44: 01:41:24 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00003688: 01:55:09 []:>--------------------------------------------------------------<
+Siparis.exe: 00003688: 01:55:09 [TUniServerModule]:Server First Init.
+Siparis.exe: 00003688: 01:55:09 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00003688: 01:55:09 [TUniServerModule]:Global Cache Folder Erased. <11> Files deleted.
+Siparis.exe: 00003688: 01:55:09 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00003688: 01:55:09 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00000840: 01:55:13 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: 3ioogpUDSD10A506082 ) : Addr: $0078E97E
+Siparis.exe: 00003830: 01:56:18 []:>--------------------------------------------------------------<
+Siparis.exe: 00003830: 01:56:18 [TUniServerModule]:Server First Init.
+Siparis.exe: 00003830: 01:56:18 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00003830: 01:56:18 [TUniServerModule]:Global Cache Folder Erased. <12> Files deleted.
+Siparis.exe: 00003830: 01:56:18 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00003830: 01:56:18 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00003D44: 01:56:23 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: MNUO1TKxxJ10A50643F ) : Addr: $0078E97E
+Siparis.exe: 0000158C: 01:57:08 []:>--------------------------------------------------------------<
+Siparis.exe: 0000158C: 01:57:08 [TUniServerModule]:Server First Init.
+Siparis.exe: 0000158C: 01:57:08 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 0000158C: 01:57:08 [TUniServerModule]:Global Cache Folder Erased. <11> Files deleted.
+Siparis.exe: 0000158C: 01:57:08 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 0000158C: 01:57:08 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00001674: 01:57:11 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: 1slwljqoyr10A506493 ) : Addr: $0078E97E
+Siparis.exe: 00002F04: 10:05:46 []:>--------------------------------------------------------------<
+Siparis.exe: 00002F04: 10:05:46 [TUniServerModule]:Server First Init.
+Siparis.exe: 00002F04: 10:05:46 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00002F04: 10:05:46 [TUniServerModule]:Global Cache Folder Erased. <11> Files deleted.
+Siparis.exe: 00002F04: 10:05:46 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00002F04: 10:05:46 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 000015C8: 10:30:13 []:>--------------------------------------------------------------<
+Siparis.exe: 000015C8: 10:30:13 [TUniServerModule]:Server First Init.
+Siparis.exe: 000015C8: 10:30:13 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 000015C8: 10:30:13 [TUniServerModule]:Global Cache Folder Erased. <15> Files deleted.
+Siparis.exe: 000015C8: 10:30:13 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 000015C8: 10:30:13 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00001F54: 10:30:18 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: kmmpB6ZTZI10A50E95C ) : Addr: $0078E97E
+Siparis.exe: 000025BC: 10:41:27 []:>--------------------------------------------------------------<
+Siparis.exe: 000025BC: 10:41:27 [TUniServerModule]:Server First Init.
+Siparis.exe: 000025BC: 10:41:27 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 000025BC: 10:41:27 [TUniServerModule]:Global Cache Folder Erased. <14> Files deleted.
+Siparis.exe: 000025BC: 10:41:27 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 000025BC: 10:41:27 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 0000220C: 10:41:30 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: QmrsXB5ykg10A50EFF8 ) : Addr: $0078E97E
+Siparis.exe: 00001F8C: 10:45:49 []:>--------------------------------------------------------------<
+Siparis.exe: 00001F8C: 10:45:49 [TUniServerModule]:Server First Init.
+Siparis.exe: 00001F8C: 10:45:49 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00001F8C: 10:45:49 [TUniServerModule]:Global Cache Folder Erased. <18> Files deleted.
+Siparis.exe: 00001F8C: 10:45:49 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00001F8C: 10:45:49 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00004434: 10:46:51 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: vREk2nq9Ux10A50F329 ) : Addr: $0078E97E

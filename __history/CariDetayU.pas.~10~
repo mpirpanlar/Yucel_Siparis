@@ -1,0 +1,73 @@
+unit CariDetayU;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics,
+  Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
+  uniGUIClasses, uniGUIForm, uniBasicGrid, uniDBGrid, uniGUIBaseClasses,
+  uniPanel, Data.DB, DBAccess, Uni, MemDS;
+
+type
+  TfrmCariDetay = class(TUniForm)
+    UniContainerPanel1: TUniContainerPanel;
+    UniDBGrid1: TUniDBGrid;
+    qCariDetay: TUniQuery;
+    dCariDetay: TUniDataSource;
+    qCariDetayCARI_KOD: TStringField;
+    qCariDetayCARI_ISIM: TStringField;
+    qCariDetayTARIH: TDateTimeField;
+    qCariDetayCARI_TIP: TStringField;
+    qCariDetayHAREKET_TURU: TStringField;
+    qCariDetayHAREKET: TStringField;
+    qCariDetayVADE_TARIHI: TDateTimeField;
+    qCariDetayBELGE_NO: TStringField;
+    qCariDetayACIKLAMA: TStringField;
+    qCariDetayBORC: TFloatField;
+    qCariDetayALACAK: TFloatField;
+    qCariDetayBAKIYE: TFloatField;
+    qCariDetayINC_KEY_NUMBER: TIntegerField;
+    qCariDetayKAPATILMIS_TUTAR: TFloatField;
+    procedure UniFormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    CariKod : String;
+  end;
+
+function frmCariDetay: TfrmCariDetay;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  MainModule, uniGUIApplication;
+
+procedure Sorgula(CariKod:String);
+begin
+  with frmCariDetay.qCariDetay do
+    begin
+      Close;
+      SQL.Clear;
+      SQL.Add(' SELECT * FROM HV_CAHAR WHERE CARI_KOD =:Car ORDER BY TARIH ASC');
+        ParamByName('Car').AsString := CariKod;
+      Open;
+      Application.ProcessMessages;
+    end;
+
+
+end;
+
+function frmCariDetay: TfrmCariDetay;
+begin
+  Result := TfrmCariDetay(UniMainModule.GetFormInstance(TfrmCariDetay));
+end;
+
+procedure TfrmCariDetay.UniFormShow(Sender: TObject);
+begin
+  Sorgula(CariKod);
+end;
+
+end.

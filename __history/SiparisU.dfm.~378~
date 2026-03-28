@@ -1,0 +1,2344 @@
+object frmSiparis: TfrmSiparis
+  Left = 0
+  Top = 0
+  ClientHeight = 681
+  ClientWidth = 1263
+  Caption = 'M'#252#351'teri Sipari'#351'leri'
+  OnShow = UniFormShow
+  BorderStyle = bsNone
+  OldCreateOrder = False
+  MonitoredKeys.Keys = <>
+  AlignmentControl = uniAlignmentClient
+  Layout = 'fit'
+  OnCreate = UniFormCreate
+  TextHeight = 15
+  object UniContainerPanel1: TUniContainerPanel
+    Left = 8
+    Top = 8
+    Width = 1193
+    Height = 633
+    Hint = ''
+    ParentColor = False
+    TabOrder = 0
+    Layout = 'vbox'
+    object pnlButonUst: TUniPanel
+      Left = 38
+      Top = 19
+      Width = 894
+      Height = 35
+      Hint = ''
+      TabOrder = 1
+      BorderStyle = ubsNone
+      Caption = ''
+      Color = 7375243
+      Layout = 'hbox'
+      LayoutConfig.Width = '100%'
+      object bntKaydet: TUniButton
+        Left = 17
+        Top = 4
+        Width = 100
+        Height = 28
+        Hint = ''
+        Caption = 'Kaydet'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 1
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      config.' +
+            'cls="btnKaydet";'#13#10'}')
+        ScreenMask.Enabled = True
+        LayoutConfig.Margin = '3 5 3 3'
+        OnClick = bntKaydetClick
+      end
+      object btnDuzenle: TUniButton
+        Left = 137
+        Top = 4
+        Width = 100
+        Height = 28
+        Hint = ''
+        Caption = 'D'#252'zenle'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 3
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      config.' +
+            'cls="btnDuzenle";'#13#10'}')
+        LayoutConfig.Margin = '3 5 3 3'
+        OnClick = btnDuzenleClick
+      end
+      object btnSil: TUniButton
+        Left = 266
+        Top = 4
+        Width = 100
+        Height = 28
+        Hint = ''
+        Caption = 'Sil'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 4
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      config.' +
+            'cls="btnSil";'#13#10'}')
+        ScreenMask.Enabled = True
+        LayoutConfig.Margin = '3 5 3 3'
+        OnClick = btnSilClick
+      end
+      object btnNetsisGonder: TUniButton
+        Left = 407
+        Top = 4
+        Width = 120
+        Height = 28
+        Hint = ''
+        Caption = 'Netsis G'#246'nder'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 5
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'warning'#39';'#13#10'}')
+        ScreenMask.Enabled = True
+        ScreenMask.Message = 'Netsis G'#246'nderim yap'#305'l'#305'yor. L'#252'tfen bekleyiniz...'
+        LayoutConfig.Margin = '3 5 3 3'
+        OnClick = btnNetsisGonderClick
+      end
+      object btnYazdir: TUniButton
+        Left = 558
+        Top = 4
+        Width = 100
+        Height = 28
+        Hint = ''
+        Caption = 'Yazd'#305'r (TL)'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 6
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      config.' +
+            'cls="btnKapat";'#13#10'}')
+        LayoutConfig.Margin = '3 5 3 20'
+        OnClick = btnYazdirClick
+      end
+      object btnYazdirDoviz: TUniButton
+        Left = 664
+        Top = 3
+        Width = 100
+        Height = 28
+        Hint = ''
+        Caption = 'Yazd'#305'r (D'#246'viz)'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 7
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      config.' +
+            'cls="btnKapat";'#13#10'}')
+        LayoutConfig.Margin = '3 5 3 20'
+        OnClick = btnYazdirDovizClick
+      end
+      object btnKapat: TUniButton
+        Left = 775
+        Top = 4
+        Width = 100
+        Height = 28
+        Hint = ''
+        Caption = 'Kapat'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 2
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      config.' +
+            'cls="btnKapat";'#13#10'}')
+        ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+        LayoutConfig.Margin = '3 5 3 20'
+        OnClick = btnKapatClick
+      end
+    end
+    object UniPageControl1: TUniPageControl
+      Left = 24
+      Top = 96
+      Width = 1129
+      Height = 489
+      Hint = ''
+      ActivePage = tabDetay
+      TabBarVisible = False
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
+      LayoutConfig.Margin = '2 2 2 2'
+      TabOrder = 2
+      object tabCari: TUniTabSheet
+        Hint = ''
+        Caption = 'Cari Se'#231'imi'
+        Layout = 'vbox'
+        object UniPanel1: TUniPanel
+          Left = 3
+          Top = 23
+          Width = 887
+          Height = 57
+          Hint = ''
+          TabOrder = 0
+          BorderStyle = ubsNone
+          Caption = ''
+          Layout = 'hbox'
+          LayoutConfig.Width = '100%'
+          object edCariKod: TUniEdit
+            Left = 156
+            Top = 10
+            Width = 220
+            Hint = ''
+            Text = ''
+            TabOrder = 1
+            ClearButton = True
+            FieldLabel = 'Cari  Ad'#305
+            FieldLabelAlign = laTop
+            LayoutConfig.Margin = '3 3 3 15'
+            OnKeyPress = edCariKodKeyPress
+          end
+          object btnListele: TUniButton
+            Left = 382
+            Top = 0
+            Width = 100
+            Height = 40
+            Hint = ''
+            Caption = 'Listele'
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Color = clWhite
+            Font.Height = -13
+            Font.Name = 'Segoe UI Semibold'
+            Font.Style = [fsBold]
+            TabOrder = 2
+            ClientEvents.UniEvents.Strings = (
+              
+                'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+            ScreenMask.Enabled = True
+            ScreenMask.Message = 'Bilgiler getiriliyor. L'#252'tfen bekleyiniz...'
+            Images = UniMainModule.Resim_24
+            ImageIndex = 1
+            LayoutConfig.Margin = '10 5 3 10'
+            OnClick = btnListeleClick
+          end
+          object UniButton1: TUniButton
+            Left = 797
+            Top = 0
+            Width = 90
+            Height = 57
+            Hint = ''
+            Caption = #304'lerle'
+            Align = alRight
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Color = clWhite
+            Font.Height = -13
+            Font.Name = 'Segoe UI Semibold'
+            Font.Style = [fsBold]
+            TabOrder = 3
+            ClientEvents.UniEvents.Strings = (
+              
+                'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'warning'#39';'#13#10'}')
+            ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+            Images = UniMainModule.Resim_24
+            ImageIndex = 0
+            IconAlign = iaRight
+            LayoutConfig.Margin = '10 5 7 70'
+            OnClick = UniButton1Click
+          end
+        end
+        object UniDBGrid1: TUniDBGrid
+          Left = 37
+          Top = 96
+          Width = 857
+          Height = 313
+          Hint = ''
+          DataSource = dsCari
+          Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgConfirmDelete, dgAutoRefreshRow]
+          WebOptions.Paged = False
+          LoadMask.Message = 'Loading data...'
+          RowHeight = 30
+          LayoutConfig.Flex = 1
+          LayoutConfig.Height = '100%'
+          LayoutConfig.Width = '100%'
+          TabOrder = 1
+          Columns = <
+            item
+              FieldName = 'KAYNAK'
+              Title.Caption = 'KAYNAK'
+              Width = 65
+              Visible = False
+              ReadOnly = True
+            end
+            item
+              FieldName = 'CARI_KOD'
+              Title.Caption = 'CARI_KODU'
+              Width = 120
+              ReadOnly = True
+            end
+            item
+              FieldName = 'CARI_ISIM'
+              Title.Caption = 'CARI_ISIM'
+              Width = 300
+              ReadOnly = True
+            end
+            item
+              FieldName = 'VKN_TCKN'
+              Title.Caption = 'VKN_TCKN'
+              Width = 94
+              ReadOnly = True
+            end
+            item
+              FieldName = 'VERGI_DAIRESI'
+              Title.Caption = 'VERGI_DAIRESI'
+              Width = 130
+              ReadOnly = True
+            end
+            item
+              FieldName = 'CM_BORCT'
+              Title.Caption = 'BOR'#199
+              Width = 100
+              ReadOnly = True
+            end
+            item
+              FieldName = 'CM_ALACT'
+              Title.Caption = 'ALACAK'
+              Width = 100
+              ReadOnly = True
+            end
+            item
+              FieldName = 'BAKIYE'
+              Title.Caption = 'BAK'#304'YE'
+              Width = 100
+              ReadOnly = True
+            end
+            item
+              FieldName = 'CARI_ADRES'
+              Title.Caption = 'CARI_ADRES'
+              Width = 300
+              ReadOnly = True
+            end
+            item
+              FieldName = 'CARI_IL'
+              Title.Caption = 'CARI_IL'
+              Width = 100
+              ReadOnly = True
+            end
+            item
+              FieldName = 'CARI_ILCE'
+              Title.Caption = 'CARI_ILCE'
+              Width = 100
+              ReadOnly = True
+            end
+            item
+              FieldName = 'CARI_EPOSTA'
+              Title.Caption = 'CARI_EPOSTA'
+              Width = 130
+              ReadOnly = True
+            end
+            item
+              FieldName = 'CARI_TEL'
+              Title.Caption = 'CARI_TEL'
+              Width = 100
+              ReadOnly = True
+            end
+            item
+              FieldName = 'KULLANICI_ADI'
+              Title.Caption = 'KULLANICI_ADI'
+              Width = 100
+              Visible = False
+              ReadOnly = True
+            end
+            item
+              FieldName = 'VADE_GUNU'
+              Title.Caption = 'VADE_GUNU'
+              Width = 130
+              ReadOnly = True
+            end
+            item
+              FieldName = 'ISKONTO_ORANI'
+              Title.Caption = 'ISKONTO_ORANI'
+              Width = 130
+              ReadOnly = True
+            end
+            item
+              FieldName = 'RISKLIMITI'
+              Title.Caption = 'RISKLIMITI'
+              Width = 130
+              ReadOnly = True
+            end>
+        end
+      end
+      object tabBaslik: TUniTabSheet
+        Hint = ''
+        Caption = 'Sipari'#351' Ba'#351'l'#305'k'
+        Layout = 'vbox'
+        object UniPanel3: TUniPanel
+          Left = 10
+          Top = 29
+          Width = 887
+          Height = 57
+          Hint = ''
+          TabOrder = 1
+          BorderStyle = ubsNone
+          Caption = ''
+          Layout = 'hbox'
+          LayoutConfig.Width = '100%'
+          object btnBaslikGeri: TUniButton
+            Left = 27
+            Top = 3
+            Width = 90
+            Height = 40
+            Hint = ''
+            Caption = 'Geri'
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Color = clWhite
+            Font.Height = -13
+            Font.Name = 'Segoe UI Semibold'
+            Font.Style = [fsBold]
+            TabOrder = 2
+            ClientEvents.UniEvents.Strings = (
+              
+                'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+            Images = UniMainModule.Resim_24
+            ImageIndex = 2
+            LayoutConfig.Margin = '10 5 3 10'
+            OnClick = btnBaslikGeriClick
+          end
+          object lblCariKod0: TUniLabel
+            Left = 174
+            Top = 9
+            Width = 70
+            Height = 23
+            Hint = ''
+            Caption = 'Cari Kod'
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Height = -17
+            Font.Name = 'Trebuchet MS'
+            Font.Style = [fsBold, fsItalic]
+            TabOrder = 3
+            LayoutConfig.Margin = '20 2 2 20'
+          end
+          object lblCariAd0: TUniLabel
+            Left = 357
+            Top = 9
+            Width = 64
+            Height = 23
+            Hint = ''
+            Caption = 'Cari Ad'#305
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Height = -17
+            Font.Name = 'Trebuchet MS'
+            Font.Style = [fsBold, fsItalic]
+            TabOrder = 4
+            LayoutConfig.Margin = '20 2 2 20'
+          end
+          object UniButton5: TUniButton
+            Left = 797
+            Top = 0
+            Width = 90
+            Height = 57
+            Hint = ''
+            Caption = #304'lerle'
+            Align = alRight
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Color = clWhite
+            Font.Height = -13
+            Font.Name = 'Segoe UI Semibold'
+            Font.Style = [fsBold]
+            TabOrder = 1
+            ClientEvents.UniEvents.Strings = (
+              
+                'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'warning'#39';'#13#10'}')
+            ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+            Images = UniMainModule.Resim_24
+            ImageIndex = 0
+            IconAlign = iaRight
+            LayoutConfig.Margin = '10 5 7 70'
+            OnClick = UniButton5Click
+          end
+        end
+        object pnlBaslik: TUniPanel
+          Left = 0
+          Top = 92
+          Width = 911
+          Height = 342
+          Hint = ''
+          TabOrder = 0
+          BorderStyle = ubsNone
+          Caption = ''
+          Layout = 'hbox'
+          LayoutConfig.Height = '100%'
+          LayoutConfig.Width = '100%'
+          object UniPanel5: TUniPanel
+            Left = 20
+            Top = 3
+            Width = 175
+            Height = 335
+            Hint = ''
+            TabOrder = 1
+            BorderStyle = ubsNone
+            Caption = ''
+            Layout = 'vbox'
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Margin = '3 3 3 3'
+            object edFisNo: TUniDBEdit
+              Left = 21
+              Top = 17
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'FisNo'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabOrder = 7
+              TabStop = False
+              ReadOnly = True
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'Fi'#351' No'
+              FieldLabelAlign = laTop
+            end
+            object dTarih: TUniDBDateTimePicker
+              Left = 21
+              Top = 45
+              Width = 120
+              Hint = ''
+              DataField = 'Tarih'
+              DataSource = frmSiparisDM.dsFisBaslik
+              DateTime = 44660.000000000000000000
+              DateFormat = 'dd/MM/yyyy'
+              TimeFormat = 'HH:mm:ss'
+              TabOrder = 2
+              LayoutConfig.Width = '100%'
+              DisabledDates = <>
+              FieldLabel = 'Tarih'
+              FieldLabelAlign = laTop
+            end
+            object dTerminTarihi: TUniDBDateTimePicker
+              Left = 21
+              Top = 73
+              Width = 120
+              Hint = ''
+              DataField = 'SevkTarihi'
+              DataSource = frmSiparisDM.dsFisBaslik
+              DateTime = 44660.000000000000000000
+              DateFormat = 'dd/MM/yyyy'
+              TimeFormat = 'HH:mm:ss'
+              TabOrder = 8
+              LayoutConfig.Width = '100%'
+              DisabledDates = <>
+              FieldLabel = 'Termin Tarihi'
+              FieldLabelAlign = laTop
+            end
+            object Kod1Combo: TUniDBLookupComboBox
+              Left = 21
+              Top = 101
+              Width = 120
+              Hint = ''
+              ListField = 'OZELKOD;ACIKLAMA'
+              ListSource = dOzelKod1
+              KeyField = 'OZELKOD'
+              ListFieldIndex = 0
+              ClearButton = True
+              DataField = 'OzelKod'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabStop = False
+              TabOrder = 1
+              Color = clWindow
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'Kod 1'
+              FieldLabelAlign = laTop
+              OnCloseUp = Kod1ComboCloseUp
+            end
+            object Kod2Combo: TUniDBLookupComboBox
+              Left = 21
+              Top = 129
+              Width = 120
+              Hint = ''
+              ListField = 'OZELKOD;ACIKLAMA'
+              ListSource = dOzelKod2
+              KeyField = 'OZELKOD'
+              ListFieldIndex = 0
+              ClearButton = True
+              DataField = 'OzelKod2'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabStop = False
+              TabOrder = 3
+              Color = clWindow
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'Kod 2'
+              FieldLabelAlign = laTop
+              OnCloseUp = Kod2ComboCloseUp
+            end
+            object projeCombo: TUniDBLookupComboBox
+              Left = 21
+              Top = 157
+              Width = 120
+              Hint = ''
+              ListField = 'PROJE_KODU;PROJE_ACIKLAMA'
+              ListSource = dProjeKodu
+              KeyField = 'PROJE_KODU'
+              ListFieldIndex = 0
+              ClearButton = True
+              DataField = 'ProjeKodu'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabStop = False
+              TabOrder = 4
+              Color = clWindow
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'Proje Kodu'
+              FieldLabelAlign = laTop
+              OnCloseUp = projeComboCloseUp
+            end
+            object UniDBEdit5: TUniDBEdit
+              Left = 21
+              Top = 185
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'Aciklama'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabOrder = 5
+              TabStop = False
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'A'#231#305'klama'
+              FieldLabelAlign = laTop
+            end
+            object edVadeGunu: TUniDBEdit
+              Left = 21
+              Top = 213
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'VadeGunu'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabOrder = 9
+              TabStop = False
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'Vade G'#252'n'#252
+              FieldLabelAlign = laTop
+              OnClick = edVadeGunuClick
+            end
+            object dovizTarih: TUniDBDateTimePicker
+              Left = 21
+              Top = 241
+              Width = 120
+              Hint = ''
+              DataField = 'DovizTarih'
+              DataSource = frmSiparisDM.dsFisBaslik
+              DateTime = 44660.000000000000000000
+              DateFormat = 'dd/MM/yyyy'
+              TimeFormat = 'HH:mm:ss'
+              TabOrder = 6
+              LayoutConfig.Width = '100%'
+              DisabledDates = <>
+              FieldLabel = 'D'#246'viz Tarihi'
+              FieldLabelAlign = laTop
+              OnChange = dovizTarihChange
+            end
+            object btnKurGuncelle: TUniButton
+              Left = 21
+              Top = 269
+              Width = 120
+              Height = 25
+              Hint = ''
+              Enabled = False
+              Caption = 'Kurlar'#305' G'#252'ncelle'
+              TabOrder = 10
+              ScreenMask.Enabled = True
+              ScreenMask.Message = 'Kurlar g'#252'ncelleniyor. L'#252'tfen Bekleyiniz...'
+              LayoutConfig.Width = '100%'
+              OnClick = btnKurGuncelleClick
+            end
+          end
+          object UniPanel6: TUniPanel
+            Left = 184
+            Top = 3
+            Width = 300
+            Height = 271
+            Hint = ''
+            TabOrder = 2
+            BorderStyle = ubsNone
+            Caption = ''
+            Layout = 'vbox'
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Margin = '3 3 3 3'
+            object UniDBEdit6: TUniDBEdit
+              Left = 10
+              Top = 10
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'ACIK4'
+              DataSource = frmSiparisDM.dEk
+              TabOrder = 7
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'A'#231#305'klama 4'
+              FieldLabelAlign = laTop
+            end
+            object UniDBEdit7: TUniDBEdit
+              Left = 10
+              Top = 38
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'ACIK5'
+              DataSource = frmSiparisDM.dEk
+              TabOrder = 1
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'A'#231#305'klama 5'
+              FieldLabelAlign = laTop
+            end
+            object UniDBEdit8: TUniDBEdit
+              Left = 10
+              Top = 63
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'ACIK6'
+              DataSource = frmSiparisDM.dEk
+              TabOrder = 2
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'A'#231#305'klama 6'
+              FieldLabelAlign = laTop
+            end
+            object UniDBEdit9: TUniDBEdit
+              Left = 10
+              Top = 88
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'ACIK7'
+              DataSource = frmSiparisDM.dEk
+              TabOrder = 3
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'A'#231#305'klama 7'
+              FieldLabelAlign = laTop
+            end
+            object UniDBEdit10: TUniDBEdit
+              Left = 10
+              Top = 113
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'ACIK8'
+              DataSource = frmSiparisDM.dEk
+              TabOrder = 4
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'A'#231#305'klama 8'
+              FieldLabelAlign = laTop
+            end
+            object UniDBEdit11: TUniDBEdit
+              Left = 10
+              Top = 141
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'ACIK9'
+              DataSource = frmSiparisDM.dEk
+              TabOrder = 5
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'A'#231#305'klama 9'
+              FieldLabelAlign = laTop
+            end
+            object UniDBEdit12: TUniDBEdit
+              Left = 10
+              Top = 166
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'ACIK10'
+              DataSource = frmSiparisDM.dEk
+              TabOrder = 6
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'A'#231#305'klama 10'
+              FieldLabelAlign = laTop
+            end
+            object kosulCombo: TUniDBLookupComboBox
+              Left = 10
+              Top = 191
+              Width = 121
+              Hint = ''
+              ListField = 'ACIKLAMA'
+              ListSource = dKosulKodu
+              KeyField = 'KOSUL_KOD'
+              ListFieldIndex = 0
+              ClearButton = True
+              DataField = 'OzelKod5'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabStop = False
+              TabOrder = 8
+              Color = 10223615
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'Ko'#351'ul Kodu'
+              FieldLabelAlign = laTop
+              OnCloseUp = kosulComboCloseUp
+            end
+          end
+          object UniPanel7: TUniPanel
+            Left = 379
+            Top = 3
+            Width = 225
+            Height = 217
+            Hint = ''
+            TabOrder = 3
+            BorderStyle = ubsNone
+            Caption = ''
+            Layout = 'vbox'
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Margin = '3 3 3 3'
+            object UniDBEdit13: TUniDBEdit
+              Left = 2
+              Top = 16
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'ACIK11'
+              DataSource = frmSiparisDM.dEk
+              TabOrder = 1
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'A'#231#305'klama 11'
+              FieldLabelAlign = laTop
+            end
+            object UniDBEdit14: TUniDBEdit
+              Left = 2
+              Top = 41
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'ACIK12'
+              DataSource = frmSiparisDM.dEk
+              TabOrder = 2
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'A'#231#305'klama 12'
+              FieldLabelAlign = laTop
+            end
+            object UniDBEdit15: TUniDBEdit
+              Left = 2
+              Top = 66
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'ACIK13'
+              DataSource = frmSiparisDM.dEk
+              TabOrder = 3
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'A'#231#305'klama 13'
+              FieldLabelAlign = laTop
+            end
+            object UniDBEdit16: TUniDBEdit
+              Left = 4
+              Top = 91
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'ACIK14'
+              DataSource = frmSiparisDM.dEk
+              TabOrder = 4
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'A'#231#305'klama 14'
+              FieldLabelAlign = laTop
+            end
+            object UniDBEdit17: TUniDBEdit
+              Left = 2
+              Top = 116
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'ACIK15'
+              DataSource = frmSiparisDM.dEk
+              TabOrder = 5
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'A'#231#305'klama 15'
+              FieldLabelAlign = laTop
+            end
+            object UniDBEdit18: TUniDBEdit
+              Left = 3
+              Top = 144
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'ACIK16'
+              DataSource = frmSiparisDM.dEk
+              TabOrder = 6
+              LayoutConfig.Width = '100%'
+              FieldLabel = 'A'#231#305'klama 16'
+              FieldLabelAlign = laTop
+            end
+          end
+          object UniPanel10: TUniPanel
+            Left = 683
+            Top = 3
+            Width = 225
+            Height = 217
+            Hint = ''
+            TabOrder = 4
+            BorderStyle = ubsNone
+            Caption = ''
+            Layout = 'vbox'
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Margin = '3 3 3 3'
+            object dovizKurGrid: TUniDBGrid
+              Left = 32
+              Top = 35
+              Width = 190
+              Height = 160
+              Hint = ''
+              DataSource = frmSiparisDM.dDoviz
+              Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgConfirmDelete, dgAutoRefreshRow]
+              WebOptions.Paged = False
+              LoadMask.Message = 'Loading data...'
+              LayoutConfig.Height = '100%'
+              LayoutConfig.Width = '100%'
+              LayoutConfig.Margin = '2 2 2 2'
+              TabOrder = 1
+              Columns = <
+                item
+                  FieldName = 'ISIM'
+                  Title.Caption = 'D'#214'V'#304'Z'
+                  Width = 65
+                  ReadOnly = True
+                end
+                item
+                  FieldName = 'DOV_SATIS'
+                  Title.Caption = 'D'#214'V.SATI'#350
+                  Width = 90
+                  ReadOnly = True
+                end
+                item
+                  FieldName = 'SIRA'
+                  Title.Caption = 'SIRA'
+                  Width = 64
+                  Visible = False
+                  ReadOnly = True
+                end
+                item
+                  FieldName = 'TARIH'
+                  Title.Caption = 'TARIH'
+                  Width = 112
+                  Visible = False
+                  ReadOnly = True
+                end
+                item
+                  FieldName = 'NETSISSIRA'
+                  Title.Caption = 'NETSISSIRA'
+                  Width = 0
+                  Visible = False
+                  ReadOnly = True
+                end
+                item
+                  FieldName = 'DOV_ALIS'
+                  Title.Caption = 'DOV_ALIS'
+                  Width = 64
+                  Visible = False
+                  ReadOnly = True
+                end
+                item
+                  FieldName = 'EFF_ALIS'
+                  Title.Caption = 'EFF_ALIS'
+                  Width = 64
+                  Visible = False
+                  ReadOnly = True
+                end
+                item
+                  FieldName = 'EFF_SATIS'
+                  Title.Caption = 'EFF_SATIS'
+                  Width = 64
+                  ReadOnly = True
+                end
+                item
+                  FieldName = 'S_YEDEK1'
+                  Title.Caption = 'S_YEDEK1'
+                  Width = 53
+                  Visible = False
+                  ReadOnly = True
+                end
+                item
+                  FieldName = 'F_YEDEK1'
+                  Title.Caption = 'F_YEDEK1'
+                  Width = 0
+                  Visible = False
+                  ReadOnly = True
+                end
+                item
+                  FieldName = 'F_YEDEK2'
+                  Title.Caption = 'F_YEDEK2'
+                  Width = 0
+                  Visible = False
+                  ReadOnly = True
+                end
+                item
+                  FieldName = 'I_YEDEK1'
+                  Title.Caption = 'I_YEDEK1'
+                  Width = 0
+                  Visible = False
+                  ReadOnly = True
+                end
+                item
+                  FieldName = 'SIRA_1'
+                  Title.Caption = 'SIRA_1'
+                  Width = 0
+                  Visible = False
+                end
+                item
+                  FieldName = 'BIRIM'
+                  Title.Caption = 'BIRIM'
+                  Width = 0
+                  Visible = False
+                  ReadOnly = True
+                end>
+            end
+          end
+        end
+      end
+      object tabDetay: TUniTabSheet
+        Hint = ''
+        Caption = 'Sipari'#351' Detay'
+        Layout = 'vbox'
+        object UniPanel2: TUniPanel
+          Left = 24
+          Top = 15
+          Width = 894
+          Height = 25
+          Hint = ''
+          TabOrder = 4
+          BorderStyle = ubsNone
+          Caption = ''
+          Color = clPalegoldenrod
+          Layout = 'hbox'
+          LayoutConfig.Width = '100%'
+          object lblSiparisNo: TUniLabel
+            Left = 30
+            Top = 3
+            Width = 54
+            Height = 16
+            Hint = ''
+            Caption = 'Sipari'#351' No'
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Height = 17
+            Font.Name = 'Trebuchet MS'
+            Font.Style = [fsBold, fsItalic]
+            TabOrder = 3
+            LayoutConfig.Margin = '5 2 2 20'
+          end
+          object edNetsisSipNo: TUniDBText
+            Left = 92
+            Top = 6
+            Width = 75
+            Height = 16
+            Hint = ''
+            DataField = 'NetsisSiparisNo'
+            DataSource = frmSiparisDM.dsFisBaslik
+            ParentFont = False
+            Font.Color = clBlue
+            Font.Height = 17
+            Font.Name = 'Trebuchet MS'
+            Font.Style = [fsBold, fsItalic]
+            LayoutConfig.Margin = '5 2 2 20'
+          end
+          object lblCariKod: TUniLabel
+            Left = 180
+            Top = 3
+            Width = 46
+            Height = 16
+            Hint = ''
+            Caption = 'Cari Kod'
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Height = 17
+            Font.Name = 'Trebuchet MS'
+            Font.Style = [fsBold, fsItalic]
+            TabOrder = 1
+            LayoutConfig.Margin = '5 2 2 20'
+          end
+          object lblCariAd: TUniLabel
+            Left = 249
+            Top = 6
+            Width = 40
+            Height = 16
+            Hint = ''
+            Caption = 'Cari Ad'
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Height = 17
+            Font.Name = 'Trebuchet MS'
+            Font.Style = [fsBold, fsItalic]
+            TabOrder = 2
+            LayoutConfig.Margin = '5 2 2 20'
+          end
+        end
+        object UniPanel8: TUniPanel
+          Left = 35
+          Top = 67
+          Width = 926
+          Height = 57
+          Hint = ''
+          TabOrder = 0
+          BorderStyle = ubsNone
+          Caption = ''
+          Layout = 'hbox'
+          LayoutConfig.Width = '100%'
+          object UniButton6: TUniButton
+            Left = 31
+            Top = 3
+            Width = 90
+            Height = 40
+            Hint = ''
+            Caption = 'Geri'
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Color = clWhite
+            Font.Height = -13
+            Font.Name = 'Segoe UI Semibold'
+            Font.Style = [fsBold]
+            TabOrder = 1
+            ClientEvents.UniEvents.Strings = (
+              
+                'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+            ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+            Images = UniMainModule.Resim_24
+            ImageIndex = 2
+            LayoutConfig.Margin = '10 20 3 10'
+            OnClick = UniButton6Click
+          end
+          object pnlDetayButon: TUniPanel
+            Left = 127
+            Top = 0
+            Width = 762
+            Height = 50
+            Hint = ''
+            TabOrder = 2
+            BorderStyle = ubsNone
+            Caption = ''
+            Layout = 'hbox'
+            LayoutConfig.Width = '100%'
+            object UniButton3: TUniButton
+              Left = 39
+              Top = 3
+              Width = 120
+              Height = 34
+              Hint = ''
+              Caption = 'Stok Se'#231
+              ParentFont = False
+              Font.Charset = TURKISH_CHARSET
+              Font.Color = clWhite
+              Font.Height = -13
+              Font.Name = 'Segoe UI Semibold'
+              Font.Style = [fsBold]
+              TabOrder = 1
+              ClientEvents.UniEvents.Strings = (
+                
+                  'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                  'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
+              ScreenMask.Enabled = True
+              ScreenMask.Message = 'Stok Listesi olu'#351'turuluyor. L'#252'tfen bekleyiniz...'
+              Images = UniMainModule.Resim_24
+              ImageIndex = 1
+              LayoutConfig.Margin = '7 5 3 50'
+              OnClick = UniButton3Click
+            end
+            object UniButton7: TUniButton
+              Left = 176
+              Top = 0
+              Width = 120
+              Height = 34
+              Hint = ''
+              Caption = 'Sat'#305'r Sil'
+              ParentFont = False
+              Font.Charset = TURKISH_CHARSET
+              Font.Color = clWhite
+              Font.Height = -13
+              Font.Name = 'Segoe UI Semibold'
+              Font.Style = [fsBold]
+              TabOrder = 2
+              ClientEvents.UniEvents.Strings = (
+                
+                  'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                  'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'danger'#39';'#13#10'}')
+              ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+              Images = UniMainModule.Resim_24
+              ImageIndex = 3
+              LayoutConfig.Margin = '7 5 3 20'
+              OnClick = UniButton7Click
+            end
+            object btnSatirFiyatUpdate: TUniButton
+              Left = 302
+              Top = 2
+              Width = 140
+              Height = 34
+              Hint = ''
+              Caption = 'TL Fiyat G'#252'ncelle'
+              ParentFont = False
+              Font.Charset = TURKISH_CHARSET
+              Font.Color = clWhite
+              Font.Height = -13
+              Font.Name = 'Segoe UI Semibold'
+              Font.Style = [fsBold]
+              TabOrder = 3
+              ClientEvents.UniEvents.Strings = (
+                
+                  'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                  'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'info'#39';'#13#10'}')
+              ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+              Images = UniMainModule.Resim_24
+              LayoutConfig.Margin = '7 5 3 20'
+              OnClick = btnSatirFiyatUpdateClick
+            end
+            object btnStokCariDetay: TUniButton
+              Left = 448
+              Top = 3
+              Width = 140
+              Height = 34
+              Hint = ''
+              Caption = 'Stok-Cari Detay'
+              ParentFont = False
+              Font.Charset = TURKISH_CHARSET
+              Font.Color = clWhite
+              Font.Height = -13
+              Font.Name = 'Segoe UI Semibold'
+              Font.Style = [fsBold]
+              TabOrder = 4
+              ClientEvents.UniEvents.Strings = (
+                
+                  'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                  'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'info'#39';'#13#10'}')
+              ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+              Images = UniMainModule.Resim_24
+              LayoutConfig.Margin = '7 5 3 20'
+              OnClick = btnStokCariDetayClick
+            end
+            object btnSatirGuncelle: TUniButton
+              Left = 602
+              Top = 4
+              Width = 140
+              Height = 34
+              Hint = ''
+              Caption = 'Sat'#305'r G'#252'ncelle'
+              ParentFont = False
+              Font.Charset = TURKISH_CHARSET
+              Font.Color = clWhite
+              Font.Height = -13
+              Font.Name = 'Segoe UI Semibold'
+              Font.Style = [fsBold]
+              TabOrder = 5
+              ClientEvents.UniEvents.Strings = (
+                
+                  'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                  'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'info'#39';'#13#10'}')
+              ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+              Images = UniMainModule.Resim_24
+              LayoutConfig.Margin = '7 5 3 20'
+              OnClick = btnSatirGuncelleClick
+            end
+          end
+        end
+        object UniHiddenPanel1: TUniHiddenPanel
+          Left = 874
+          Top = 111
+          Width = 160
+          Height = 256
+          Hint = ''
+          Visible = True
+          object UniDBLookupComboBox1: TUniDBLookupComboBox
+            Left = 12
+            Top = 58
+            Width = 145
+            Hint = ''
+            ListField = 'ISIM'
+            ListSource = frmSiparisDM.dDoviz
+            KeyField = 'SIRA'
+            ListFieldIndex = 0
+            DataField = 'ParaBirimi'
+            DataSource = frmSiparisDM.dsFisDetay
+            TabOrder = 1
+            Color = clWindow
+          end
+          object UniDBEdit2: TUniDBEdit
+            Left = 24
+            Top = 120
+            Width = 121
+            Height = 22
+            Hint = ''
+            DataField = 'ParaBirimi'
+            DataSource = frmSiparisDM.dsFisDetay
+            TabOrder = 2
+            OnChangeValue = UniDBEdit2ChangeValue
+          end
+          object UniButton4: TUniButton
+            Left = 16
+            Top = 172
+            Width = 120
+            Height = 34
+            Hint = ''
+            Caption = 'Sat'#305'r Kaydet'
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Color = clWhite
+            Font.Height = -13
+            Font.Name = 'Segoe UI Semibold'
+            Font.Style = [fsBold]
+            TabOrder = 3
+            ClientEvents.UniEvents.Strings = (
+              
+                'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'success'#39';'#13#10'}')
+            ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+            Images = UniMainModule.Resim_24
+            ImageIndex = 3
+            LayoutConfig.Margin = '7 5 3 20'
+            OnClick = UniButton4Click
+          end
+        end
+        object UniDBGrid2: TUniDBGrid
+          Left = 11
+          Top = 132
+          Width = 857
+          Height = 198
+          Hint = ''
+          ClientEvents.ExtEvents.Strings = (
+            
+              'edit=function edit(editor, context, eOpts)'#13#10'{'#13#10'  function _post ' +
+              '() {    '#13#10'    ajaxRequest(editor.grid, '#39'_post'#39', []);'#13#10'  }'#13#10'  set' +
+              'Timeout(_post, 200);'#13#10'}')
+          ClicksToEdit = 1
+          DataSource = frmSiparisDM.dsFisDetay
+          Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgConfirmDelete, dgAutoRefreshRow]
+          WebOptions.Paged = False
+          LoadMask.Message = 'Loading data...'
+          RowHeight = 30
+          LayoutConfig.Flex = 1
+          LayoutConfig.Height = '100%'
+          LayoutConfig.Width = '100%'
+          TabOrder = 1
+          Summary.Align = taBottom
+          Summary.Enabled = True
+          OnAjaxEvent = UniDBGrid2AjaxEvent
+          OnColumnSummary = UniDBGrid2ColumnSummary
+          OnColumnSummaryResult = UniDBGrid2ColumnSummaryResult
+          Columns = <
+            item
+              FieldName = 'StokKod'
+              Title.Caption = 'Stok Kodu'
+              Width = 120
+              ReadOnly = True
+            end
+            item
+              FieldName = 'StokAciklama'
+              Title.Caption = 'Stok Ad'#305' / A'#231#305'klama'
+              Width = 300
+              ReadOnly = True
+            end
+            item
+              FieldName = 'Miktar'
+              Title.Caption = 'Miktar'
+              Width = 64
+              ReadOnly = True
+            end
+            item
+              FieldName = 'StokBirim'
+              Title.Caption = 'Birim'
+              Width = 65
+              ReadOnly = True
+            end
+            item
+              FieldName = 'GercekMiktar'
+              Title.Caption = 'Miktar 2'
+              Width = 64
+              ReadOnly = True
+            end
+            item
+              FieldName = 'StokGercekBirim'
+              Title.Caption = 'Birim2'
+              Width = 65
+              ReadOnly = True
+            end
+            item
+              FieldName = 'BirimFiyat'
+              Title.Caption = 'D'#246'v.Birim Fiyat'
+              Width = 95
+              ReadOnly = True
+            end
+            item
+              FieldName = 'LDoviz'
+              Title.Caption = 'D'#246'viz'
+              Width = 75
+              ReadOnly = True
+              Editor = UniDBLookupComboBox1
+            end
+            item
+              FieldName = 'SatisKur'
+              Title.Caption = 'Kur'
+              Width = 90
+              ReadOnly = True
+            end
+            item
+              FieldName = 'CariBirimFiyat'
+              Title.Caption = 'TL Fiyat'
+              Width = 95
+              ReadOnly = True
+            end
+            item
+              FieldName = 'IskYuzde_1'
+              Title.Caption = #304'sk.1 %'
+              Width = 64
+              ReadOnly = True
+            end
+            item
+              FieldName = 'cIskTutar1'
+              Title.Caption = #304'sk.1 Tut.'
+              Width = 64
+            end
+            item
+              FieldName = 'IskYuzde_3'
+              Title.Caption = #304'nd. %'
+              Width = 64
+              ReadOnly = True
+            end
+            item
+              FieldName = 'cNetDovizBirimFiyat'
+              Title.Caption = 'NetD'#246'vBrmFiyat'
+              Width = 95
+            end
+            item
+              FieldName = 'NetBirimFiyat'
+              Title.Caption = 'Net Birim Fiyat'
+              Width = 95
+              ReadOnly = True
+              ShowSummary = True
+            end
+            item
+              FieldName = 'BrutToplam'
+              Title.Caption = 'Br'#252't Toplam'
+              Width = 95
+              ReadOnly = True
+              ShowSummary = True
+            end
+            item
+              FieldName = 'IskToplam'
+              Title.Caption = #304'sk. Toplam'
+              Width = 95
+              ReadOnly = True
+              ShowSummary = True
+            end
+            item
+              FieldName = 'cIskToplam'
+              Title.Caption = #304'sk. Toplam'
+              Width = 95
+              ReadOnly = True
+              ShowSummary = True
+            end
+            item
+              FieldName = 'NetToplam'
+              Title.Caption = 'Net Toplam'
+              Width = 95
+              ReadOnly = True
+              ShowSummary = True
+            end
+            item
+              FieldName = 'Kdv'
+              Title.Caption = 'Kdv'
+              Width = 85
+              ReadOnly = True
+              ShowSummary = True
+            end
+            item
+              FieldName = 'KdvTutar'
+              Title.Caption = 'Kdv Tutar'
+              Width = 95
+              ReadOnly = True
+              ShowSummary = True
+            end
+            item
+              FieldName = 'Ozel1'
+              Title.Caption = #214'ZEL'
+              Width = 75
+              Alignment = taCenter
+              ReadOnly = True
+            end
+            item
+              FieldName = 'SatirEK1'
+              Title.Caption = 'Sat'#305'rEK1'
+              Width = 75
+            end
+            item
+              FieldName = 'SatirEK2'
+              Title.Caption = 'Sat'#305'rEK2'
+              Width = 75
+            end
+            item
+              FieldName = 'SonMaliyetFiyat'
+              Title.Caption = 'Son Maliyet Fiyat'
+              Width = 110
+              Visible = False
+              ReadOnly = True
+            end
+            item
+              FieldName = 'SonMaliyetTarih'
+              Title.Caption = 'Son Maliyet Tarih'
+              Width = 110
+              Visible = False
+              ReadOnly = True
+            end
+            item
+              FieldName = 'SonAlisFiyat'
+              Title.Caption = 'Son Al'#305#351' Fiyat'
+              Width = 100
+              ReadOnly = True
+            end
+            item
+              FieldName = 'SonAlisTarih'
+              Title.Caption = 'Son Al'#305#351' Tarih'
+              Width = 100
+              ReadOnly = True
+            end
+            item
+              FieldName = 'Kontrol Fiyat'
+              Title.Caption = 'KontrolFiyat'
+              Width = 64
+              Visible = False
+              ReadOnly = True
+            end
+            item
+              FieldName = 'KontrolFiyat'
+              Title.Caption = 'KontrolFiyat'
+              Width = 68
+            end
+            item
+              FieldName = 'cNetToplam'
+              Title.Caption = 'cNetToplam'
+              Width = 64
+              Visible = False
+              ShowSummary = True
+            end
+            item
+              FieldName = 'cKdvTutar'
+              Title.Caption = 'cKdvTutar'
+              Width = 64
+              Visible = False
+              ShowSummary = True
+            end>
+        end
+        object UniPanel9: TUniPanel
+          Left = 13
+          Top = 354
+          Width = 1200
+          Height = 100
+          Hint = ''
+          TabOrder = 2
+          BorderStyle = ubsNone
+          Caption = ''
+          Layout = 'hbox'
+          LayoutAttribs.Pack = 'end'
+          LayoutConfig.Width = '100%'
+          object UniSimplePanel7: TUniSimplePanel
+            Left = 22
+            Top = 3
+            Width = 130
+            Height = 94
+            Hint = ''
+            ParentColor = False
+            TabOrder = 6
+            Layout = 'vbox'
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Margin = '2 2 2 2'
+          end
+          object tutarPanel: TUniSimplePanel
+            Left = 74
+            Top = 3
+            Width = 130
+            Height = 94
+            Hint = ''
+            ParentColor = False
+            TabOrder = 1
+            Layout = 'vbox'
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Margin = '2 2 2 2'
+            object iskSecCombo: TUniComboBox
+              Left = 9
+              Top = 7
+              Width = 110
+              Hint = ''
+              Style = csDropDownList
+              Text = 'Tutar'
+              Items.Strings = (
+                'Y'#252'zde'
+                'Tutar')
+              ItemIndex = 1
+              TabOrder = 2
+              LayoutConfig.Width = '100%'
+              FieldLabel = #304'ndirim / Yuvarlama'
+              FieldLabelAlign = laTop
+              IconItems = <>
+            end
+            object ediskonto: TUniNumberEdit
+              Left = 3
+              Top = 35
+              Width = 110
+              Hint = ''
+              TabOrder = 1
+              LayoutConfig.Width = '100%'
+              DecimalSeparator = ','
+              OnClick = ediskontoClick
+              OnKeyPress = ediskontoKeyPress
+            end
+          end
+          object UniSimplePanel1: TUniSimplePanel
+            Left = 210
+            Top = 3
+            Width = 90
+            Height = 94
+            Hint = ''
+            ParentColor = False
+            TabOrder = 5
+            Layout = 'vbox'
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Margin = '2 20 2 2'
+            object UniLabel3: TUniLabel
+              Left = 24
+              Top = 16
+              Width = 51
+              Height = 13
+              Hint = ''
+              Visible = False
+              Caption = 'UniLabel3'
+              TabOrder = 2
+            end
+            object btnUygula: TUniButton
+              Left = 7
+              Top = 47
+              Width = 80
+              Height = 28
+              Hint = ''
+              Caption = 'Uygula'
+              ParentFont = False
+              Font.Charset = TURKISH_CHARSET
+              Font.Color = clWhite
+              Font.Height = -13
+              Font.Name = 'Segoe UI Semibold'
+              Font.Style = [fsBold]
+              TabOrder = 1
+              ClientEvents.UniEvents.Strings = (
+                
+                  'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                  'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'danger'#39';'#13#10'}')
+              ScreenMask.Enabled = True
+              ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+              LayoutConfig.Width = '100%'
+              LayoutConfig.Margin = '30 5 3 3'
+              OnClick = btnUygulaClick
+            end
+          end
+          object UniSimplePanel9: TUniSimplePanel
+            Left = 311
+            Top = 2
+            Width = 210
+            Height = 95
+            Hint = ''
+            ParentColor = False
+            TabOrder = 2
+            Layout = 'vbox'
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Margin = '2 2 2 2'
+            object edToplamBrut: TUniDBFormattedNumberEdit
+              Left = 64
+              Top = 16
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'BrutToplam'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabOrder = 1
+              ReadOnly = True
+              FieldLabel = 'Br'#252't Toplam'
+              FieldLabelWidth = 95
+              DecimalSeparator = ','
+              ThousandSeparator = '.'
+            end
+            object edToplamIskonto: TUniDBFormattedNumberEdit
+              Left = 64
+              Top = 44
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'IskontoToplam'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabOrder = 2
+              ReadOnly = True
+              FieldLabel = #304'skonto Toplam'
+              FieldLabelWidth = 95
+              DecimalSeparator = ','
+              ThousandSeparator = '.'
+            end
+          end
+          object UniSimplePanel10: TUniSimplePanel
+            Left = 527
+            Top = 3
+            Width = 220
+            Height = 95
+            Hint = ''
+            Visible = False
+            ParentColor = False
+            TabOrder = 3
+            Layout = 'vbox'
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Margin = '2 2 2 2'
+            object edToplamOtv: TUniDBFormattedNumberEdit
+              Left = 64
+              Top = 16
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'OtvToplam'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabOrder = 1
+              ReadOnly = True
+              FieldLabel = #214'.T.V. Toplam'
+              FieldLabelWidth = 110
+              DecimalSeparator = ','
+              ThousandSeparator = '.'
+            end
+            object edToplamOiv: TUniDBFormattedNumberEdit
+              Left = 64
+              Top = 44
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'OivToplam'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabOrder = 2
+              ReadOnly = True
+              FieldLabel = #214'.'#304'.V. Toplam'
+              FieldLabelWidth = 110
+              DecimalSeparator = ','
+              ThousandSeparator = '.'
+            end
+            object edToplamTevkifat: TUniDBFormattedNumberEdit
+              Left = 64
+              Top = 72
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'TevkifatKdv'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabOrder = 3
+              ReadOnly = True
+              FieldLabel = 'Tevkif Edilen KDV'
+              FieldLabelWidth = 110
+              DecimalSeparator = ','
+              ThousandSeparator = '.'
+            end
+          end
+          object UniSimplePanel11: TUniSimplePanel
+            Left = 753
+            Top = 2
+            Width = 210
+            Height = 95
+            Hint = ''
+            ParentColor = False
+            TabOrder = 4
+            Layout = 'vbox'
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Margin = '2 2 2 2'
+            object edToplamMatrah: TUniDBFormattedNumberEdit
+              Left = 64
+              Top = 16
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'KdvMatrah'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabOrder = 1
+              ReadOnly = True
+              FieldLabel = 'KDV Matrah'
+              FieldLabelWidth = 90
+              DecimalSeparator = ','
+              ThousandSeparator = '.'
+            end
+            object edToplamKdv: TUniDBFormattedNumberEdit
+              Left = 64
+              Top = 44
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'Kdv'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabOrder = 2
+              ReadOnly = True
+              FieldLabel = 'KDV'
+              FieldLabelWidth = 90
+              DecimalSeparator = ','
+              ThousandSeparator = '.'
+            end
+            object edToplamGenel: TUniDBFormattedNumberEdit
+              Left = 64
+              Top = 72
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'GenelToplam'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabOrder = 3
+              ReadOnly = True
+              FieldLabel = 'Genel Toplam'
+              FieldLabelWidth = 90
+              DecimalSeparator = ','
+              ThousandSeparator = '.'
+            end
+          end
+        end
+      end
+      object tabParametreler: TUniTabSheet
+        Hint = ''
+        Caption = 'tabParametreler'
+        object UniPanel4: TUniPanel
+          Left = 21
+          Top = 361
+          Width = 944
+          Height = 100
+          Hint = ''
+          TabOrder = 0
+          BorderStyle = ubsNone
+          Caption = ''
+          Layout = 'hbox'
+          LayoutAttribs.Pack = 'end'
+          LayoutConfig.Width = '100%'
+          object UniSimplePanel2: TUniSimplePanel
+            Left = 25
+            Top = 3
+            Width = 130
+            Height = 94
+            Hint = ''
+            ParentColor = False
+            TabOrder = 1
+            Layout = 'vbox'
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Margin = '2 2 2 2'
+            object UniComboBox2: TUniComboBox
+              Left = 9
+              Top = 7
+              Width = 110
+              Hint = ''
+              Style = csDropDownList
+              Text = 'Tutar'
+              Items.Strings = (
+                'Y'#252'zde'
+                'Tutar')
+              ItemIndex = 1
+              TabOrder = 2
+              LayoutConfig.Width = '100%'
+              FieldLabel = #304'ndirim / Yuvarlama'
+              FieldLabelAlign = laTop
+              IconItems = <>
+            end
+            object UniNumberEdit1: TUniNumberEdit
+              Left = 3
+              Top = 35
+              Width = 110
+              Hint = ''
+              TabOrder = 1
+              LayoutConfig.Width = '100%'
+              DecimalSeparator = ','
+              OnClick = ediskontoClick
+              OnKeyPress = ediskontoKeyPress
+            end
+          end
+          object UniSimplePanel3: TUniSimplePanel
+            Left = 205
+            Top = 3
+            Width = 90
+            Height = 94
+            Hint = ''
+            ParentColor = False
+            TabOrder = 5
+            Layout = 'vbox'
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Margin = '2 20 2 2'
+            object UniLabel1: TUniLabel
+              Left = 24
+              Top = 16
+              Width = 51
+              Height = 13
+              Hint = ''
+              Visible = False
+              Caption = 'UniLabel3'
+              TabOrder = 2
+            end
+            object UniButton2: TUniButton
+              Left = 7
+              Top = 47
+              Width = 80
+              Height = 28
+              Hint = ''
+              Caption = 'Uygula'
+              ParentFont = False
+              Font.Charset = TURKISH_CHARSET
+              Font.Color = clWhite
+              Font.Height = -13
+              Font.Name = 'Segoe UI Semibold'
+              Font.Style = [fsBold]
+              TabOrder = 1
+              ClientEvents.UniEvents.Strings = (
+                
+                  'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                  'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'danger'#39';'#13#10'}')
+              ScreenMask.Enabled = True
+              ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+              LayoutConfig.Width = '100%'
+              LayoutConfig.Margin = '30 5 3 3'
+              OnClick = btnUygulaClick
+            end
+          end
+          object UniSimplePanel4: TUniSimplePanel
+            Left = 311
+            Top = 3
+            Width = 210
+            Height = 95
+            Hint = ''
+            ParentColor = False
+            TabOrder = 2
+            Layout = 'vbox'
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Margin = '2 2 2 2'
+            object UniDBFormattedNumberEdit1: TUniDBFormattedNumberEdit
+              Left = 64
+              Top = 16
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'BrutToplam'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabOrder = 1
+              ReadOnly = True
+              FieldLabel = 'Br'#252't Toplam'
+              FieldLabelWidth = 95
+              DecimalSeparator = ','
+              ThousandSeparator = '.'
+            end
+            object UniDBFormattedNumberEdit2: TUniDBFormattedNumberEdit
+              Left = 64
+              Top = 44
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'IskontoToplam'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabOrder = 2
+              ReadOnly = True
+              FieldLabel = #304'skonto Toplam'
+              FieldLabelWidth = 95
+              DecimalSeparator = ','
+              ThousandSeparator = '.'
+            end
+          end
+          object UniSimplePanel5: TUniSimplePanel
+            Left = 527
+            Top = 3
+            Width = 220
+            Height = 95
+            Hint = ''
+            Visible = False
+            ParentColor = False
+            TabOrder = 3
+            Layout = 'vbox'
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Margin = '2 2 2 2'
+            object UniDBFormattedNumberEdit3: TUniDBFormattedNumberEdit
+              Left = 64
+              Top = 16
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'OtvToplam'
+              TabOrder = 1
+              ReadOnly = True
+              FieldLabel = #214'.T.V. Toplam'
+              FieldLabelWidth = 110
+              DecimalSeparator = ','
+              ThousandSeparator = '.'
+            end
+            object UniDBFormattedNumberEdit4: TUniDBFormattedNumberEdit
+              Left = 64
+              Top = 44
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'OivToplam'
+              TabOrder = 2
+              ReadOnly = True
+              FieldLabel = #214'.'#304'.V. Toplam'
+              FieldLabelWidth = 110
+              DecimalSeparator = ','
+              ThousandSeparator = '.'
+            end
+            object UniDBFormattedNumberEdit5: TUniDBFormattedNumberEdit
+              Left = 64
+              Top = 72
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'TevkifatKdv'
+              TabOrder = 3
+              ReadOnly = True
+              FieldLabel = 'Tevkif Edilen KDV'
+              FieldLabelWidth = 110
+              DecimalSeparator = ','
+              ThousandSeparator = '.'
+            end
+          end
+          object UniSimplePanel6: TUniSimplePanel
+            Left = 753
+            Top = 2
+            Width = 210
+            Height = 95
+            Hint = ''
+            ParentColor = False
+            TabOrder = 4
+            Layout = 'vbox'
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Margin = '2 2 2 2'
+            object UniDBFormattedNumberEdit6: TUniDBFormattedNumberEdit
+              Left = 64
+              Top = 16
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'KdvMatrah'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabOrder = 1
+              ReadOnly = True
+              FieldLabel = 'KDV Matrah'
+              FieldLabelWidth = 90
+              DecimalSeparator = ','
+              ThousandSeparator = '.'
+            end
+            object UniDBFormattedNumberEdit7: TUniDBFormattedNumberEdit
+              Left = 64
+              Top = 44
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'Kdv'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabOrder = 2
+              ReadOnly = True
+              FieldLabel = 'KDV'
+              FieldLabelWidth = 90
+              DecimalSeparator = ','
+              ThousandSeparator = '.'
+            end
+            object UniDBFormattedNumberEdit8: TUniDBFormattedNumberEdit
+              Left = 64
+              Top = 72
+              Width = 121
+              Height = 22
+              Hint = ''
+              DataField = 'GenelToplam'
+              DataSource = frmSiparisDM.dsFisBaslik
+              TabOrder = 3
+              ReadOnly = True
+              FieldLabel = 'Genel Toplam'
+              FieldLabelWidth = 90
+              DecimalSeparator = ','
+              ThousandSeparator = '.'
+            end
+          end
+        end
+      end
+    end
+  end
+  object qCari: TUniQuery
+    Connection = frmDM.conNetsis
+    SQL.Strings = (
+      
+        '-- SELECT  '#39'MUHTELIF'#39' AS '#39'KAYNAK'#39', VKN_TCKN,CARI_KODU,CARI_ISIM,' +
+        'CARI_ADRES,CARI_IL,CARI_ILCE,CARI_EPOSTA,CARI_TEL,KULLANICI_ADI,' +
+        'VERGI_DAIRESI'
+      
+        '-- , 0 AS '#39'CM_BORCT'#39', 0 AS '#39'CM_ALACT'#39', 0 AS '#39'BAKIYE'#39', 0 as VADE_' +
+        'GUNU, 0 AS ISKONTO_ORANI, 0 AS '#39'RISKLIMITI'#39
+      '-- FROM PLT_CARIKAYDET'
+      '--  WHERE CARI_KODU LIKE '#39'12048%'#39
+      '-- UNION '
+      'SELECT '#39'CARIKART'#39' AS '#39'KAYNAK'#39
+      '--, VERGI_NUMARASI'
+      
+        ', CASE WHEN VERGI_NUMARASI IS NULL THEN (SELECT E.TCKIMLIKNO FRO' +
+        'M TBLCASABITEK E WHERE E.CARI_KOD = TBLCASABIT.CARI_KOD) ELSE VE' +
+        'RGI_NUMARASI END '#39'VERGI_NUMARASI'#39
+      
+        ', CARI_KOD, CARI_ISIM, CARI_ADRES, CARI_IL, CARI_ILCE, EMAIL, CA' +
+        'RI_TEL, '#39#39' AS '#39'KULLANICI_ADI'#39', VERGI_DAIRESI'
+      
+        ', CM_BORCT, CM_ALACT, (CM_BORCT-CM_ALACT) AS '#39'BAKIYE'#39', VADE_GUNU' +
+        ', ISKONTO_ORANI, ISNULL(R.RISKLIMITI,0) AS RISKLIMITI'
+      'FROM TBLCASABIT '
+      
+        #9'LEFT JOIN TBLCARISK R WITH(NOLOCK) ON (R.CARIKOD = TBLCASABIT.C' +
+        'ARI_KOD)'
+      'WHERE CARI_TIP = '#39'A'#39
+      ' AND CARI_KOD LIKE '#39'12048%'#39
+      'ORDER BY CARI_KOD DESC')
+    Left = 568
+    Top = 118
+    object qCariKAYNAK: TStringField
+      FieldName = 'KAYNAK'
+      ReadOnly = True
+      Required = True
+      Size = 8
+    end
+    object qCariVERGI_NUMARASI: TStringField
+      FieldName = 'VERGI_NUMARASI'
+      ReadOnly = True
+      Size = 15
+    end
+    object qCariCARI_KOD: TStringField
+      FieldName = 'CARI_KOD'
+      Required = True
+      Size = 15
+    end
+    object qCariCARI_ISIM: TStringField
+      FieldName = 'CARI_ISIM'
+      Size = 100
+    end
+    object qCariCARI_ADRES: TStringField
+      FieldName = 'CARI_ADRES'
+      Size = 100
+    end
+    object qCariCARI_IL: TStringField
+      FieldName = 'CARI_IL'
+      Size = 50
+    end
+    object qCariCARI_ILCE: TStringField
+      FieldName = 'CARI_ILCE'
+      Size = 50
+    end
+    object qCariEMAIL: TStringField
+      FieldName = 'EMAIL'
+      Size = 255
+    end
+    object qCariCARI_TEL: TStringField
+      FieldName = 'CARI_TEL'
+    end
+    object qCariKULLANICI_ADI: TStringField
+      FieldName = 'KULLANICI_ADI'
+      ReadOnly = True
+      Required = True
+      Size = 1
+    end
+    object qCariVERGI_DAIRESI: TStringField
+      FieldName = 'VERGI_DAIRESI'
+      Size = 50
+    end
+    object qCariCM_BORCT: TFloatField
+      FieldName = 'CM_BORCT'
+      DisplayFormat = '#.,##'
+    end
+    object qCariCM_ALACT: TFloatField
+      FieldName = 'CM_ALACT'
+      DisplayFormat = '#.,##'
+    end
+    object qCariBAKIYE: TFloatField
+      FieldName = 'BAKIYE'
+      ReadOnly = True
+      DisplayFormat = '#.,##'
+    end
+    object qCariVADE_GUNU: TSmallintField
+      FieldName = 'VADE_GUNU'
+    end
+    object qCariISKONTO_ORANI: TFloatField
+      FieldName = 'ISKONTO_ORANI'
+    end
+    object qCariRISKLIMITI: TFloatField
+      FieldName = 'RISKLIMITI'
+      ReadOnly = True
+      Required = True
+      DisplayFormat = '#.,##'
+    end
+  end
+  object dsCari: TUniDataSource
+    DataSet = qCari
+    Left = 616
+    Top = 118
+  end
+  object qOzelKod1: TUniQuery
+    Connection = frmDM.conNetsis
+    SQL.Strings = (
+      
+        'SELECT  OZELKOD,ACIKLAMA FROM TBLOZELKOD1 WITH(NOLOCK)  ORDER BY' +
+        ' OZELKOD ASC')
+    Left = 264
+    Top = 334
+  end
+  object qOzelKod2: TUniQuery
+    Connection = frmDM.conNetsis
+    SQL.Strings = (
+      
+        'SELECT  OZELKOD,ACIKLAMA FROM TBLOZELKOD2 WITH(NOLOCK)  ORDER BY' +
+        ' OZELKOD ASC')
+    Left = 336
+    Top = 334
+  end
+  object qProjeKodu: TUniQuery
+    Connection = frmDM.conNetsis
+    SQL.Strings = (
+      
+        'SELECT PROJE_KODU, PROJE_ACIKLAMA, RAPOR_KOD1 FROM TBLPROJE ORDE' +
+        'R BY PROJE_KODU ASC')
+    Left = 408
+    Top = 334
+  end
+  object dProjeKodu: TUniDataSource
+    DataSet = qProjeKodu
+    Left = 408
+    Top = 382
+  end
+  object dOzelKod2: TUniDataSource
+    DataSet = qOzelKod2
+    Left = 336
+    Top = 382
+  end
+  object dOzelKod1: TUniDataSource
+    DataSet = qOzelKod1
+    Left = 264
+    Top = 390
+  end
+  object frxReport1: TfrxReport
+    Version = '2025.2.4'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick, pbCopy, pbSelection]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Default'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 44681.729286898150000000
+    ReportOptions.LastChange = 44681.729286898150000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      'begin'
+      ''
+      'end.')
+    Left = 536
+    Top = 328
+    Datasets = <>
+    Variables = <>
+    Style = <>
+    Watermarks = <>
+  end
+  object frxPDFExport1: TfrxPDFExport
+    UseFileCache = True
+    ShowProgress = True
+    OverwritePrompt = False
+    DataOnly = False
+    EmbedFontsIfProtected = False
+    InteractiveFormsFontSubset = 'A-Z,a-z,0-9,#43-#47 '
+    OpenAfterExport = False
+    PrintOptimized = False
+    Outline = False
+    Background = False
+    HTMLTags = True
+    Quality = 95
+    Transparency = False
+    Author = 'FastReport'
+    Subject = 'FastReport PDF export'
+    Creator = 'FastReport'
+    ProtectionFlags = [ePrint, eModify, eCopy, eAnnot]
+    HideToolbar = False
+    HideMenubar = False
+    HideWindowUI = False
+    FitWindow = False
+    CenterWindow = False
+    PrintScaling = False
+    PdfA = False
+    PDFStandard = psNone
+    PDFVersion = pv17
+    PDFColorSpace = csDeviceRGB
+    Left = 608
+    Top = 328
+  end
+  object saSor: TUniSweetAlert
+    Title = 'Title'
+    TitleText = 'S'#304'L'
+    Text = 'Silmek '#304'stiyor musunuz ?'
+    ConfirmButtonText = 'Tamam'
+    CancelButtonText = #304'ptal'
+    AlertType = atQuestion
+    Padding = 20
+    OnConfirm = saSorConfirm
+    Left = 984
+    Top = 80
+  end
+  object saSatirSor: TUniSweetAlert
+    Title = 'S'#304'L'
+    TitleText = 'S'#304'L'
+    Text = 'Silmek '#304'stiyor musunuz ?'
+    ConfirmButtonText = 'Tamam'
+    CancelButtonText = #304'ptal'
+    AlertType = atQuestion
+    Padding = 20
+    OnConfirm = saSatirSorConfirm
+    Left = 984
+    Top = 128
+  end
+  object qKosulKodu: TUniQuery
+    Connection = frmDM.conNetsis
+    SQL.Strings = (
+      
+        'SELECT KOSUL_KOD, ACIKLAMA, BASLANGICTAR, LISTEFIATI, VADEGUNU F' +
+        'ROM TBLKOSGENEL')
+    Left = 416
+    Top = 438
+  end
+  object dKosulKodu: TUniDataSource
+    DataSet = qKosulKodu
+    Left = 416
+    Top = 486
+  end
+  object saFiyat1: TUniSweetAlert
+    Title = 'Title'
+    ConfirmButtonText = 'OK'
+    CancelButtonText = 'Cancel'
+    Padding = 20
+    OnConfirm = saFiyat1Confirm
+    Left = 979
+    Top = 192
+  end
+end

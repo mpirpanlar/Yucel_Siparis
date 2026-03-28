@@ -1,0 +1,683 @@
+unit Genel;
+
+interface
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics,
+  Controls, Forms, uniGUITypes, uniGUIAbstractClasses, uniGUIDialogs, uniPageControl, uniPanel, Main, uniButton, StrUtils,
+  uniGUIClasses, uniGUIForm, Data.DB, MemDS, DBAccess, Uni, MainModule, DMU, UniguiApplication, uniSweetAlert ,
+  ServerModule, Xml.xmldom, Xml.XMLIntf, Xml.XMLDoc, frxExportXLS, frxExportXLSX, frxExportImage, frxExportPDF, frxClass;
+
+
+     procedure xFormShow(AFormType: TuniFormClass; YetkiForm:String; Tip:Integer;FisNo:String);
+     procedure xFormShowModal(AFormType: TuniFormClass; YetkiForm:String; Tip:Integer;FisNo:String);
+//     Procedure xAcilisTablolar;
+     Procedure xTabloAc(Tablo : Tuniquery;Sorgu:String);
+     Procedure xLogKaydet (Qry : Tuniquery);
+     Procedure xLogDegistir (Qry : Tuniquery);
+//     Function xFisNoAl(TabloAd:String):String;
+//     Procedure xKayitYenile;
+     Procedure xUpdateTablo (Sorgu : String);
+     Procedure xUnidacBaglanNetsis;  //Netsis Server Baðlan
+     Procedure xUnidacBaglanAsya;  //Asya Server Baðlan
+//     procedure xMesaj(MsgID : Integer);
+//     Procedure xKapamaFis (FaturaGC:String ;FisGC:String ;CariKod:String ;ParaBirimi:String);
+//     Function xFaturaNo(Fatura:Integer):String;
+     function xKayitSor(Sorgu : String) : Boolean;
+     function xKayitSorNetsis(Sorgu : String) : Boolean;
+//     Procedure xUnidacBaglan;
+     Function xGuidOlustur():String;
+     function xXMLAyir(const Value, A, B: string): string;
+     Procedure xRaporGoster (RaporAdi,PDFDosyaAdi : String ; FrxRapor : TfrxReport; frxPDF:TfrxPDFExport);
+//     Procedure xRaporXLS (RaporAdi : String ; FrxRapor : TfrxReport; frxXLS:TfrxXLSXExport);
+//     Procedure xRaporJPEG (RaporAdi : String ; FrxRapor : TfrxReport; frxJPG:TfrxJPEGExport);
+//     Procedure xKurOku;
+     function xYuvarla(Value: Double; DecCount: Integer): Double ;
+
+    var
+    xSiparisFazlaTeslimatOrani : Real; // Netsis
+
+implementation
+
+uses PDFGosterU, TmpU;
+
+Procedure xUnidacBaglanNetsis;  //Local Server Baðlan
+begin
+   frmDM.ConNetsis.Connected:=False;
+   frmDM.ConNetsis.ProviderName:='SQL Server';
+   frmDM.ConNetsis.Server:='10.10.253.10';
+   frmDM.ConNetsis.Username:='egehayat';
+   frmDM.ConNetsis.Password:='Eh2210?!';
+   frmDM.ConNetsis.Database:=Tmp.xNetsisSirketKodu;
+//   frmDM.ConNetsis.SpecificOptions.Values['ApplicationName']:= xFKey+xDatabaseAdi;
+        try
+          frmDM.ConNetsis.Connected:=true;
+        except
+//        xMesaj(20);
+          frmDM.ConNetsis.Connected:=false;
+          Application.Terminate;
+        end;
+end;
+
+Procedure xUnidacBaglanAsya;  //Local Server Baðlan
+begin
+   frmDM.conAsya.Connected:=False;
+   frmDM.conAsya.ProviderName:='SQL Server';
+   frmDM.conAsya.Server:='10.10.253.10';
+   frmDM.conAsya.Username:='egehayat';
+   frmDM.conAsya.Password:='Eh2210?!';
+   frmDM.conAsya.Database:='ASYA_ENTEGRE';
+//   frmDM.ConNetsis.SpecificOptions.Values['ApplicationName']:= xFKey+xDatabaseAdi;
+        try
+          frmDM.conAsya.Connected:=true;
+        except
+//        xMesaj(20);
+          frmDM.conAsya.Connected:=false;
+          Application.Terminate;
+        end;
+end;
+
+
+function xYuvarla(Value: Double; DecCount: Integer): Double ;
+begin
+ Result := StrToFloat( Format('%.*f', [DecCount, StrToFloat(FloatToStr(Value))]) );
+end;
+
+//Procedure xKurOku;
+//var
+//  Node,AltNode:IXMLNode;
+//  Qry:Tuniquery;
+//begin
+//  xUpdateTablo('delete from parabirimtemp');
+//  Qry:=Tuniquery.Create(nil);
+//  Qry.Connection:=frmDM.UC;
+//  xTabloAc(Qry,'Select * from parabirimtemp');
+//
+//
+//  UniMainModule.XMLDocument1.FileName:='https://www.tcmb.gov.tr/kurlar/today.xml';
+//  UniMainModule.XMLDocument1.Active := True;
+//  Node := UniMainModule.XMLDocument1.DocumentElement;
+//  AltNode := Node.ChildNodes.FindNode('Currency');
+//
+//  repeat
+//    Qry.Append;
+//    Qry.FieldByName('CurrencyCode').AsString:=AltNode.GetAttributeNS('CurrencyCode', '');
+//    Qry.FieldByName('CurrencyName').AsString:=AltNode.ChildNodes['CurrencyName'].Text;
+//    Qry.FieldByName('Alis').AsFloat:=strtofloat(stringReplace(AltNode.ChildNodes['ForexBuying'].Text,'.',',',[rfReplaceAll, rfIgnoreCase]));
+//    if AltNode.ChildNodes['ForexSelling'].Text <> '' then
+//    Qry.FieldByName('Satis').AsFloat:=strtofloat(stringReplace(AltNode.ChildNodes['ForexSelling'].Text,'.',',',[rfReplaceAll, rfIgnoreCase]));
+//    Qry.Post;
+//    AltNode := AltNode.NextSibling;
+//  until AltNode=nil ;
+//
+//  frmDM.qParaBirim.First;
+//
+//  while not frmDM.qParaBirim.Eof do begin
+//      xTabloAc(Qry,'select CurrencyCode,Alis,Satis from parabirimtemp where CurrencyCode='''+frmDM.qParaBirim.FieldByName('CurrencyCode').AsString+''' ');
+//      frmDM.qParaBirim.Edit;
+//      if Qry.FieldByName('Alis').AsFloat=0 then frmDM.qParaBirim.FieldByName('Alis').AsFloat:=1
+//        else frmDM.qParaBirim.FieldByName('Alis').AsFloat:=Qry.FieldByName('Alis').AsFloat;
+//      if Qry.FieldByName('Satis').AsFloat=0 then frmDM.qParaBirim.FieldByName('Satis').AsFloat:=1
+//        else frmDM.qParaBirim.FieldByName('Satis').AsFloat:=Qry.FieldByName('Satis').AsFloat;
+//      frmDM.qParaBirim.Post;
+//      frmDM.qParaBirim.Next;
+//  end;
+//  frmDM.qParaBirim.Refresh;
+//end;
+
+Procedure xRaporGoster (RaporAdi,PDFDosyaAdi : String ; FrxRapor : TfrxReport; frxPDF:TfrxPDFExport);
+  var
+    Stream: TStream;
+    Qry:Tuniquery;
+    fn : String;
+  Begin
+    Qry:=Tuniquery.Create(nil);
+    Qry.Connection:=frmDM.conAsya;
+    Qry.Close;
+    Qry.SQL.Clear;
+    Qry.SQL.Text:='Select * from raporlar where RaporAdi=:RaporAd';
+    Qry.ParamByName('RaporAd').AsString:=RaporAdi;
+    Qry.Open;
+    Stream := Qry.CreateBlobStream(Qry.FieldByName('RaporData'), bmRead);
+
+//    fn:=FormatDateTime('ddmmyyhhmmss.zzz', Now()) +'.pdf';
+    fn:=PDFDosyaAdi +'.pdf';;
+    FrxRapor.PrintOptions.ShowDialog := False;
+    FrxRapor.ShowProgress:=false;
+    FrxRapor.EngineOptions.SilentMode:=True;
+    FrxRapor.EngineOptions.EnableThreadSafe := True;
+    FrxRapor.EngineOptions.DestroyForms := False;
+    frxPDF.Background:=True;
+    frxPDF.ShowProgress:=False;
+    frxPDF.ShowDialog:=False;
+    frxPDF.FileName := UniServerModule.LocalCachePath + fn;
+    frxPDF.DefaultPath := '';
+    FrxRapor.PreviewOptions.AllowEdit:=False;
+    FrxRapor.LoadFromStream(Stream);
+    FrxRapor.PrepareReport();
+    FrxRapor.Export( frxPDF);
+    frmPDFGoster.UniURLFrame1.URL :=UniServerModule.LocalCacheURL + fn;
+    frmPDFGoster.ShowModal();
+    Stream.Free;
+    Qry.Free;
+  End;
+
+//    Procedure xRaporJPEG (RaporAdi : String ; FrxRapor : TfrxReport; frxJPG:TfrxJPEGExport);
+//  var
+//    Stream: TStream;
+//    Qry:Tuniquery;
+//    fn : String;
+//  Begin
+//    Qry:=Tuniquery.Create(nil);
+//    Qry.Connection:=frmDM.UC;
+//    Qry.Close;
+//    Qry.SQL.Clear;
+//    Qry.SQL.Text:='Select * from raporlar where RaporAdi=:RaporAd';
+//    Qry.ParamByName('RaporAd').AsString:=RaporAdi;
+//    Qry.Open;
+//    Stream := Qry.CreateBlobStream(Qry.FieldByName('RaporData'), bmRead);
+//
+////    frxXLS.showprogress:= false;
+////    frxXLS.showdialog := false;
+////    FrxRapor.LoadFromStream(Stream);
+////    FrxRapor.PrepareReport ();
+////  // CreateGUID (NewGUID);
+////    frxXLS.FileName := UniServerModule.TempFolderPath + 'aa.xlsx';
+////    FrxRapor.Export (frxXLS);
+////    UniSession.SendFile (UniServerModule.TempFolderPath + 'aa.xlsx', 'aa.xlsx');
+//
+//
+//
+//    fn:=FormatDateTime('ddmmyyhhmmss.zzz', Now()) +'.jpg';
+//    FrxRapor.PrintOptions.ShowDialog := False;
+//    FrxRapor.ShowProgress:=false;
+////    FrxRapor.EngineOptions.SilentMode:=True;
+////    FrxRapor.EngineOptions.EnableThreadSafe := True;
+////    FrxRapor.EngineOptions.DestroyForms := False;
+////    frxXLS.Background:=True;
+//     frxJPG.SeparateFiles:=false;
+//    frxJPG.ShowProgress:=False;
+//    frxJPG.ShowDialog:=False;
+//    frxJPG.FileName := UniServerModule.LocalCachePath + fn;
+//    frxJPG.DefaultPath := '';
+//    FrxRapor.PreviewOptions.AllowEdit:=False;
+//    FrxRapor.LoadFromStream(Stream);
+//    FrxRapor.PrepareReport();
+//    FrxRapor.Export( frxJPG);
+//    UniSession.SendFile(UniServerModule.LocalCachePath + fn);
+//    //    frmPDFGoster.UniURLFrame1.URL :=UniServerModule.LocalCacheURL + fn;
+////    frmPDFGoster.ShowModal();
+//    Stream.Free;
+//    Qry.Free;
+//  End;
+
+//  Procedure xRaporXLS (RaporAdi : String ; FrxRapor : TfrxReport; frxXLS:TfrxXLSXExport);
+//  var
+//    Stream: TStream;
+//    Qry:Tuniquery;
+//    fn : String;
+//  Begin
+//    Qry:=Tuniquery.Create(nil);
+//    Qry.Connection:=frmDM.UC;
+//    Qry.Close;
+//    Qry.SQL.Clear;
+//    Qry.SQL.Text:='Select * from raporlar where RaporAdi=:RaporAd';
+//    Qry.ParamByName('RaporAd').AsString:=RaporAdi;
+//    Qry.Open;
+//    Stream := Qry.CreateBlobStream(Qry.FieldByName('RaporData'), bmRead);
+//
+////    frxXLS.showprogress:= false;
+////    frxXLS.showdialog := false;
+////    FrxRapor.LoadFromStream(Stream);
+////    FrxRapor.PrepareReport ();
+////  // CreateGUID (NewGUID);
+////    frxXLS.FileName := UniServerModule.TempFolderPath + 'aa.xlsx';
+////    FrxRapor.Export (frxXLS);
+////    UniSession.SendFile (UniServerModule.TempFolderPath + 'aa.xlsx', 'aa.xlsx');
+//
+//
+//
+//    fn:=FormatDateTime('ddmmyyhhmmss.zzz', Now()) +'.xlsx';
+//    FrxRapor.PrintOptions.ShowDialog := False;
+//    FrxRapor.ShowProgress:=false;
+//    FrxRapor.EngineOptions.SilentMode:=True;
+//    FrxRapor.EngineOptions.EnableThreadSafe := True;
+//    FrxRapor.EngineOptions.DestroyForms := False;
+////    frxXLS.Background:=True;
+//    frxXLS.ShowProgress:=False;
+//    frxXLS.ShowDialog:=False;
+//    frxXLS.FileName := UniServerModule.LocalCachePath + fn;
+//    frxXLS.DefaultPath := '';
+//    FrxRapor.PreviewOptions.AllowEdit:=False;
+//    FrxRapor.LoadFromStream(Stream);
+//    FrxRapor.PrepareReport();
+//    FrxRapor.Export( frxXLS);
+//    UniSession.SendFile(UniServerModule.LocalCachePath + fn);
+//    //    frmPDFGoster.UniURLFrame1.URL :=UniServerModule.LocalCacheURL + fn;
+////    frmPDFGoster.ShowModal();
+//    Stream.Free;
+//    Qry.Free;
+//  End;
+
+function xXMLAyir(const Value, A, B: string): string;
+var
+  aPos, bPos: Integer;
+begin
+  result := '';
+  aPos := Pos(A, Value);
+  if aPos > 0 then begin
+    aPos := aPos + Length(A);
+    bPos := PosEx(B, Value, aPos);
+    if bPos > 0 then begin
+      result := Copy(Value, aPos, bPos - aPos);
+    end;
+  end;
+end;
+Function xGuidOlustur():String;
+var
+  MyGuid: TGuid;
+begin
+ if CreateGuid(MyGuid) <> 0 then begin
+    ShowMessage('Guid oluþturulamadý');
+    Exit;
+ end;
+  Result:=xXMLAyir(GuidToString(MyGuid),'{','}');
+end;
+
+procedure xFormShowModal(AFormType: TuniFormClass; YetkiForm:String; Tip:Integer;FisNo:String); //Tip : 0 Yeni Tip : 1 Mevcut Kart ve Fiþ Tipi
+  var
+   F : TUniForm;
+    Qry,QryCaption:Tuniquery;
+    Z: Integer;
+begin
+  UniSession.Synchronize();
+
+    Qry:=Tuniquery.Create(nil);
+    Qry.Connection:=frmDM.conAsya;
+    Qry.Close;
+    Qry.SQL.Clear;
+    Qry.SQL.Text:='Select Gor,Sil,Degistir,Kaydet from Yetki where KullaniciGrupID=:KullaniciGrupID and FormName=:FormAdi';
+    Qry.ParamByName('KullaniciGrupID').AsInteger:=Tmp.xKullaniciGrupID;
+    Qry.ParamByName('FormAdi').AsString:=YetkiForm;
+    Qry.Open;
+    if Qry.FieldByName('Gor').AsInteger =0 then begin
+       UniMainModule.saYetki.Show;
+       Qry.Free;
+       Abort;
+    end;
+        QryCaption:=Tuniquery.Create(nil);
+        QryCaption.Connection:=frmDM.conAsya;
+        QryCaption.Close;
+        QryCaption.SQL.Clear;
+        QryCaption.SQL.Text:='Select FormName,FormCaption from FormName where FormName=:FormAdi';
+        QryCaption.ParamByName('FormAdi').AsString:=YetkiForm;
+        QryCaption.Open;
+
+
+  F:=AFormType.Create(UniApplication);
+  F.Hint:=FisNo;
+  F.Caption:=QryCaption.FieldByName('FormCaption').AsString;
+  F.Show;
+          //////Yetkiler   Düzenle ve Sil
+          if Qry.FieldByName('Sil').AsInteger = 0 then begin
+              for Z:= 0 to pred (TuniForm(F).componentcount) do begin
+                if (TuniForm(F).components[Z] is TuniButton) then
+                  if TuniButton(TuniForm(F).Components[Z]).Name='btnSil' then
+                    TuniButton(TuniForm(F).Components[Z]).Visible:= false;
+              end;
+          end;
+          if Qry.FieldByName('Degistir').AsInteger = 0 then begin
+              for Z:= 0 to pred (TuniForm(F).componentcount) do begin
+                if (TuniForm(F).components[Z] is TuniButton) then
+                  if TuniButton(TuniForm(F).Components[Z]).Name='btnDuzenle' then
+                    TuniButton(TuniForm(F).Components[Z]).Visible:= false;
+              end;
+          end;
+          Qry.free;
+          /////////////////
+end;
+
+procedure xFormShow(AFormType: TuniFormClass; YetkiForm:String; Tip:Integer;FisNo:String); //Tip : 0 Yeni Tip : 1 Mevcut Kart ve Fiþ Tipi
+var
+    TabSheetNew: TUniTabSheet; I,Z: Integer;
+    PanelTabSheetNew: TUniPanel;
+    F : TUniForm;
+    Qry,QryCaption:Tuniquery;
+    Label Atla;
+begin
+  MainForm.ShowMask('Bekleyiniz..');
+  UniSession.Synchronize();
+  ///Yetki
+    QryCaption:=Tuniquery.Create(nil);
+    QryCaption.Connection:=frmDM.conAsya;
+
+    Qry:=Tuniquery.Create(nil);
+    Qry.Connection:=frmDM.conAsya;
+    Qry.Close;
+    Qry.SQL.Clear;
+    Qry.SQL.Text:='Select Gor,Sil,Degistir,Kaydet from YETKI where KullaniciGrupID=:KullaniciGrupID and FormName=:FormAdi';
+    Qry.ParamByName('KullaniciGrupID').AsInteger:=Tmp.xKullaniciGrupID;
+    Qry.ParamByName('FormAdi').AsString:=YetkiForm;
+    Qry.Open;
+    if Qry.FieldByName('Gor').AsInteger =0 then begin
+       UniMainModule.saYetki.Show;
+       Qry.Free;
+       MainForm.HideMask;
+       Abort;
+    end;
+
+
+  MainForm.NavPage.Visible:= True;
+  {Check if exists, active tab if exist and exit}
+  for I := 0 to MainForm.NavPage.PageCount - 1 do
+    if MainForm.NavPage.Pages[I].Name = YetkiForm  then
+      begin
+        MainForm.NavPage.ActivePageIndex := I;
+        MainForm.NavPage.ActivePage.Close;
+        Goto Atla;
+        //        Exit;
+      end;
+       Atla:
+        QryCaption.Close;
+        QryCaption.SQL.Clear;
+        QryCaption.SQL.Text:='Select FormName,FormCaption from FormName where FormName=:FormAdi';
+        QryCaption.ParamByName('FormAdi').AsString:=YetkiForm;
+        QryCaption.Open;
+  //if not found, then create it...
+//  TabSheetNew              := TUniTabSheet.Create(NavPage);
+  TabSheetNew              := TUniTabSheet.Create(MainForm.NavPage);
+  TabSheetNew.PageControl  := MainForm.NavPage;
+  TabSheetNew.Caption      := QryCaption.FieldByName('FormCaption').AsString;
+  TabSheetNew.Name         := YetkiForm;
+  TabSheetNew.Closable     := True;
+  TabSheetNew.OnClose      := MainForm.CheckTab;
+
+
+  PanelTabSheetNew := TUniPanel.Create(MainForm);
+  PanelTabSheetNew.Align := alClient;
+  PanelTabSheetNew.Parent := TabSheetNew;
+  PanelTabSheetNew.AlignmentControl := uniAlignmentClient;
+  PanelTabSheetNew.Layout := 'fit';
+  PanelTabSheetNew.LayoutConfig.Margin:='1 1 1 1';
+  PanelTabSheetNew.BorderStyle:=ubsNone;
+  F:=AFormType.Create(UniApplication);
+  F.Parent := PanelTabSheetNew;
+  F.Tag:=Tip;
+  F.Hint:=FisNo;
+  F.Show;
+
+          //////Yetkiler   Düzenle ve Sil
+          if Qry.FieldByName('Sil').AsInteger = 0 then begin
+              for Z:= 0 to pred (TuniForm(F).componentcount) do begin
+                if (TuniForm(F).components[Z] is TuniButton) then
+                  if TuniButton(TuniForm(F).Components[Z]).Name='btnSil' then
+                    TuniButton(TuniForm(F).Components[Z]).Visible:= false;
+              end;
+          end;
+          if Qry.FieldByName('Degistir').AsInteger = 0 then begin
+              for Z:= 0 to pred (TuniForm(F).componentcount) do begin
+                if (TuniForm(F).components[Z] is TuniButton) then
+                  if TuniButton(TuniForm(F).Components[Z]).Name='btnDuzenle' then
+                    TuniButton(TuniForm(F).Components[Z]).Visible:= false;
+              end;
+          end;
+          Qry.free;
+          /////////////////
+
+  MainForm.NavPage.ActivePageIndex := MainForm.NavPage.PageCount - 1;
+  MainForm.HideMask;
+end;
+//Procedure xAcilisTablolar;
+//begin
+////  frmDM.qStokBirim.Open;
+//  frmDM.qDepo.Open;
+//  frmDM.qStokTipi.Open;
+//  frmDM.qTevkifat.Open;
+//  frmDM.qUretimTipi.Open;
+//  frmDMListeler.qFaturaListesi.Open;
+//  frmDMListeler.qPersonelListesi.Open;
+////  frmDMListeler.qStokListesi.Open;
+////  frmDMListeler.qGiderListesi.Open;
+//  frmDM.qCariFirmaTip.Open;
+//  frmDM.qCariUlke.open;
+//  frmDM.qParametre.Open;
+//  frmDM.qCariGrup.Open;
+//  frmDM.qCariTip.Open;
+//  frmDM.qFaturaTip.Open;
+//  frmDM.qParaBirim.Open;
+//  frmDM.qStokBirim.Open;
+//  frmDM.qStokKdv.Open;
+//  frmDM.qStokMarka.Open;
+//  frmDM.qEFaturaTanim.Open;
+//  frmDM.qPersonel.Open;
+//
+//end;
+Procedure xTabloAc(Tablo : Tuniquery;Sorgu:String);
+begin
+    Tablo.Close;
+    Tablo.UnPrepare;
+    Tablo.SQL.Clear;
+    Tablo.SQL.Text:=Sorgu;
+    Tablo.Prepare;
+    Tablo.Open;
+end;
+Procedure xLogKaydet (Qry : Tuniquery);
+  begin
+    Qry.FieldByName('KayitTarihi').Value:=now;
+    Qry.FieldByName('KayitKullanici').AsString:=IntToStr(Tmp.xKullaniciId);
+//    Qry.FieldByName('KayitBilgisayar').AsString:=xBilgisayarAdi;
+  end;
+
+Procedure xLogDegistir (Qry : Tuniquery);
+  begin
+    Qry.FieldByName('DegistirilmeTarihi').Value:=now;
+    Qry.FieldByName('DegistirenKullanici').AsString:=IntToStr(Tmp.xKullaniciId);
+//    Qry.FieldByName('DegistirenBilgisayar').AsString:=xBilgisayarAdi;
+  end;
+//Function xFisNoAl(TabloAd:String):String;
+//begin
+//  frmDM.spFisNoBul.Close;
+//  frmDM.spFisNoBul.ParamByName('p_TabloAdi').AsString:=TabloAd;
+//  frmDM.spFisNoBul.Open;
+//  Result:=frmDM.qParametre.FieldByName('Calisma_Yili').AsString+'-'+frmDM.spFisNoBul.FieldByName('FisNo').AsString;
+//end;
+Procedure xUpdateTablo (Sorgu : String);
+  var
+    Qry:Tuniquery;
+  begin
+    Qry:=Tuniquery.Create(nil);
+    Qry.Connection:=frmDM.conAsya;
+    Qry.Close;
+    Qry.SQL.Clear;
+    Qry.SQL.Text:=Sorgu;
+    Qry.Execute;
+    Qry.Free;
+  end;
+//Procedure xKayitYenile;
+//begin
+//  if frmDMListeler.qCariListesi.Active then frmDMListeler.qCariListesi.Refresh;
+//  if frmDMListeler.qFaturaListesi.Active then frmDMListeler.qFaturaListesi.Refresh;
+//  if frmDMListeler.qStokListesi.Active then frmDMListeler.qStokListesi.Refresh;
+//  if frmDMListeler.qHizmetListesi.Active then frmDMListeler.qHizmetListesi.Refresh;
+//  if frmDMListeler.qGiderListesi.Active then frmDMListeler.qGiderListesi.Refresh;
+//  if frmDMListeler.spKasaBankaEkstre.Active then frmDMListeler.spKasaBankaEkstre.Refresh;
+//  if frmDMListeler.qGiderHareket.Active then frmDMListeler.qGiderHareket.Refresh;
+//  if frmDMListeler.qKasaBankaListesi.Active then frmDMListeler.qKasaBankaListesi.Refresh;
+//
+//end;
+//procedure xMesaj(MsgID : Integer);
+//begin
+//    frmDM.qMesajlar.Close;
+//    frmDM.qMesajlar.ParamByName('MesajID').AsInteger:=MsgID;
+//    frmDM.qMesajlar.Open;
+//    UniMainModule.saMesaj.Text:=frmDM.qMesajlar.FieldByName('MesajDetay').AsString;
+//    UniMainModule.saMesaj.TitleText:=frmDM.qMesajlar.FieldByName('MesajBaslik').AsString;
+//    UniMainModule.saMesaj.Show;
+//end;
+//Procedure xKapamaFis (FaturaGC:String ;FisGC:String ;CariKod:String ;ParaBirimi:String);
+//var
+//  FisTutar,FaturaTutar,FisOdemesi,FaturaOdenen :Double;
+//  FisFisNo, FaturaNo : String;
+//  Qry,QryInsert : Tuniquery;
+//  Label Atla;
+//begin
+//  Qry:=Tuniquery.Create(nil);
+//  Qry.Connection:=frmDM.UC;
+//  QryInsert:=Tuniquery.Create(nil);
+//  QryInsert.Connection:=frmDM.UC;
+//
+//  frmDM.spKapamaFis.Close;
+//  frmDM.spKapamaFis.ParamByName('p_GirisCikis').AsString:=FisGC;
+//  frmDM.spKapamaFis.ParamByName('p_CariKod').AsString:=CariKod;
+//  frmDM.spKapamaFis.ParamByName('p_ParaBirimi').AsString:=ParaBirimi;
+//  frmDM.spKapamaFis.ExecProc;
+//  frmDM.spKapamaFis.First;
+//
+//  frmDM.spKapamaFatura.Close;
+//  frmDM.spKapamaFatura.ParamByName('p_GirisCikis').AsString:=FaturaGC;
+//  frmDM.spKapamaFatura.ParamByName('p_CariKod').AsString:=CariKod;
+//  frmDM.spKapamaFatura.ParamByName('p_ParaBirimi').AsString:=ParaBirimi;
+//  frmDM.spKapamaFatura.ExecProc;
+//  frmDM.spKapamaFatura.First;
+//
+//  while not frmDM.spKapamaFis.Eof  do begin
+//    frmDM.spKapamaFis.Refresh;
+//    FisFisNo := frmDM.spKapamaFis.FieldByName('FisNo').AsString;
+//    FisTutar :=frmDM.spKapamaFis.FieldByName('KalanTutar').AsFloat;
+//    FisOdemesi :=frmDM.spKapamaFis.FieldByName('OdenenTutar').AsFloat;
+//
+//      while not frmDM.spKapamaFatura.Eof do begin
+//          frmDM.spKapamaFatura.Refresh;
+//          FaturaNo:=frmDM.spKapamaFatura.FieldByName('FisNo').AsString;
+//          FaturaTutar := frmDM.spKapamaFatura.FieldByName('KalanTutar').AsFloat;
+//          FaturaOdenen := frmDM.spKapamaFatura.FieldByName('OdenenTutar').AsFloat;;
+//
+//        if FaturaTutar <= FisTutar then begin
+//          //Fatura Öde
+//            Qry.Close;
+//            Qry.SQL.Clear;
+//            Qry.SQL.Text:='Update FisBaslik set OdenenTutar=:Tutar where FisNo='''+FaturaNo+'''';
+//            Qry.ParamByName('Tutar').Value:=FaturaTutar+FaturaOdenen;
+//            Qry.Execute;
+//
+//          QryInsert.Close;
+//          QryInsert.SQL.Clear;
+//          QryInsert.SQL.Text:='Insert into OdemeTablosu (CariFisNo,FaturaFisNo,KapatilanTutar) values (:FisFisNo,:FaturaNo,:Tutar)';
+//          QryInsert.ParamByName('FisFisNo').AsString:=FisFisNo;
+//          QryInsert.ParamByName('FaturaNo').AsString:=FaturaNo;
+//          QryInsert.ParamByName('Tutar').AsFloat:=FaturaTutar;
+//          QryInsert.Execute;
+//        //Fiþ Öde
+//
+//          Qry.Close;
+//          Qry.SQL.Clear;
+//          Qry.SQL.Text:='Update FisBaslik set OdenenTutar=:Tutar where FisNo='''+FisFisNo+'''';
+//          Qry.ParamByName('Tutar').Value:=FisOdemesi+FaturaTutar;
+//          Qry.Execute;
+//
+//          FisOdemesi:=FisOdemesi+FaturaTutar;
+//          FisTutar:=FisTutar-FaturaTutar;
+//
+//        end else
+//        ///Fatura Tutarý Fiþden Fazla ise sadece Bir tane ödenebilir.
+//        if (FaturaTutar > FisTutar) then begin
+//          //Fatura Öde
+//            Qry.Close;
+//            Qry.SQL.Clear;
+//            Qry.SQL.Text:='Update FisBaslik set OdenenTutar=:Tutar where FisNo='''+FaturaNo+'''';
+//            Qry.ParamByName('Tutar').Value:=FisTutar + FaturaOdenen;
+//            Qry.Execute;
+//          //Fiþ Öde
+//          Qry.Close;
+//          Qry.SQL.Clear;
+//          Qry.SQL.Text:='Update FisBaslik set OdenenTutar=:Tutar where FisNo='''+FisFisNo+'''';
+//          Qry.ParamByName('Tutar').Value:=FisOdemesi+FisTutar;
+//          Qry.Execute;
+//
+//          QryInsert.Close;
+//          QryInsert.SQL.Clear;
+//          QryInsert.SQL.Text:='Insert into OdemeTablosu (CariFisNo,FaturaFisNo,KapatilanTutar) values (:FisFisNo,:FaturaNo,:Tutar)';
+//          QryInsert.ParamByName('FisFisNo').AsString:=FisFisNo;
+//          QryInsert.ParamByName('FaturaNo').AsString:=FaturaNo;
+//          QryInsert.ParamByName('Tutar').AsFloat:=FisTutar;
+//          QryInsert.Execute;
+//
+//          FaturaTutar:=FaturaTutar-FisTutar;
+//          FisOdemesi:=FisOdemesi+FisTutar;
+//          FisTutar:=FaturaTutar - FisTutar;
+//          Goto Atla;
+//        end;
+//        frmDM.spKapamaFatura.Next;
+//      end;
+//    Atla:
+//    frmDM.spKapamaFis.Next;
+//  end;
+//   QryInsert.Free;
+//   Qry.Free;
+//end;
+//Function xFaturaNo(Fatura:Integer):String;
+//  Var
+//    TabloAd:String;
+//begin
+//  if Fatura=0 then TabloAd:='KFatura';
+//  if Fatura=1 then TabloAd:='EFatura';
+//  if Fatura=2 then TabloAd:='EArsiv';
+//  frmDM.spFisNoBul.Close;
+//  frmDM.spFisNoBul.ParamByName('p_TabloAdi').AsString:=TabloAd;
+//  frmDM.spFisNoBul.Open;
+//  if (Fatura=0) then
+//    Result:=frmDM.qParametre.FieldByName('FaturaSeri').AsString+FormatFloat(frmDM.qParametre.FieldByName('FaturaNoFormat').AsString,frmDM.spFisNoBul.FieldByName('FisNo').AsFloat)
+//  else
+//  if (Fatura=1) then
+//   Result:=frmDM.qParametre.FieldByName('EFaturaSeri').AsString+FormatFloat(frmDM.qParametre.FieldByName('EFaturaNoFormat').AsString,frmDM.spFisNoBul.FieldByName('FisNo').AsFloat)
+//  else
+//   Result:=frmDM.qParametre.FieldByName('EArsivSeri').AsString+FormatFloat(frmDM.qParametre.FieldByName('EArsivNoFormat').AsString,frmDM.spFisNoBul.FieldByName('FisNo').AsFloat);
+//end;
+function xKayitSor(Sorgu : String) : Boolean;
+var
+Qry:Tuniquery;
+begin
+  Qry:=Tuniquery.Create(nil);
+  Qry.Connection:=frmDM.conAsya;
+  Qry.Close;
+  Qry.UnPrepare;
+  Qry.SQL.Clear;
+  Qry.SQL.Text:=Sorgu;
+  Qry.Prepare;
+  Qry.Open;
+  Result := Qry.RecordCount > 0;
+  Qry.Free;
+end;
+function xKayitSorNetsis(Sorgu : String) : Boolean;
+var
+Qry:Tuniquery;
+begin
+  Qry:=Tuniquery.Create(nil);
+  Qry.Connection:=frmDM.conNetsis;
+  Qry.Close;
+  Qry.UnPrepare;
+  Qry.SQL.Clear;
+  Qry.SQL.Text:=Sorgu;
+  Qry.Prepare;
+  Qry.Open;
+  Result := Qry.RecordCount > 0;
+  Qry.Free;
+end;
+
+//Procedure xUnidacBaglan;  //Local Server Baðlan
+//begin
+//   frmDM.UC.Connected:=False;
+//   frmDM.UC.ProviderName:='MySQL';
+//   frmDM.UC.Server:=xServerAdi;
+//   frmDM.UC.Username:=xServerKullanici;
+//   frmDM.UC.Password:=xServerSifre;
+//   frmDM.UC.Database:=xDataBaseAdi;
+////   frmDM.UC.SpecificOptions.Values['ApplicationName']:= xFKey+xDatabaseAdi;
+//        try
+//        frmDM.UC.Connected:=true;
+//        except
+//        xMesaj(20);
+//        frmDM.UC.Connected:=false;
+//        Application.Terminate;
+//        end;
+//end;
+end.

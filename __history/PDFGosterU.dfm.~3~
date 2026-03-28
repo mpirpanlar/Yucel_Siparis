@@ -1,0 +1,23 @@
+object frmPDFGoster: TfrmPDFGoster
+  Left = 0
+  Top = 0
+  ClientHeight = 665
+  ClientWidth = 1055
+  Caption = 'PDF G'#246'ster'
+  OldCreateOrder = False
+  MonitoredKeys.Keys = <>
+  AlignmentControl = uniAlignmentClient
+  Layout = 'fit'
+  PixelsPerInch = 96
+  TextHeight = 13
+  object UniURLFrame1: TUniURLFrame
+    Left = 24
+    Top = 24
+    Width = 969
+    Height = 619
+    Hint = ''
+    TabOrder = 0
+    ParentColor = False
+    Color = clBtnFace
+  end
+end

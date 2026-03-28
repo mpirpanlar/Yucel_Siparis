@@ -1,0 +1,340 @@
+object frmMaliyetTriggerGuncelle: TfrmMaliyetTriggerGuncelle
+  Left = 0
+  Top = 0
+  ClientHeight = 695
+  ClientWidth = 1223
+  Caption = 'frmMaliyetTriggerGuncelle'
+  OnShow = UniFormShow
+  BorderStyle = bsNone
+  OldCreateOrder = False
+  MonitoredKeys.Keys = <>
+  AlignmentControl = uniAlignmentClient
+  Layout = 'fit'
+  PixelsPerInch = 96
+  TextHeight = 13
+  object UniContainerPanel1: TUniContainerPanel
+    Left = 38
+    Top = 8
+    Width = 1147
+    Height = 677
+    Hint = ''
+    ParentColor = False
+    ScreenMask.Message = 'l'#252'tfen bekleyiniz...'
+    TabOrder = 0
+    Layout = 'vbox'
+    object UniPanel2: TUniPanel
+      Left = 31
+      Top = 19
+      Width = 938
+      Height = 35
+      Hint = ''
+      TabOrder = 1
+      BorderStyle = ubsNone
+      Caption = ''
+      Color = 10865101
+      Layout = 'hbox'
+      LayoutConfig.Width = '100%'
+      object UniButton2: TUniButton
+        Left = 3
+        Top = 4
+        Width = 100
+        Height = 28
+        Hint = ''
+        Caption = 'Kapat'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 1
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
+        LayoutConfig.Margin = '3 5 3 3'
+        OnClick = UniButton2Click
+      end
+      object UniButton1: TUniButton
+        Left = 286
+        Top = 4
+        Width = 100
+        Height = 28
+        Hint = ''
+        Visible = False
+        Caption = 'Cari Ekstre'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 3
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
+        LayoutConfig.Margin = '3 5 3 3'
+      end
+      object UniPanel6: TUniPanel
+        Left = 638
+        Top = 0
+        Width = 300
+        Height = 35
+        Hint = ''
+        Align = alRight
+        TabOrder = 2
+        BorderStyle = ubsNone
+        Caption = ''
+        Color = 10865101
+        Layout = 'hbox'
+        LayoutAttribs.Align = 'right'
+        object btnKaydet: TUniButton
+          Left = 49
+          Top = 4
+          Width = 100
+          Height = 28
+          Hint = ''
+          Visible = False
+          Caption = 'Onay'
+          ParentFont = False
+          Font.Charset = TURKISH_CHARSET
+          Font.Color = clWhite
+          Font.Height = -13
+          Font.Name = 'Segoe UI Semibold'
+          Font.Style = [fsBold]
+          TabOrder = 2
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+              'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'success'#39';'#13#10'}')
+          ScreenMask.Enabled = True
+          LayoutConfig.Margin = '3 5 3 3'
+        end
+        object btnSil: TUniButton
+          Left = 187
+          Top = 4
+          Width = 100
+          Height = 28
+          Hint = ''
+          Visible = False
+          Caption = 'Onay '#304'ptal'
+          ParentFont = False
+          Font.Charset = TURKISH_CHARSET
+          Font.Color = clWhite
+          Font.Height = -13
+          Font.Name = 'Segoe UI Semibold'
+          Font.Style = [fsBold]
+          TabOrder = 1
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+              'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'danger'#39';'#13#10'}')
+          ScreenMask.Enabled = True
+          LayoutConfig.Margin = '3 5 3 3'
+        end
+      end
+    end
+    object UniPanel1: TUniPanel
+      Left = 31
+      Top = 60
+      Width = 1082
+      Height = 65
+      Hint = ''
+      TabOrder = 3
+      BorderStyle = ubsNone
+      Title = 'Arama'
+      Caption = ''
+      Layout = 'hbox'
+      LayoutConfig.Width = '100%'
+      object UniSimplePanel3: TUniSimplePanel
+        Left = 11
+        Top = 3
+        Width = 110
+        Height = 59
+        Hint = ''
+        Visible = False
+        ParentColor = False
+        TabOrder = 1
+        Layout = 'vbox'
+        LayoutConfig.Margin = '5 0 0 5'
+        object UniDateTimePicker1: TUniDateTimePicker
+          Left = 5
+          Top = 3
+          Width = 100
+          Hint = ''
+          DateTime = 44143.000000000000000000
+          DateFormat = 'dd/MM/yyyy'
+          TimeFormat = 'HH:mm:ss'
+          TabOrder = 1
+          LayoutConfig.Width = '100%'
+          LayoutConfig.Margin = '2 3 1 3'
+        end
+      end
+      object edCariKod: TUniEdit
+        Left = 127
+        Top = 40
+        Width = 200
+        Hint = ''
+        Visible = False
+        Text = ''
+        TabOrder = 2
+        ScreenMask.Message = 'l'#252'tfen bekleyiniz...'
+        ClearButton = True
+        FieldLabel = 'Cari Ad'
+        FieldLabelAlign = laTop
+        LayoutConfig.Margin = '2 3 1 3'
+      end
+      object cbTrigger: TUniComboBox
+        Left = 352
+        Top = 40
+        Width = 145
+        Hint = ''
+        Style = csDropDownList
+        Text = ''
+        Items.Strings = (
+          'TRIGGER AKT'#304'F'
+          'TRIGGER PAS'#304'F')
+        TabOrder = 4
+        ClearButton = True
+        LayoutConfig.Margin = '2 3 1 3'
+        IconItems = <>
+      end
+      object btnGuncelle: TUniButton
+        Left = 527
+        Top = 22
+        Width = 98
+        Height = 40
+        Hint = ''
+        Caption = 'G'#252'ncelle'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 3
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+        ScreenMask.Enabled = True
+        ImageIndex = 3
+        LayoutConfig.Margin = '7 5 3 10'
+        OnClick = btnGuncelleClick
+      end
+    end
+    object UniSimplePanel2: TUniSimplePanel
+      Left = 31
+      Top = 153
+      Width = 1082
+      Height = 488
+      Hint = ''
+      ParentColor = False
+      ScreenMask.Message = 'l'#252'tfen bekleyiniz...'
+      TabOrder = 2
+      Layout = 'hbox'
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
+      object gridFaturaDetay: TUniDBGrid
+        Left = 12
+        Top = 15
+        Width = 821
+        Height = 234
+        Hint = ''
+        DataSource = dTrgLog
+        Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgConfirmDelete, dgAutoRefreshRow]
+        ReadOnly = True
+        LoadMask.Message = 'Loading data...'
+        LayoutConfig.Flex = 1
+        LayoutConfig.Height = '100%'
+        TabOrder = 1
+        Columns = <
+          item
+            FieldName = 'TARIH'
+            Title.Caption = 'TARIH'
+            Width = 115
+          end
+          item
+            FieldName = 'KAYITYAPANKUL'
+            Title.Caption = #304#350'LEM YAPAN KULLANICI'
+            Width = 200
+          end
+          item
+            FieldName = 'A_K'
+            Title.Caption = 'A'#199'/KAPA'
+            Width = 64
+          end>
+      end
+    end
+  end
+  object popYazdir: TUniPopupMenu
+    Left = 152
+    Top = 400
+    object btnHtml: TUniMenuItem
+      Caption = 'HTML'
+    end
+    object btnXls: TUniMenuItem
+      Caption = 'XLSX'
+    end
+    object btnCsv: TUniMenuItem
+      Caption = 'CSV'
+    end
+  end
+  object saKaydet: TUniSweetAlert
+    Title = 'Title'
+    TitleText = 'Hata !'
+    Text = 'Sipari'#351'e '#199'evrilmi'#351
+    ConfirmButtonText = 'Tamam'
+    CancelButtonText = 'Cancel'
+    AlertType = atInfo
+    Padding = 20
+    Left = 152
+    Top = 280
+  end
+  object UniScreenMask1: TUniScreenMask
+    Enabled = True
+    DisplayMessage = 'Y'#252'kleniyor...'
+    Left = 600
+    Top = 544
+  end
+  object saMesaj: TUniSweetAlert
+    Title = 'Title'
+    TitleText = #304#351'lem Tamam'
+    Text = 'Maliyet Kontrol'
+    ConfirmButtonText = 'Tamam'
+    CancelButtonText = 'Cancel'
+    Padding = 20
+    Left = 152
+    Top = 344
+  end
+  object qTrgLog: TUniQuery
+    Connection = frmDM.conNetsis
+    SQL.Strings = (
+      'SELECT TOP 10 * FROM PLT_TRIGGER_AK_LOG ORDER BY TARIH DESC'
+      '')
+    ReadOnly = True
+    Left = 712
+    Top = 208
+    object qTrgLogTRIGGER_ADI: TStringField
+      FieldName = 'TRIGGER_ADI'
+      Size = 50
+    end
+    object qTrgLogA_K: TIntegerField
+      FieldName = 'A_K'
+    end
+    object qTrgLogTARIH: TDateTimeField
+      FieldName = 'TARIH'
+    end
+    object qTrgLogKAYITYAPANKUL: TStringField
+      FieldName = 'KAYITYAPANKUL'
+      Size = 50
+    end
+  end
+  object dTrgLog: TUniDataSource
+    DataSet = qTrgLog
+    Left = 712
+    Top = 256
+  end
+end

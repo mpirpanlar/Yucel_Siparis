@@ -1,0 +1,3 @@
+Siparis.exe: 0000415C: 16:20:50 [127.0.0.1]:Failed Sequence Recovery: SeqId: 68, Event: click
+Siparis.exe: 0000415C: 16:21:05 [127.0.0.1]:Sequence sent from cache:  SeqId: 68
+Siparis.exe: 0000415C: 16:21:05 [127.0.0.1]:Processed: Id: 68, Evt: click, [M1stGCBgco10A9905E3]

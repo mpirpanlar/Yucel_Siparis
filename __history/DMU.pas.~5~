@@ -1,0 +1,33 @@
+unit DMU;
+
+interface
+
+uses
+  System.SysUtils, System.Classes, UniProvider, SQLServerUniProvider, Data.DB,
+  DBAccess, Uni, dxmdaset;
+
+type
+  TfrmDM = class(TDataModule)
+    upSQLServer: TSQLServerUniProvider;
+    upSQLServer2: TSQLServerUniProvider;
+    conNetsis: TUniConnection;
+    conAsya: TUniConnection;
+    memStok: TdxMemData;
+    memStokStokKod: TStringField;
+    dsmemstok: TUniDataSource;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  frmDM: TfrmDM;
+
+implementation
+
+{%CLASSGROUP 'Vcl.Controls.TControl'}
+
+{$R *.dfm}
+
+end.

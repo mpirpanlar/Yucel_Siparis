@@ -1,0 +1,3 @@
+Siparis.exe: 00001CE8: 01:47:03 [127.0.0.1]:Failed Sequence Recovery: SeqId: 30, Event: click
+Siparis.exe: 00001CE8: 01:47:06 [127.0.0.1]:Sequence sent from cache:  SeqId: 30
+Siparis.exe: 00001CE8: 01:47:06 [127.0.0.1]:Processed: Id: 30, Evt: click, [JBMY1mH7lU10A411F7E]

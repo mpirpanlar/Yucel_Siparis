@@ -1,0 +1,148 @@
+object frmStokCariDetay: TfrmStokCariDetay
+  Left = 0
+  Top = 0
+  ClientHeight = 611
+  ClientWidth = 994
+  Caption = 'Stok Sat'#305#351' Detaylar'#305
+  OnShow = UniFormShow
+  BorderStyle = bsDialog
+  OldCreateOrder = False
+  MonitoredKeys.Keys = <>
+  AlignmentControl = uniAlignmentClient
+  Layout = 'fit'
+  PixelsPerInch = 96
+  TextHeight = 13
+  object UniContainerPanel1: TUniContainerPanel
+    Left = 24
+    Top = 16
+    Width = 945
+    Height = 577
+    Hint = ''
+    ParentColor = False
+    TabOrder = 0
+    Layout = 'vbox'
+    object UniDBGrid1: TUniDBGrid
+      Left = 16
+      Top = 16
+      Width = 913
+      Height = 537
+      Hint = ''
+      DataSource = dStokCariDetay
+      Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgConfirmDelete, dgAutoRefreshRow]
+      ReadOnly = True
+      LoadMask.Message = 'Loading data...'
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      TabOrder = 1
+      Columns = <
+        item
+          FieldName = 'FISNO'
+          Title.Caption = 'FISNO'
+          Width = 120
+        end
+        item
+          FieldName = 'TARIH'
+          Title.Caption = 'TARIH'
+          Width = 120
+        end
+        item
+          FieldName = 'MIKTAR'
+          Title.Caption = 'MIKTAR'
+          Width = 75
+        end
+        item
+          FieldName = 'DOVIZ'
+          Title.Caption = 'DOVIZ'
+          Width = 75
+        end
+        item
+          FieldName = 'DOV_FIAT'
+          Title.Caption = 'DOV_FIAT'
+          Width = 130
+        end
+        item
+          FieldName = 'NET_FIAT'
+          Title.Caption = 'NET_FIAT'
+          Width = 130
+        end
+        item
+          FieldName = 'KDV'
+          Title.Caption = 'KDV'
+          Width = 64
+        end
+        item
+          FieldName = 'STOK_KODU'
+          Title.Caption = 'STOK_KODU'
+          Width = 150
+          Visible = False
+        end
+        item
+          FieldName = 'STOK_ADI'
+          Title.Caption = 'STOK_ADI'
+          Width = 200
+          Hint = '200'
+        end
+        item
+          FieldName = 'CARI_KOD'
+          Title.Caption = 'CARI_KOD'
+          Width = 150
+        end
+        item
+          FieldName = 'CARI_ISIM'
+          Title.Caption = 'CARI_ISIM'
+          Width = 200
+          Hint = '200'
+        end
+        item
+          FieldName = 'DEPO_KODU'
+          Title.Caption = 'DEPO'
+          Width = 50
+        end
+        item
+          FieldName = 'DOV_TIP'
+          Title.Caption = 'DOV_TIP'
+          Width = 64
+        end>
+    end
+  end
+  object qStokCariDetay: TUniQuery
+    Connection = frmDM.conNetsis
+    SQL.Strings = (
+      ''
+      
+        'SELECT H.STOK_KODU, S.STOK_ADI, H.FISNO, H.STHAR_TARIH AS TARIH,' +
+        ' H.STHAR_ACIKLAMA AS CARI_KOD, C.CARI_ISIM, H.DEPO_KODU'
+      
+        ', H.STHAR_GCMIK AS MIKTAR, H.STHAR_DOVTIP AS DOV_TIP, CASE WHEN ' +
+        'H.STHAR_DOVTIP = 0 THEN '#39'TL'#39' ELSE D.ISIM END '#39'DOVIZ'#39', H.STHAR_DO' +
+        'VFIAT AS DOV_FIAT, H.STHAR_NF AS NET_FIAT, STHAR_KDV AS KDV'
+      ''
+      'FROM TBLSTHAR H'
+      
+        #9'INNER JOIN TBLSTSABIT S WITH(NOLOCK) ON (S.STOK_KODU = H.STOK_K' +
+        'ODU)'
+      
+        #9'INNER JOIN TBLCASABIT C WITH(NOLOCK) ON (C.CARI_KOD = H.STHAR_A' +
+        'CIKLAMA)'
+      
+        #9'INNER JOIN NETSIS.DBO.KUR D WITH(NOLOCK) ON (D.SIRA = H.STHAR_D' +
+        'OVTIP)'
+      'WHERE H.STOK_KODU = '#39'201001-003'#39
+      'AND H.STHAR_ACIKLAMA = '#39'000000'#39
+      'AND H.STHAR_FTIRSIP = '#39'1'#39
+      'AND H.DEPO_KODU = 3'
+      ''
+      ''
+      ''
+      ''
+      '')
+    ReadOnly = True
+    Left = 488
+    Top = 304
+  end
+  object dStokCariDetay: TUniDataSource
+    DataSet = qStokCariDetay
+    Left = 504
+    Top = 360
+  end
+end

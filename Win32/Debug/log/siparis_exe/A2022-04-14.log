@@ -1,0 +1,374 @@
+Siparis.exe: 00004498: 00:26:50 []:>--------------------------------------------------------------<
+Siparis.exe: 00004498: 00:26:50 [TUniServerModule]:Server First Init.
+Siparis.exe: 00004498: 00:26:50 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00004498: 00:26:50 [TUniServerModule]:Global Cache Folder Erased. <11> Files deleted.
+Siparis.exe: 00004498: 00:26:50 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00004498: 00:26:50 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 000040D8: 00:26:58 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00002780: 00:35:56 []:>--------------------------------------------------------------<
+Siparis.exe: 00002780: 00:35:56 [TUniServerModule]:Server First Init.
+Siparis.exe: 00002780: 00:35:56 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00002780: 00:35:56 [TUniServerModule]:Global Cache Folder Erased. <10> Files deleted.
+Siparis.exe: 00002780: 00:35:56 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00002780: 00:35:56 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00002670: 00:36:04 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: qG4mCPuc5q10A3968EF ) : Addr: $0078E97E
+Siparis.exe: 00004598: 00:36:05 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 000034A8: 00:36:26 [127.0.0.1]:EDatabaseError : Connection is not defined : Addr: $009BA90D
+Siparis.exe: 000024E4: 00:37:14 []:>--------------------------------------------------------------<
+Siparis.exe: 000024E4: 00:37:14 [TUniServerModule]:Server First Init.
+Siparis.exe: 000024E4: 00:37:14 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 000024E4: 00:37:14 [TUniServerModule]:Global Cache Folder Erased. <10> Files deleted.
+Siparis.exe: 000024E4: 00:37:14 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 000024E4: 00:37:14 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00004720: 00:37:24 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: pqwLnMbfNX10A396B66 ) : Addr: $0078E97E
+Siparis.exe: 00000F38: 00:37:28 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00002DA0: 00:38:32 []:>--------------------------------------------------------------<
+Siparis.exe: 00002DA0: 00:38:32 [TUniServerModule]:Server First Init.
+Siparis.exe: 00002DA0: 00:38:32 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00002DA0: 00:38:32 [TUniServerModule]:Global Cache Folder Erased. <9> Files deleted.
+Siparis.exe: 00002DA0: 00:38:32 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00002DA0: 00:38:32 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 0000471C: 00:38:41 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: ZLVmLAsuLt10A396BC3 ) : Addr: $0078E97E
+Siparis.exe: 00000988: 00:38:42 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00000568: 00:40:13 []:>--------------------------------------------------------------<
+Siparis.exe: 00000568: 00:40:13 [TUniServerModule]:Server First Init.
+Siparis.exe: 00000568: 00:40:13 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00000568: 00:40:13 [TUniServerModule]:Global Cache Folder Erased. <12> Files deleted.
+Siparis.exe: 00000568: 00:40:13 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00000568: 00:40:13 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00002524: 00:40:24 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: ujBbI9W7v710A396C1A ) : Addr: $0078E97E
+Siparis.exe: 00000C68: 00:40:25 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00004460: 00:40:32 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00000D80: 00:40:48 [127.0.0.1]:EDatabaseError : qFisBaslik: Field 'CariKod' not found : Addr: $0065986E
+Siparis.exe: 00004234: 00:41:10 []:>--------------------------------------------------------------<
+Siparis.exe: 00004234: 00:41:10 [TUniServerModule]:Server First Init.
+Siparis.exe: 00004234: 00:41:10 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00004234: 00:41:10 [TUniServerModule]:Global Cache Folder Erased. <11> Files deleted.
+Siparis.exe: 00004234: 00:41:10 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00004234: 00:41:10 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 000014E8: 00:41:14 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 000040B0: 00:43:29 []:>--------------------------------------------------------------<
+Siparis.exe: 000040B0: 00:43:29 [TUniServerModule]:Server First Init.
+Siparis.exe: 000040B0: 00:43:29 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 000040B0: 00:43:29 [TUniServerModule]:Global Cache Folder Erased. <13> Files deleted.
+Siparis.exe: 000040B0: 00:43:29 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 000040B0: 00:43:29 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00000540: 00:43:37 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: 4uxX97rgaw10A396CCD ) : Addr: $0078E97E
+Siparis.exe: 00000CB0: 00:43:38 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00002F1C: 00:45:34 [HandleFileRequest[192.168.1.46]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00002A58: 00:53:10 []:>--------------------------------------------------------------<
+Siparis.exe: 00002A58: 00:53:10 [TUniServerModule]:Server First Init.
+Siparis.exe: 00002A58: 00:53:10 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00002A58: 00:53:10 [TUniServerModule]:Global Cache Folder Erased. <29> Files deleted.
+Siparis.exe: 00002A58: 00:53:10 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00002A58: 00:53:10 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00000F34: 00:53:16 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: qPwVx3rTXo10A396D73 ) : Addr: $0078E97E
+Siparis.exe: 000046E4: 00:53:17 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: qPwVx3rTXo10A396D73 ) : Addr: $0078E97E
+Siparis.exe: 000035DC: 00:53:19 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00002518: 01:05:12 []:>--------------------------------------------------------------<
+Siparis.exe: 00002518: 01:05:12 [TUniServerModule]:Server First Init.
+Siparis.exe: 00002518: 01:05:12 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00002518: 01:05:12 [TUniServerModule]:Global Cache Folder Erased. <10> Files deleted.
+Siparis.exe: 00002518: 01:05:12 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00002518: 01:05:12 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00002C50: 01:05:19 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: 513mGqwaxD10A397015 ) : Addr: $0078E97E
+Siparis.exe: 0000307C: 01:05:20 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 000047A8: 01:07:16 []:>--------------------------------------------------------------<
+Siparis.exe: 000047A8: 01:07:16 [TUniServerModule]:Server First Init.
+Siparis.exe: 000047A8: 01:07:16 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 000047A8: 01:07:16 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 000047A8: 01:07:16 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 000047A8: 01:07:16 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 000020F4: 01:07:22 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: 8BsK7TyYWV10A397356 ) : Addr: $0078E97E
+Siparis.exe: 0000069C: 01:07:22 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 000016B8: 01:09:16 []:>--------------------------------------------------------------<
+Siparis.exe: 000016B8: 01:09:16 [TUniServerModule]:Server First Init.
+Siparis.exe: 000016B8: 01:09:16 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 000016B8: 01:09:16 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 000016B8: 01:09:16 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 000016B8: 01:09:16 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00000C08: 01:09:23 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: 4kiCaCl6xH10A3973E4 ) : Addr: $0078E97E
+Siparis.exe: 00003F54: 01:09:23 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00002960: 01:10:36 []:>--------------------------------------------------------------<
+Siparis.exe: 00002960: 01:10:36 [TUniServerModule]:Server First Init.
+Siparis.exe: 00002960: 01:10:36 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00002960: 01:10:36 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 00002960: 01:10:36 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00002960: 01:10:36 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00000F54: 01:10:43 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: oU6TvAymiS10A397470 ) : Addr: $0078E97E
+Siparis.exe: 00000338: 01:10:43 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 000005D8: 01:12:13 []:>--------------------------------------------------------------<
+Siparis.exe: 000005D8: 01:12:14 [TUniServerModule]:Server First Init.
+Siparis.exe: 000005D8: 01:12:14 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 000005D8: 01:12:14 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 000005D8: 01:12:14 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 000005D8: 01:12:14 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 000017E4: 01:12:18 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: trgFlLJWRc10A3974CD ) : Addr: $0078E97E
+Siparis.exe: 0000161C: 01:12:19 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00002850: 01:14:04 []:>--------------------------------------------------------------<
+Siparis.exe: 00002850: 01:14:04 [TUniServerModule]:Server First Init.
+Siparis.exe: 00002850: 01:14:04 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00002850: 01:14:04 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 00002850: 01:14:04 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00002850: 01:14:04 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 000005D0: 01:14:11 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: CVgzQytzto10A39753B ) : Addr: $0078E97E
+Siparis.exe: 00004034: 01:14:12 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 000044DC: 01:14:49 []:>--------------------------------------------------------------<
+Siparis.exe: 000044DC: 01:14:49 [TUniServerModule]:Server First Init.
+Siparis.exe: 000044DC: 01:14:49 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 000044DC: 01:14:49 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 000044DC: 01:14:49 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 000044DC: 01:14:49 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00003D18: 01:14:59 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: gYrx4JKabf10A3975BE ) : Addr: $0078E97E
+Siparis.exe: 00001FC8: 01:15:00 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00000700: 01:15:34 []:>--------------------------------------------------------------<
+Siparis.exe: 00000700: 01:15:34 [TUniServerModule]:Server First Init.
+Siparis.exe: 00000700: 01:15:34 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00000700: 01:15:34 [TUniServerModule]:Global Cache Folder Erased. <9> Files deleted.
+Siparis.exe: 00000700: 01:15:34 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00000700: 01:15:34 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00000554: 01:15:40 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: QPRBhKwsOd10A3975F0 ) : Addr: $0078E97E
+Siparis.exe: 000023A0: 01:15:41 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 0000362C: 01:17:08 []:>--------------------------------------------------------------<
+Siparis.exe: 0000362C: 01:17:08 [TUniServerModule]:Server First Init.
+Siparis.exe: 0000362C: 01:17:08 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 0000362C: 01:17:08 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 0000362C: 01:17:08 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 0000362C: 01:17:08 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00003DB0: 01:17:12 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: QTVVzUlpoQ10A397625 ) : Addr: $0078E97E
+Siparis.exe: 000008E0: 01:17:13 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 000030B4: 01:18:10 []:>--------------------------------------------------------------<
+Siparis.exe: 000030B4: 01:18:10 [TUniServerModule]:Server First Init.
+Siparis.exe: 000030B4: 01:18:10 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 000030B4: 01:18:10 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 000030B4: 01:18:10 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 000030B4: 01:18:10 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 000013F8: 01:18:15 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: IGH6ycNvwe10A39768F ) : Addr: $0078E97E
+Siparis.exe: 0000401C: 01:18:16 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 000004C8: 01:18:50 []:>--------------------------------------------------------------<
+Siparis.exe: 000004C8: 01:18:50 [TUniServerModule]:Server First Init.
+Siparis.exe: 000004C8: 01:18:50 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 000004C8: 01:18:50 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 000004C8: 01:18:50 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 000004C8: 01:18:50 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 0000475C: 01:18:59 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: SMk9U7mmgQ10A3976D8 ) : Addr: $0078E97E
+Siparis.exe: 000044A0: 01:19:00 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00003AC0: 01:19:24 []:>--------------------------------------------------------------<
+Siparis.exe: 00003AC0: 01:19:24 [TUniServerModule]:Server First Init.
+Siparis.exe: 00003AC0: 01:19:24 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00003AC0: 01:19:24 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 00003AC0: 01:19:25 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00003AC0: 01:19:25 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00001908: 01:19:31 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: nd1ceqiQfD10A39770B ) : Addr: $0078E97E
+Siparis.exe: 00002E4C: 01:19:32 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00002D34: 01:20:03 []:>--------------------------------------------------------------<
+Siparis.exe: 00002D34: 01:20:03 [TUniServerModule]:Server First Init.
+Siparis.exe: 00002D34: 01:20:03 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00002D34: 01:20:03 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 00002D34: 01:20:03 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00002D34: 01:20:03 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 0000327C: 01:20:09 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: uOFGZQJswP10A397730 ) : Addr: $0078E97E
+Siparis.exe: 000030F0: 01:20:10 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00000A60: 01:20:43 []:>--------------------------------------------------------------<
+Siparis.exe: 00000A60: 01:20:43 [TUniServerModule]:Server First Init.
+Siparis.exe: 00000A60: 01:20:43 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00000A60: 01:20:43 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 00000A60: 01:20:43 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00000A60: 01:20:43 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 0000128C: 01:20:49 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: Dob4FTlUbX10A39775B ) : Addr: $0078E97E
+Siparis.exe: 00002E1C: 01:20:50 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 0000148C: 01:21:18 []:>--------------------------------------------------------------<
+Siparis.exe: 0000148C: 01:21:18 [TUniServerModule]:Server First Init.
+Siparis.exe: 0000148C: 01:21:18 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 0000148C: 01:21:18 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 0000148C: 01:21:18 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 0000148C: 01:21:18 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 000030D4: 01:21:23 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: nPBc2yeMmm10A39778A ) : Addr: $0078E97E
+Siparis.exe: 00001DD8: 01:21:24 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 0000355C: 01:22:08 []:>--------------------------------------------------------------<
+Siparis.exe: 0000355C: 01:22:08 [TUniServerModule]:Server First Init.
+Siparis.exe: 0000355C: 01:22:08 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 0000355C: 01:22:08 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 0000355C: 01:22:08 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 0000355C: 01:22:08 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00004764: 01:22:14 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: RIFgPfENiJ10A3977B2 ) : Addr: $0078E97E
+Siparis.exe: 00003B2C: 01:22:14 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 000034D4: 01:23:08 []:>--------------------------------------------------------------<
+Siparis.exe: 000034D4: 01:23:08 [TUniServerModule]:Server First Init.
+Siparis.exe: 000034D4: 01:23:08 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 000034D4: 01:23:08 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 000034D4: 01:23:08 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 000034D4: 01:23:08 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 000003A8: 01:23:13 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: kq5KNFiyan10A3977EC ) : Addr: $0078E97E
+Siparis.exe: 00003ECC: 01:23:14 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00001BC0: 01:24:02 []:>--------------------------------------------------------------<
+Siparis.exe: 00001BC0: 01:24:02 [TUniServerModule]:Server First Init.
+Siparis.exe: 00001BC0: 01:24:02 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00001BC0: 01:24:02 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 00001BC0: 01:24:02 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00001BC0: 01:24:02 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 000040AC: 01:24:08 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: KHoN4V5w2Y10A397831 ) : Addr: $0078E97E
+Siparis.exe: 000031A8: 01:24:09 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00004214: 01:25:56 []:>--------------------------------------------------------------<
+Siparis.exe: 00004214: 01:25:56 [TUniServerModule]:Server First Init.
+Siparis.exe: 00004214: 01:25:56 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00004214: 01:25:56 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 00004214: 01:25:56 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00004214: 01:25:56 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00001358: 01:26:07 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: OyvrpfFN5e10A397871 ) : Addr: $0078E97E
+Siparis.exe: 00002C4C: 01:26:07 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00003D6C: 01:28:06 []:>--------------------------------------------------------------<
+Siparis.exe: 00003D6C: 01:28:06 [TUniServerModule]:Server First Init.
+Siparis.exe: 00003D6C: 01:28:06 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00003D6C: 01:28:06 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 00003D6C: 01:28:06 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00003D6C: 01:28:06 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00002E10: 01:28:12 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: yUT5kjEqla10A3978FA ) : Addr: $0078E97E
+Siparis.exe: 00001638: 01:28:13 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00003040: 01:31:59 []:>--------------------------------------------------------------<
+Siparis.exe: 00003040: 01:31:59 [TUniServerModule]:Server First Init.
+Siparis.exe: 00003040: 01:31:59 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00003040: 01:31:59 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 00003040: 01:31:59 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00003040: 01:31:59 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 0000455C: 01:32:04 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: dQsR7EbSiX10A39798B ) : Addr: $0078E97E
+Siparis.exe: 000010E8: 01:32:05 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00002EC4: 01:33:58 []:>--------------------------------------------------------------<
+Siparis.exe: 00002EC4: 01:33:58 [TUniServerModule]:Server First Init.
+Siparis.exe: 00002EC4: 01:33:58 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00002EC4: 01:33:58 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 00002EC4: 01:33:58 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00002EC4: 01:33:58 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 0000417C: 01:34:04 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: tdrMPU6Yve10A397A98 ) : Addr: $0078E97E
+Siparis.exe: 000026A8: 01:34:05 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 0000447C: 01:34:59 []:>--------------------------------------------------------------<
+Siparis.exe: 0000447C: 01:34:59 [TUniServerModule]:Server First Init.
+Siparis.exe: 0000447C: 01:34:59 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 0000447C: 01:34:59 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 0000447C: 01:34:59 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 0000447C: 01:34:59 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00003E98: 01:35:09 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: tRFNI1pftt10A397B22 ) : Addr: $0078E97E
+Siparis.exe: 00001128: 01:35:10 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00002B30: 01:36:38 []:>--------------------------------------------------------------<
+Siparis.exe: 00002B30: 01:36:38 [TUniServerModule]:Server First Init.
+Siparis.exe: 00002B30: 01:36:38 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00002B30: 01:36:38 [TUniServerModule]:Global Cache Folder Erased. <10> Files deleted.
+Siparis.exe: 00002B30: 01:36:38 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00002B30: 01:36:38 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 0000157C: 01:36:45 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: nKoxBC719u10A397B68 ) : Addr: $0078E97E
+Siparis.exe: 00003688: 01:36:46 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 000046D0: 01:38:06 []:>--------------------------------------------------------------<
+Siparis.exe: 000046D0: 01:38:06 [TUniServerModule]:Server First Init.
+Siparis.exe: 000046D0: 01:38:06 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 000046D0: 01:38:06 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 000046D0: 01:38:06 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 000046D0: 01:38:06 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00003BC4: 01:38:10 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: dh5iG7yCK310A397BDC ) : Addr: $0078E97E
+Siparis.exe: 00002510: 01:38:11 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00003464: 01:38:43 []:>--------------------------------------------------------------<
+Siparis.exe: 00003464: 01:38:43 [TUniServerModule]:Server First Init.
+Siparis.exe: 00003464: 01:38:43 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00003464: 01:38:43 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 00003464: 01:38:43 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00003464: 01:38:43 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 000007BC: 01:38:48 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: LUvKOUMKMZ10A397C3F ) : Addr: $0078E97E
+Siparis.exe: 000041CC: 01:38:49 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00000D9C: 01:39:40 []:>--------------------------------------------------------------<
+Siparis.exe: 00000D9C: 01:39:40 [TUniServerModule]:Server First Init.
+Siparis.exe: 00000D9C: 01:39:40 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00000D9C: 01:39:40 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 00000D9C: 01:39:40 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00000D9C: 01:39:40 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00001234: 01:39:47 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: 7vsdXd2CW910A397C6B ) : Addr: $0078E97E
+Siparis.exe: 0000336C: 01:39:48 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00004110: 01:40:10 []:>--------------------------------------------------------------<
+Siparis.exe: 00004110: 01:40:10 [TUniServerModule]:Server First Init.
+Siparis.exe: 00004110: 01:40:10 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00004110: 01:40:10 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 00004110: 01:40:10 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00004110: 01:40:10 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00002C34: 01:40:15 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: bR5gx3LpPw10A397CAF ) : Addr: $0078E97E
+Siparis.exe: 00003AD0: 01:40:16 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00001310: 01:45:01 []:>--------------------------------------------------------------<
+Siparis.exe: 00001310: 01:45:01 [TUniServerModule]:Server First Init.
+Siparis.exe: 00001310: 01:45:01 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00001310: 01:45:01 [TUniServerModule]:Global Cache Folder Erased. <8> Files deleted.
+Siparis.exe: 00001310: 01:45:01 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00001310: 01:45:01 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00002C88: 01:45:06 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: xbgGzR755u10A397CD0 ) : Addr: $0078E97E
+Siparis.exe: 000040F0: 01:45:07 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00003ED8: 01:48:30 []:>--------------------------------------------------------------<
+Siparis.exe: 00003ED8: 01:48:30 [TUniServerModule]:Server First Init.
+Siparis.exe: 00003ED8: 01:48:30 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00003ED8: 01:48:30 [TUniServerModule]:Global Cache Folder Erased. <10> Files deleted.
+Siparis.exe: 00003ED8: 01:48:30 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00003ED8: 01:48:30 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00003600: 01:48:36 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: g7pR3N8JO310A397E21 ) : Addr: $0078E97E
+Siparis.exe: 000023D0: 01:48:36 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 000038AC: 01:51:53 []:>--------------------------------------------------------------<
+Siparis.exe: 000038AC: 01:51:53 [TUniServerModule]:Server First Init.
+Siparis.exe: 000038AC: 01:51:53 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 000038AC: 01:51:53 [TUniServerModule]:Global Cache Folder Erased. <9> Files deleted.
+Siparis.exe: 000038AC: 01:51:53 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 000038AC: 01:51:53 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00002560: 01:51:58 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: f9v1qdNvYe10A397F13 ) : Addr: $0078E97E
+Siparis.exe: 000034F8: 01:51:59 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00000820: 01:54:19 []:>--------------------------------------------------------------<
+Siparis.exe: 00000820: 01:54:19 [TUniServerModule]:Server First Init.
+Siparis.exe: 00000820: 01:54:19 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00000820: 01:54:19 [TUniServerModule]:Global Cache Folder Erased. <10> Files deleted.
+Siparis.exe: 00000820: 01:54:19 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00000820: 01:54:20 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 000012D8: 01:54:26 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: MibHYoSGqZ10A397FFD ) : Addr: $0078E97E
+Siparis.exe: 00001A60: 01:54:27 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00001D4C: 01:55:35 []:>--------------------------------------------------------------<
+Siparis.exe: 00001D4C: 01:55:35 [TUniServerModule]:Server First Init.
+Siparis.exe: 00001D4C: 01:55:35 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00001D4C: 01:55:35 [TUniServerModule]:Global Cache Folder Erased. <9> Files deleted.
+Siparis.exe: 00001D4C: 01:55:35 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00001D4C: 01:55:35 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00001350: 01:55:47 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: k9fayeHUjn10A3980A9 ) : Addr: $0078E97E
+Siparis.exe: 00003388: 01:55:48 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00004070: 02:01:48 []:>--------------------------------------------------------------<
+Siparis.exe: 00004070: 02:01:48 [TUniServerModule]:Server First Init.
+Siparis.exe: 00004070: 02:01:48 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00004070: 02:01:48 [TUniServerModule]:Global Cache Folder Erased. <9> Files deleted.
+Siparis.exe: 00004070: 02:01:48 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00004070: 02:01:48 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00000968: 02:01:57 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: yIc2tDJor310A398106 ) : Addr: $0078E97E
+Siparis.exe: 00002B60: 02:01:57 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00001298: 02:02:41 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 000039E4: 02:05:35 []:>--------------------------------------------------------------<
+Siparis.exe: 000039E4: 02:05:35 [TUniServerModule]:Server First Init.
+Siparis.exe: 000039E4: 02:05:35 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 000039E4: 02:05:35 [TUniServerModule]:Global Cache Folder Erased. <17> Files deleted.
+Siparis.exe: 000039E4: 02:05:35 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 000039E4: 02:05:35 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00000EA4: 02:05:43 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: Dpfvvv5cP710A3982E6 ) : Addr: $0078E97E
+Siparis.exe: 00000F18: 02:05:44 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00003CC8: 02:07:30 []:>--------------------------------------------------------------<
+Siparis.exe: 00003CC8: 02:07:30 [TUniServerModule]:Server First Init.
+Siparis.exe: 00003CC8: 02:07:30 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00003CC8: 02:07:30 [TUniServerModule]:Global Cache Folder Erased. <9> Files deleted.
+Siparis.exe: 00003CC8: 02:07:30 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00003CC8: 02:07:30 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00002C6C: 02:07:36 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: XIxDKXbFQy10A3983B8 ) : Addr: $0078E97E
+Siparis.exe: 000047E4: 02:07:37 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00000484: 02:08:56 []:>--------------------------------------------------------------<
+Siparis.exe: 00000484: 02:08:56 [TUniServerModule]:Server First Init.
+Siparis.exe: 00000484: 02:08:56 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00000484: 02:08:56 [TUniServerModule]:Global Cache Folder Erased. <11> Files deleted.
+Siparis.exe: 00000484: 02:08:56 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00000484: 02:08:56 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00000B7C: 02:08:59 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: hL6ZPFlcHh10A39843B ) : Addr: $0078E97E
+Siparis.exe: 00004370: 02:09:00 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: hL6ZPFlcHh10A39843B ) : Addr: $0078E97E
+Siparis.exe: 00003F58: 02:09:02 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: hL6ZPFlcHh10A39843B ) : Addr: $0078E97E
+Siparis.exe: 000008B4: 02:09:04 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png
+Siparis.exe: 00000F54: 02:11:37 []:>--------------------------------------------------------------<
+Siparis.exe: 00000F54: 02:11:37 [TUniServerModule]:Server First Init.
+Siparis.exe: 00000F54: 02:11:37 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00000F54: 02:11:37 [TUniServerModule]:Global Cache Folder Erased. <9> Files deleted.
+Siparis.exe: 00000F54: 02:11:37 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00000F54: 02:11:37 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00004068: 02:11:42 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: OISOTb71sg10A39849E ) : Addr: $0078E97E
+Siparis.exe: 00002F3C: 02:11:45 [HandleFileRequest[127.0.0.1]]:File not found: C:\UretimSource\FibrosanSiparis\Win32\Debug\images\Egehayat_logo.png

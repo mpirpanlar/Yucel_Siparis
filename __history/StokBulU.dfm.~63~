@@ -1,0 +1,471 @@
+object frmStokBul: TfrmStokBul
+  Left = 0
+  Top = 0
+  ClientHeight = 611
+  ClientWidth = 1044
+  Caption = 'Stok Listesi'
+  OnShow = UniFormShow
+  BorderStyle = bsDialog
+  OldCreateOrder = False
+  BorderIcons = [biSystemMenu]
+  MonitoredKeys.Keys = <>
+  AlignmentControl = uniAlignmentClient
+  Layout = 'fit'
+  PixelsPerInch = 96
+  TextHeight = 13
+  object UniContainerPanel1: TUniContainerPanel
+    Left = 24
+    Top = 24
+    Width = 1001
+    Height = 553
+    Hint = ''
+    ParentColor = False
+    TabOrder = 0
+    Layout = 'vbox'
+    object UniPanel8: TUniPanel
+      Left = 32
+      Top = 21
+      Width = 937
+      Height = 55
+      Hint = ''
+      TabOrder = 1
+      BorderStyle = ubsNone
+      Caption = ''
+      Layout = 'hbox'
+      LayoutConfig.Width = '100%'
+      object edStokKod: TUniEdit
+        Left = 3
+        Top = 3
+        Width = 200
+        Hint = ''
+        Text = ''
+        TabOrder = 1
+        ClearButton = True
+        FieldLabel = 'Stok Ad'#305
+        FieldLabelAlign = laTop
+        LayoutConfig.Margin = '3 3 3 15'
+        OnKeyPress = edStokKodKeyPress
+      end
+      object btnStokListele: TUniButton
+        Left = 222
+        Top = 3
+        Width = 120
+        Height = 34
+        Hint = ''
+        Caption = 'Listele'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 2
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+        ScreenMask.Enabled = True
+        ScreenMask.Message = 'Bilgiler getiriliyor. L'#252'tfen bekleyiniz...'
+        Images = UniMainModule.Resim_24
+        ImageIndex = 1
+        LayoutConfig.Margin = '12 5 3 10'
+        OnClick = btnStokListeleClick
+      end
+      object BirimCombo: TUniComboBox
+        Left = 384
+        Top = 3
+        Width = 60
+        Hint = ''
+        Style = csDropDownList
+        Text = ''
+        TabOrder = 4
+        LayoutConfig.Margin = '3 3 3 15'
+        FieldLabel = 'Birim'
+        FieldLabelAlign = laTop
+        IconItems = <>
+      end
+      object edMiktar: TUniNumberEdit
+        Left = 450
+        Top = 3
+        Width = 60
+        Hint = ''
+        TabOrder = 5
+        FieldLabel = 'Miktar'
+        FieldLabelAlign = laTop
+        LayoutConfig.Margin = '3 3 3 15'
+        DecimalSeparator = ','
+        OnClick = edMiktarClick
+        OnKeyPress = edMiktarKeyPress
+      end
+      object dovizCombo: TUniDBLookupComboBox
+        Left = 516
+        Top = 3
+        Width = 65
+        Hint = ''
+        ListField = 'ISIM'
+        ListSource = frmSiparisDM.dDoviz
+        KeyField = 'SIRA'
+        ListFieldIndex = 0
+        TabOrder = 6
+        Color = clWindow
+        AutoEdit = False
+        LayoutConfig.Margin = '3 3 3 15'
+        FieldLabel = 'Para Birimi'
+        FieldLabelAlign = laTop
+      end
+      object chkOzel1: TUniCheckBox
+        Left = 587
+        Top = 3
+        Width = 56
+        Height = 17
+        Hint = ''
+        Caption = #214'ZEL'
+        TabOrder = 7
+        LayoutConfig.Margin = '25 3 3 20'
+      end
+      object edEk1: TUniEdit
+        Left = 631
+        Top = 3
+        Width = 67
+        Hint = ''
+        Text = ''
+        TabOrder = 8
+        ClearButton = True
+        FieldLabel = 'EK 1'
+        FieldLabelAlign = laTop
+        LayoutConfig.Margin = '3 3 3 15'
+      end
+      object edEk2: TUniEdit
+        Left = 704
+        Top = 3
+        Width = 67
+        Hint = ''
+        Text = ''
+        TabOrder = 9
+        FieldLabel = 'EK 2'
+        FieldLabelAlign = laTop
+        LayoutConfig.Margin = '3 3 3 15'
+      end
+      object btnSecileniKullan: TUniButton
+        Left = 745
+        Top = 0
+        Width = 147
+        Height = 34
+        Hint = ''
+        Caption = 'Se'#231'ileni Kullan'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 3
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'success'#39';'#13#10'}')
+        ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+        Images = UniMainModule.Resim_24
+        ImageIndex = 3
+        LayoutConfig.Margin = '12 5 3 70'
+        OnClick = btnSecileniKullanClick
+      end
+    end
+    object UniDBGrid2: TUniDBGrid
+      Left = 32
+      Top = 162
+      Width = 857
+      Height = 313
+      Hint = ''
+      DataSource = dStokListe
+      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgConfirmDelete, dgAutoRefreshRow]
+      LoadMask.Message = 'Loading data...'
+      RowHeight = 30
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
+      TabOrder = 2
+      OnCellClick = UniDBGrid2CellClick
+      Columns = <
+        item
+          FieldName = 'SUBE_KODU'
+          Title.Caption = #350'UBE'
+          Width = 41
+        end
+        item
+          FieldName = 'ISLETME_KODU'
+          Title.Caption = 'ISLETME_KODU'
+          Width = 41
+          Visible = False
+        end
+        item
+          FieldName = 'STOK_KODU'
+          Title.Caption = 'STOK KODU'
+          Width = 100
+        end
+        item
+          FieldName = 'URETICI_KODU'
+          Title.Caption = 'URETICI_KODU'
+          Width = 214
+          Visible = False
+        end
+        item
+          FieldName = 'STOK_ADI'
+          Title.Caption = 'STOK_ADI'
+          Width = 300
+        end
+        item
+          FieldName = 'KUR'
+          Title.Caption = 'D'#214'V'
+          Width = 60
+        end
+        item
+          FieldName = 'DOV_SATIS_FIAT'
+          Title.Caption = 'D'#214'V.F'#304'AT'
+          Width = 64
+        end
+        item
+          FieldName = 'DEPO_MIKTAR'
+          Title.Caption = 'DEPO'
+          Width = 80
+        end
+        item
+          FieldName = 'ACIK_YUKLEME_TOPLAM'
+          Title.Caption = 'A'#199'K.Y'#220'K.'
+          Width = 80
+        end
+        item
+          FieldName = 'KULLANILABILIR_BAKIYE'
+          Title.Caption = 'KULL.BAK'#304'YE'
+          Width = 80
+        end
+        item
+          FieldName = 'SATIS_FIAT1'
+          Title.Caption = 'SATIS_FIAT1'
+          Width = 85
+        end
+        item
+          FieldName = 'SATIS_FIAT2'
+          Title.Caption = 'SATIS_FIAT2'
+          Width = 85
+        end
+        item
+          FieldName = 'SATIS_FIAT3'
+          Title.Caption = 'SATIS_FIAT3'
+          Width = 85
+        end
+        item
+          FieldName = 'SATIS_FIAT4'
+          Title.Caption = 'SATIS_FIAT4'
+          Width = 85
+        end
+        item
+          FieldName = 'SAT_DOV_TIP'
+          Title.Caption = 'D'#214'V.T'#304'P'
+          Width = 60
+        end
+        item
+          FieldName = 'KDV_ORANI'
+          Title.Caption = 'KDV'
+          Width = 60
+        end>
+    end
+  end
+  object qStokListe: TUniQuery
+    Connection = frmDM.conNetsis
+    SQL.Strings = (
+      'SELECT '
+      'TBLSTSABIT.SUBE_KODU'
+      ',ISLETME_KODU'
+      ',STOK_KODU'
+      ',URETICI_KODU'
+      ',STOK_ADI'
+      ',GRUP_KODU'
+      ',KOD_1'
+      ',KOD_2'
+      ',KOD_3'
+      ',KOD_4'
+      ',KOD_5'
+      ',SATICI_KODU'
+      ',OLCU_BR1'
+      ',OLCU_BR2'
+      ',PAY_1'
+      ',PAYDA_1'
+      ',OLCU_BR3'
+      ',PAY2'
+      ',PAYDA2'
+      ',FIAT_BIRIMI'
+      ',AZAMI_STOK'
+      ',ASGARI_STOK'
+      ',TEMIN_SURESI'
+      ',KUL_MIK'
+      ',RISK_SURESI'
+      ',ZAMAN_BIRIMI'
+      ',SATIS_FIAT1'
+      ',SATIS_FIAT2'
+      ',SATIS_FIAT3'
+      ',SATIS_FIAT4'
+      ',SAT_DOV_TIP'
+      ',DOV_ALIS_FIAT'
+      ',DOV_MAL_FIAT'
+      ',DOV_SATIS_FIAT'
+      ',MUH_DETAYKODU'
+      ',BIRIM_AGIRLIK'
+      ',NAKLIYET_TUT'
+      ',KDV_ORANI'
+      ',ALIS_DOV_TIP'
+      ',DEPO_KODU'
+      ',DOV_TUR'
+      ',URET_OLCU_BR'
+      ',BILESENMI'
+      ',MAMULMU'
+      ',FORMUL_TOPLAMI'
+      ',UPDATE_KODU'
+      ',MAX_ISKONTO'
+      ',ECZACI_KARI'
+      ',MIKTAR'
+      ',MAL_FAZLASI'
+      ',KDV_TENZIL_ORAN'
+      ',KILIT'
+      ',ONCEKI_KOD'
+      ',SONRAKI_KOD'
+      ',BARKOD1'
+      ',BARKOD2'
+      ',BARKOD3'
+      ',ALIS_KDV_KODU'
+      ',ALIS_FIAT1'
+      ',ALIS_FIAT2'
+      ',ALIS_FIAT3'
+      ',ALIS_FIAT4'
+      ',LOT_SIZE'
+      ',MIN_SIP_MIKTAR'
+      ',SABIT_SIP_ARALIK'
+      ',SIP_POLITIKASI'
+      ',OZELLIK_KODU1'
+      ',OZELLIK_KODU2'
+      ',OZELLIK_KODU3'
+      ',OZELLIK_KODU4'
+      ',OZELLIK_KODU5'
+      ',OPSIYON_KODU1'
+      ',OPSIYON_KODU2'
+      ',OPSIYON_KODU3'
+      ',OPSIYON_KODU4'
+      ',OPSIYON_KODU5'
+      ',BILESEN_OP_KODU'
+      ',SIP_VER_MAL'
+      ',ELDE_BUL_MAL'
+      ',YIL_TAH_KUL_MIK'
+      ',EKON_SIP_MIKTAR'
+      ',ESKI_RECETE'
+      ',OTOMATIK_URETIM'
+      ',ALFKOD'
+      ',SAFKOD'
+      ',KODTURU'
+      ',S_YEDEK1'
+      ',S_YEDEK2'
+      ',F_YEDEK3'
+      ',F_YEDEK4'
+      ',C_YEDEK5'
+      ',C_YEDEK6'
+      ',B_YEDEK7'
+      ',I_YEDEK8'
+      ',L_YEDEK9'
+      ',D_YEDEK10'
+      ',GIRIS_SERI'
+      ',CIKIS_SERI'
+      ',SERI_BAK'
+      ',SERI_MIK'
+      ',SERI_GIR_OT'
+      ',SERI_CIK_OT'
+      ',SERI_BASLANGIC'
+      ',FIYATKODU'
+      ',FIYATSIRASI'
+      ',PLANLANACAK'
+      ',LOT_SIZECUSTOMER'
+      ',MIN_SIP_MIKTARCUSTOMER'
+      ',GUMRUKTARIFEKODU'
+      ',ABCKODU'
+      ',PERFORMANSKODU'
+      ',SATICISIPKILIT'
+      ',MUSTERISIPKILIT'
+      ',SATINALMAKILIT'
+      ',SATISKILIT'
+      ',EN'
+      ',BOY'
+      ',GENISLIK'
+      ',SIPLIMITVAR'
+      ',SONSTOKKODU'
+      ',ONAYTIPI'
+      ',ONAYNUM'
+      ',FIKTIF_MAM'
+      ',YAPILANDIR'
+      ',SBOMVARMI'
+      ',BAGLISTOKKOD'
+      ',YAPKOD'
+      ',ALISTALTEKKILIT'
+      ',SATISTALTEKKILIT'
+      ',S_YEDEK3'
+      ',STOKMEVZUAT'
+      ',OTVTEVKIFAT'
+      ',SERIBARKOD'
+      
+        ', ISNULL((SELECT MIKTAR1_BAKIYE FROM HV_STOK_DEPO_BAKIYE P WITH(' +
+        'NOLOCK) WHERE (P.SUBE_KODU = 0) AND (P.STOK_KODU = TBLSTSABIT.ST' +
+        'OK_KODU) AND (DEPO_KODU = 3)),0) AS DEPO_MIKTAR'
+      ',ISNULL(Y.ACIK_YUKLEME_TOPLAM,0) AS '#39'ACIK_YUKLEME_TOPLAM'#39
+      
+        ', ((ISNULL((SELECT MIKTAR1_BAKIYE FROM HV_STOK_DEPO_BAKIYE P WIT' +
+        'H(NOLOCK) WHERE (P.SUBE_KODU = 0) AND (P.STOK_KODU = TBLSTSABIT.' +
+        'STOK_KODU) AND (DEPO_KODU = 3)),0)) -'
+      ' (ISNULL(Y.ACIK_YUKLEME_TOPLAM,0))) AS '#39'KULLANILABILIR_BAKIYE'#39
+      ' , D.ISIM AS KUR'
+      ' FROM TBLSTSABIT '
+      
+        #9'LEFT JOIN ASYA_ENTEGRE.DBO.HV_STOK_ACIKYUKLEME Y WITH(NOLOCK) O' +
+        'N (Y.STOKKODU = STOK_KODU) AND (Y.SUBE_KODU = 0)'
+      #9'LEFT JOIN NETSIS.DBO.KUR D WITH(NOLOCK) ON (D.SIRA=SAT_DOV_TIP)'
+      'where STOK_KODU = '#39'201005-001'#39)
+    Left = 116
+    Top = 86
+  end
+  object dStokListe: TUniDataSource
+    DataSet = spStokListe
+    Left = 120
+    Top = 142
+  end
+  object spStokListe: TUniStoredProc
+    StoredProcName = 'HSP_STOKLISTESI;1'
+    SQL.Strings = (
+      '{:RETURN_VALUE = CALL HSP_STOKLISTESI;1 (:sube, :depo, :stok)}')
+    Connection = frmDM.conNetsis
+    Left = 280
+    Top = 104
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'RETURN_VALUE'
+        ParamType = ptResult
+        Value = 0
+      end
+      item
+        DataType = ftInteger
+        Name = 'sube'
+        ParamType = ptInput
+        Value = nil
+      end
+      item
+        DataType = ftInteger
+        Name = 'depo'
+        ParamType = ptInput
+        Value = nil
+      end
+      item
+        DataType = ftString
+        Name = 'stok'
+        ParamType = ptInput
+        Size = 50
+        Value = nil
+      end>
+    CommandStoredProcName = 'HSP_STOKLISTESI;1'
+  end
+end

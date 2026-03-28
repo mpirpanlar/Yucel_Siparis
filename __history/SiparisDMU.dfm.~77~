@@ -1,0 +1,955 @@
+object frmSiparisDM: TfrmSiparisDM
+  OldCreateOrder = False
+  Height = 576
+  Width = 803
+  object qFisBaslik: TUniQuery
+    Connection = frmDM.conAsya
+    SQL.Strings = (
+      'Select * from SIPARIS_BASLIK'
+      '-- where FisNo = '#39'T20220000000855'#39
+      'Where FisNo=:FisNo')
+    BeforePost = qFisBaslikBeforePost
+    Left = 32
+    Top = 34
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'FisNo'
+        Value = Null
+      end>
+  end
+  object qFisDetay: TUniQuery
+    Connection = frmDM.conAsya
+    SQL.Strings = (
+      'Select *,'#39'Hari'#231#39' as KdvDahil from SIPARIS_DETAY order by SiraNo')
+    MasterSource = dsFisBaslik
+    MasterFields = 'FisNo'
+    DetailFields = 'FisNo'
+    CachedUpdates = True
+    BeforePost = qFisDetayBeforePost
+    OnCalcFields = qFisDetayCalcFields
+    Left = 168
+    Top = 42
+    ParamData = <
+      item
+        DataType = ftString
+        Name = 'FisNo'
+        ParamType = ptInput
+        Value = 'T20220000000855'
+      end>
+    object qFisDetaycKdvTutar: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'cKdvTutar'
+      DisplayFormat = '#.,##'
+      Calculated = True
+    end
+    object qFisDetaycBrutToplam: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'cBrutToplam'
+      DisplayFormat = '#.,#####'
+      Calculated = True
+    end
+    object qFisDetaycIskToplam: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'cIskToplam'
+      DisplayFormat = '#.,##'
+      Calculated = True
+    end
+    object qFisDetaycNetToplam: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'cNetToplam'
+      DisplayFormat = '#.,#####'
+      Calculated = True
+    end
+    object qFisDetaycNetBirimFiyat: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'cNetBirimFiyat'
+      DisplayFormat = '#.,#####'
+      Calculated = True
+    end
+    object qFisDetaycKdvBirimFiyat: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'cKdvBirimFiyat'
+      DisplayFormat = '#.,##'
+      Calculated = True
+    end
+    object qFisDetaycCariBirimFiyat: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'cCariBirimFiyat'
+      DisplayFormat = '#.,#####'
+      Calculated = True
+    end
+    object qFisDetaycCariToplam: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'cCariToplam'
+      DisplayFormat = '#.,##'
+      Calculated = True
+    end
+    object qFisDetaycOtvToplam: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'cOtvToplam'
+      DisplayFormat = '#.,##'
+      Calculated = True
+    end
+    object qFisDetaycOivToplam: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'cOivToplam'
+      DisplayFormat = '#.,##'
+      Calculated = True
+    end
+    object qFisDetayFisDetayID: TIntegerField
+      AutoGenerateValue = arAutoInc
+      FieldName = 'FisDetayID'
+    end
+    object qFisDetayDepoID: TIntegerField
+      FieldName = 'DepoID'
+      Required = True
+    end
+    object qFisDetayBirimFiyat: TFloatField
+      FieldName = 'BirimFiyat'
+      Required = True
+      DisplayFormat = '#.,#####'
+    end
+    object qFisDetayNetBirimFiyat: TFloatField
+      FieldName = 'NetBirimFiyat'
+      DisplayFormat = '#.,#####'
+    end
+    object qFisDetayKdvBirimFiyat: TFloatField
+      FieldName = 'KdvBirimFiyat'
+      DisplayFormat = '#.,##'
+    end
+    object qFisDetayMiktar: TFloatField
+      FieldName = 'Miktar'
+      Required = True
+    end
+    object qFisDetayGercekMiktar: TFloatField
+      FieldName = 'GercekMiktar'
+    end
+    object qFisDetayKdv: TFloatField
+      FieldName = 'Kdv'
+      DisplayFormat = '#.,##'
+    end
+    object qFisDetayKdvTutar: TFloatField
+      FieldName = 'KdvTutar'
+      DisplayFormat = '#.,##'
+    end
+    object qFisDetayIskYuzde_1: TFloatField
+      FieldName = 'IskYuzde_1'
+    end
+    object qFisDetayIskTutar: TFloatField
+      FieldName = 'IskTutar'
+      DisplayFormat = '#.,##'
+    end
+    object qFisDetayIskToplam: TFloatField
+      FieldName = 'IskToplam'
+      DisplayFormat = '#.,##'
+    end
+    object qFisDetayBrutToplam: TFloatField
+      FieldName = 'BrutToplam'
+      DisplayFormat = '#.,#####'
+    end
+    object qFisDetayNetToplam: TFloatField
+      FieldName = 'NetToplam'
+      DisplayFormat = '#.,##'
+    end
+    object qFisDetaySiraNo: TIntegerField
+      FieldName = 'SiraNo'
+    end
+    object qFisDetayOtvToplam: TFloatField
+      FieldName = 'OtvToplam'
+    end
+    object qFisDetayOtvDeger: TFloatField
+      FieldName = 'OtvDeger'
+    end
+    object qFisDetayOivYuzde: TFloatField
+      FieldName = 'OivYuzde'
+    end
+    object qFisDetayGiren: TFloatField
+      FieldName = 'Giren'
+    end
+    object qFisDetayCikan: TFloatField
+      FieldName = 'Cikan'
+    end
+    object qFisDetayCariBirimFiyat: TFloatField
+      FieldName = 'CariBirimFiyat'
+      DisplayFormat = '#.,#####'
+    end
+    object qFisDetayCariToplam: TFloatField
+      FieldName = 'CariToplam'
+    end
+    object qFisDetaySatisKur: TFloatField
+      FieldName = 'SatisKur'
+      DisplayFormat = '#.,#####'
+    end
+    object qFisDetayCariKur: TFloatField
+      FieldName = 'CariKur'
+    end
+    object qFisDetayCarpan: TFloatField
+      FieldName = 'Carpan'
+    end
+    object qFisDetayStokTip: TShortintField
+      FieldName = 'StokTip'
+    end
+    object qFisDetayAlisMaliyet: TFloatField
+      FieldName = 'AlisMaliyet'
+      DisplayFormat = '#.,##'
+    end
+    object qFisDetaycKdvTevkifat: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'cKdvTevkifat'
+      Calculated = True
+    end
+    object qFisDetayTevkifatKdv: TFloatField
+      FieldName = 'TevkifatKdv'
+    end
+    object qFisDetayFisNo: TStringField
+      FieldName = 'FisNo'
+      Required = True
+      Size = 50
+    end
+    object qFisDetayIskYuzde_2: TFloatField
+      FieldName = 'IskYuzde_2'
+    end
+    object qFisDetayIskYuzde_3: TFloatField
+      FieldName = 'IskYuzde_3'
+      DisplayFormat = '#.,##'
+    end
+    object qFisDetayStokAciklama: TStringField
+      FieldName = 'StokAciklama'
+      Size = 200
+    end
+    object qFisDetayStokKod: TStringField
+      FieldName = 'StokKod'
+      Required = True
+      Size = 50
+    end
+    object qFisDetayParaBirimi: TStringField
+      FieldName = 'ParaBirimi'
+      Size = 5
+    end
+    object qFisDetayStokDurum: TByteField
+      FieldName = 'StokDurum'
+    end
+    object qFisDetayStokBirim: TStringField
+      FieldName = 'StokBirim'
+      Required = True
+      Size = 30
+    end
+    object qFisDetayOtvKod: TStringField
+      FieldName = 'OtvKod'
+      Size = 50
+    end
+    object qFisDetayOtvOranTutar: TStringField
+      FieldName = 'OtvOranTutar'
+      Size = 10
+    end
+    object qFisDetayCariParaBirimi: TStringField
+      FieldName = 'CariParaBirimi'
+      Size = 5
+    end
+    object qFisDetaySatisKurBirimi: TStringField
+      FieldName = 'SatisKurBirimi'
+      Size = 5
+    end
+    object qFisDetayStokGercekBirim: TStringField
+      FieldName = 'StokGercekBirim'
+      Size = 30
+    end
+    object qFisDetayKdvDahil: TStringField
+      FieldName = 'KdvDahil'
+      ReadOnly = True
+      Required = True
+      Size = 5
+    end
+    object qFisDetaySonMaliyetFiyat: TFloatField
+      FieldName = 'SonMaliyetFiyat'
+      DisplayFormat = '#.,##'
+    end
+    object qFisDetaySonMaliyetTarih: TDateTimeField
+      FieldName = 'SonMaliyetTarih'
+    end
+    object qFisDetaySonAlisFiyat: TFloatField
+      FieldName = 'SonAlisFiyat'
+      DisplayFormat = '#.,##'
+    end
+    object qFisDetaySonAlisTarih: TDateTimeField
+      FieldName = 'SonAlisTarih'
+    end
+    object qFisDetayDovizAdi: TStringField
+      FieldName = 'DovizAdi'
+      Size = 10
+    end
+    object qFisDetaycDovizFiyat: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'cDovizFiyat'
+      DisplayFormat = '#.,##'
+      Calculated = True
+    end
+    object qFisDetayc_BrutFiyat: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'c_BrutFiyat'
+      DisplayFormat = '#.,##'
+      Calculated = True
+    end
+    object qFisDetayc_NetFiyat: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'c_NetFiyat'
+      Calculated = True
+    end
+    object qFisDetayKontrolFiyat: TFloatField
+      FieldName = 'KontrolFiyat'
+    end
+    object qFisDetayOzel1: TStringField
+      FieldName = 'Ozel1'
+      Size = 50
+    end
+    object qFisDetayOzel2: TStringField
+      FieldName = 'Ozel2'
+      Size = 50
+    end
+    object qFisDetayLDoviz: TStringField
+      FieldKind = fkLookup
+      FieldName = 'LDoviz'
+      LookupDataSet = qDoviz
+      LookupKeyFields = 'ISIM'
+      LookupResultField = 'ISIM'
+      KeyFields = 'DovizAdi'
+      Lookup = True
+    end
+    object qFisDetaySatirEK1: TStringField
+      FieldName = 'SatirEK1'
+      Size = 50
+    end
+    object qFisDetaySatirEK2: TStringField
+      FieldName = 'SatirEK2'
+      Size = 50
+    end
+    object qFisDetaycNetDovizBirimFiyat: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'cNetDovizBirimFiyat'
+      Calculated = True
+    end
+    object qFisDetaycIskTutar1: TFloatField
+      FieldKind = fkCalculated
+      FieldName = 'cIskTutar1'
+      Calculated = True
+    end
+  end
+  object dsFisDetay: TUniDataSource
+    DataSet = qFisDetay
+    Left = 168
+    Top = 98
+  end
+  object dsFisBaslik: TUniDataSource
+    DataSet = qFisBaslik
+    Left = 32
+    Top = 90
+  end
+  object qStokSec: TUniQuery
+    Connection = frmDM.conNetsis
+    SQL.Strings = (
+      'SELECT SUBE_KODU'
+      ',ISLETME_KODU'
+      ',STOK_KODU'
+      ',URETICI_KODU'
+      ',STOK_ADI'
+      ',GRUP_KODU'
+      ',KOD_1'
+      ',KOD_2'
+      ',KOD_3'
+      ',KOD_4'
+      ',KOD_5'
+      ',SATICI_KODU'
+      ',OLCU_BR1'
+      ',OLCU_BR2'
+      ',PAY_1'
+      ',PAYDA_1'
+      ',OLCU_BR3'
+      ',PAY2'
+      ',PAYDA2'
+      ',FIAT_BIRIMI'
+      ',AZAMI_STOK'
+      ',ASGARI_STOK'
+      ',TEMIN_SURESI'
+      ',KUL_MIK'
+      ',RISK_SURESI'
+      ',ZAMAN_BIRIMI'
+      ',SATIS_FIAT1'
+      ',SATIS_FIAT2'
+      ',SATIS_FIAT3'
+      ',SATIS_FIAT4'
+      ',SAT_DOV_TIP'
+      ',DOV_ALIS_FIAT'
+      ',DOV_MAL_FIAT'
+      ',DOV_SATIS_FIAT'
+      ',MUH_DETAYKODU'
+      ',BIRIM_AGIRLIK'
+      ',NAKLIYET_TUT'
+      ',KDV_ORANI'
+      ',ALIS_DOV_TIP'
+      ',DEPO_KODU'
+      ',DOV_TUR'
+      ',URET_OLCU_BR'
+      ',BILESENMI'
+      ',MAMULMU'
+      ',FORMUL_TOPLAMI'
+      ',UPDATE_KODU'
+      ',MAX_ISKONTO'
+      ',ECZACI_KARI'
+      ',MIKTAR'
+      ',MAL_FAZLASI'
+      ',KDV_TENZIL_ORAN'
+      ',KILIT'
+      ',ONCEKI_KOD'
+      ',SONRAKI_KOD'
+      ',BARKOD1'
+      ',BARKOD2'
+      ',BARKOD3'
+      ',ALIS_KDV_KODU'
+      ',ALIS_FIAT1'
+      ',ALIS_FIAT2'
+      ',ALIS_FIAT3'
+      ',ALIS_FIAT4'
+      ',LOT_SIZE'
+      ',MIN_SIP_MIKTAR'
+      ',SABIT_SIP_ARALIK'
+      ',SIP_POLITIKASI'
+      ',OZELLIK_KODU1'
+      ',OZELLIK_KODU2'
+      ',OZELLIK_KODU3'
+      ',OZELLIK_KODU4'
+      ',OZELLIK_KODU5'
+      ',OPSIYON_KODU1'
+      ',OPSIYON_KODU2'
+      ',OPSIYON_KODU3'
+      ',OPSIYON_KODU4'
+      ',OPSIYON_KODU5'
+      ',BILESEN_OP_KODU'
+      ',SIP_VER_MAL'
+      ',ELDE_BUL_MAL'
+      ',YIL_TAH_KUL_MIK'
+      ',EKON_SIP_MIKTAR'
+      ',ESKI_RECETE'
+      ',OTOMATIK_URETIM'
+      ',ALFKOD'
+      ',SAFKOD'
+      ',KODTURU'
+      ',S_YEDEK1'
+      ',S_YEDEK2'
+      ',F_YEDEK3'
+      ',F_YEDEK4'
+      ',C_YEDEK5'
+      ',C_YEDEK6'
+      ',B_YEDEK7'
+      ',I_YEDEK8'
+      ',L_YEDEK9'
+      ',D_YEDEK10'
+      ',GIRIS_SERI'
+      ',CIKIS_SERI'
+      ',SERI_BAK'
+      ',SERI_MIK'
+      ',SERI_GIR_OT'
+      ',SERI_CIK_OT'
+      ',SERI_BASLANGIC'
+      ',FIYATKODU'
+      ',FIYATSIRASI'
+      ',PLANLANACAK'
+      ',LOT_SIZECUSTOMER'
+      ',MIN_SIP_MIKTARCUSTOMER'
+      ',GUMRUKTARIFEKODU'
+      ',ABCKODU'
+      ',PERFORMANSKODU'
+      ',SATICISIPKILIT'
+      ',MUSTERISIPKILIT'
+      ',SATINALMAKILIT'
+      ',SATISKILIT'
+      ',EN'
+      ',BOY'
+      ',GENISLIK'
+      ',SIPLIMITVAR'
+      ',SONSTOKKODU'
+      ',ONAYTIPI'
+      ',ONAYNUM'
+      ',FIKTIF_MAM'
+      ',YAPILANDIR'
+      ',SBOMVARMI'
+      ',BAGLISTOKKOD'
+      ',YAPKOD'
+      ',ALISTALTEKKILIT'
+      ',SATISTALTEKKILIT'
+      ',S_YEDEK3'
+      ',STOKMEVZUAT'
+      ',OTVTEVKIFAT'
+      ',SERIBARKOD'
+      ' FROM TBLSTSABIT where Stok_Kodu=:StokKod')
+    Left = 344
+    Top = 42
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'StokKod'
+        Value = nil
+      end>
+  end
+  object spStokMaliyetBul: TUniStoredProc
+    StoredProcName = 'STOKMALIYETBUL;1'
+    SQL.Strings = (
+      '{:RETURN_VALUE = CALL STOKMALIYETBUL;1 (:STOK)}')
+    Connection = frmDM.conNetsis
+    Left = 444
+    Top = 105
+    ParamData = <
+      item
+        DataType = ftInteger
+        Name = 'RETURN_VALUE'
+        ParamType = ptResult
+        Value = 0
+      end
+      item
+        DataType = ftString
+        Name = 'STOK'
+        ParamType = ptInput
+        Size = 35
+        Value = nil
+      end>
+    CommandStoredProcName = 'STOKMALIYETBUL;1'
+  end
+  object qNetsisSubeParametre: TUniQuery
+    Connection = frmDM.conNetsis
+    SQL.Strings = (
+      
+        'SELECT SUBE_KODU, ISNULL(YEDEK11,'#39'H'#39') AS YEDEK11 FROM TBLPARAM W' +
+        'HERE SUBE_KODU =:Sube')
+    Left = 448
+    Top = 38
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'Sube'
+        Value = nil
+      end>
+  end
+  object qDoviz: TUniQuery
+    Connection = frmDM.conNetsis
+    SQL.Strings = (
+      
+        'SELECT D.*, K.BIRIM, K.ISIM, K.NETSISSIRA FROM NETSIS.DBO.DOVIZ ' +
+        'D '
+      'LEFT JOIN NETSIS.DBO.KUR K WITH(NOLOCK) ON (K.SIRA = D.SIRA) '
+      'WHERE TARIH =:Tar'
+      '-- WHERE TARIH ='#39'2022-10-05'#39
+      'UNION ALL '
+      'SELECT '#39#39',0,'#39#39',1,'#39#39',1,'#39#39','#39#39','#39#39','#39#39',1,'#39'TL'#39',0 '
+      ''
+      
+        '--SELECT D.*, K.BIRIM, K.ISIM, K.NETSISSIRA FROM NETSIS.DBO.DOVI' +
+        'Z D '
+      '--LEFT JOIN NETSIS.DBO.KUR K WITH(NOLOCK) ON (K.SIRA = D.SIRA) '
+      '--WHERE TARIH = '#39'2022-04-18'#39)
+    Active = True
+    Left = 554
+    Top = 33
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'Tar'
+        Value = Null
+      end>
+  end
+  object dDoviz: TUniDataSource
+    DataSet = qDoviz
+    Left = 554
+    Top = 89
+  end
+  object qEk: TUniQuery
+    Connection = frmDM.conAsya
+    SQL.Strings = (
+      'SELECT * FROM FISBASLIK_EK')
+    MasterSource = dsFisBaslik
+    MasterFields = 'CariKod;FisNo'
+    DetailFields = 'CARIKOD;FATIRSNO'
+    CachedUpdates = True
+    BeforePost = qEkBeforePost
+    Left = 32
+    Top = 153
+    ParamData = <
+      item
+        DataType = ftString
+        Name = 'CariKod'
+        Value = nil
+      end
+      item
+        DataType = ftString
+        Name = 'FisNo'
+        Value = nil
+      end>
+  end
+  object dEk: TUniDataSource
+    DataSet = qEk
+    Left = 32
+    Top = 224
+  end
+  object db_FisBaslik: TfrxDBDataset
+    UserName = 'Fis_Baslik'
+    CloseDataSource = False
+    DataSet = qFisBaslik
+    BCDToCurrency = False
+    Left = 96
+    Top = 32
+  end
+  object db_FisDetay: TfrxDBDataset
+    UserName = 'Fis_Detay'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'cKdvTutar=cKdvTutar'
+      'cBrutToplam=cBrutToplam'
+      'cIskToplam=cIskToplam'
+      'cNetToplam=cNetToplam'
+      'cNetBirimFiyat=cNetBirimFiyat'
+      'cKdvBirimFiyat=cKdvBirimFiyat'
+      'cCariBirimFiyat=cCariBirimFiyat'
+      'cCariToplam=cCariToplam'
+      'cOtvToplam=cOtvToplam'
+      'cOivToplam=cOivToplam'
+      'FisDetayID=FisDetayID'
+      'DepoID=DepoID'
+      'BirimFiyat=BirimFiyat'
+      'NetBirimFiyat=NetBirimFiyat'
+      'KdvBirimFiyat=KdvBirimFiyat'
+      'Miktar=Miktar'
+      'GercekMiktar=GercekMiktar'
+      'Kdv=Kdv'
+      'KdvTutar=KdvTutar'
+      'IskYuzde_1=IskYuzde_1'
+      'IskTutar=IskTutar'
+      'IskToplam=IskToplam'
+      'BrutToplam=BrutToplam'
+      'NetToplam=NetToplam'
+      'SiraNo=SiraNo'
+      'OtvToplam=OtvToplam'
+      'OtvDeger=OtvDeger'
+      'OivYuzde=OivYuzde'
+      'Giren=Giren'
+      'Cikan=Cikan'
+      'CariBirimFiyat=CariBirimFiyat'
+      'CariToplam=CariToplam'
+      'SatisKur=SatisKur'
+      'CariKur=CariKur'
+      'Carpan=Carpan'
+      'StokTip=StokTip'
+      'AlisMaliyet=AlisMaliyet'
+      'cKdvTevkifat=cKdvTevkifat'
+      'TevkifatKdv=TevkifatKdv'
+      'FisNo=FisNo'
+      'IskYuzde_2=IskYuzde_2'
+      'IskYuzde_3=IskYuzde_3'
+      'StokAciklama=StokAciklama'
+      'StokKod=StokKod'
+      'ParaBirimi=ParaBirimi'
+      'StokDurum=StokDurum'
+      'StokBirim=StokBirim'
+      'OtvKod=OtvKod'
+      'OtvOranTutar=OtvOranTutar'
+      'CariParaBirimi=CariParaBirimi'
+      'SatisKurBirimi=SatisKurBirimi'
+      'StokGercekBirim=StokGercekBirim'
+      'KdvDahil=KdvDahil'
+      'SonMaliyetFiyat=SonMaliyetFiyat'
+      'SonMaliyetTarih=SonMaliyetTarih'
+      'SonAlisFiyat=SonAlisFiyat'
+      'SonAlisTarih=SonAlisTarih'
+      'DovizAdi=DovizAdi'
+      'cDovizFiyat=cDovizFiyat'
+      'c_BrutFiyat=c_BrutFiyat'
+      'c_NetFiyat=c_NetFiyat'
+      'KontrolFiyat=KontrolFiyat'
+      'Ozel1=Ozel1'
+      'Ozel2=Ozel2'
+      'LDoviz=LDoviz'
+      'SatirEK1=SatirEK1'
+      'SatirEK2=SatirEK2')
+    DataSet = qFisDetay
+    BCDToCurrency = False
+    Left = 248
+    Top = 40
+  end
+  object db_Ek: TfrxDBDataset
+    UserName = 'Ek_Alanlar'
+    CloseDataSource = False
+    DataSet = qEk
+    BCDToCurrency = False
+    Left = 64
+    Top = 160
+  end
+  object db_DovizKur: TfrxDBDataset
+    UserName = 'Doviz_Kur'
+    CloseDataSource = False
+    DataSet = qDoviz
+    BCDToCurrency = False
+    Left = 624
+    Top = 32
+  end
+  object qCariDizayn: TUniQuery
+    Connection = frmDM.conNetsis
+    SQL.Strings = (
+      'SELECT * FROM TBLCASABIT WHERE CARI_KOD =:Cari')
+    Left = 192
+    Top = 246
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'Cari'
+        Value = Null
+      end>
+  end
+  object db_CariDizayn: TfrxDBDataset
+    UserName = 'Cari_Kart'
+    CloseDataSource = False
+    DataSet = qCariDizayn
+    BCDToCurrency = False
+    Left = 264
+    Top = 248
+  end
+  object frxSiparis: TfrxReport
+    Version = '6.7.9'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick, pbCopy, pbSelection]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Default'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 44208.039242546300000000
+    ReportOptions.LastChange = 44208.039242546300000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      'begin'
+      ''
+      'end.')
+    Left = 384
+    Top = 304
+    Datasets = <
+      item
+        DataSet = db_CariDizayn
+        DataSetName = 'Cari_Kart'
+      end
+      item
+        DataSet = db_DovizKur
+        DataSetName = 'Doviz_Kur'
+      end
+      item
+        DataSet = db_Ek
+        DataSetName = 'Ek_Alanlar'
+      end
+      item
+        DataSet = db_FisBaslik
+        DataSetName = 'Fis_Baslik'
+      end
+      item
+        DataSet = db_FisDetay
+        DataSetName = 'Fis_Detay'
+      end>
+    Variables = <>
+    Style = <>
+    object Data: TfrxDataPage
+      Height = 1000.000000000000000000
+      Width = 1000.000000000000000000
+    end
+    object Page1: TfrxReportPage
+      PaperWidth = 210.000000000000000000
+      PaperHeight = 297.000000000000000000
+      PaperSize = 9
+      LeftMargin = 10.000000000000000000
+      RightMargin = 10.000000000000000000
+      TopMargin = 10.000000000000000000
+      BottomMargin = 10.000000000000000000
+      Frame.Typ = []
+      MirrorMode = []
+    end
+  end
+  object frxPDFExport1: TfrxPDFExport
+    UseFileCache = True
+    ShowProgress = True
+    OverwritePrompt = False
+    DataOnly = False
+    OpenAfterExport = False
+    PrintOptimized = False
+    Outline = False
+    Background = False
+    HTMLTags = True
+    Quality = 95
+    Transparency = False
+    Author = 'FastReport'
+    Subject = 'FastReport PDF export'
+    ProtectionFlags = [ePrint, eModify, eCopy, eAnnot]
+    HideToolbar = False
+    HideMenubar = False
+    HideWindowUI = False
+    FitWindow = False
+    CenterWindow = False
+    PrintScaling = False
+    PdfA = False
+    PDFStandard = psNone
+    PDFVersion = pv17
+    Left = 424
+    Top = 336
+  end
+  object qCariEkDizayn: TUniQuery
+    Connection = frmDM.conNetsis
+    SQL.Strings = (
+      'SELECT * FROM TBLCASABITEK WHERE CARI_KOD =:Cari')
+    Left = 176
+    Top = 334
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'Cari'
+        Value = nil
+      end>
+  end
+  object frxDBDataset1: TfrxDBDataset
+    UserName = 'Cari_KartEK'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'CARI_KOD=CARI_KOD'
+      'KAYITTARIHI=KAYITTARIHI'
+      'KAYITYAPANKUL=KAYITYAPANKUL'
+      'DUZELTMETARIHI=DUZELTMETARIHI'
+      'DUZELTMEYAPANKUL=DUZELTMEYAPANKUL'
+      'KULL1N=KULL1N'
+      'KULL2N=KULL2N'
+      'KULL3N=KULL3N'
+      'KULL4N=KULL4N'
+      'KULL5N=KULL5N'
+      'KULL6N=KULL6N'
+      'KULL7N=KULL7N'
+      'KULL8N=KULL8N'
+      'KULL1S=KULL1S'
+      'KULL2S=KULL2S'
+      'KULL3S=KULL3S'
+      'KULL4S=KULL4S'
+      'KULL5S=KULL5S'
+      'KULL6S=KULL6S'
+      'KULL7S=KULL7S'
+      'KULL8S=KULL8S'
+      'SALES_VOLUME=SALES_VOLUME'
+      'PRIM=PRIM'
+      'CIRO_TARIHI=CIRO_TARIHI'
+      'ESKI_YENI=ESKI_YENI'
+      'S_YEDEK1=S_YEDEK1'
+      'S_YEDEK2=S_YEDEK2'
+      'F_YEDEK1=F_YEDEK1'
+      'F_YEDEK2=F_YEDEK2'
+      'C_YEDEK1=C_YEDEK1'
+      'C_YEDEK2=C_YEDEK2'
+      'B_YEDEK1=B_YEDEK1'
+      'I_YEDEK1=I_YEDEK1'
+      'L_YEDEK1=L_YEDEK1'
+      'ODEKOD=ODEKOD'
+      'TCKIMLIKNO=TCKIMLIKNO'
+      'CARIALIAS=CARIALIAS'
+      'CARIKOMTIP=CARIKOMTIP'
+      'CARIEIRSALIAS=CARIEIRSALIAS'
+      'DOVIZ_CEVRIM=DOVIZ_CEVRIM'
+      'EIRSSABLONKOD=EIRSSABLONKOD'
+      'MUHASEBAT=MUHASEBAT'
+      'CARIRISK=CARIRISK'
+      'EFAT_DZNADI=EFAT_DZNADI'
+      'EARS_DZNADI=EARS_DZNADI'
+      'EIRS_DZNADI=EIRS_DZNADI'
+      'EMUST_DZNADI=EMUST_DZNADI'
+      'EARS_INT_DZNADI=EARS_INT_DZNADI')
+    DataSet = qCariEkDizayn
+    BCDToCurrency = False
+    Left = 264
+    Top = 344
+  end
+  object qCaRisk: TUniQuery
+    Connection = frmDM.conNetsis
+    SQL.Strings = (
+      'SELECT * FROM TBLCARISK WHERE CARIKOD =:Cari')
+    Left = 360
+    Top = 430
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'Cari'
+        Value = Null
+      end>
+  end
+  object frxDBDataset2: TfrxDBDataset
+    UserName = 'Cari_Risk'
+    CloseDataSource = False
+    FieldAliases.Strings = (
+      'CARIKOD=CARIKOD'
+      'RISKGRUP=RISKGRUP'
+      'RISKLIMITI=RISKLIMITI'
+      'TEMINATI=TEMINATI'
+      'CARISK=CARISK'
+      'CCRISK=CCRISK'
+      'SARISK=SARISK'
+      'SCRISK=SCRISK'
+      'IRSRISK=IRSRISK'
+      'SIPRISK=SIPRISK'
+      'RISKLIMITIO=RISKLIMITIO'
+      'TEMINATIO=TEMINATIO'
+      'CARISKO=CARISKO'
+      'CCRISKO=CCRISKO'
+      'SARISKO=SARISKO'
+      'SCRISKO=SCRISKO'
+      'IRSRISKO=IRSRISKO'
+      'SIPRISKO=SIPRISKO'
+      'BORCRISKO=BORCRISKO'
+      'SIPRISKDAVRAN=SIPRISKDAVRAN'
+      'IRSRISKDAVRAN=IRSRISKDAVRAN'
+      'FATRISKDAVRAN=FATRISKDAVRAN'
+      'DOVIZLI=DOVIZLI'
+      'KAYITYAPANKUL=KAYITYAPANKUL'
+      'KAYITTARIHI=KAYITTARIHI'
+      'DUZELTMEYAPANKUL=DUZELTMEYAPANKUL'
+      'DUZELTMETARIHI=DUZELTMETARIHI'
+      'YED1RISK=YED1RISK'
+      'YED2RISK=YED2RISK'
+      'YED1POZIT=YED1POZIT'
+      'YED2POZIT=YED2POZIT'
+      'YED1RISKO=YED1RISKO'
+      'YED2RISKO=YED2RISKO'
+      'YED1POZITO=YED1POZITO'
+      'YED2POZITO=YED2POZITO'
+      'C_YEDEK1=C_YEDEK1'
+      'C_YEDEK2=C_YEDEK2'
+      'INT_YEDEK1=INT_YEDEK1'
+      'YUKRISKDAVRAN=YUKRISKDAVRAN'
+      'SEVKRISKDAVRAN=SEVKRISKDAVRAN'
+      'YUKRISKO=YUKRISKO'
+      'SEVKRISKO=SEVKRISKO'
+      'YUKRISK=YUKRISK'
+      'SEVKRISK=SEVKRISK'
+      'ONAYTIPI=ONAYTIPI'
+      'ONAYNUM=ONAYNUM')
+    DataSet = qCaRisk
+    BCDToCurrency = False
+    Left = 440
+    Top = 432
+  end
+  object qFisBaslik2: TUniQuery
+    Connection = frmDM.conAsya
+    SQL.Strings = (
+      'Select * from SIPARIS_BASLIK'
+      '-- where FisNo = '#39'T20220000000855'#39
+      'Where FisNo=:FisNo')
+    BeforePost = qFisBaslikBeforePost
+    Left = 48
+    Top = 306
+    ParamData = <
+      item
+        DataType = ftUnknown
+        Name = 'FisNo'
+        Value = Null
+      end>
+  end
+  object dFisBaslik2: TUniDataSource
+    DataSet = qFisBaslik2
+    Left = 48
+    Top = 362
+  end
+end

@@ -1,0 +1,1286 @@
+unit YuklemeTalebiU;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics,
+  Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
+  uniGUIClasses, uniGUIForm, uniScreenMask, uniGUIBaseClasses, uniSweetAlert,
+  Data.DB, uniGridExporters, uniBasicGrid, Vcl.Menus, uniMainMenu, DBAccess,
+  Uni, MemDS, uniDBGrid, uniComboBox, uniMultiItem, uniDBComboBox,
+  uniDBLookupComboBox, uniEdit, uniDateTimePicker, uniPanel, uniButton,
+  uniBitBtn, uniMenuButton, dxmdaset, uniRadioGroup, uniDBEdit, uniCheckBox, DateUtils;
+
+type
+  TfrmYuklemeTalebi = class(TUniForm)
+    UniContainerPanel1: TUniContainerPanel;
+    UniPanel2: TUniPanel;
+    UniMenuButton1: TUniMenuButton;
+    UniButton2: TUniButton;
+    UniPanel6: TUniPanel;
+    btnYuklemeOlustur: TUniButton;
+    UniPanel1: TUniPanel;
+    UniSimplePanel3: TUniSimplePanel;
+    UniDateTimePicker1: TUniDateTimePicker;
+    UniDateTimePicker2: TUniDateTimePicker;
+    edCariKod: TUniEdit;
+    btnListele: TUniButton;
+    UniSimplePanel2: TUniSimplePanel;
+    qFisTip: TUniQuery;
+    dsFisTip: TUniDataSource;
+    popYazdir: TUniPopupMenu;
+    btnHtml: TUniMenuItem;
+    btnXls: TUniMenuItem;
+    btnCsv: TUniMenuItem;
+    UniGridHTMLExporter1: TUniGridHTMLExporter;
+    UniGridExcelExporter1: TUniGridExcelExporter;
+    UniGridCSVExporter1: TUniGridCSVExporter;
+    saKaydet: TUniSweetAlert;
+    UniScreenMask1: TUniScreenMask;
+    saMesaj: TUniSweetAlert;
+    qSiparis: TUniQuery;
+    dSiparis: TUniDataSource;
+    mSiparis: TdxMemData;
+    mSiparisFISNO: TStringField;
+    mSiparisSTHAR_TARIH: TDateTimeField;
+    mSiparisSTOK_KODU: TStringField;
+    mSiparisSTOK_ADI: TStringField;
+    mSiparisSTHAR_GCMIK: TFloatField;
+    mSiparisSTHAR_GCMIK2: TFloatField;
+    mSiparisMIKTAR1: TFloatField;
+    mSiparisOLCU_BR1: TStringField;
+    mSiparisMIKTAR2: TFloatField;
+    mSiparisOLCU_BR2: TStringField;
+    mSiparisMIKTAR3: TFloatField;
+    mSiparisOLCU_BR3: TStringField;
+    mSiparisDETAY1: TStringField;
+    mSiparisDETAY2: TStringField;
+    mSiparisDETAY3: TStringField;
+    mSiparisDETAY4: TStringField;
+    mSiparisDETAY5: TStringField;
+    mSiparisDETAY6: TStringField;
+    mSiparisDETAY7: TStringField;
+    mSiparisDETAY8: TStringField;
+    mSiparisDETAY9: TStringField;
+    mSiparisDETAY10: TStringField;
+    mSiparisCEVRIM: TFloatField;
+    mSiparisSTHAR_GCKOD: TStringField;
+    mSiparisSTHAR_NF: TFloatField;
+    mSiparisSTHAR_BF: TFloatField;
+    mSiparisSTHAR_IAF: TFloatField;
+    mSiparisSTHAR_KDV: TFloatField;
+    mSiparisDEPO_KODU: TSmallintField;
+    mSiparisSTHAR_ACIKLAMA: TStringField;
+    mSiparisCARI_ISIM: TStringField;
+    mSiparisSTHAR_SATISK: TFloatField;
+    mSiparisSTHAR_MALFISK: TFloatField;
+    mSiparisSTHAR_FTIRSIP: TStringField;
+    mSiparisSTHAR_SATISK2: TFloatField;
+    mSiparisLISTE_FIAT: TByteField;
+    mSiparisSTHAR_HTUR: TStringField;
+    mSiparisSTHAR_DOVTIP: TByteField;
+    mSiparisSTHAR_DOVFIAT: TFloatField;
+    mSiparisSTHAR_ODEGUN: TSmallintField;
+    mSiparisSTRA_SATISK3: TFloatField;
+    mSiparisSTRA_SATISK4: TFloatField;
+    mSiparisSTRA_SATISK5: TFloatField;
+    mSiparisSTRA_SATISK6: TFloatField;
+    mSiparisSTHAR_BGTIP: TStringField;
+    mSiparisSTHAR_KOD1: TStringField;
+    mSiparisSTHAR_KOD2: TStringField;
+    mSiparisSTHAR_SIPNUM: TStringField;
+    mSiparisSTHAR_CARIKOD: TStringField;
+    mSiparisSTHAR_SIP_TURU: TStringField;
+    mSiparisPLASIYER_KODU: TStringField;
+    mSiparisEKALAN_NEDEN: TStringField;
+    mSiparisEKALAN: TStringField;
+    mSiparisEKALAN1: TStringField;
+    mSiparisREDMIK: TFloatField;
+    mSiparisREDNEDEN: TByteField;
+    mSiparisSIRA: TSmallintField;
+    mSiparisSTRA_SIPKONT: TSmallintField;
+    mSiparisAMBAR_KABULNO: TStringField;
+    mSiparisFIRMA_DOVTIP: TByteField;
+    mSiparisFIRMA_DOVMAL: TFloatField;
+    mSiparisUPDATE_KODU: TStringField;
+    mSiparisIRSALIYE_NO: TStringField;
+    mSiparisIRSALIYE_TARIH: TDateTimeField;
+    mSiparisKOSULKODU: TStringField;
+    mSiparisSTHAR_TESTAR: TDateTimeField;
+    mSiparisOLCUBR: TByteField;
+    mSiparisINCKEYNO: TIntegerField;
+    mSiparisVADE_TARIHI: TDateTimeField;
+    mSiparisLISTE_NO: TStringField;
+    mSiparisBAGLANTI_NO: TIntegerField;
+    mSiparisSUBE_KODU: TSmallintField;
+    mSiparisPROJE_KODU: TStringField;
+    mSiparisFIYATTARIHI: TDateTimeField;
+    mSiparisKOSULTARIHI: TDateTimeField;
+    mSiparisSTRA_IRSKONT: TSmallintField;
+    mSiparisGRUP_KODU: TStringField;
+    mSiparisKOD_1: TStringField;
+    mSiparisKOD_2: TStringField;
+    mSiparisKOD_3: TStringField;
+    mSiparisKOD_4: TStringField;
+    mSiparisKOD_5: TStringField;
+    mSiparisTARIH_YIL: TIntegerField;
+    mSiparisTARIH_AY: TIntegerField;
+    mSiparisTARIH_GUN: TIntegerField;
+    mSiparisTESLIMTARIH_YIL: TIntegerField;
+    mSiparisTESLIMTARIH_AY: TIntegerField;
+    mSiparisTESLIMTARIH_GUN: TIntegerField;
+    mSiparisBASLIK_KOD1: TStringField;
+    mSiparisBASLIK_KOD2: TStringField;
+    mSiparisODEKOD: TStringField;
+    mSiparisBASLIKTESLIM_TARIHI: TDateTimeField;
+    mSiparisBASLIK_KOSULKODU: TStringField;
+    mSiparisBASLIK_FIYATTARIHI: TDateTimeField;
+    mSiparisGEN_ISK1T: TFloatField;
+    mSiparisGEN_ISK2T: TFloatField;
+    mSiparisGEN_ISK3T: TFloatField;
+    mSiparisGEN_ISK1O: TFloatField;
+    mSiparisGEN_ISK2O: TFloatField;
+    mSiparisGEN_ISK3O: TFloatField;
+    mSiparisBRUTTUTAR: TFloatField;
+    mSiparisKDV_DAHIL_BRUT_TOP: TFloatField;
+    mSiparisGENELTOPLAM: TFloatField;
+    mSiparisTOPLAM_MIK: TFloatField;
+    mSiparisFIRMA_DOVTUT: TFloatField;
+    mSiparisSIP_KALAN: TFloatField;
+    mSiparisKAPALI_YUKLEME_MIKTAR: TIntegerField;
+    mSiparisACIK_YUKLEME_MIKTAR: TFloatField;
+    mSiparisODEMEGUNU: TSmallintField;
+    mSiparisvYUKLEME_MIKTAR: TFloatField;
+    mSiparisSEC: TByteField;
+    dxMemData1: TdxMemData;
+    UniDataSource1: TUniDataSource;
+    dxMemData1FISNO: TStringField;
+    dxMemData1STHAR_TARIH: TDateTimeField;
+    dxMemData1STOK_KODU: TStringField;
+    dxMemData1STOK_ADI: TStringField;
+    dxMemData1STHAR_GCMIK: TFloatField;
+    dxMemData1STHAR_GCMIK2: TFloatField;
+    dxMemData1MIKTAR1: TFloatField;
+    dxMemData1OLCU_BR1: TStringField;
+    dxMemData1MIKTAR2: TFloatField;
+    dxMemData1OLCU_BR2: TStringField;
+    dxMemData1MIKTAR3: TFloatField;
+    dxMemData1OLCU_BR3: TStringField;
+    dxMemData1DETAY1: TStringField;
+    dxMemData1DETAY2: TStringField;
+    dxMemData1DETAY3: TStringField;
+    dxMemData1DETAY4: TStringField;
+    dxMemData1DETAY5: TStringField;
+    dxMemData1DETAY6: TStringField;
+    dxMemData1DETAY7: TStringField;
+    dxMemData1DETAY8: TStringField;
+    dxMemData1DETAY9: TStringField;
+    dxMemData1DETAY10: TStringField;
+    dxMemData1CEVRIM: TFloatField;
+    dxMemData1STHAR_GCKOD: TStringField;
+    dxMemData1STHAR_NF: TFloatField;
+    dxMemData1STHAR_BF: TFloatField;
+    dxMemData1STHAR_IAF: TFloatField;
+    dxMemData1STHAR_KDV: TFloatField;
+    dxMemData1DEPO_KODU: TSmallintField;
+    dxMemData1STHAR_ACIKLAMA: TStringField;
+    dxMemData1CARI_ISIM: TStringField;
+    dxMemData1STHAR_SATISK: TFloatField;
+    dxMemData1STHAR_MALFISK: TFloatField;
+    dxMemData1STHAR_FTIRSIP: TStringField;
+    dxMemData1STHAR_SATISK2: TFloatField;
+    dxMemData1LISTE_FIAT: TByteField;
+    dxMemData1STHAR_HTUR: TStringField;
+    dxMemData1STHAR_DOVTIP: TByteField;
+    dxMemData1STHAR_DOVFIAT: TFloatField;
+    dxMemData1STHAR_ODEGUN: TSmallintField;
+    dxMemData1STRA_SATISK3: TFloatField;
+    dxMemData1STRA_SATISK4: TFloatField;
+    dxMemData1STRA_SATISK5: TFloatField;
+    dxMemData1STRA_SATISK6: TFloatField;
+    dxMemData1STHAR_BGTIP: TStringField;
+    dxMemData1STHAR_KOD1: TStringField;
+    dxMemData1STHAR_KOD2: TStringField;
+    dxMemData1STHAR_SIPNUM: TStringField;
+    dxMemData1STHAR_CARIKOD: TStringField;
+    dxMemData1STHAR_SIP_TURU: TStringField;
+    dxMemData1PLASIYER_KODU: TStringField;
+    dxMemData1EKALAN_NEDEN: TStringField;
+    dxMemData1EKALAN: TStringField;
+    dxMemData1EKALAN1: TStringField;
+    dxMemData1REDMIK: TFloatField;
+    dxMemData1REDNEDEN: TByteField;
+    dxMemData1SIRA: TSmallintField;
+    dxMemData1STRA_SIPKONT: TSmallintField;
+    dxMemData1AMBAR_KABULNO: TStringField;
+    dxMemData1FIRMA_DOVTIP: TByteField;
+    dxMemData1FIRMA_DOVMAL: TFloatField;
+    dxMemData1UPDATE_KODU: TStringField;
+    dxMemData1IRSALIYE_NO: TStringField;
+    dxMemData1IRSALIYE_TARIH: TDateTimeField;
+    dxMemData1KOSULKODU: TStringField;
+    dxMemData1STHAR_TESTAR: TDateTimeField;
+    dxMemData1OLCUBR: TByteField;
+    dxMemData1INCKEYNO: TIntegerField;
+    dxMemData1VADE_TARIHI: TDateTimeField;
+    dxMemData1LISTE_NO: TStringField;
+    dxMemData1BAGLANTI_NO: TIntegerField;
+    dxMemData1SUBE_KODU: TSmallintField;
+    dxMemData1PROJE_KODU: TStringField;
+    dxMemData1FIYATTARIHI: TDateTimeField;
+    dxMemData1KOSULTARIHI: TDateTimeField;
+    dxMemData1STRA_IRSKONT: TSmallintField;
+    dxMemData1GRUP_KODU: TStringField;
+    dxMemData1KOD_1: TStringField;
+    dxMemData1KOD_2: TStringField;
+    dxMemData1KOD_3: TStringField;
+    dxMemData1KOD_4: TStringField;
+    dxMemData1KOD_5: TStringField;
+    dxMemData1TARIH_YIL: TIntegerField;
+    dxMemData1TARIH_AY: TIntegerField;
+    dxMemData1TARIH_GUN: TIntegerField;
+    dxMemData1TESLIMTARIH_YIL: TIntegerField;
+    dxMemData1TESLIMTARIH_AY: TIntegerField;
+    dxMemData1TESLIMTARIH_GUN: TIntegerField;
+    dxMemData1BASLIK_KOD1: TStringField;
+    dxMemData1BASLIK_KOD2: TStringField;
+    dxMemData1ODEKOD: TStringField;
+    dxMemData1BASLIKTESLIM_TARIHI: TDateTimeField;
+    dxMemData1BASLIK_KOSULKODU: TStringField;
+    dxMemData1BASLIK_FIYATTARIHI: TDateTimeField;
+    dxMemData1GEN_ISK1T: TFloatField;
+    dxMemData1GEN_ISK2T: TFloatField;
+    dxMemData1GEN_ISK3T: TFloatField;
+    dxMemData1GEN_ISK1O: TFloatField;
+    dxMemData1GEN_ISK2O: TFloatField;
+    dxMemData1GEN_ISK3O: TFloatField;
+    dxMemData1BRUTTUTAR: TFloatField;
+    dxMemData1KDV_DAHIL_BRUT_TOP: TFloatField;
+    dxMemData1GENELTOPLAM: TFloatField;
+    dxMemData1TOPLAM_MIK: TFloatField;
+    dxMemData1FIRMA_DOVTUT: TFloatField;
+    dxMemData1SIP_KALAN: TFloatField;
+    dxMemData1KAPALI_YUKLEME_MIKTAR: TIntegerField;
+    dxMemData1ACIK_YUKLEME_MIKTAR: TFloatField;
+    dxMemData1ODEMEGUNU: TSmallintField;
+    dxMemData1vYUKLEME_MIKTAR: TFloatField;
+    dxMemData1SEC: TByteField;
+    UniPanel3: TUniPanel;
+    rgirsFat: TUniRadioGroup;
+    rgOdeme: TUniRadioGroup;
+    rgDoviz: TUniRadioGroup;
+    txtVadeGunu: TUniDBEdit;
+    chkSipKalan: TUniCheckBox;
+    UniDBGrid1: TUniDBGrid;
+    UniDBGrid2: TUniDBGrid;
+    btnYuklemeEsitKalan: TUniButton;
+    btnGirilenleriSec: TUniButton;
+    btnSecilenlerYukleme_Kalan: TUniButton;
+    UniButton4: TUniButton;
+    procedure btnListeleClick(Sender: TObject);
+    procedure UniFormShow(Sender: TObject);
+    procedure UniButton2Click(Sender: TObject);
+    procedure btnYuklemeOlusturClick(Sender: TObject);
+    Function YuklemeNoGetir:String;
+    procedure rgirsFatChangeValue(Sender: TObject);
+    procedure mSiparisBeforePost(DataSet: TDataSet);
+    procedure btnYuklemeEsitKalanClick(Sender: TObject);
+    procedure btnGirilenleriSecClick(Sender: TObject);
+    procedure btnSecilenlerYukleme_KalanClick(Sender: TObject);
+    procedure UniDBGrid1AfterLoad(Sender: TUniCustomDBGrid);
+    procedure UniButton4Click(Sender: TObject);
+    procedure edCariKodKeyPress(Sender: TObject; var Key: Char);
+
+  private
+    { Private declarations }
+    SQL : string;
+    procedure SiparisFazlaTeslimatOran;
+    procedure GrisSecimKaldir;
+    procedure GridYuklemeMiktarOlanlariSec;
+  public
+    { Public declarations }
+  end;
+
+function frmYuklemeTalebi: TfrmYuklemeTalebi;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  MainModule, uniGUIApplication, DMU, SiparisU, Genel, Main, TmpU;
+
+function frmYuklemeTalebi: TfrmYuklemeTalebi;
+begin
+  Result := TfrmYuklemeTalebi(UniMainModule.GetFormInstance(TfrmYuklemeTalebi));
+end;
+
+procedure TfrmYuklemeTalebi.btnListeleClick(Sender: TObject);
+Var
+CariAdi :String;
+SL: TStringList;
+i:integer;
+
+begin
+
+  qSiparis.Close;
+  qSiparis.SQL.Clear;
+  SQL:='SELECT '
+  +' FISNO '
+  +' ,S.STHAR_TARIH '
+  +' ,S.STOK_KODU, ST.STOK_ADI '
+  +' ,S.STHAR_GCMIK '
+  +' ,S.STHAR_GCMIK2 '
+  +' ,S.STHAR_GCMIK AS MIKTAR1 '
+  +' ,ST.OLCU_BR1 '
+  +' ,S.STHAR_GCMIK * (ST.PAY_1/ST.PAYDA_1) AS MIKTAR2 '
+  +' ,ST.OLCU_BR2 '
+  +' ,S.STHAR_GCMIK * (ST.PAY2/ST.PAYDA2) AS MIKTAR3 '
+  +' ,ST.OLCU_BR3 '
+  +' ,T.ACIKLAMA1 AS DETAY1 '
+  +' ,T.ACIKLAMA2 AS DETAY2 '
+  +' ,T.ACIKLAMA3 AS DETAY3 '
+  +' ,T.ACIKLAMA4 AS DETAY4 '
+  +' ,T.ACIKLAMA5 AS DETAY5 '
+  +' ,T.ACIKLAMA6 AS DETAY6 '
+  +' ,T.ACIKLAMA7 AS DETAY7 '
+  +' ,T.ACIKLAMA8 AS DETAY8 '
+  +' ,T.ACIKLAMA9 AS DETAY9 '
+  +' ,T.ACIKLAMA10 AS DETAY10 '
+  +' ,S.CEVRIM '
+  +' ,S.STHAR_GCKOD '
+  +' ,ISNULL(S.STHAR_NF,0) AS STHAR_NF '
+  +' ,ISNULL(S.STHAR_BF,0) AS STHAR_BF '
+  +' ,ISNULL(S.STHAR_IAF,0) AS STHAR_IAF '
+  +' ,S.STHAR_KDV '
+  +' ,S.DEPO_KODU '
+  +' ,S.STHAR_ACIKLAMA, C.CARI_ISIM '
+  +' ,S.STHAR_SATISK '
+  +' ,S.STHAR_MALFISK '
+  +' ,S.STHAR_FTIRSIP '
+  +' ,S.STHAR_SATISK2 '
+  +' ,S.LISTE_FIAT '
+  +' ,S.STHAR_HTUR '
+  +' ,S.STHAR_DOVTIP '
+  +' ,S.STHAR_DOVFIAT '
+  +' ,S.STHAR_ODEGUN '
+  +' ,S.STRA_SATISK3 '
+  +' ,S.STRA_SATISK4 '
+  +' ,S.STRA_SATISK5 '
+  +' ,S.STRA_SATISK6 '
+  +' ,S.STHAR_BGTIP '
+  +' ,S.STHAR_KOD1 '
+  +' ,S.STHAR_KOD2 '
+  +' ,S.STHAR_SIPNUM '
+  +' ,S.STHAR_CARIKOD '
+  +' ,S.STHAR_SIP_TURU '
+  +' ,S.PLASIYER_KODU '
+  +' ,S.EKALAN_NEDEN '
+  +' ,S.EKALAN '
+  +' ,S.EKALAN1 '
+  +' ,S.REDMIK '
+  +' ,S.REDNEDEN '
+  +' ,S.SIRA '
+  +' ,S.STRA_SIPKONT '
+  +' ,S.AMBAR_KABULNO '
+  +' ,S.FIRMA_DOVTIP '
+  +' ,S.FIRMA_DOVMAL '
+  +' ,S.UPDATE_KODU '
+  +' ,S.IRSALIYE_NO '
+  +' ,S.IRSALIYE_TARIH '
+  +' ,S.KOSULKODU '
+  +' ,S.STHAR_TESTAR '
+  +' ,S.OLCUBR '
+  +' ,S.INCKEYNO '
+  +' ,S.VADE_TARIHI '
+  +' ,S.LISTE_NO '
+  +' ,S.BAGLANTI_NO '
+  +' ,S.SUBE_KODU '
+  +' ,S.PROJE_KODU '
+  +' ,S.FIYATTARIHI '
+  +' ,S.KOSULTARIHI '
+  +' ,S.STRA_IRSKONT '
+  +' ,ST.GRUP_KODU '
+  +' ,ST.KOD_1 '
+  +' ,ST.KOD_2 '
+  +' ,ST.KOD_3 '
+  +' ,ST.KOD_4 '
+  +' ,ST.KOD_5 '
+  +' ,YEAR(STHAR_TARIH) AS TARIH_YIL '
+  +' ,MONTH(STHAR_TARIH) AS TARIH_AY '
+  +' ,DAY(STHAR_TARIH) AS TARIH_GUN '
+  +' ,YEAR(STHAR_TESTAR) AS TESLIMTARIH_YIL '
+  +' ,MONTH(STHAR_TESTAR) AS TESLIMTARIH_AY '
+  +' ,DAY(STHAR_TESTAR) AS TESLIMTARIH_GUN '
+  +' ,M.KOD1 AS BASLIK_KOD1, M.KOD2 AS BASLIK_KOD2, M.ODEKOD, M.SIPARIS_TEST AS BASLIKTESLIM_TARIHI, M.KOSULKODU AS BASLIK_KOSULKODU, M.FIYATTARIHI AS BASLIK_FIYATTARIHI '
+  +' ,M.GEN_ISK1T, M.GEN_ISK2T, M.GEN_ISK3T, M.GEN_ISK1O, M.GEN_ISK2O, M.GEN_ISK3O, BRUTTUTAR, M.KDV_DAHIL_BRUT_TOP, M.GENELTOPLAM, M.TOPLAM_MIK '
+  +' ,S.FIRMA_DOVTUT, (S.STHAR_GCMIK - S.FIRMA_DOVTUT) AS ''SIP_KALAN'' '
+  +' ,0 AS ''KAPALI_YUKLEME_MIKTAR'' '
+  +' , Y.MIKTAR AS ''ACIK_YUKLEME_MIKTAR'' '
+  +' , M.ODEMEGUNU '
+  +' FROM ' + Tmp.xNetsisSirketKodu + '.DBO.TBLSIPATRA S  WITH(NOLOCK,NOWAIT) '
+  +' LEFT OUTER JOIN ' + Tmp.xNetsisSirketKodu + '.DBO.TBLSSATIRAC T WITH(NOLOCK,NOWAIT) ON (T.INCKEYNO = S.INCKEYNO) AND (T.SIRANO = S.SIRA) AND (BGTIP = S.STHAR_FTIRSIP) '
+  +' LEFT OUTER JOIN ' + Tmp.xNetsisSirketKodu + '.DBO.TBLSTSABIT ST WITH(NOLOCK,NOWAIT) ON (ST.STOK_KODU = S.STOK_KODU) '
+  +' LEFT OUTER JOIN ' + Tmp.xNetsisSirketKodu + '.DBO.TBLCASABIT C WITH(NOLOCK,NOWAIT) ON (C.CARI_KOD = S.STHAR_ACIKLAMA) '
+  +' LEFT OUTER JOIN ' + Tmp.xNetsisSirketKodu + '.DBO.TBLSIPAMAS M WITH(NOLOCK,NOWAIT) ON (M.SUBE_KODU = S.SUBE_KODU) AND (M.FATIRS_NO = S.FISNO) '
+  +' LEFT OUTER JOIN ASYA_ENTEGRE.DBO.HV_INCKEY_MIKTAR Y WITH(NOLOCK) ON (Y.SIPINCKEY = S.INCKEYNO) '
+  +' WHERE (S.STHAR_FTIRSIP = ''6'') AND (S.STHAR_HTUR <> ''K'') AND (S.SUBE_KODU =:Sub) AND (S.DEPO_KODU =:Dep)'
+  +' AND (S.STHAR_TARIH BETWEEN :t1 AND :t2)';
+
+  SL := TStringList.Create;
+  SL.Delimiter := ' ';//Boþluk
+  SL.DelimitedText := edCariKod.Text;
+
+   if edCariKod.Text <> '' then begin
+        for i:=0 to SL.Count-1 do begin
+          CariAdi:=SL.Strings[i];
+          SQL:= SQL+' and ((S.STHAR_ACIKLAMA like''%'+CariAdi+'%'') or (C.CARI_ISIM like''%'+CariAdi+'%'') or (S.FISNO like''%'+CariAdi+'%'')) ';
+        end;
+   end;
+
+  if not chkSipKalan.Checked = True then
+    begin
+      SQL:= SQL+' AND ((S.STHAR_GCMIK - S.FIRMA_DOVTUT) > 0) ';
+    end;
+
+  qSiparis.SQL.Text:=SQL;
+  qSiparis.ParamByName('t1').Value:=UniDateTimePicker1.DateTime;
+  qSiparis.ParamByName('t2').Value:=UniDateTimePicker2.DateTime;
+  qSiparis.ParamByName('Sub').AsInteger := Tmp.xSubeKodu;
+  qSiparis.ParamByName('Dep').AsInteger := Tmp.xKullaniciDepo;
+  qSiparis.SQL.Add('ORDER BY S.FISNO, S.INCKEYNO ASC');
+
+  qSiparis.Open;
+  SL.Free;
+
+  mSiparis.Close;
+  mSiparis.Open;
+  mSiparis.DisableControls;
+  mSiparis.LoadFromDataSet(qSiparis);
+  mSiparis.EnableControls;
+
+  rgirsFat.Enabled := True;
+  rgirsFat.ItemIndex := -1;
+
+  rgOdeme.Enabled := True;
+  rgOdeme.ItemIndex := -1;
+
+  rgDoviz.Enabled := True;
+  rgDoviz.ItemIndex := -1;
+
+
+
+end;
+
+function TfrmYuklemeTalebi.YuklemeNoGetir:String;
+var
+  UretimNo : String;
+  q1 : TUniQuery;
+begin
+
+  q1 := TUniQuery.Create(nil);
+  q1.Connection := frmDM.conAsya;
+
+  with q1 do
+    begin
+      Application.ProcessMessages;
+      Close;
+      SQL.Clear;
+      SQL.Add('Select dbo.NumaraSeriAl(''YUKLEMENO'',''YUK'') as YuklemeNo');
+      Open;
+      Application.ProcessMessages;
+      UretimNo := FieldByName('YuklemeNo').AsString;
+
+      Close;
+      SQL.Clear;
+      SQL.Add('Update NumaraSerileri Set SonrakiSayi = SonrakiSayi+1 Where Formati = ''YUK''');
+      ExecSQL;
+      Close;
+      FreeAndNil(q1);
+
+      Result := UretimNo;
+    end;
+
+end;
+
+procedure TfrmYuklemeTalebi.btnYuklemeOlusturClick(Sender: TObject);
+var
+  I: Integer;
+  B : TBookmark;
+  q:TUniQuery;
+  StokKodu, StokAdi, inckey, SiparisNo: Variant;
+  TeslimMiktar, SipKalan, KapaliYukleme, AcikYukleme, YuklemeMiktar, SiparisSube, SiparisDepo : Variant;
+  YuklemeNo, Cumleinckey, CumleCariKod : String;
+  AcikMiktar, AktifYuklemeMiktar : Real;
+
+begin
+
+
+  if rgirsFat.ItemIndex = -1 then
+    begin
+      UniMainModule.saHata.Show('Belge [ÝRSALÝYE / FATURA] seçimi yapýlmalýdýr.');
+      Abort;
+    end;
+
+  if rgDoviz.ItemIndex = -1 then
+    begin
+      UniMainModule.saHata.show('Döviz Kuru Sabit seçimi yapýlmalýdýr.');
+      Abort;
+    end;
+
+//  if not dxMemData1.Active then
+
+  dxMemdata1.Close;
+  dxMemdata1.Open;
+
+//  UniButton4.Click;
+
+  if UniDBGrid1.SelectedRows.Count > 0 then
+    begin
+      mSiparis.DisableControls;
+
+      // save cursor location
+      B := mSiparis.GetBookmark;
+      try
+        for I := 0 to UniDBGrid1.SelectedRows.Count - 1 do
+        begin
+          mSiparis.Bookmark := UniDBGrid1.SelectedRows[I];
+
+          dxMemdata1.Append;
+          dxMemData1.CopyFields(mSiparis);
+          dxMemdata1.Post;
+        end;
+      finally
+  //      if ADelete then
+  //        UniDBGrid1.SelectedRows.Delete;
+  //
+  //      // restore cursor location
+  //      if ClientDataSet1.BookmarkValid(B) then
+  //        ClientDataSet1.GotoBookmark(B);
+  //
+  //      ClientDataSet1.FreeBookmark(B);
+  //      ClientDataSet1.EnableControls;
+      end;
+    end else if UniDBGrid1.SelectedRows.Count = 0 then
+             begin
+              UniMainModule.saHata.Show('Hiç bir satýr seçilmemiþ. - ÝÞLEM DEVAM EDEMEZ.');
+             end;
+
+
+  // Gridde inckeyno larýn alýnýp kontrollerinyapýldýðý bölümdü.
+      dxMemData1.First;
+      while not dxMemData1.Eof do
+        begin
+
+          try
+            if VarIsNull(dxMemData1.FieldByName('INCKEYNO').Value) = True then
+              begin
+                incKey := 0;
+              end else
+              begin
+                incKey := dxMemData1.FieldByName('INCKEYNO').Value;
+              end;
+
+          finally
+
+          end;
+
+          begin
+
+//            if dxMemData1.RecNo = 1 then
+//              begin
+//                Cumleinckey := '(' + IntToStr(inckey) + ')';
+//                CumleCariKod := '(' + dxMemData1.FieldByName('STHAR_ACIKLAMA').Asstring + ')';
+//              end else
+//              begin
+//                if I = 0 then
+//                  begin
+//                    Cumleinckey := '(' + IntToStr(inckey) + ',';
+//                    CumleCariKod := '(' + dxMemData1.FieldByName('STHAR_ACIKLAMA').Asstring + ',';
+//                  end else if I = dxMemData1.RecNo - 1 then
+//                    begin
+//                      Cumleinckey := Cumleinckey + IntToStr(inckey) + ')';
+//                      CumleCariKod := CumleCariKod + dxMemData1.FieldByName('STHAR_ACIKLAMA').Asstring + ')';
+//                    end else
+//                      begin
+//                        Cumleinckey := Cumleinckey + IntToStr(inckey) + ',';
+//                        CumleCariKod := CumleCariKod + dxMemData1.FieldByName('STHAR_ACIKLAMA').Asstring + ',';
+//                      end;
+//              end;
+
+            if dxMemData1.RecordCount = 1 then
+              begin
+                Cumleinckey := '(' + IntToStr(inckey) + ')';
+                CumleCariKod := '(' + dxMemData1.FieldByName('STHAR_ACIKLAMA').Asstring + ')';
+              end else
+              begin
+                if dxMemData1.RecNo = 1 then
+                  begin
+                    Cumleinckey := '(' + IntToStr(inckey) + ',';
+                    CumleCariKod := '(' + dxMemData1.FieldByName('STHAR_ACIKLAMA').Asstring + ',';
+                  end else if dxMemData1.RecNo = dxMemData1.RecordCount then  // sona gelme durumu
+                    begin
+                      Cumleinckey := Cumleinckey + IntToStr(inckey) + ')';
+                      CumleCariKod := CumleCariKod + dxMemData1.FieldByName('STHAR_ACIKLAMA').Asstring + ')';
+                    end else
+                      begin
+                        Cumleinckey := Cumleinckey + IntToStr(inckey) + ',';
+                        CumleCariKod := CumleCariKod + dxMemData1.FieldByName('STHAR_ACIKLAMA').Asstring + ',';
+                      end;
+              end;
+
+            if VarIsNull(dxMemData1.FieldByName('vYUKLEME_MIKTAR').AsFloat) = True then
+              begin
+                YuklemeMiktar := 0;
+              end else
+              begin
+                YuklemeMiktar := dxMemData1.FieldByName('vYUKLEME_MIKTAR').AsFloat;
+              end;
+
+            if YuklemeMiktar = 0 then
+              begin
+                Screen.Cursor := crDefault;
+                UniMainModule.saHata.Show('Yükleme Miktarý girilmelidir.');
+                qSiparis.EnableControls;
+                Abort;
+              end;
+
+              begin
+                AcikMiktar := (mSiparisSIP_KALAN.AsFloat - mSiparisACIK_YUKLEME_MIKTAR.AsFloat);
+                AcikMiktar := AcikMiktar + ((AcikMiktar * xSiparisFazlaTeslimatOrani) / 100);
+
+                if (mSiparisvYUKLEME_MIKTAR.Value > AcikMiktar) then
+                  begin
+                    UniMainModule.saHata.Show('Yüklenecek Miktar Kalan Miktardan büyüktür.. - ÝÞLEM DEVAM EDEMEZ.');
+                    mSiparisvYUKLEME_MIKTAR.Value := 0;
+                    mSiparis.Refresh;
+                    Abort;
+                  end;
+              end;
+
+          end;
+
+
+          dxMemData1.Next;
+        end;
+  // Gridde inckeyno larýn alýnýp kontrollerinyapýldýðý bölümdü.
+
+    q := TUniQuery.Create(nil);
+    q.Connection := frmDM.conAsya;
+
+  // Seçilen satýrlarda birden fazla cari ve Teslim Carinin kaydý var mý? Var ise Abort;
+    q.Close;
+    q.SQL.Clear;
+    q.SQL.Add(' SELECT (STHAR_ACIKLAMA + STHAR_CARIKOD) AS ''CARIKOD'' ');
+//    q.SQL.Add(' FROM YUCEL2022.DBO.TBLSIPATRA WHERE INCKEYNO IN ' + Cumleinckey); //(''11697'',''11706'',''11700'',''11703'',''12135'') ');
+    q.SQL.Add(' FROM ' + Tmp.xNetsisSirketKodu +'.DBO.TBLSIPATRA WHERE INCKEYNO IN ' + Cumleinckey); //(''11697'',''11706'',''11700'',''11703'',''12135'') ');
+    q.SQL.Add(' GROUP BY (STHAR_ACIKLAMA + STHAR_CARIKOD) ');
+    q.Open;
+    if q.RecordCount > 1 then
+      begin
+        qSiparis.EnableControls;
+        UniMainModule.saHata.Show('Seçilen satýrlarda farklý müþterilerin sipariþleri mevcuttur... - YÜKLEME TALEBÝ OLUÞTURULAMAZ...');
+        q.Close;
+        FreeAndNil(q);
+        Abort;
+      end;
+
+  // Kayýtlarýn gerçekletiði bölümdür.
+
+    YuklemeNo := YuklemeNoGetir;
+
+    dxMemData1.First;
+    while not dxMemData1.Eof do
+      begin
+        try
+          if VarIsNull(dxMemData1.FieldByName('INCKEYNO').Value) = True then
+            begin
+              incKey := 0;
+            end else
+            begin
+              incKey := dxMemData1.FieldByName('INCKEYNO').Value;
+            end;
+
+          if VarIsNull(dxMemData1.FieldByName('FIRMA_DOVTUT').Value) = True then
+            begin
+              TeslimMiktar := 0;
+            end else
+            begin
+              TeslimMiktar := dxMemData1.FieldByName('FIRMA_DOVTUT').Value;
+            end;
+
+          if VarIsNull(dxMemData1.FieldByName('SIP_KALAN').Value) = True then
+            begin
+              SipKalan := 0;
+            end else
+            begin
+              SipKalan := dxMemData1.FieldByName('SIP_KALAN').Value;
+            end;
+
+          if VarIsNull(dxMemData1.FieldByName('KAPALI_YUKLEME_MIKTAR').Value) = True then
+            begin
+              KapaliYukleme := 0;
+            end else
+            begin
+              KapaliYukleme := dxMemData1.FieldByName('KAPALI_YUKLEME_MIKTAR').Value;
+            end;
+
+          if VarIsNull(dxMemData1.FieldByName('ACIK_YUKLEME_MIKTAR').Value) = True then
+            begin
+              AcikYukleme := 0;
+            end else
+            begin
+              AcikYukleme := dxMemData1.FieldByName('ACIK_YUKLEME_MIKTAR').Value;
+            end;
+
+          if VarIsNull(dxMemData1.FieldByName('vYUKLEME_MIKTAR').Value) = True then
+            begin
+              YuklemeMiktar := 0;
+            end else
+            begin
+              YuklemeMiktar := dxMemData1.FieldByName('vYUKLEME_MIKTAR').Value;
+            end;
+
+          if VarIsNull(dxMemData1.FieldByName('STOK_KODU').Value) = True then
+            begin
+              StokKodu := '';
+            end else
+            begin
+              StokKodu := dxMemData1.FieldByName('STOK_KODU').Value;
+            end;
+
+          if VarIsNull(dxMemData1.FieldByName('STOK_ADI').Value) = True then
+            begin
+              StokAdi := 0;
+            end else
+            begin
+              StokAdi := dxMemData1.FieldByName('STOK_ADI').Value;
+            end;
+
+          if VarIsNull(dxMemData1.FieldByName('FISNO').Value) = True then
+            begin
+              SiparisNo := 0;
+            end else
+            begin
+              SiparisNo := dxMemData1.FieldByName('FISNO').Value;
+            end;
+
+          if VarIsNull(dxMemData1.FieldByName('SUBE_KODU').Value) = True then
+            begin
+              SiparisSube := 0;
+            end else
+            begin
+              SiparisSube := dxMemData1.FieldByName('SUBE_KODU').Value;
+            end;
+
+          if VarIsNull(dxMemData1.FieldByName('DEPO_KODU').Value) = True then
+            begin
+              SiparisDepo := 0;
+            end else
+            begin
+              SiparisDepo := dxMemData1.FieldByName('DEPO_KODU').Value;
+            end;
+
+
+          q.Close;
+          q.SQL.Clear;
+          q.SQL.Add('');
+          q.SQL.Add(' INSERT INTO dbo.YUKLEME ');
+          q.SQL.Add('(YUKLEMENO ');
+          q.SQL.Add(',STOKKODU ');
+          q.SQL.Add(',MIKTAR1 ');
+          q.SQL.Add(',ADET1 ');
+          q.SQL.Add(',MIKTAR2 ');
+          q.SQL.Add(',ADET2 ');
+          q.SQL.Add(',OLUSTURMATARIHI ');
+          q.SQL.Add(',OLUSTURANKUL ');
+          q.SQL.Add(',YUKLEMEDURUMU ');
+          q.SQL.Add(',YUKLEMETARIHI ');
+          q.SQL.Add(',YUKLEYENKUL ');
+          q.SQL.Add(',DUZELTMETARIHI ');
+          q.SQL.Add(',GONDERILDI ');
+          q.SQL.Add(',GONDERILMETARIHI ');
+          q.SQL.Add(',AKTIF ');
+          q.SQL.Add(',SUBE_KODU ');
+          q.SQL.Add(',DEPO_KODU ');
+          q.SQL.Add(',DEPO_KONUM ');
+          q.SQL.Add(',ISLEM_ACIKLAMA ');
+          q.SQL.Add(',GENEL_ACIKLAMA ');
+          q.SQL.Add(',SATIR_ADET ');
+          q.SQL.Add(',ARACPLAKASI ');
+          q.SQL.Add(',SIPARISNO ');
+          q.SQL.Add(',IRSALIYENO ');
+          q.SQL.Add(',YUKLEMEPLANLAMATARIHI ');
+          q.SQL.Add(',SIPINCKEY ');
+          q.SQL.Add(',SOFOR_ADI ');
+          q.SQL.Add(',ALT_STOKKOD1 ');
+          q.SQL.Add(',DATNO ');
+          q.SQL.Add(',CARIKODU ');
+          q.SQL.Add(',SIPARIS_DEPO ');
+          q.SQL.Add(',DORSE_PLAKA ');
+          q.SQL.Add(',SOFOR_TC ');
+          q.SQL.Add(',ACIK_KAPALI ');
+          q.SQL.Add(',IRSALIYE_FATURA ');
+          q.SQL.Add(',VADEGUNU ');
+          q.SQL.Add(',BOLUNEN_MIKTAR ');
+          q.SQL.Add(',DOVIZ_KURU_SABIT) ');
+              q.SQL.Add('VALUES( ');
+              q.SQL.Add(':vYUKLEMENO,');
+              q.SQL.Add(':vSTOKKODU,');
+//                  q.SQL.Add(':vSERINO,');
+//                  q.SQL.Add(':vPALETNO,');
+//                  q.SQL.Add(':vLOTNO,');
+              q.SQL.Add(':vMIKTAR1,');
+              q.SQL.Add(':vADET1,');
+              q.SQL.Add(':vMIKTAR2,');
+              q.SQL.Add(':vADET2,');
+              q.SQL.Add(':vOLUSTURMATARIHI,');
+              q.SQL.Add(':vOLUSTURANKUL,');
+              q.SQL.Add(':vYUKLEMEDURUMU,');
+              q.SQL.Add(':vYUKLEMETARIHI,');
+              q.SQL.Add(':vYUKLEYENKUL,');
+              q.SQL.Add(':vDUZELTMETARIHI,');
+              q.SQL.Add(':vGONDERILDI,');
+              q.SQL.Add(':vGONDERILMETARIHI,');
+              q.SQL.Add(':vAKTIF,');
+              q.SQL.Add(':vSUBE_KODU,');
+              q.SQL.Add(':vDEPO_KODU,');
+              q.SQL.Add(':vDEPO_KONUM,');
+              q.SQL.Add(':vISLEM_ACIKLAMA,');
+              q.SQL.Add(':vGENEL_ACIKLAMA,');
+              q.SQL.Add(':vSATIR_ADET,');
+              q.SQL.Add(':vARACPLAKASI,');
+              q.SQL.Add(':vSIPARISNO,');
+              q.SQL.Add(':vIRSALIYENO,');
+              q.SQL.Add(':vYUKLEMEPLANLAMATARIHI,');
+              q.SQL.Add(':vSIPINCKEY,');
+              q.SQL.Add(':vSOFOR_ADI,');
+              q.SQL.Add(':vALT_STOKKOD1,');
+              q.SQL.Add(':vDATNO,');
+              q.SQL.Add(':vCARIKODU,');
+              q.SQL.Add(':vSIPARIS_DEPO,');
+              q.SQL.Add(':vDORSE_PLAKA,');
+              q.SQL.Add(':vSOFOR_TC,');
+              q.SQL.Add(':vACIK_KAPALI,');
+              q.SQL.Add(':vIRSALIYE_FATURA,');
+              q.SQL.Add(':vVADEGUNU, ');
+              q.SQL.Add(':vBOLUNEN_MIKTAR, ');
+              q.SQL.Add(':vDOVIZ_KURU_SABIT) ');
+                  q.ParamByName('vYUKLEMENO').AsString := YuklemeNo;
+                  q.ParamByName('vSTOKKODU').AsString := StokKodu;
+//                      q.ParamByName('vSERINO').Value := '';
+//                      q.ParamByName('vPALETNO').Value := '';
+//                      q.ParamByName('vLOTNO').Value := '';
+                  q.ParamByName('vMIKTAR1').AsFloat := YuklemeMiktar;
+                  q.ParamByName('vADET1').AsInteger := 0;
+                  q.ParamByName('vMIKTAR2').AsFloat := 0;
+                  q.ParamByName('vADET2').AsInteger := 0;
+                  q.ParamByName('vOLUSTURMATARIHI').AsDateTime := Now;
+                  q.ParamByName('vOLUSTURANKUL').AsString := '';
+                  q.ParamByName('vYUKLEMEDURUMU').AsInteger := 0;
+                  q.ParamByName('vYUKLEMETARIHI').AsDateTime := now;
+                  q.ParamByName('vYUKLEYENKUL').AsString := '';
+                  q.ParamByName('vDUZELTMETARIHI').AsString := '1899-12-30';
+                  q.ParamByName('vGONDERILDI').AsInteger := 0;
+                  q.ParamByName('vGONDERILMETARIHI').Value := '1899-12-30';
+                  q.ParamByName('vAKTIF').AsInteger := 0;
+                  q.ParamByName('vSUBE_KODU').AsInteger := SiparisSube;
+                  q.ParamByName('vDEPO_KODU').AsInteger := 0;
+                  q.ParamByName('vDEPO_KONUM').AsString := '';
+                  q.ParamByName('vISLEM_ACIKLAMA').AsString := '';
+                  q.ParamByName('vGENEL_ACIKLAMA').AsString := '';
+                  q.ParamByName('vSATIR_ADET').AsInteger := 0;
+                  q.ParamByName('vARACPLAKASI').AsString := '';
+                  q.ParamByName('vSIPARISNO').AsString := '';
+                  q.ParamByName('vIRSALIYENO').AsString := '';
+                  q.ParamByName('vYUKLEMEPLANLAMATARIHI').AsString := '1899-12-30';
+                  q.ParamByName('vSIPINCKEY').Value := inckey;
+                  q.ParamByName('vSOFOR_ADI').AsString := '';
+                  q.ParamByName('vALT_STOKKOD1').AsString := '';
+                  q.ParamByName('vDATNO').AsString := '';
+                  q.ParamByName('vCARIKODU').AsString := '';
+                  q.ParamByName('vSIPARIS_DEPO').AsInteger := SiparisDepo;
+                  q.ParamByName('vDORSE_PLAKA').AsString := '';
+                  q.ParamByName('vSOFOR_TC').AsString := '';
+
+                  // Açýk / Kapalý Olma Durumu
+                  if rgOdeme.ItemIndex = 0 then q.ParamByName('vACIK_KAPALI').AsInteger := 2;
+                  if rgOdeme.ItemIndex = 1 then q.ParamByName('vACIK_KAPALI').AsInteger := 1;
+
+                  // Ýrsaliye / Fatura olma durumu
+//                      q.ParamByName('vIRSALIYE_FATURA').AsInteger := -1;
+                  if rgirsFat.ItemIndex = 0 then
+                    q.ParamByName('vIRSALIYE_FATURA').AsInteger := 0 // Ýrsaliye
+                    else
+                    q.ParamByName('vIRSALIYE_FATURA').AsInteger := 1;
+
+                  q.ParamByName('vVADEGUNU').AsInteger := StrToInt(Trim(txtVadeGunu.Text));
+                  q.ParamByName('vBOLUNEN_MIKTAR').AsFloat := YuklemeMiktar;
+
+                 if rgDoviz.ItemIndex = 0 then
+                    q.ParamByName('vDOVIZ_KURU_SABIT').AsInteger := 1 // EVET demektir. Sabit olarak uygulanacak. Kur hesaplamasý yapýlmayacak alanlar flu olacak.
+                    else
+                    q.ParamByName('vDOVIZ_KURU_SABIT').AsInteger := 0;
+
+
+          q.Execute;
+        except
+          On E:Exception do
+            begin
+              q.Close;
+              FreeAndNil(q);
+              Abort;
+            end;
+
+        end;
+
+        dxMemData1.next;
+      end;
+
+    qSiparis.EnableControls;
+
+
+      try
+        q.Close;
+        q.SQL.Clear;
+        q.SQL.Add(' INSERT INTO dbo.FISBASLIK_EK ');
+        q.SQL.Add(' (FATIRSNO,ACIK1,ACIK2,ACIK3,ACIK4,ACIK5,ACIK6,ACIK7,ACIK8,ACIK9,ACIK10,ACIK11,ACIK12,ACIK13,ACIK14,ACIK15,ACIK16,TIP,CARIKOD,SUBEKODU,YUKLEMENO) ');
+        q.SQL.Add(' SELECT FATIRSNO,ACIK1,ACIK2,ACIK3,ACIK4,ACIK5,ACIK6,ACIK7,ACIK8,ACIK9,ACIK10,ACIK11,ACIK12,ACIK13,ACIK14,ACIK15,ACIK16,FKOD,CKOD,SUBE_KODU, :Yuk ');
+        q.SQL.Add(' FROM ' + Tmp.xNetsisSirketKodu + '.DBO.TBLFATUEK ');
+        q.SQL.Add(' WHERE FKOD = ''6'' AND FATIRSNO IN( ');
+        q.SQL.Add(' SELECT FISNO FROM ' + Tmp.xNetsisSirketKodu + '.DBO.TBLSIPATRA WHERE FISNO = FATIRSNO AND INCKEYNO IN( ');
+        q.SQL.Add(' select TOP 1 MIN(SIPINCKEY) from YUKLEME WHERE YUKLEMENO =:Yuk )) ');  // Yüklemedeki ilk inckey in sipariþ baþlýk bilgileri alýnýyor.
+        q.ParamByName('Yuk').AsString := YuklemeNo;
+        q.ExecSQL;
+      except
+          On E:Exception do
+            begin
+              q.Close;
+              FreeAndNil(q);
+              Abort;
+            end;
+      end;
+
+    dxMemData1.Close;
+    rgirsFat.ItemIndex := -1;
+    rgOdeme.ItemIndex := 0;
+    rgDoviz.ItemIndex := -1;
+
+    btnListele.Click;
+
+    UniMainModule.saKaydet.Show('Ýþlem Tamam ' + YuklemeNo);
+
+    GrisSecimKaldir;
+
+    rgirsFat.Enabled := True;
+    rgirsFat.ItemIndex := -1;
+
+    rgOdeme.Enabled := True;
+    rgOdeme.ItemIndex := -1;
+
+    rgDoviz.Enabled := True;
+    rgDoviz.ItemIndex := -1;
+
+
+end;
+
+procedure TfrmYuklemeTalebi.edCariKodKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    begin
+      btnListele.SetFocus;
+      btnListele.Click;
+    end;
+end;
+
+procedure TfrmYuklemeTalebi.mSiparisBeforePost(DataSet: TDataSet);
+var
+  AcikMiktar, AktifYuklemeMiktar : Real;
+begin
+ // Hesaplama Ýþlemleri
+  with DataSet do
+    begin
+      if FieldByName('vYUKLEME_MIKTAR').AsFloat > 0 then
+        begin
+          AcikMiktar := (mSiparisSIP_KALAN.AsFloat - mSiparisACIK_YUKLEME_MIKTAR.AsFloat);
+          AcikMiktar := AcikMiktar + ((AcikMiktar * xSiparisFazlaTeslimatOrani) / 100);
+
+          if (mSiparisvYUKLEME_MIKTAR.Value > AcikMiktar) then
+            begin
+              UniMainModule.saHata_1.Show('Girilen Miktar Kalan Miktardan fazladýr.');
+              mSiparisvYUKLEME_MIKTAR.Value := 0;
+              mSiparis.Refresh;
+              Abort;
+            end;
+        end;
+    end;
+
+
+end;
+
+procedure TfrmYuklemeTalebi.rgirsFatChangeValue(Sender: TObject);
+begin
+  if rgirsFat.ItemIndex = 0 then    // irsaliye
+    begin
+      rgOdeme.ItemIndex := 1;
+      rgOdeme.Enabled := False;
+    end else if rgirsFat.ItemIndex = 1 then // fatura
+              begin
+                rgOdeme.Enabled := True;
+                rgOdeme.ItemIndex := 0;
+              end else
+              begin
+                rgOdeme.ItemIndex := -1;
+                rgOdeme.Enabled := False;
+              end;
+end;
+
+procedure TfrmYuklemeTalebi.btnYuklemeEsitKalanClick(Sender: TObject);
+var
+  I: Integer;
+  B : TBookmark;
+  inckey : Variant;
+begin
+  dxMemData1.Close;
+  dxMemdata1.Open;
+
+  if UniDBGrid1.SelectedRows.Count > 0 then
+    begin
+      mSiparis.DisableControls;
+
+      // save cursor location
+      B := mSiparis.GetBookmark;
+      try
+        for I := 0 to UniDBGrid1.SelectedRows.Count - 1 do
+        begin
+          mSiparis.Bookmark := UniDBGrid1.SelectedRows[I];
+
+          dxMemdata1.Append;
+          dxMemData1.CopyFields(mSiparis);
+          dxMemdata1.Post;
+        end;
+      finally
+
+      end;
+
+    end else if UniDBGrid1.SelectedRows.Count = 0 then
+             begin
+              UniMainModule.saHata.Show('Hiç bir satýr seçilmemiþ. - ÝÞLEM DEVAM EDEMEZ.');
+             end;
+
+      mSiparis.DisableControls;
+  // Gridde inckeyno larýn alýnýp kontrollerinyapýldýðý bölümdü.
+      dxMemData1.First;
+      while not dxMemData1.Eof do
+        begin
+
+          try
+            if VarIsNull(dxMemData1.FieldByName('INCKEYNO').Value) = True then
+              begin
+                incKey := 0;
+              end else
+              begin
+                incKey := dxMemData1.FieldByName('INCKEYNO').Value;
+              end;
+
+          finally
+
+          end;
+
+          begin
+
+            mSiparis.First;
+            if mSiparis.Locate('INCKEYNO',inckey,[]) = True then
+              begin
+                mSiparis.Edit;
+                mSiparis.FieldByName('vYUKLEME_MIKTAR').AsFloat := mSiparis.FieldByName('SIP_KALAN').AsFloat;
+                mSiparis.Post;
+
+              end;
+          end;
+
+          dxMemData1.Next;
+        end;
+
+      mSiparis.EnableControls;
+      UniDBGrid1.Refresh;
+//      mSiparis.Refresh;
+
+
+
+//  // Data ya direk müdahale kýsmý. Þimdilik iptal ediliyor.
+//  mSiparis.First;
+//  while not mSiparis.eof do
+//    begin
+//      mSiparis.Edit;
+//      mSiparis.FieldByName('vYUKLEME_MIKTAR').AsFloat := mSiparis.FieldByName('SIP_KALAN').AsFloat;
+//      mSiparis.Post;
+//     mSiparis.Next;
+//    end;
+
+
+end;
+
+procedure TfrmYuklemeTalebi.btnSecilenlerYukleme_KalanClick(Sender: TObject);
+var
+  I: Integer;
+  B : TBookmark;
+  inckey : Variant;
+begin
+  dxMemData1.Close;
+  dxMemdata1.Open;
+  if UniDBGrid1.SelectedRows.Count > 0 then
+    begin
+      mSiparis.DisableControls;
+
+      // save cursor location
+      B := mSiparis.GetBookmark;
+      try
+        for I := 0 to UniDBGrid1.SelectedRows.Count - 1 do
+        begin
+          mSiparis.Bookmark := UniDBGrid1.SelectedRows[I];
+
+          dxMemdata1.Append;
+          dxMemData1.CopyFields(mSiparis);
+          dxMemdata1.Post;
+        end;
+      finally
+
+      end;
+
+    end else if UniDBGrid1.SelectedRows.Count = 0 then
+             begin
+              UniMainModule.saHata.Show('Hiç bir satýr seçilmemiþ. - ÝÞLEM DEVAM EDEMEZ.');
+             end;
+
+      mSiparis.DisableControls;
+  // Gridde inckeyno larýn alýnýp kontrollerinyapýldýðý bölümdü.
+      dxMemData1.First;
+      while not dxMemData1.Eof do
+        begin
+
+          try
+            if VarIsNull(dxMemData1.FieldByName('INCKEYNO').Value) = True then
+              begin
+                incKey := 0;
+              end else
+              begin
+                incKey := dxMemData1.FieldByName('INCKEYNO').Value;
+              end;
+
+          finally
+
+          end;
+
+          begin
+
+            mSiparis.First;
+            if mSiparis.Locate('INCKEYNO',inckey,[]) = True then
+              begin
+                mSiparis.Edit;
+                mSiparis.FieldByName('vYUKLEME_MIKTAR').AsFloat := mSiparis.FieldByName('SIP_KALAN').AsFloat;
+                mSiparis.Post;
+
+              end;
+          end;
+
+          dxMemData1.Next;
+        end;
+
+      mSiparis.EnableControls;
+      UniDBGrid1.Refresh;
+//      mSiparis.Refresh;
+
+end;
+
+procedure TfrmYuklemeTalebi.UniButton2Click(Sender: TObject);
+begin
+//UniSession.AddJS(UniDBGrid1.JSName + '.getSelectionModel().selectAll () ;');
+    MainForm.NavPage.ActivePage.Close;
+end;
+
+procedure TfrmYuklemeTalebi.btnGirilenleriSecClick(Sender: TObject);
+begin
+//  UniSession.AddJS(UniDBGrid1.JSName + '.getSelectionModel().selectAll () ;');
+  GrisSecimKaldir;
+  GridYuklemeMiktarOlanlariSec;
+
+end;
+
+procedure TfrmYuklemeTalebi.UniButton4Click(Sender: TObject);
+begin
+  GrisSecimKaldir;
+  GridYuklemeMiktarOlanlariSec;
+end;
+
+
+procedure TfrmYuklemeTalebi.UniDBGrid1AfterLoad(Sender: TUniCustomDBGrid);
+begin
+  GrisSecimKaldir;
+end;
+
+procedure TfrmYuklemeTalebi.UniFormShow(Sender: TObject);
+begin
+  UniDateTimePicker1.DateTime:=StrToDate('01.01.2022');
+  UniDateTimePicker2.DateTime:=now;
+end;
+
+procedure TfrmYuklemeTalebi.SiparisFazlaTeslimatOran;
+var
+  q: TUniQuery;
+begin
+  q := TUniQuery.Create(self);
+  q.Connection := frmDM.conNetsis;
+  q.Close;
+  q.SQL.Clear;
+  q.SQL.Add('SELECT FAZTESORAN  FROM TBLSFATUPRM');
+  q.Open;
+  xSiparisFazlaTeslimatOrani := q.FieldByName('FAZTESORAN').AsFloat;
+  q.Close;
+  FreeAndNil(q);
+end;
+
+procedure TfrmYuklemeTalebi.GrisSecimKaldir;
+begin
+  with UniDBGrid1, UniDBGrid1.DataSource.DataSet do
+  begin
+    DisableControls;
+    First;
+    try
+      while not Eof do
+      begin
+        //        if (FieldByName('Category').AsString = 'Ray') then
+        //          JSInterface.JSCallDefer('getSelectionModel().select', [RecNo-1, True], 10);
+        JSInterface.JSCallDefer('getSelectionModel().deselect', [0], 10);
+        Next;
+      end;
+    finally
+      First;
+      EnableControls;
+    end;
+  end;
+end;
+
+procedure TfrmYuklemeTalebi.GridYuklemeMiktarOlanlariSec;
+begin
+  with UniDBGrid1, UniDBGrid1.DataSource.DataSet do
+  begin
+    DisableControls;
+    First;
+    try
+      while not Eof do
+      begin
+        if (FieldByName('vYUKLEME_MIKTAR').AsFloat > 0) then
+        begin
+          JSInterface.JSCallDefer('getSelectionModel().select', [RecNo - 1, True], 10);
+        end;
+        Next;
+      end;
+    finally
+      First;
+      EnableControls;
+    end;
+  end;
+end;
+
+end.

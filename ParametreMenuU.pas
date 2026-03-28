@@ -1,0 +1,94 @@
+unit ParametreMenuU;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics,
+  Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
+  uniGUIClasses, uniGUIForm, uniButton, uniPanel, uniGUIBaseClasses;
+
+type
+  TfrmParametreMenu = class(TUniForm)
+    UniContainerPanel1: TUniContainerPanel;
+    UniSimplePanel1: TUniSimplePanel;
+    UniPanel1: TUniPanel;
+    UniButton1: TUniButton;
+    UniButton2: TUniButton;
+    UniButton4: TUniButton;
+    UniButton7: TUniButton;
+    UniSimplePanel2: TUniSimplePanel;
+    UniPanel2: TUniPanel;
+    UniButton3: TUniButton;
+    UniSimplePanel3: TUniSimplePanel;
+    UniPanel3: TUniPanel;
+    UniButton5: TUniButton;
+    UniButton6: TUniButton;
+    UniButton8: TUniButton;
+    UniButton9: TUniButton;
+    UniButton10: TUniButton;
+    procedure UniButton4Click(Sender: TObject);
+    procedure UniButton2Click(Sender: TObject);
+    procedure UniButton1Click(Sender: TObject);
+    procedure UniButton7Click(Sender: TObject);
+    procedure UniButton8Click(Sender: TObject);
+    procedure UniButton9Click(Sender: TObject);
+    procedure UniButton10Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+function frmParametreMenu: TfrmParametreMenu;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  MainModule, uniGUIApplication, Genel, ParametrelerU, KullaniciGrupU,
+  KullanicilarU;
+
+//  EFaturaTanimU, SiparisBayiU, BayiTanimU, KurlarU;
+
+function frmParametreMenu: TfrmParametreMenu;
+begin
+  Result := TfrmParametreMenu(UniMainModule.GetFormInstance(TfrmParametreMenu));
+end;
+
+procedure TfrmParametreMenu.UniButton10Click(Sender: TObject);
+begin
+//  xFormShowModal(TfrmKurlar,'Kurlar',0,'');
+end;
+
+procedure TfrmParametreMenu.UniButton1Click(Sender: TObject);
+begin
+  xFormShow(TfrmKullanicilar,'Kullanici',0,'');
+end;
+
+procedure TfrmParametreMenu.UniButton2Click(Sender: TObject);
+begin
+  xFormShow(TfrmKullaniciGrup,'KullaniciGrup',0,'');
+end;
+
+procedure TfrmParametreMenu.UniButton4Click(Sender: TObject);
+begin
+  xFormShow(TfrmParametreler,'Parametreler',0,'');
+end;
+
+procedure TfrmParametreMenu.UniButton7Click(Sender: TObject);
+begin
+//  xFormShowModal(TfrmEFaturaTanim,'EFaturaTanim',0,'');
+end;
+
+procedure TfrmParametreMenu.UniButton8Click(Sender: TObject);
+begin
+//  xFormShowModal(TfrmSiparisBayi,'SiparisBayi',0,'');
+end;
+
+procedure TfrmParametreMenu.UniButton9Click(Sender: TObject);
+begin
+//  xFormShowModal(TfrmBayiTanim,'BayiTanim',0,'');
+end;
+
+end.

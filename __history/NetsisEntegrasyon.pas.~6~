@@ -1,0 +1,105 @@
+unit NetsisEntegrasyon;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, cxPropertiesStore, Vcl.StdCtrls, Netopenx50_TLB, Uni ;
+
+  Procedure NetsisBaglan();
+  Procedure NetsisMusteriSiparisi;
+
+  var
+  Kullanici,Sifre, Firma : String;
+  AktifDekontNo, Sube : Integer;
+
+
+
+implementation
+
+  Uses Genel, DMU, MainModule, SiparisDMU;
+
+procedure NetsisBaglan;
+var
+  Kernel: IKernel;
+  Sirket: ISirket;
+begin
+
+  Kullanici:='egehayat';
+  Sifre:='Eh2210?!';
+  Firma:='XXYUCEL2022';
+  Sube := 0;
+
+  if Kernel = nil then
+    begin
+      try
+        Kernel:=CoKernel.Create;
+        Sirket := Kernel.yeniSirket(vtMSSQL, Firma, 'TemelSet', '', Kullanici, Sifre, Sube);
+//        Sirket := Kernel.yeniSirket(vtMSSQL, txtSirket1.Text, 'TemelSet', '', 'BYS2', 'BYS3', 0);
+
+      except
+        On E:Exception do
+          begin
+            Screen.Cursor := crDefault;
+            ShowMessage('Baðlantý Hatasý -> ' + E.Message);
+            Abort;
+          end;
+      end;
+//      ShowMessage('Baðlantý saðlandý.');
+    end;
+
+
+end;
+
+procedure NetsisMusteriSiparisi();
+Var
+  Kernel : IKernel;
+  Sirket : ISirket;
+  Siparis : IFatura;
+  SipUst : IFatUst;
+  SipKalem : IFatKalem;
+Begin
+
+  NetsisBaglan;
+
+  Siparis := Kernel.yeniFatura(Sirket,ftSSip);
+  //Siparis Ust Bilgilerini Olustur
+  SipUst := Siparis.Ust;
+  SipUst.FATIRS_NO := frmSiparisDM.qFisBaslik.FieldByName('FisNo').AsString;
+  SipUst.TIPI := ft_Acik;
+  SipUst.CariKod := frmSiparisDM.qFisBaslik.FieldByName('CariKod').AsString;
+  SipUst.TARIH := frmSiparisDM.qFisBaslik.FieldByName('Tarih').AsDateTime;
+  SipUst.SIPARIS_TEST := frmSiparisDM.qFisBaslik.FieldByName('Tarih').AsDateTime;
+
+  frmSiparisDM.qFisDetay.First;
+  while not frmSiparisDM.qFisDetay.Eof do
+    begin
+      SipKalem := Siparis.kalemYeni(frmSiparisDM.qFisDetay.FieldByName('StokKod').AsString);
+      SipKalem.STra_GCMIK := frmSiparisDM.qFisDetay.FieldByName('Miktar').AsFloat;
+      SipKalem.Olcubr := 1;
+      SipKalem.CEVRIM := frmSiparisDM.qFisDetay.FieldByName('Carpan').AsFloat;
+      SipKalem.STra_DOVTIP := StrToInt(frmSiparisDM.qFisDetay.FieldByName('ParaBirimi').AsString);
+      SipKalem.STra_DOVFIAT := frmSiparisDM.qFisDetay.FieldByName('BirimFiyat').AsFloat;
+      SipKalem.STra_KDV := frmSiparisDM.qFisDetay.FieldByName('Kdv').AsFloat;
+      SipKalem.STra_BF := frmSiparisDM.qFisDetay.FieldByName('NetBirimFiyat').AsFloat;
+      SipKalem.STra_SatIsk := 0;
+      SipKalem.STra_SatIsk3 := 0;
+      SipKalem.STra_NF := frmSiparisDM.qFisDetay.FieldByName('NetBirimFiyat').AsFloat;
+
+      SipKalem.DEPO_KODU :=  xKullaniciDepo;
+
+      SipKalem.D_YEDEK10 := SipUst.Tarih;
+
+      frmSiparisDM.qFisDetay.Next;
+    end;
+
+
+  //Kayýtlarý saklama
+  Siparis.kayitYeni;
+  UniMainModule.saKaydet.Show('');
+
+
+
+end;
+
+end.

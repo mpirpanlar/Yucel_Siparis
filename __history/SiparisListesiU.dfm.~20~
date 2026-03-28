@@ -1,0 +1,938 @@
+object frmSiparisListesi: TfrmSiparisListesi
+  Left = 0
+  Top = 0
+  ClientHeight = 695
+  ClientWidth = 1223
+  Caption = 'frmSiparisListesi'
+  OnShow = UniFormShow
+  BorderStyle = bsNone
+  OldCreateOrder = False
+  MonitoredKeys.Keys = <>
+  AlignmentControl = uniAlignmentClient
+  Layout = 'fit'
+  PixelsPerInch = 96
+  TextHeight = 13
+  object UniContainerPanel1: TUniContainerPanel
+    Left = 38
+    Top = 10
+    Width = 1147
+    Height = 677
+    Hint = ''
+    ParentColor = False
+    TabOrder = 0
+    Layout = 'vbox'
+    object UniPanel2: TUniPanel
+      Left = 31
+      Top = 19
+      Width = 938
+      Height = 35
+      Hint = ''
+      TabOrder = 1
+      BorderStyle = ubsNone
+      Caption = ''
+      Color = 10865101
+      Layout = 'hbox'
+      LayoutConfig.Width = '100%'
+      object UniMenuButton1: TUniMenuButton
+        Left = 21
+        Top = 5
+        Width = 100
+        Height = 28
+        Hint = ''
+        DropdownMenu = popYazdir
+        Caption = 'Aktar'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 2
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      config.' +
+            'cls="btnAktar";'#13#10'}')
+        LayoutConfig.Margin = '3 5 3 3'
+      end
+      object UniButton2: TUniButton
+        Left = 158
+        Top = 5
+        Width = 100
+        Height = 28
+        Hint = ''
+        Caption = 'Kapat'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 1
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
+        LayoutConfig.Margin = '3 5 3 3'
+        OnClick = UniButton2Click
+      end
+      object UniButton1: TUniButton
+        Left = 286
+        Top = 4
+        Width = 100
+        Height = 28
+        Hint = ''
+        Caption = 'G'#252'ncelle'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 4
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
+        ScreenMask.Enabled = True
+        ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+        LayoutConfig.Margin = '3 5 3 3'
+        OnClick = UniButton1Click
+      end
+      object UniPanel6: TUniPanel
+        Left = 638
+        Top = 0
+        Width = 300
+        Height = 35
+        Hint = ''
+        Align = alRight
+        TabOrder = 3
+        BorderStyle = ubsNone
+        Caption = ''
+        Color = 10865101
+        Layout = 'hbox'
+        LayoutAttribs.Align = 'right'
+        object btnKaydet: TUniButton
+          Left = 49
+          Top = 3
+          Width = 100
+          Height = 28
+          Hint = ''
+          Visible = False
+          Caption = 'Onay'
+          ParentFont = False
+          Font.Charset = TURKISH_CHARSET
+          Font.Color = clWhite
+          Font.Height = -13
+          Font.Name = 'Segoe UI Semibold'
+          Font.Style = [fsBold]
+          TabOrder = 2
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+              'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'success'#39';'#13#10'}')
+          ScreenMask.Enabled = True
+          LayoutConfig.Margin = '3 5 3 3'
+        end
+        object btnSil: TUniButton
+          Left = 187
+          Top = 4
+          Width = 100
+          Height = 28
+          Hint = ''
+          Visible = False
+          Caption = 'Onay '#304'ptal'
+          ParentFont = False
+          Font.Charset = TURKISH_CHARSET
+          Font.Color = clWhite
+          Font.Height = -13
+          Font.Name = 'Segoe UI Semibold'
+          Font.Style = [fsBold]
+          TabOrder = 1
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+              'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'danger'#39';'#13#10'}')
+          ScreenMask.Enabled = True
+          LayoutConfig.Margin = '3 5 3 3'
+        end
+      end
+    end
+    object UniPanel1: TUniPanel
+      Left = 31
+      Top = 60
+      Width = 1082
+      Height = 65
+      Hint = ''
+      TabOrder = 3
+      BorderStyle = ubsNone
+      Title = 'Arama'
+      Caption = ''
+      Layout = 'hbox'
+      LayoutConfig.Width = '100%'
+      object UniSimplePanel3: TUniSimplePanel
+        Left = 11
+        Top = 3
+        Width = 110
+        Height = 59
+        Hint = ''
+        ParentColor = False
+        TabOrder = 1
+        Layout = 'vbox'
+        LayoutConfig.Margin = '5 0 0 5'
+        object UniDateTimePicker1: TUniDateTimePicker
+          Left = 5
+          Top = 3
+          Width = 100
+          Hint = ''
+          DateTime = 44143.000000000000000000
+          DateFormat = 'dd/MM/yyyy'
+          TimeFormat = 'HH:mm:ss'
+          TabOrder = 1
+          LayoutConfig.Width = '100%'
+          LayoutConfig.Margin = '2 3 1 3'
+        end
+        object UniDateTimePicker2: TUniDateTimePicker
+          Left = 5
+          Top = 31
+          Width = 100
+          Hint = ''
+          DateTime = 44143.000000000000000000
+          DateFormat = 'dd/MM/yyyy'
+          TimeFormat = 'HH:mm:ss'
+          TabOrder = 2
+          LayoutConfig.Width = '100%'
+          LayoutConfig.Margin = '2 3 1 3'
+        end
+      end
+      object edCariKod: TUniEdit
+        Left = 127
+        Top = 40
+        Width = 200
+        Hint = ''
+        Text = ''
+        TabOrder = 2
+        ClearButton = True
+        FieldLabel = 'Cari Kod,  Cari Ad, Belge No'
+        FieldLabelAlign = laTop
+        LayoutConfig.Margin = '2 3 1 3'
+      end
+      object cbFaturaDurum: TUniComboBox
+        Left = 360
+        Top = 40
+        Width = 150
+        Hint = ''
+        Style = csDropDownList
+        Text = 'Hay'#305'r'
+        Items.Strings = (
+          'Hepsi'
+          'Evet'
+          'Hay'#305'r')
+        ItemIndex = 2
+        TabOrder = 3
+        ClearButton = True
+        LayoutConfig.Margin = '2 3 1 3'
+        FieldLabel = 'Netsis G'#246'nderilen'
+        FieldLabelAlign = laTop
+        IconItems = <>
+      end
+      object btnListele: TUniButton
+        Left = 687
+        Top = 22
+        Width = 120
+        Height = 40
+        Hint = ''
+        Caption = 'Listele'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 4
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+        ScreenMask.Enabled = True
+        ImageIndex = 3
+        LayoutConfig.Margin = '7 5 3 10'
+        OnClick = btnListeleClick
+      end
+    end
+    object UniSimplePanel2: TUniSimplePanel
+      Left = 31
+      Top = 153
+      Width = 1082
+      Height = 488
+      Hint = ''
+      ParentColor = False
+      TabOrder = 2
+      Layout = 'hbox'
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
+      object UniDBGrid1: TUniDBGrid
+        Left = 80
+        Top = 20
+        Width = 977
+        Height = 449
+        Hint = ''
+        ClicksToEdit = 1
+        DataSource = dsSiparisListesi
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgConfirmDelete, dgTabs, dgAutoRefreshRow]
+        WebOptions.Paged = False
+        Grouping.ShowCaption = False
+        Grouping.ShowGroupable = True
+        LoadMask.Message = 'Loading data...'
+        LayoutConfig.Flex = 1
+        LayoutConfig.Height = '100%'
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '0 0 0 0'
+        TabOrder = 1
+        Summary.Align = taBottom
+        Summary.Enabled = True
+        Summary.GrandTotal = True
+        Summary.GrandTotalAlign = taBottom
+        Exporter.Enabled = True
+        Exporter.IncludeGroups = True
+        Exporter.IncludeSummary = True
+        Exporter.FileName = 'SiparisListesi'
+        Exporter.Title = 'Sipari'#351' Listesi'
+        Columns = <
+          item
+            FieldName = 'Tarih'
+            Title.Caption = 'Tarih'
+            Width = 100
+          end
+          item
+            FieldName = 'FisNo'
+            Title.Caption = 'Fi'#351' No'
+            Width = 120
+          end
+          item
+            FieldName = 'CariKod'
+            Title.Caption = 'Cari Kodu'
+            Width = 100
+          end
+          item
+            FieldName = 'CARI_ISIM'
+            Title.Caption = 'Cari Ad'#305
+            Width = 200
+            ReadOnly = True
+          end
+          item
+            FieldName = 'Aciklama'
+            Title.Caption = 'A'#231#305'klama'
+            Width = 100
+          end
+          item
+            FieldName = 'OzelKod'
+            Title.Caption = 'Kod 1'
+            Width = 50
+          end
+          item
+            FieldName = 'OzelKod2'
+            Title.Caption = 'Kod 2'
+            Width = 50
+          end
+          item
+            FieldName = 'ProjeKodu'
+            Title.Caption = 'Prj.Kodu'
+            Width = 50
+          end
+          item
+            ShowToolTipAlways = False
+            FieldName = 'PersonelKodu'
+            Title.Caption = 'PersonelKodu'
+            Width = 100
+          end
+          item
+            FieldName = 'KullaniciAd'
+            Title.Caption = 'Personel Ad'#305
+            Width = 100
+            ReadOnly = True
+          end
+          item
+            FieldName = 'Durum'
+            Title.Caption = 'Durum'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'Gonderildi'
+            Title.Caption = 'Gonderildi'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'DovizTarih'
+            Title.Caption = 'DovizTarih'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'NetsisSiparisNo'
+            Title.Caption = 'Netsis Sipari'#351' No'
+            Width = 120
+          end
+          item
+            FieldName = 'FisBaslikID'
+            Title.Caption = 'FisBaslikID'
+            Width = 100
+            Visible = False
+            ReadOnly = True
+          end
+          item
+            FieldName = 'FisTipID'
+            Title.Caption = 'FisTipID'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'Vade'
+            Title.Caption = 'Vade'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'SevkTarihi'
+            Title.Caption = 'SevkTarihi'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'BelgeNo'
+            Title.Caption = 'BelgeNo'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'ParaBirimi'
+            Title.Caption = 'ParaBirimi'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'BrutToplam'
+            Title.Caption = 'BrutToplam'
+            Width = 100
+          end
+          item
+            FieldName = 'IskontoToplam'
+            Title.Caption = 'IskontoToplam'
+            Width = 100
+          end
+          item
+            FieldName = 'OtvToplam'
+            Title.Caption = 'OtvToplam'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'OivToplam'
+            Title.Caption = 'OivToplam'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'KdvMatrah'
+            Title.Caption = 'KdvMatrah'
+            Width = 100
+          end
+          item
+            FieldName = 'Kdv'
+            Title.Caption = 'Kdv'
+            Width = 100
+          end
+          item
+            FieldName = 'GenelToplam'
+            Title.Caption = 'GenelToplam'
+            Width = 100
+          end
+          item
+            FieldName = 'Borc'
+            Title.Caption = 'Borc'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'Alacak'
+            Title.Caption = 'Alacak'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'OdenenTutar'
+            Title.Caption = 'OdenenTutar'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'KayitTarihi'
+            Title.Caption = 'KayitTarihi'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'DegistirilmeTarihi'
+            Title.Caption = 'DegistirilmeTarihi'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'KayitKullanici'
+            Title.Caption = 'KayitKullanici'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'DegistirenKullanici'
+            Title.Caption = 'DegistirenKullanici'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'KayitBilgisayar'
+            Title.Caption = 'KayitBilgisayar'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'DegistirenBilgisayar'
+            Title.Caption = 'DegistirenBilgisayar'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'Tevkifat'
+            Title.Caption = 'Tevkifat'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'TevkifatKod'
+            Title.Caption = 'TevkifatKod'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'TevkifatKdv'
+            Title.Caption = 'TevkifatKdv'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'TevkifatYuzde'
+            Title.Caption = 'TevkifatYuzde'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'KasaBankaID'
+            Title.Caption = 'KasaBankaID'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'Cari'
+            Title.Caption = 'Cari'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'Kur'
+            Title.Caption = 'Kur'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'ParaBirimiFis'
+            Title.Caption = 'ParaBirimiFis'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'GenelToplamFis'
+            Title.Caption = 'GenelToplamFis'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'KasaGiris'
+            Title.Caption = 'KasaGiris'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'KasaCikis'
+            Title.Caption = 'KasaCikis'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'AcikKapali'
+            Title.Caption = 'AcikKapali'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'KalanTutar'
+            Title.Caption = 'KalanTutar'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'FaturaTipID'
+            Title.Caption = 'FaturaTipID'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'Ajanda'
+            Title.Caption = 'Ajanda'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'FaturaGuid'
+            Title.Caption = 'FaturaGuid'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'OzelKod3'
+            Title.Caption = 'OzelKod3'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'OzelKod4'
+            Title.Caption = 'OzelKod4'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'OzelKod5'
+            Title.Caption = 'OzelKod5'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'NetsisKasaKodu'
+            Title.Caption = 'NetsisKasaKodu'
+            Width = 100
+            Visible = False
+          end
+          item
+            FieldName = 'NetsisFaturaNo'
+            Title.Caption = 'NetsisFaturaNo'
+            Width = 100
+            Visible = False
+          end>
+      end
+    end
+  end
+  object qFisTip: TUniQuery
+    SQL.Strings = (
+      'Select * from FisTip where Tip='#39'Siparis'#39)
+    Left = 600
+    Top = 416
+  end
+  object dsFisTip: TUniDataSource
+    DataSet = qFisTip
+    Left = 600
+    Top = 472
+  end
+  object popYazdir: TUniPopupMenu
+    Left = 368
+    Top = 312
+    object btnHtml: TUniMenuItem
+      Caption = 'HTML'
+    end
+    object btnXls: TUniMenuItem
+      Caption = 'XLSX'
+    end
+    object btnCsv: TUniMenuItem
+      Caption = 'CSV'
+    end
+  end
+  object UniGridHTMLExporter1: TUniGridHTMLExporter
+    FileExtention = 'html'
+    MimeType = 'text/html'
+    CharSet = 'UTF-8'
+    Left = 720
+    Top = 264
+  end
+  object UniGridExcelExporter1: TUniGridExcelExporter
+    FileExtention = 'xlsx'
+    MimeType = 
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.shee' +
+      't'
+    CharSet = 'UTF-8'
+    Left = 720
+    Top = 320
+  end
+  object UniGridCSVExporter1: TUniGridCSVExporter
+    FileExtention = 'csv'
+    MimeType = 'text/csv'
+    CharSet = 'UTF-8'
+    Left = 720
+    Top = 376
+  end
+  object qSiparisListesi: TUniQuery
+    Connection = frmDM.conAsya
+    SQL.Strings = (
+      'SELECT B.*'
+      ', C.CARI_ISIM, K.KullaniciAd'
+      'FROM SIPARIS_BASLIK B'
+      
+        #9'LEFT JOIN XXYUCEL2022.DBO.TBLCASABIT C WITH(NOLOCK) ON (C.CARI_' +
+        'KOD = B.CariKod)'
+      #9'LEFT JOIN KULLANICI K ON (K.KullaniciID = B.PersonelKodu)')
+    Left = 816
+    Top = 464
+    object qSiparisListesiFisBaslikID: TIntegerField
+      FieldName = 'FisBaslikID'
+      ReadOnly = True
+      Required = True
+    end
+    object qSiparisListesiFisTipID: TByteField
+      FieldName = 'FisTipID'
+      Required = True
+    end
+    object qSiparisListesiFisNo: TStringField
+      FieldName = 'FisNo'
+      Required = True
+      Size = 50
+    end
+    object qSiparisListesiCariKod: TStringField
+      FieldName = 'CariKod'
+      Size = 50
+    end
+    object qSiparisListesiTarih: TDateTimeField
+      FieldName = 'Tarih'
+      Required = True
+    end
+    object qSiparisListesiVade: TDateTimeField
+      FieldName = 'Vade'
+    end
+    object qSiparisListesiSevkTarihi: TDateTimeField
+      FieldName = 'SevkTarihi'
+    end
+    object qSiparisListesiBelgeNo: TStringField
+      FieldName = 'BelgeNo'
+      Size = 50
+    end
+    object qSiparisListesiAciklama: TStringField
+      FieldName = 'Aciklama'
+      Size = 200
+    end
+    object qSiparisListesiOzelKod: TStringField
+      FieldName = 'OzelKod'
+      Size = 200
+    end
+    object qSiparisListesiParaBirimi: TStringField
+      FieldName = 'ParaBirimi'
+      Required = True
+      Size = 5
+    end
+    object qSiparisListesiBrutToplam: TFloatField
+      FieldName = 'BrutToplam'
+      DisplayFormat = '#.,##'
+    end
+    object qSiparisListesiIskontoToplam: TFloatField
+      FieldName = 'IskontoToplam'
+      DisplayFormat = '#.,##'
+    end
+    object qSiparisListesiOtvToplam: TFloatField
+      FieldName = 'OtvToplam'
+    end
+    object qSiparisListesiOivToplam: TFloatField
+      FieldName = 'OivToplam'
+    end
+    object qSiparisListesiKdvMatrah: TFloatField
+      FieldName = 'KdvMatrah'
+      DisplayFormat = '#.,##'
+    end
+    object qSiparisListesiKdv: TFloatField
+      FieldName = 'Kdv'
+      DisplayFormat = '#.,##'
+    end
+    object qSiparisListesiGenelToplam: TFloatField
+      FieldName = 'GenelToplam'
+      DisplayFormat = '#.,##'
+    end
+    object qSiparisListesiBorc: TFloatField
+      FieldName = 'Borc'
+    end
+    object qSiparisListesiAlacak: TFloatField
+      FieldName = 'Alacak'
+    end
+    object qSiparisListesiOdenenTutar: TFloatField
+      FieldName = 'OdenenTutar'
+    end
+    object qSiparisListesiKayitTarihi: TDateTimeField
+      FieldName = 'KayitTarihi'
+    end
+    object qSiparisListesiDegistirilmeTarihi: TDateTimeField
+      FieldName = 'DegistirilmeTarihi'
+    end
+    object qSiparisListesiKayitKullanici: TStringField
+      FieldName = 'KayitKullanici'
+      Size = 50
+    end
+    object qSiparisListesiDegistirenKullanici: TStringField
+      FieldName = 'DegistirenKullanici'
+      Size = 50
+    end
+    object qSiparisListesiKayitBilgisayar: TStringField
+      FieldName = 'KayitBilgisayar'
+      Size = 50
+    end
+    object qSiparisListesiDegistirenBilgisayar: TStringField
+      FieldName = 'DegistirenBilgisayar'
+      Size = 50
+    end
+    object qSiparisListesiTevkifat: TByteField
+      FieldName = 'Tevkifat'
+    end
+    object qSiparisListesiTevkifatKod: TStringField
+      FieldName = 'TevkifatKod'
+      Size = 10
+    end
+    object qSiparisListesiTevkifatKdv: TFloatField
+      FieldName = 'TevkifatKdv'
+    end
+    object qSiparisListesiTevkifatYuzde: TFloatField
+      FieldName = 'TevkifatYuzde'
+    end
+    object qSiparisListesiKasaBankaID: TIntegerField
+      FieldName = 'KasaBankaID'
+    end
+    object qSiparisListesiDurum: TByteField
+      FieldName = 'Durum'
+      Required = True
+    end
+    object qSiparisListesiCari: TByteField
+      FieldName = 'Cari'
+    end
+    object qSiparisListesiKur: TFloatField
+      FieldName = 'Kur'
+    end
+    object qSiparisListesiParaBirimiFis: TStringField
+      FieldName = 'ParaBirimiFis'
+      Size = 5
+    end
+    object qSiparisListesiGenelToplamFis: TFloatField
+      FieldName = 'GenelToplamFis'
+    end
+    object qSiparisListesiKasaGiris: TFloatField
+      FieldName = 'KasaGiris'
+    end
+    object qSiparisListesiKasaCikis: TFloatField
+      FieldName = 'KasaCikis'
+    end
+    object qSiparisListesiAcikKapali: TByteField
+      FieldName = 'AcikKapali'
+    end
+    object qSiparisListesiKalanTutar: TFloatField
+      FieldName = 'KalanTutar'
+    end
+    object qSiparisListesiFaturaTipID: TSmallintField
+      FieldName = 'FaturaTipID'
+    end
+    object qSiparisListesiAjanda: TByteField
+      FieldName = 'Ajanda'
+    end
+    object qSiparisListesiGonderildi: TByteField
+      FieldName = 'Gonderildi'
+    end
+    object qSiparisListesiFaturaGuid: TStringField
+      FieldName = 'FaturaGuid'
+      Size = 100
+    end
+    object qSiparisListesiPersonelKodu: TStringField
+      FieldName = 'PersonelKodu'
+      Size = 50
+    end
+    object qSiparisListesiOzelKod2: TStringField
+      FieldName = 'OzelKod2'
+      Size = 50
+    end
+    object qSiparisListesiOzelKod3: TStringField
+      FieldName = 'OzelKod3'
+      Size = 50
+    end
+    object qSiparisListesiOzelKod4: TStringField
+      FieldName = 'OzelKod4'
+      Size = 50
+    end
+    object qSiparisListesiOzelKod5: TStringField
+      FieldName = 'OzelKod5'
+      Size = 50
+    end
+    object qSiparisListesiProjeKodu: TStringField
+      FieldName = 'ProjeKodu'
+      Size = 50
+    end
+    object qSiparisListesiNetsisKasaKodu: TStringField
+      FieldName = 'NetsisKasaKodu'
+      Size = 8
+    end
+    object qSiparisListesiNetsisFaturaNo: TStringField
+      FieldName = 'NetsisFaturaNo'
+      Size = 50
+    end
+    object qSiparisListesiDovizTarih: TDateTimeField
+      FieldName = 'DovizTarih'
+    end
+    object qSiparisListesiNetsisSiparisNo: TStringField
+      FieldName = 'NetsisSiparisNo'
+      Size = 50
+    end
+    object qSiparisListesiCARI_ISIM: TStringField
+      FieldName = 'CARI_ISIM'
+      ReadOnly = True
+      Size = 100
+    end
+    object qSiparisListesiKullaniciAd: TStringField
+      FieldName = 'KullaniciAd'
+      ReadOnly = True
+      Size = 50
+    end
+  end
+  object dsSiparisListesi: TUniDataSource
+    DataSet = qSiparisListesi
+    Left = 816
+    Top = 520
+  end
+  object saKaydet: TUniSweetAlert
+    Title = 'Title'
+    TitleText = 'Hata !'
+    Text = 'Sipari'#351'e '#199'evrilmi'#351
+    ConfirmButtonText = 'Tamam'
+    CancelButtonText = 'Cancel'
+    AlertType = atInfo
+    Padding = 20
+    Left = 152
+    Top = 280
+  end
+  object UniScreenMask1: TUniScreenMask
+    AttachedControl = UniDBGrid1
+    Enabled = True
+    DisplayMessage = 'Y'#252'kleniyor...'
+    Left = 600
+    Top = 544
+  end
+  object saMesaj: TUniSweetAlert
+    Title = 'Title'
+    TitleText = 'Hata !'
+    Text = 'Sipari'#351'e '#199'evrilmi'#351
+    ConfirmButtonText = 'Tamam'
+    CancelButtonText = 'Cancel'
+    AlertType = atInfo
+    Padding = 20
+    Left = 152
+    Top = 344
+  end
+end

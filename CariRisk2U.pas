@@ -1,0 +1,326 @@
+unit CariRisk2U;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics,
+  Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
+  uniGUIClasses, uniGUIForm, uniScreenMask, uniGUIBaseClasses, uniSweetAlert,
+  Data.DB, uniGridExporters, uniBasicGrid, Vcl.Menus, uniMainMenu, DBAccess,
+  Uni, MemDS, uniDBGrid, uniComboBox, uniMultiItem, uniDBComboBox,
+  uniDBLookupComboBox, uniEdit, uniDateTimePicker, uniPanel, uniButton,
+  uniBitBtn, uniMenuButton, uniMemo, uniLabel, uniDBText;
+
+type
+  TfrmCariRisk2 = class(TUniForm)
+    UniContainerPanel1: TUniContainerPanel;
+    UniPanel2: TUniPanel;
+    UniMenuButton1: TUniMenuButton;
+    UniButton2: TUniButton;
+    UniPanel6: TUniPanel;
+    btnKaydet: TUniButton;
+    btnSil: TUniButton;
+    UniPanel1: TUniPanel;
+    UniSimplePanel2: TUniSimplePanel;
+    UniDBGrid1: TUniDBGrid;
+    qFisTip: TUniQuery;
+    dsFisTip: TUniDataSource;
+    popYazdir: TUniPopupMenu;
+    btnHtml: TUniMenuItem;
+    btnXls: TUniMenuItem;
+    btnCsv: TUniMenuItem;
+    UniGridHTMLExporter1: TUniGridHTMLExporter;
+    UniGridExcelExporter1: TUniGridExcelExporter;
+    UniGridCSVExporter1: TUniGridCSVExporter;
+    saKaydet: TUniSweetAlert;
+    UniScreenMask1: TUniScreenMask;
+    saMesaj: TUniSweetAlert;
+    UniButton1: TUniButton;
+    qCariListesi: TUniQuery;
+    dCariListesi: TUniDataSource;
+    btnListele: TUniButton;
+    edCariKod: TUniEdit;
+    UniSimplePanel4: TUniSimplePanel;
+    UniDateTimePicker1: TUniDateTimePicker;
+    UniDateTimePicker2: TUniDateTimePicker;
+    txtRiskLimiti: TUniNumberEdit;
+    btnRiskKaydet: TUniButton;
+    btnCariKilit: TUniButton;
+    btnCariKilitAc: TUniButton;
+    qCariListesiCARI_KOD: TStringField;
+    qCariListesiCARI_ISIM: TStringField;
+    qCariListesiCARI_IL: TStringField;
+    qCariListesiCARI_ILCE: TStringField;
+    qCariListesiRISKLIMITI: TFloatField;
+    qCariListesiKILIT_DURUM: TStringField;
+    procedure btnListeleClick(Sender: TObject);
+    procedure UniFormShow(Sender: TObject);
+    procedure UniButton2Click(Sender: TObject);
+    procedure UniButton1Click(Sender: TObject);
+    procedure UniDBGrid1CellClick(Column: TUniDBGridColumn);
+    procedure btnRiskKaydetClick(Sender: TObject);
+    procedure btnCariKilitClick(Sender: TObject);
+    procedure btnCariKilitAcClick(Sender: TObject);
+  private
+    { Private declarations }
+    SQL : string;
+  public
+    { Public declarations }
+  end;
+
+function frmCariRisk2: TfrmCariRisk2;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  MainModule, uniGUIApplication, SiparisU, Genel, Main, CariDetayU, DMU, TmpU;
+
+function frmCariRisk2: TfrmCariRisk2;
+begin
+  Result := TfrmCariRisk2(UniMainModule.GetFormInstance(TfrmCariRisk2));
+end;
+
+procedure TfrmCariRisk2.btnCariKilitClick(Sender: TObject);
+var
+  q:TUniQuery;
+begin
+  try
+    q := TUniQuery.Create(nil);
+    q.Connection := frmDM.conNetsis;
+    q.Close;
+    q.SQL.Clear;
+    q.SQL.Add('UPDATE TBLCASABIT SET C_YEDEK1 = ''B'' WHERE CARI_KOD =:Cari');
+    q.ParamByName('Cari').AsString := qCariListesi.FieldByName('CARI_KOD').AsString;
+    q.ExecSQL;
+    q.Close;
+    FreeAndNil(q);
+    btnListele.Click;
+    saMesaj.Title := 'Mesaj';
+    saMesaj.TitleText := '';
+    saMesaj.Show('Cari Kitlendi.');
+  except
+    On E:Exception do
+      begin
+        q.Close;
+        FreeAndNil(q);
+        UniMainModule.saHata.Show('Kayýt Hatasý -> ' + E.Message);
+        Abort;
+      end;
+  end;
+end;
+
+
+procedure TfrmCariRisk2.btnListeleClick(Sender: TObject);
+Var
+CariAdi :String;
+SL: TStringList;
+i:integer;
+
+begin
+
+  txtRiskLimiti.Visible := False;
+  btnRiskKaydet.Visible := False;
+  btnCariKilit.Visible := False;
+  btnCariKilitAc.Visible := False;
+
+  qCariListesi.Close;
+  qCariListesi.SQL.Clear;
+//  SQL:='SELECT C.*, CE.* '
+//        +' , (C.CM_BORCT - C.CM_ALACT) AS BAKIYE '
+//        +' FROM TBLCASABIT C INNER JOIN TBLCASABITEK CE WITH(NOLOCK) ON (C.CARI_KOD = CE.CARI_KOD) '
+//        +' WHERE (C.CARI_TIP = ''A'') ';
+
+//   SQL := 'SELECT * FROM HV_CARI_LISTESI2 WHERE CARI_KOD = CARI_KOD ';
+  SQL := ' SELECT C.CARI_KOD, C.CARI_ISIM, C.CARI_IL, C.CARI_ILCE, R.RISKLIMITI ';
+  SQL := SQL + ' ,CASE WHEN C.C_YEDEK1 = ''B'' THEN ''KILITLI'' WHEN C.C_YEDEK1 = ''A'' THEN ''ACIK'' END ''KILIT_DURUM'' ';
+  SQL := SQL + ' FROM TBLCASABIT C ';
+  SQL := SQL + ' LEFT JOIN TBLCARISK R WITH(NOLOCK) ON R.CARIKOD = C.CARI_KOD ';
+
+
+  SL := TStringList.Create;
+  SL.Delimiter := ' ';//Boþluk
+  SL.DelimitedText := edCariKod.Text;
+
+   if edCariKod.Text <> '' then begin
+        for i:=0 to SL.Count-1 do begin
+          CariAdi:=SL.Strings[i];
+//          SQL:= SQL+' WHERE (DBO.TRK(C.CARI_KOD like''%'+edCariKod.Text+'%'')) or (DBO.TRK(C.CARI_ISIM) like''%'+edCariKod.Text+'%'') ';
+
+//         SQL := 'SELECT * FROM HV_CARI_LISTESI ';
+//         SQL :=SQL+'  WHERE DBO.TRK(CARI_ISIM) LIKE ''%' + edCariKod.Text + '%'' ';
+
+        end;
+   end;
+
+          SQL :=SQL+' WHERE DBO.TRK(CARI_ISIM) LIKE ''%' + edCariKod.Text + '%'' ';
+
+
+//   if cbFaturaDurum.ItemIndex = 1 then
+//    SQL:= SQL+' and (NetsisSiparisNo Is Not Null OR NetsisSiparisNo <> '' '') ';
+//   if cbFaturaDurum.ItemIndex = 2 then
+//    SQL:= SQL+' and (NetsisSiparisNo Is Null OR NetsisSiparisNo = '' '') ';
+
+
+  qCariListesi.SQL.Text:=SQL;
+  qCariListesi.Open;
+  SL.Free;
+
+  {
+
+   SQL := 'SELECT * FROM HV_CARI_LISTESI ';
+   SQL :=SQL+' WHERE DBO.TRK(CARI_ISIM) LIKE ''%' + edCariKod.Text + '%'' ';
+//   SQL :=SQL+' WHERE CARI_ISIM LIKE ''%' + edCariKod.Text + '%'' ';
+
+
+  }
+
+end;
+
+procedure TfrmCariRisk2.btnRiskKaydetClick(Sender: TObject);
+var
+  q:TUniQuery;
+  guid : string;
+begin
+
+  try
+    q := TUniQuery.Create(nil);
+    q.Connection := frmDM.conNetsis;
+
+    // 1. MEVCUDU OLUSTUR
+    q.Close;
+    q.SQL.Clear;
+    q.SQL.Add(' DECLARE @GUID UNIQUEIDENTIFIER ');
+    q.SQL.Add('  ');
+    q.SQL.Add(' SELECT @GUID = NEWID() ');
+    q.SQL.Add('  ');
+    q.SQL.Add(' INSERT INTO TBLCARISKLOG ');
+    q.SQL.Add(' SELECT @GUID, ''U'', GETDATE(), :Kul, ''E'',:Pc ');
+    q.SQL.Add(' , CARIKOD, RISKGRUP, RISKLIMITI, TEMINATI, CARISK, CCRISK, SARISK, SCRISK, IRSRISK, SIPRISK, RISKLIMITIO, TEMINATIO, CARISKO, CCRISKO, SARISKO, ');
+    q.SQL.Add(' SCRISKO, IRSRISKO, SIPRISKO, BORCRISKO, SIPRISKDAVRAN, IRSRISKDAVRAN, FATRISKDAVRAN, DOVIZLI, KAYITYAPANKUL, KAYITTARIHI, DUZELTMEYAPANKUL, DUZELTMETARIHI, ');
+    q.SQL.Add(' YED1RISK, YED2RISK, YED1POZIT, YED2POZIT, YED1RISKO, YED2RISKO, YED1POZITO, YED2POZITO, C_YEDEK1, C_YEDEK2, INT_YEDEK1, YUKRISKDAVRAN, SEVKRISKDAVRAN, ');
+    q.SQL.Add(' YUKRISKO, SEVKRISKO, YUKRISK, SEVKRISK, ONAYTIPI, ONAYNUM, DEKRISKDAVRAN ');
+    q.SQL.Add('  ');
+    q.SQL.Add(' FROM TBLCARISK WHERE CARIKOD =:Cari ');
+    q.ParamByName('Cari').AsString := qCariListesi.FieldByName('CARI_KOD').AsString;
+    q.ParamByName('Kul').AsString := Tmp.xKullaniciAdi;
+    q.ParamByName('Pc').AsString := 'EGEHAYAT';
+    q.ExecSQL;
+
+    // 2. guid al.
+    q.Close;
+    q.SQL.Clear;
+    q.SQL.Add(' SELECT TOP 1 GUID FROM TBLCARISKLOG WHERE CARIKOD =:Cari ORDER BY ISLEMTARIHI DESC');
+    q.ParamByName('Cari').AsString := qCariListesi.FieldByName('CARI_KOD').AsString;
+    q.Open;
+    guid := q.FieldByName('GUID').AsString;
+    q.Close;
+
+
+    // 3. yeni deðer ile update
+    q.Close;
+    q.SQL.Clear;
+    q.SQL.Add('UPDATE TBLCARISK SET RISKLIMITI =:Risk WHERE CARIKOD =:Cari');
+    q.ParamByName('Cari').AsString := qCariListesi.FieldByName('CARI_KOD').AsString;
+    q.ParamByName('Risk').Value := txtRiskLimiti.Value;
+    q.ExecSQL;
+    q.Close;
+
+    // DEÐÝÞENÝ OLUSTUR
+    q.Close;
+    q.SQL.Clear;
+    q.SQL.Add(' INSERT INTO TBLCARISKLOG ');
+    q.SQL.Add(' SELECT :Gui, ''U'', GETDATE(), :Kul, ''Y'',:Pc ');
+    q.SQL.Add(' , CARIKOD, RISKGRUP, RISKLIMITI, TEMINATI, CARISK, CCRISK, SARISK, SCRISK, IRSRISK, SIPRISK, RISKLIMITIO, TEMINATIO, CARISKO, CCRISKO, SARISKO, ');
+    q.SQL.Add(' SCRISKO, IRSRISKO, SIPRISKO, BORCRISKO, SIPRISKDAVRAN, IRSRISKDAVRAN, FATRISKDAVRAN, DOVIZLI, KAYITYAPANKUL, KAYITTARIHI, DUZELTMEYAPANKUL, DUZELTMETARIHI, ');
+    q.SQL.Add(' YED1RISK, YED2RISK, YED1POZIT, YED2POZIT, YED1RISKO, YED2RISKO, YED1POZITO, YED2POZITO, C_YEDEK1, C_YEDEK2, INT_YEDEK1, YUKRISKDAVRAN, SEVKRISKDAVRAN, ');
+    q.SQL.Add(' YUKRISKO, SEVKRISKO, YUKRISK, SEVKRISK, ONAYTIPI, ONAYNUM, DEKRISKDAVRAN ');
+    q.SQL.Add('  ');
+    q.SQL.Add(' FROM TBLCARISK WHERE CARIKOD =:Cari ');
+    q.ParamByName('Cari').AsString := qCariListesi.FieldByName('CARI_KOD').AsString;
+    q.ParamByName('Kul').AsString := Tmp.xKullaniciAdi;
+    q.ParamByName('Pc').AsString := 'EGEHAYAT';
+    q.ParamByName('Gui').AsString := guid;
+    q.ExecSQL;
+
+    FreeAndNil(q);
+    btnListele.Click;
+  except
+    On E:Exception do
+      begin
+        q.Close;
+        FreeAndNil(q);
+        UniMainModule.saHata.Show('Kayýt Hatasý -> ' + E.Message);
+        Abort;
+      end;
+
+
+  end;
+end;
+
+procedure TfrmCariRisk2.UniButton1Click(Sender: TObject);
+begin
+
+//  frmCariDetay.CariKod := qCariListesi.FieldByName('CARI_KOD').AsString;
+//  frmCariDetay.Caption := 'Cari Detay - ' + qCariListesi.FieldByName('CARI_KOD').AsString + ' - ' + qCariListesi.FieldByName('CARI_ISIM').AsString;
+//  frmCariDetay.ShowModal();
+
+end;
+
+procedure TfrmCariRisk2.UniButton2Click(Sender: TObject);
+begin
+    MainForm.NavPage.ActivePage.Close;
+end;
+
+procedure TfrmCariRisk2.btnCariKilitAcClick(Sender: TObject);
+var
+  q:TUniQuery;
+begin
+  try
+    q := TUniQuery.Create(nil);
+    q.Connection := frmDM.conNetsis;
+    q.Close;
+    q.SQL.Clear;
+    q.SQL.Add('UPDATE TBLCASABIT SET C_YEDEK1 = ''A'' WHERE CARI_KOD =:Cari');
+    q.ParamByName('Cari').AsString := qCariListesi.FieldByName('CARI_KOD').AsString;
+    q.ExecSQL;
+    q.Close;
+    FreeAndNil(q);
+    btnListele.Click;
+    saMesaj.Title := 'Mesaj';
+    saMesaj.TitleText := '';
+    saMesaj.Show('Cari Kilidi Açýldý.');
+  except
+    On E:Exception do
+      begin
+        q.Close;
+        FreeAndNil(q);
+        UniMainModule.saHata.Show('Kayýt Hatasý -> ' + E.Message);
+        Abort;
+      end;
+  end;
+end;
+
+
+procedure TfrmCariRisk2.UniDBGrid1CellClick(Column: TUniDBGridColumn);
+begin
+  txtRiskLimiti.Visible := True;
+  btnRiskKaydet.Visible := True;
+  btnCariKilit.Visible := True;
+  btnCariKilitAc.Visible := True;
+end;
+
+procedure TfrmCariRisk2.UniFormShow(Sender: TObject);
+begin
+//  UniDateTimePicker1.DateTime:=now-15;
+//  UniDateTimePicker2.DateTime:=now;
+
+  txtRiskLimiti.Visible := False;
+  btnRiskKaydet.Visible := False;
+  btnCariKilit.Visible := False;
+  btnCariKilitAc.Visible := False;
+
+end;
+
+end.

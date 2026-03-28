@@ -1,0 +1,106 @@
+object frmCariDetay: TfrmCariDetay
+  Left = 0
+  Top = 0
+  ClientHeight = 601
+  ClientWidth = 995
+  Caption = 'Cari Detay'
+  BorderStyle = bsDialog
+  OldCreateOrder = False
+  MonitoredKeys.Keys = <>
+  AlignmentControl = uniAlignmentClient
+  Layout = 'fit'
+  PixelsPerInch = 96
+  TextHeight = 13
+  object UniContainerPanel1: TUniContainerPanel
+    Left = 24
+    Top = 8
+    Width = 945
+    Height = 577
+    Hint = ''
+    ParentColor = False
+    TabOrder = 0
+    Layout = 'vbox'
+    object UniDBGrid1: TUniDBGrid
+      Left = 16
+      Top = 16
+      Width = 913
+      Height = 537
+      Hint = ''
+      Options = [dgEditing, dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgConfirmDelete, dgAutoRefreshRow]
+      ReadOnly = True
+      LoadMask.Message = 'Loading data...'
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      TabOrder = 1
+      Columns = <
+        item
+          FieldName = 'FISNO'
+          Title.Caption = 'FISNO'
+          Width = 120
+        end
+        item
+          FieldName = 'TARIH'
+          Title.Caption = 'TARIH'
+          Width = 120
+        end
+        item
+          FieldName = 'MIKTAR'
+          Title.Caption = 'MIKTAR'
+          Width = 75
+        end
+        item
+          FieldName = 'DOVIZ'
+          Title.Caption = 'DOVIZ'
+          Width = 75
+        end
+        item
+          FieldName = 'DOV_FIAT'
+          Title.Caption = 'DOV_FIAT'
+          Width = 130
+        end
+        item
+          FieldName = 'NET_FIAT'
+          Title.Caption = 'NET_FIAT'
+          Width = 130
+        end
+        item
+          FieldName = 'KDV'
+          Title.Caption = 'KDV'
+          Width = 64
+        end
+        item
+          FieldName = 'STOK_KODU'
+          Title.Caption = 'STOK_KODU'
+          Width = 150
+          Visible = False
+        end
+        item
+          FieldName = 'STOK_ADI'
+          Title.Caption = 'STOK_ADI'
+          Width = 200
+          Hint = '200'
+        end
+        item
+          FieldName = 'CARI_KOD'
+          Title.Caption = 'CARI_KOD'
+          Width = 150
+        end
+        item
+          FieldName = 'CARI_ISIM'
+          Title.Caption = 'CARI_ISIM'
+          Width = 200
+          Hint = '200'
+        end
+        item
+          FieldName = 'DEPO_KODU'
+          Title.Caption = 'DEPO'
+          Width = 50
+        end
+        item
+          FieldName = 'DOV_TIP'
+          Title.Caption = 'DOV_TIP'
+          Width = 64
+        end>
+    end
+  end
+end

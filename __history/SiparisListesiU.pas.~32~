@@ -1,0 +1,215 @@
+unit SiparisListesiU;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics,
+  Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
+  uniGUIClasses, uniGUIForm, uniScreenMask, uniGUIBaseClasses, uniSweetAlert,
+  Data.DB, uniGridExporters, uniBasicGrid, Vcl.Menus, uniMainMenu, DBAccess,
+  Uni, MemDS, uniDBGrid, uniComboBox, uniMultiItem, uniDBComboBox,
+  uniDBLookupComboBox, uniEdit, uniDateTimePicker, uniPanel, uniButton,
+  uniBitBtn, uniMenuButton;
+
+type
+  TfrmSiparisListesi = class(TUniForm)
+    UniContainerPanel1: TUniContainerPanel;
+    UniPanel2: TUniPanel;
+    UniMenuButton1: TUniMenuButton;
+    UniButton2: TUniButton;
+    UniPanel6: TUniPanel;
+    btnKaydet: TUniButton;
+    btnSil: TUniButton;
+    UniPanel1: TUniPanel;
+    UniSimplePanel3: TUniSimplePanel;
+    UniDateTimePicker1: TUniDateTimePicker;
+    UniDateTimePicker2: TUniDateTimePicker;
+    edCariKod: TUniEdit;
+    cbFaturaDurum: TUniComboBox;
+    btnListele: TUniButton;
+    UniSimplePanel2: TUniSimplePanel;
+    UniDBGrid1: TUniDBGrid;
+    qFisTip: TUniQuery;
+    dsFisTip: TUniDataSource;
+    popYazdir: TUniPopupMenu;
+    btnHtml: TUniMenuItem;
+    btnXls: TUniMenuItem;
+    btnCsv: TUniMenuItem;
+    UniGridHTMLExporter1: TUniGridHTMLExporter;
+    UniGridExcelExporter1: TUniGridExcelExporter;
+    UniGridCSVExporter1: TUniGridCSVExporter;
+    qSiparisListesi: TUniQuery;
+    dsSiparisListesi: TUniDataSource;
+    saKaydet: TUniSweetAlert;
+    UniScreenMask1: TUniScreenMask;
+    saMesaj: TUniSweetAlert;
+    qSiparisListesiFisBaslikID: TIntegerField;
+    qSiparisListesiFisTipID: TByteField;
+    qSiparisListesiFisNo: TStringField;
+    qSiparisListesiCariKod: TStringField;
+    qSiparisListesiTarih: TDateTimeField;
+    qSiparisListesiVade: TDateTimeField;
+    qSiparisListesiSevkTarihi: TDateTimeField;
+    qSiparisListesiBelgeNo: TStringField;
+    qSiparisListesiAciklama: TStringField;
+    qSiparisListesiOzelKod: TStringField;
+    qSiparisListesiParaBirimi: TStringField;
+    qSiparisListesiBrutToplam: TFloatField;
+    qSiparisListesiIskontoToplam: TFloatField;
+    qSiparisListesiOtvToplam: TFloatField;
+    qSiparisListesiOivToplam: TFloatField;
+    qSiparisListesiKdvMatrah: TFloatField;
+    qSiparisListesiKdv: TFloatField;
+    qSiparisListesiGenelToplam: TFloatField;
+    qSiparisListesiBorc: TFloatField;
+    qSiparisListesiAlacak: TFloatField;
+    qSiparisListesiOdenenTutar: TFloatField;
+    qSiparisListesiKayitTarihi: TDateTimeField;
+    qSiparisListesiDegistirilmeTarihi: TDateTimeField;
+    qSiparisListesiKayitKullanici: TStringField;
+    qSiparisListesiDegistirenKullanici: TStringField;
+    qSiparisListesiKayitBilgisayar: TStringField;
+    qSiparisListesiDegistirenBilgisayar: TStringField;
+    qSiparisListesiTevkifat: TByteField;
+    qSiparisListesiTevkifatKod: TStringField;
+    qSiparisListesiTevkifatKdv: TFloatField;
+    qSiparisListesiTevkifatYuzde: TFloatField;
+    qSiparisListesiKasaBankaID: TIntegerField;
+    qSiparisListesiDurum: TByteField;
+    qSiparisListesiCari: TByteField;
+    qSiparisListesiKur: TFloatField;
+    qSiparisListesiParaBirimiFis: TStringField;
+    qSiparisListesiGenelToplamFis: TFloatField;
+    qSiparisListesiKasaGiris: TFloatField;
+    qSiparisListesiKasaCikis: TFloatField;
+    qSiparisListesiAcikKapali: TByteField;
+    qSiparisListesiKalanTutar: TFloatField;
+    qSiparisListesiFaturaTipID: TSmallintField;
+    qSiparisListesiAjanda: TByteField;
+    qSiparisListesiGonderildi: TByteField;
+    qSiparisListesiFaturaGuid: TStringField;
+    qSiparisListesiPersonelKodu: TStringField;
+    qSiparisListesiOzelKod2: TStringField;
+    qSiparisListesiOzelKod3: TStringField;
+    qSiparisListesiOzelKod4: TStringField;
+    qSiparisListesiOzelKod5: TStringField;
+    qSiparisListesiProjeKodu: TStringField;
+    qSiparisListesiNetsisKasaKodu: TStringField;
+    qSiparisListesiNetsisFaturaNo: TStringField;
+    qSiparisListesiDovizTarih: TDateTimeField;
+    qSiparisListesiNetsisSiparisNo: TStringField;
+    qSiparisListesiCARI_ISIM: TStringField;
+    qSiparisListesiKullaniciAd: TStringField;
+    btnGuncelle: TUniButton;
+    procedure btnListeleClick(Sender: TObject);
+    procedure UniFormShow(Sender: TObject);
+    procedure btnGuncelleClick(Sender: TObject);
+    procedure UniButton2Click(Sender: TObject);
+  private
+    { Private declarations }
+    SQL : string;
+  public
+    { Public declarations }
+  end;
+
+function frmSiparisListesi: TfrmSiparisListesi;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  MainModule, uniGUIApplication, DMU, SiparisU, Genel, Main, TmpU;
+
+function frmSiparisListesi: TfrmSiparisListesi;
+begin
+  Result := TfrmSiparisListesi(UniMainModule.GetFormInstance(TfrmSiparisListesi));
+end;
+
+procedure TfrmSiparisListesi.btnListeleClick(Sender: TObject);
+Var
+CariAdi :String;
+SL: TStringList;
+i:integer;
+
+begin
+
+  qSiparisListesi.Close;
+  qSiparisListesi.SQL.Clear;
+  SQL:='SELECT B.* '
+        +' , C.CARI_ISIM, K.KullaniciAd '
+        +' FROM SIPARIS_BASLIK B '
+        +'	LEFT JOIN ' + Tmp.xNetsisSirketKodu + '.DBO.TBLCASABIT C WITH(NOLOCK) ON (C.CARI_KOD = B.CariKod) '
+        +'	LEFT JOIN KULLANICI K ON (K.KullaniciID = B.PersonelKodu) '
+        +' where Tarih between :Tarih1 and :Tarih2 ';
+
+        if Tmp.xKullaniciAdmin <> 1 then
+          begin
+//            SQL := SQL + ' and KayitKullanici =:Kul ';
+            SQL := SQL + ' and KayitKullanici = '''+IntToStr(Tmp.xKullaniciID)+'''  ';
+          end;
+
+
+
+  SL := TStringList.Create;
+  SL.Delimiter := ' ';//Boþluk
+  SL.DelimitedText := edCariKod.Text;
+
+   if edCariKod.Text <> '' then begin
+        for i:=0 to SL.Count-1 do begin
+          CariAdi:=SL.Strings[i];
+          SQL:= SQL+' and ((B.CariKod like''%'+CariAdi+'%'') or (C.CARI_ISIM like''%'+CariAdi+'%'') or (FisNo like''%'+CariAdi+'%'')) ';
+        end;
+   end;
+
+   if cbFaturaDurum.ItemIndex = 1 then
+    SQL:= SQL+' and (NetsisSiparisNo Is Not Null OR NetsisSiparisNo <> '' '') ';
+   if cbFaturaDurum.ItemIndex = 2 then
+    SQL:= SQL+' and (NetsisSiparisNo Is Null OR NetsisSiparisNo = '' '') ';
+
+
+  qSiparisListesi.SQL.Text:=SQL;
+  qSiparisListesi.ParamByName('Tarih1').Value:=UniDateTimePicker1.DateTime;
+  qSiparisListesi.ParamByName('Tarih2').Value:=UniDateTimePicker2.DateTime;
+//  if xKullaniciAdmin <> 1 then
+//    begin
+//      qSiparisListesi.ParamByName('Kul').Value:=xKullaniciAdmin;
+//    end;
+  qSiparisListesi.Open;
+  SL.Free;
+
+  btnGuncelle.Enabled := True;
+
+end;
+
+procedure TfrmSiparisListesi.btnGuncelleClick(Sender: TObject);
+begin
+  if qSiparisListesi.FieldByName('NetsisSiparisNo').AsString <> '' then
+    begin
+      UniMainModule.saHata.Show('Netsis e gönderilen sipariþ güncellenemez.');
+      Abort;
+    end;
+
+  if UniDBGrid1.SelectedRows.Count = 0 then
+    begin
+      UniMainModule.saHata.Show('Bir satýr seçiniz...');
+      Abort;
+    end;
+
+  xFormShow(TfrmSiparis,'SatisSiparisi',1,qSiparisListesi.FieldByName('FisNo').AsString);
+end;
+
+procedure TfrmSiparisListesi.UniButton2Click(Sender: TObject);
+begin
+    MainForm.NavPage.ActivePage.Close;
+end;
+
+procedure TfrmSiparisListesi.UniFormShow(Sender: TObject);
+begin
+//  UniDateTimePicker1.DateTime:=now-15;
+  UniDateTimePicker1.DateTime:=StrToDate('01.01.2022');
+  UniDateTimePicker2.DateTime:=now;
+  btnGuncelle.Enabled := False;
+end;
+
+end.

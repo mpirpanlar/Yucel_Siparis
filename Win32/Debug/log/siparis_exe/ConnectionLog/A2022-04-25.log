@@ -1,0 +1,22 @@
+Siparis.exe: 00003F44: 01:13:40 [127.0.0.1]:Failed Sequence Recovery: SeqId: 35, Event: click
+Siparis.exe: 0000378C: 01:18:29 [127.0.0.1]:Failed Sequence Recovery: SeqId: 36, Event: click
+Siparis.exe: 00002358: 01:21:18 [127.0.0.1]:Failed Sequence Recovery: SeqId: 36, Event: click
+Siparis.exe: 00004240: 01:23:07 [127.0.0.1]:Failed Sequence Recovery: SeqId: 36, Event: click
+Siparis.exe: 00004240: 01:23:07 [127.0.0.1]:Sequence sent from cache:  SeqId: 36
+Siparis.exe: 00004240: 01:23:07 [127.0.0.1]:Processed: Id: 36, Evt: click, [wvHkFDmicT10A4A40C6]
+Siparis.exe: 000033CC: 01:27:24 [127.0.0.1]:Failed Sequence Recovery: SeqId: 69, Event: click
+Siparis.exe: 00002720: 01:38:51 [127.0.0.1]:Failed Sequence Recovery: SeqId: 35, Event: click
+Siparis.exe: 00002720: 01:39:07 [127.0.0.1]:Sequence sent from cache:  SeqId: 35
+Siparis.exe: 00002720: 01:39:07 [127.0.0.1]:Processed: Id: 35, Evt: click, [ulofqjytGm10A4A450E]
+Siparis.exe: 0000420C: 01:44:02 [127.0.0.1]:Failed Sequence Recovery: SeqId: 36, Event: click
+Siparis.exe: 000041D4: 01:45:32 [127.0.0.1]:Failed Sequence Recovery: SeqId: 36, Event: click
+Siparis.exe: 0000420C: 01:45:33 [127.0.0.1]:Sequence sent from cache:  SeqId: 36
+Siparis.exe: 0000420C: 01:45:33 [127.0.0.1]:Processed: Id: 36, Evt: click, [TI6lDm5Qk510A4A4663]
+Siparis.exe: 00001F34: 01:45:33 [127.0.0.1]:Failed Sequence Recovery: SeqId: 36, Event: click
+Siparis.exe: 000041D4: 01:45:34 [127.0.0.1]:Sequence sent from cache:  SeqId: 36
+Siparis.exe: 000041D4: 01:45:34 [127.0.0.1]:Processed: Id: 36, Evt: click, [TI6lDm5Qk510A4A4663]
+Siparis.exe: 00001F34: 01:45:34 [127.0.0.1]:Sequence sent from cache:  SeqId: 36
+Siparis.exe: 00001F34: 01:45:35 [127.0.0.1]:Processed: Id: 36, Evt: click, [TI6lDm5Qk510A4A4663]
+Siparis.exe: 000007FC: 01:45:36 [127.0.0.1]:Failed Sequence Recovery: SeqId: 36, Event: click
+Siparis.exe: 000007FC: 01:45:36 [127.0.0.1]:Sequence sent from cache:  SeqId: 36
+Siparis.exe: 000007FC: 01:45:36 [127.0.0.1]:Processed: Id: 36, Evt: click, [TI6lDm5Qk510A4A4663]

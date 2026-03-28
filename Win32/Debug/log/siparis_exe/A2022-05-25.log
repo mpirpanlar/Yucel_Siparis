@@ -1,0 +1,20 @@
+Siparis.exe: 00003F54: 15:38:48 []:>--------------------------------------------------------------<
+Siparis.exe: 00003F54: 15:38:48 [TUniServerModule]:Server First Init.
+Siparis.exe: 00003F54: 15:38:48 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00003F54: 15:38:48 [TUniServerModule]:Global Cache Folder Erased. <17> Files deleted.
+Siparis.exe: 00003F54: 15:38:48 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00003F54: 15:38:48 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00000E34: 15:45:51 []:>--------------------------------------------------------------<
+Siparis.exe: 00000E34: 15:45:51 [TUniServerModule]:Server First Init.
+Siparis.exe: 00000E34: 15:45:51 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00000E34: 15:45:51 [TUniServerModule]:Global Cache Folder Erased. <23> Files deleted.
+Siparis.exe: 00000E34: 15:45:51 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00000E34: 15:45:51 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00002E38: 15:47:56 [Can not use Master/Detail with CachedUpdates (D:\ProjectsClone1\Delphi\Dac\Common\Source\DBAccess.pas, line 9111)-127.0.0.1]:EAssertionFailed : Can not use Master/Detail with CachedUpdates (D:\ProjectsClone1\Delphi\Dac\Common\Source\DBAccess.pas, line 9111) : Addr: $009E2A7A
+Siparis.exe: 00002A2C: 15:49:20 []:>--------------------------------------------------------------<
+Siparis.exe: 00002A2C: 15:49:20 [TUniServerModule]:Server First Init.
+Siparis.exe: 00002A2C: 15:49:20 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00002A2C: 15:49:20 [TUniServerModule]:Global Cache Folder Erased. <31> Files deleted.
+Siparis.exe: 00002A2C: 15:49:20 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00002A2C: 15:49:21 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 000024D0: 15:49:26 [127.0.0.1]:EUniSessionException : Invalid session or session Timeout. (Session not found: kgHHybQDhe10A78F2BB ) : Addr: $007E149E

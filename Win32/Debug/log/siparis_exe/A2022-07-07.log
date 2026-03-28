@@ -1,0 +1,83 @@
+Siparis.exe: 00003748: 09:49:27 []:>--------------------------------------------------------------<
+Siparis.exe: 00003748: 09:49:27 [TUniServerModule]:Server First Init.
+Siparis.exe: 00003748: 09:49:27 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00003748: 09:49:27 [TUniServerModule]:Global Cache Folder Erased. <1> Files deleted.
+Siparis.exe: 00003748: 09:49:27 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00003748: 09:49:27 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00000474: 09:56:46 []:>--------------------------------------------------------------<
+Siparis.exe: 00000474: 09:56:46 [TUniServerModule]:Server First Init.
+Siparis.exe: 00000474: 09:56:46 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00000474: 09:56:46 [TUniServerModule]:Global Cache Folder Erased. <25> Files deleted.
+Siparis.exe: 00000474: 09:56:46 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00000474: 09:56:46 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00001E48: 09:56:52 [127.0.0.1]:EUniSessionException : Geçersiz oturum veya oturum Zaman Aşımı. (Session not found: udiiQ2EX9r10ABA2E0C ) : Addr: $007E149E
+Siparis.exe: 00002898: 09:59:07 []:>--------------------------------------------------------------<
+Siparis.exe: 00002898: 09:59:07 [TUniServerModule]:Server First Init.
+Siparis.exe: 00002898: 09:59:07 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00002898: 09:59:07 [TUniServerModule]:Global Cache Folder Erased. <20> Files deleted.
+Siparis.exe: 00002898: 09:59:07 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00002898: 09:59:07 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00002C60: 09:59:16 [127.0.0.1]:EUniSessionException : Geçersiz oturum veya oturum Zaman Aşımı. (Session not found: cOJVEGQ7nZ10ABA3007 ) : Addr: $007E149E
+Siparis.exe: 00003044: 10:00:27 []:>--------------------------------------------------------------<
+Siparis.exe: 00003044: 10:00:27 [TUniServerModule]:Server First Init.
+Siparis.exe: 00003044: 10:00:27 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00003044: 10:00:27 [TUniServerModule]:Global Cache Folder Erased. <16> Files deleted.
+Siparis.exe: 00003044: 10:00:27 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00003044: 10:00:27 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00001B98: 10:00:28 [127.0.0.1]:EUniSessionException : Geçersiz oturum veya oturum Zaman Aşımı. (Session not found: Duk9GeMfsC10ABA30B9 ) : Addr: $007E149E
+Siparis.exe: 00001038: 10:02:24 []:>--------------------------------------------------------------<
+Siparis.exe: 00001038: 10:02:25 [TUniServerModule]:Server First Init.
+Siparis.exe: 00001038: 10:02:25 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00001038: 10:02:25 [TUniServerModule]:Global Cache Folder Erased. <19> Files deleted.
+Siparis.exe: 00001038: 10:02:25 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00001038: 10:02:25 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00003504: 10:02:26 [127.0.0.1]:EUniSessionException : Geçersiz oturum veya oturum Zaman Aşımı. (Session not found: z5QzrwAkDV10ABA3109 ) : Addr: $007E149E
+Siparis.exe: 00000D74: 10:03:15 []:>--------------------------------------------------------------<
+Siparis.exe: 00000D74: 10:03:15 [TUniServerModule]:Server First Init.
+Siparis.exe: 00000D74: 10:03:15 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00000D74: 10:03:15 [TUniServerModule]:Global Cache Folder Erased. <16> Files deleted.
+Siparis.exe: 00000D74: 10:03:15 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00000D74: 10:03:15 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00003F6C: 10:03:21 [127.0.0.1]:EUniSessionException : Geçersiz oturum veya oturum Zaman Aşımı. (Session not found: BTjifesUN410ABA318C ) : Addr: $007E149E
+Siparis.exe: 00001248: 12:16:57 []:>--------------------------------------------------------------<
+Siparis.exe: 00001248: 12:16:57 [TUniServerModule]:Server First Init.
+Siparis.exe: 00001248: 12:16:57 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00001248: 12:16:57 [TUniServerModule]:Global Cache Folder Erased. <23> Files deleted.
+Siparis.exe: 00001248: 12:16:57 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00001248: 12:16:57 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00000A10: 12:22:05 []:>--------------------------------------------------------------<
+Siparis.exe: 00000A10: 12:22:05 [TUniServerModule]:Server First Init.
+Siparis.exe: 00000A10: 12:22:05 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00000A10: 12:22:05 [TUniServerModule]:Global Cache Folder Erased. <16> Files deleted.
+Siparis.exe: 00000A10: 12:22:06 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00000A10: 12:22:06 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 000020E4: 12:22:11 [127.0.0.1]:EUniSessionException : Geçersiz oturum veya oturum Zaman Aşımı. (Session not found: vtUHF1bl9o10ABA5611 ) : Addr: $007E149E
+Siparis.exe: 00000F4C: 12:26:14 []:>--------------------------------------------------------------<
+Siparis.exe: 00000F4C: 12:26:14 [TUniServerModule]:Server First Init.
+Siparis.exe: 00000F4C: 12:26:14 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00000F4C: 12:26:14 [TUniServerModule]:Global Cache Folder Erased. <16> Files deleted.
+Siparis.exe: 00000F4C: 12:26:14 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00000F4C: 12:26:14 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00004818: 12:26:20 [127.0.0.1]:EUniSessionException : Geçersiz oturum veya oturum Zaman Aşımı. (Session not found: a3amGzIXXn10ABA5773 ) : Addr: $007E149E
+Siparis.exe: 000024F0: 12:26:21 [127.0.0.1]:EUniSessionException : Geçersiz oturum veya oturum Zaman Aşımı. (Session not found: a3amGzIXXn10ABA5773 ) : Addr: $007E149E
+Siparis.exe: 0000413C: 12:49:05 []:>--------------------------------------------------------------<
+Siparis.exe: 0000413C: 12:49:05 [TUniServerModule]:Server First Init.
+Siparis.exe: 0000413C: 12:49:05 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 0000413C: 12:49:05 [TUniServerModule]:Global Cache Folder Erased. <23> Files deleted.
+Siparis.exe: 0000413C: 12:49:05 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 0000413C: 12:49:05 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00004670: 12:49:17 [127.0.0.1]:EUniSessionException : Geçersiz oturum veya oturum Zaman Aşımı. (Session not found: FdzrxQbjxF10ABA5896 ) : Addr: $007E149E
+Siparis.exe: 0000469C: 12:50:24 []:>--------------------------------------------------------------<
+Siparis.exe: 0000469C: 12:50:24 [TUniServerModule]:Server First Init.
+Siparis.exe: 0000469C: 12:50:24 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 0000469C: 12:50:24 [TUniServerModule]:Global Cache Folder Erased. <13> Files deleted.
+Siparis.exe: 0000469C: 12:50:24 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 0000469C: 12:50:24 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00003EE0: 12:50:32 [127.0.0.1]:EUniSessionException : Geçersiz oturum veya oturum Zaman Aşımı. (Session not found: G4RSqzu8sD10ABA5ECC ) : Addr: $007E149E
+Siparis.exe: 00001D70: 12:52:09 []:>--------------------------------------------------------------<
+Siparis.exe: 00001D70: 12:52:09 [TUniServerModule]:Server First Init.
+Siparis.exe: 00001D70: 12:52:09 [TUniServerModule]:Debug Mode = ON
+Siparis.exe: 00001D70: 12:52:09 [TUniServerModule]:Global Cache Folder Erased. <13> Files deleted.
+Siparis.exe: 00001D70: 12:52:09 [TUniServerModule]:Starting HTTP Server on Port: 8077...
+Siparis.exe: 00001D70: 12:52:09 [TUniServerModule]:HTTP Server Started on Port: 8077
+Siparis.exe: 00002390: 12:53:15 [127.0.0.1]:EUniSessionException : Geçersiz oturum veya oturum Zaman Aşımı. (Session not found: ERS1QLRcvc10ABA5F23 ) : Addr: $007E149E

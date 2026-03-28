@@ -1,0 +1,37 @@
+unit CariRiskU;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics,
+  Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
+  uniGUIClasses, uniGUIForm, uniGUIBaseClasses, uniButton, uniBasicGrid,
+  uniDBGrid, uniMultiItem, uniComboBox, uniEdit, uniDateTimePicker, uniPanel,
+  uniBitBtn, uniMenuButton, uniSweetAlert, Data.DB, MemDS, DBAccess, Uni,
+  Vcl.Menus, uniMainMenu;
+
+type
+  TfrmCariRisk = class(TUniForm)
+  private
+    { Private declarations }
+    SQL : string;
+
+  public
+    { Public declarations }
+  end;
+
+function frmCariRisk: TfrmCariRisk;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  MainModule, uniGUIApplication, Main, DMU;
+
+function frmCariRisk: TfrmCariRisk;
+begin
+  Result := TfrmCariRisk(UniMainModule.GetFormInstance(TfrmCariRisk));
+end;
+
+end.

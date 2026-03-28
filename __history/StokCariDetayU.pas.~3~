@@ -1,0 +1,35 @@
+unit StokCariDetayU;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics,
+  Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
+  uniGUIClasses, uniGUIForm, uniGUIBaseClasses, uniPanel, uniBasicGrid,
+  uniDBGrid;
+
+type
+  TfrmStokCariDetay = class(TUniForm)
+    UniContainerPanel1: TUniContainerPanel;
+    UniDBGrid1: TUniDBGrid;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+function frmStokCariDetay: TfrmStokCariDetay;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  MainModule, uniGUIApplication;
+
+function frmStokCariDetay: TfrmStokCariDetay;
+begin
+  Result := TfrmStokCariDetay(UniMainModule.GetFormInstance(TfrmStokCariDetay));
+end;
+
+end.

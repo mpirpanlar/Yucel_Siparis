@@ -1,0 +1,33 @@
+unit PDFGosterU;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics,
+  Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
+  uniGUIClasses, uniGUIForm, uniGUIBaseClasses, uniURLFrame;
+
+type
+  TfrmPDFGoster = class(TUniForm)
+    UniURLFrame1: TUniURLFrame;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+function frmPDFGoster: TfrmPDFGoster;
+
+implementation
+
+{$R *.dfm}
+
+uses
+  MainModule, uniGUIApplication;
+
+function frmPDFGoster: TfrmPDFGoster;
+begin
+  Result := TfrmPDFGoster(UniMainModule.GetFormInstance(TfrmPDFGoster));
+end;
+
+end.
