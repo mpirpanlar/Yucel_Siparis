@@ -1,4 +1,0 @@
-Siparis.exe: 00001868: 02:05:47 [127.0.0.1]:Failed Sequence Recovery: SeqId: 44, Event: click
-Siparis.exe: 000016CC: 02:56:39 [127.0.0.1]:Failed Sequence Recovery: SeqId: 44, Event: click
-Siparis.exe: 000016CC: 02:56:39 [127.0.0.1]:Sequence sent from cache:  SeqId: 44
-Siparis.exe: 000016CC: 02:56:39 [127.0.0.1]:Processed: Id: 44, Evt: click, [IxuNT5MAmV10A4D6739]

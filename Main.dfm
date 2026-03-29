@@ -20,6 +20,10 @@ object MainForm: TMainForm
     object tabMenu: TUniTabSheet
       Hint = ''
       Caption = 'Ana Menu'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 256
+      ExplicitHeight = 128
       object UniSimplePanel2: TUniSimplePanel
         AlignWithMargins = True
         Left = 3
@@ -72,6 +76,44 @@ object MainForm: TMainForm
             OnClick = btnSiparisClick
           end
         end
+        object UniSimplePanelCRM: TUniSimplePanel
+          Left = 3
+          Top = 102
+          Width = 500
+          Height = 95
+          Hint = ''
+          ParentColor = False
+          Color = clWhite
+          TabOrder = 2
+          Layout = 'hbox'
+          LayoutConfig.Width = '100%'
+          LayoutConfig.Margin = '15 0 0 4'
+          object btnCRM: TUniBitBtn
+            Left = 3
+            Top = 3
+            Width = 126
+            Height = 67
+            Hint = ''
+            Caption = 'CRM'
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Color = clWhite
+            Font.Height = -15
+            Font.Style = [fsItalic]
+            TabOrder = 1
+            ClientEvents.UniEvents.Strings = (
+              
+                'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.cls=' +
+                '"btnMenu";'#13#10'}')
+            IconAlign = iaBottom
+            IconPosition = ipButtonEdge
+            ImageIndex = 4
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Width = '100%'
+            LayoutConfig.Margin = '2 2 2 2'
+            OnClick = btnCRMClick
+          end
+        end
         object UniSimplePanel1: TUniSimplePanel
           Left = 3
           Top = 165
@@ -80,7 +122,7 @@ object MainForm: TMainForm
           Hint = ''
           ParentColor = False
           Color = clWhite
-          TabOrder = 2
+          TabOrder = 3
           Layout = 'hbox'
           LayoutConfig.Width = '100%'
           LayoutConfig.Margin = '15 0 0 4'

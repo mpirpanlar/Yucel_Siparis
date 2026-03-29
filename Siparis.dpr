@@ -36,7 +36,14 @@ uses
   SiparisSatirGuncelleU in 'SiparisSatirGuncelleU.pas' {frmSiparisSatirGuncelle: TUniForm},
   CariRiskU in 'CariRiskU.pas' {frmCariRisk: TUniForm},
   MaliyetTriggerGuncelleU in 'MaliyetTriggerGuncelleU.pas' {frmMaliyetTriggerGuncelle: TUniForm},
-  CariListesiU in 'CariListesiU.pas' {frmCariListesi: TUniForm};
+  CariListesiU in 'CariListesiU.pas' {frmCariListesi: TUniForm},
+  CrmSchemaU in 'CrmSchemaU.pas',
+  CrmMenuU in 'CrmMenuU.pas' {frmCrmMenu: TUniForm},
+  CrmAktiviteU in 'CrmAktiviteU.pas' {frmCrmAktivite: TUniForm},
+  CrmGorevU in 'CrmGorevU.pas' {frmCrmGorev: TUniForm},
+  CrmCariSecU in 'CrmCariSecU.pas' {frmCrmCariSec: TUniForm},
+  CrmAktiviteListeU in 'CrmAktiviteListeU.pas' {frmCrmAktiviteListe: TUniForm},
+  CrmGorevListeU in 'CrmGorevListeU.pas' {frmCrmGorevListe: TUniForm};
 
 {$R *.res}
 

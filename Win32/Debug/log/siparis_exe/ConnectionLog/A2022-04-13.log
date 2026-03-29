@@ -1,7 +1,0 @@
-Siparis.exe: 000051A8: 00:22:55 [192.168.1.101]:Failed Sequence Recovery: SeqId: 29, Event: blurchange
-Siparis.exe: 000051A8: 00:23:04 [192.168.1.101]:Sequence sent from cache:  SeqId: 29
-Siparis.exe: 000051A8: 00:23:04 [192.168.1.101]:Processed: Id: 29, Evt: blurchange, [AFXYqCgpVy10A37E0D2]
-Siparis.exe: 00003720: 00:23:07 [192.168.1.101]:Failed Sequence Recovery: SeqId: 30, Event: tabchange
-Siparis.exe: 00003720: 00:23:07 [192.168.1.101]:Sequence sent from cache:  SeqId: 30
-Siparis.exe: 00003720: 00:23:07 [192.168.1.101]:Processed: Id: 30, Evt: tabchange, [AFXYqCgpVy10A37E0D2]
-Siparis.exe: 000041D4: 02:31:58 [192.168.1.40]:Failed Sequence Recovery: SeqId: 24, Event: actionclick

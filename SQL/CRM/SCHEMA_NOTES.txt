@@ -1,0 +1,5 @@
+CRM ASYA_ENTEGRE sema notlari
+- Collation: SQL_Latin1_General_CP1_CI_AS
+- Sürüm tablosu: CRM_SCHEMA_GECMIS (uygulama CrmSchemaU ile doldurur)
+- Hedef sürüm: CrmSchemaU.pas -> CRM_SCHEMA_TARGET_VERSION
+- Yeni revizyon: sürümü artırın, CrmSchemaApplyMigration içine yeni case ekleyin; mümkünse buraya da örnek .sql koyun.

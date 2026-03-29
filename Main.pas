@@ -17,6 +17,8 @@ type
     UniSimplePanel2: TUniSimplePanel;
     UniSimplePanel4: TUniSimplePanel;
     btnSiparis: TUniBitBtn;
+    UniSimplePanelCRM: TUniSimplePanel;
+    btnCRM: TUniBitBtn;
     pnlMenu: TUniSimplePanel;
     UniPanel1: TUniPanel;
     lbFirma: TUniLabel;
@@ -77,6 +79,7 @@ type
     procedure btnSiparisClick(Sender: TObject);
     procedure UniFormShow(Sender: TObject);
     procedure UniBitBtn10Click(Sender: TObject);
+    procedure btnCRMClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -94,7 +97,7 @@ implementation
 
 uses
   uniGUIVars, MainModule, uniGUIApplication, SiparisU, SiparisMenuU, SiparisDMU,
-  DMU, Genel, ParametreMenuU, TmpU;
+  DMU, Genel, ParametreMenuU, TmpU, CrmMenuU, CrmSchemaU;
 
 procedure TMainForm.SiparisFazlaTeslimatOran;
 var
@@ -155,9 +158,21 @@ begin
 
 end;
 
+procedure TMainForm.btnCRMClick(Sender: TObject);
+begin
+  PanelMenu;
+  frmCrmMenu.Parent := pnlMenu;
+  frmCrmMenu.Show;
+end;
+
 procedure TMainForm.UniFormShow(Sender: TObject);
 begin
-// Açýlýþ Ýþlemleri
+  try
+    CrmEnsureDatabase(frmDM.conAsya);
+  except
+    on E: Exception do
+      UniMainModule.saHata.Show('CRM veritabani semasi: ' + E.Message);
+  end;
   SiparisFazlaTeslimatOran;
   lblKullanici.Caption := Tmp.xKullaniciAdi;
 

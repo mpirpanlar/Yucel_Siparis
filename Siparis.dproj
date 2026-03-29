@@ -1,4 +1,4 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{FA7776A3-A6A2-4A34-A1C2-7FD2C9B2C95F}</ProjectGuid>
         <ProjectVersion>20.2</ProjectVersion>
@@ -311,6 +311,37 @@
         </DCCReference>
         <DCCReference Include="CariListesiU.pas">
             <Form>frmCariListesi</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmSchemaU.pas"/>
+        <DCCReference Include="CrmMenuU.pas">
+            <Form>frmCrmMenu</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmAktiviteU.pas">
+            <Form>frmCrmAktivite</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmGorevU.pas">
+            <Form>frmCrmGorev</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmCariSecU.pas">
+            <Form>frmCrmCariSec</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmAktiviteListeU.pas">
+            <Form>frmCrmAktiviteListe</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmGorevListeU.pas">
+            <Form>frmCrmGorevListe</Form>
             <FormType>dfm</FormType>
             <DesignClass>TUniForm</DesignClass>
         </DCCReference>

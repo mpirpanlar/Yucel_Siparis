@@ -1,6 +1,0 @@
-Siparis.exe: 00002600: 09:44:38 []:>--------------------------------------------------------------<
-Siparis.exe: 00002600: 09:44:38 [TUniServerModule]:Server First Init.
-Siparis.exe: 00002600: 09:44:38 [TUniServerModule]:Debug Mode = ON
-Siparis.exe: 00002600: 09:44:38 [TUniServerModule]:Global Cache Folder Erased. <16> Files deleted.
-Siparis.exe: 00002600: 09:44:38 [TUniServerModule]:Starting HTTP Server on Port: 8077...
-Siparis.exe: 00002600: 09:44:38 [TUniServerModule]:HTTP Server Started on Port: 8077
