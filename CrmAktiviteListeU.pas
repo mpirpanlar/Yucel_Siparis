@@ -68,8 +68,10 @@ procedure TfrmCrmAktiviteListe.btnListeleClick(Sender: TObject);
 begin
   qList.Close;
   qList.SQL.Text :=
-    'SELECT AKTIVITE_ID, TIP, KONU, CARI_KOD, AKTIVITE_TARIHI, DURUM ' +
-    'FROM dbo.CRM_AKTIVITE WHERE TIP <> ''TASK'' ORDER BY AKTIVITE_ID DESC';
+    'SELECT A.AKTIVITE_ID, A.TIP, A.KONU, A.CARI_KOD, A.AKTIVITE_TARIHI, A.DURUM, T.TEKLIF_NO, A.SIPARIS_NO ' +
+    'FROM dbo.CRM_AKTIVITE A ' +
+    'LEFT JOIN dbo.CRM_TEKLIF T ON T.TEKLIF_ID = A.TEKLIF_ID ' +
+    'WHERE A.TIP <> ''TASK'' ORDER BY A.AKTIVITE_ID DESC';
   qList.Open;
 end;
 

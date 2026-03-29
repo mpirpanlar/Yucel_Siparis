@@ -13,6 +13,8 @@ type
     yKullaniciGrupID, ySubeKodu, yKullaniciDepo, yKullaniciAdmin : Integer;
     yParaBirimi, yNetsisProjeUygulamasi, yNetsisSirketKodu, yKullaniciAdi, yNetsisKullanici, yNetsisSifre, yNetsisPlasiyer : String;
     yDovizTakip : SmallInt;
+    yCrmYeniAktiviteTeklifId: Int64;
+    yCrmYeniGorevTeklifId: Int64;
 
   public
     { Public declarations }
@@ -31,6 +33,8 @@ type
     property xNetsisSifre : String read yNetsisSifre write yNetsisSifre;
     property xNetsisPlasiyer : String read yNetsisPlasiyer write yNetsisPlasiyer;
     property xDovizTakip : SmallInt read yDovizTakip write yDovizTakip;
+    property xCrmYeniAktiviteTeklifId: Int64 read yCrmYeniAktiviteTeklifId write yCrmYeniAktiviteTeklifId;
+    property xCrmYeniGorevTeklifId: Int64 read yCrmYeniGorevTeklifId write yCrmYeniGorevTeklifId;
 
 
   end;

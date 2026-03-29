@@ -335,6 +335,11 @@
             <FormType>dfm</FormType>
             <DesignClass>TUniForm</DesignClass>
         </DCCReference>
+        <DCCReference Include="CrmStokSecU.pas">
+            <Form>frmCrmStokSec</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
         <DCCReference Include="CrmAktiviteListeU.pas">
             <Form>frmCrmAktiviteListe</Form>
             <FormType>dfm</FormType>
@@ -342,6 +347,36 @@
         </DCCReference>
         <DCCReference Include="CrmGorevListeU.pas">
             <Form>frmCrmGorevListe</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmParamAktiviteTipU.pas">
+            <Form>frmCrmParamAktiviteTip</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmParamAktiviteDurumU.pas">
+            <Form>frmCrmParamAktiviteDurum</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmParamTeklifDurumU.pas">
+            <Form>frmCrmParamTeklifDurum</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmTeklifU.pas">
+            <Form>frmCrmTeklif</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmTeklifListeU.pas">
+            <Form>frmCrmTeklifListe</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmCariOzetU.pas">
+            <Form>frmCrmCariOzet</Form>
             <FormType>dfm</FormType>
             <DesignClass>TUniForm</DesignClass>
         </DCCReference>

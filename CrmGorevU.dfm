@@ -1,7 +1,7 @@
 object frmCrmGorev: TfrmCrmGorev
   Left = 0
   Top = 0
-  ClientHeight = 500
+  ClientHeight = 536
   ClientWidth = 640
   Caption = 'Yeni G'#246'rev'
   OnShow = UniFormShow
@@ -15,7 +15,7 @@ object frmCrmGorev: TfrmCrmGorev
     Left = 0
     Top = 0
     Width = 640
-    Height = 500
+    Height = 536
     Hint = ''
     Align = alClient
     TabOrder = 0
@@ -25,7 +25,7 @@ object frmCrmGorev: TfrmCrmGorev
       Left = 0
       Top = 0
       Width = 640
-      Height = 448
+      Height = 484
       Hint = ''
       Align = alClient
       TabOrder = 0
@@ -108,87 +108,106 @@ object frmCrmGorev: TfrmCrmGorev
             'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
         OnClick = btnCariBulClick
       end
-      object lblBitis: TUniLabel
+      object lblBagliTeklif: TUniLabel
         Left = 16
         Top = 164
         Width = 120
         Height = 17
         Hint = ''
-        Caption = 'Termin (biti'#351')'
+        Caption = 'Bagli teklif no'
         TabOrder = 7
       end
-      object dtBitis: TUniDateTimePicker
+      object edBagliTeklifNo: TUniEdit
         Left = 160
         Top = 160
-        Width = 200
+        Width = 440
         Height = 27
-        Hint = ''
+        Hint = 'Tekliften acilan gorevlerde dolu gelir; salt okunur'
+        Text = ''
+        ReadOnly = True
         TabOrder = 8
       end
-      object lblOncelik: TUniLabel
+      object lblBitis: TUniLabel
         Left = 16
         Top = 200
         Width = 120
         Height = 17
         Hint = ''
-        Caption = #214'ncelik'
+        Caption = 'Termin (biti'#351')'
         TabOrder = 9
       end
-      object cbOncelik: TUniComboBox
+      object dtBitis: TUniDateTimePicker
         Left = 160
         Top = 196
         Width = 200
         Height = 27
         Hint = ''
-        Style = csDropDownList
-        Text = ''
         TabOrder = 10
-        IconItems = <>
       end
-      object lblAtanan: TUniLabel
+      object lblOncelik: TUniLabel
         Left = 16
         Top = 236
         Width = 120
         Height = 17
         Hint = ''
-        Caption = 'Atanan'
+        Caption = #214'ncelik'
         TabOrder = 11
+      end
+      object cbOncelik: TUniComboBox
+        Left = 160
+        Top = 232
+        Width = 200
+        Height = 27
+        Hint = ''
+        Style = csDropDownList
+        Text = ''
+        TabOrder = 12
+        IconItems = <>
+      end
+      object lblAtanan: TUniLabel
+        Left = 16
+        Top = 272
+        Width = 120
+        Height = 17
+        Hint = ''
+        Caption = 'Atanan'
+        TabOrder = 13
       end
       object lkAtanan: TUniDBLookupComboBox
         Left = 160
-        Top = 232
+        Top = 268
         Width = 440
         Height = 27
         Hint = ''
         ListField = 'KullaniciAd'
         KeyField = 'KullaniciID'
         ListSource = dsKullanici
-        TabOrder = 12
+        TabOrder = 14
       end
       object lblDurum: TUniLabel
         Left = 16
-        Top = 272
+        Top = 308
         Width = 120
         Height = 17
         Hint = ''
         Caption = 'Durum'
-        TabOrder = 13
+        TabOrder = 15
       end
-      object cbDurum: TUniComboBox
+      object lkDurum: TUniDBLookupComboBox
         Left = 160
-        Top = 268
-        Width = 200
+        Top = 304
+        Width = 440
         Height = 27
         Hint = ''
-        Style = csDropDownList
-        Text = ''
-        TabOrder = 14
-        IconItems = <>
+        ListField = 'AD'
+        KeyField = 'DURUM_ID'
+        ListSource = dsDurLkp
+        TabOrder = 16
       end
     end
     object panFooter: TUniPanel
       Left = 0
-      Top = 448
+      Top = 484
       Width = 640
       Height = 52
       Hint = ''
@@ -244,5 +263,15 @@ object frmCrmGorev: TfrmCrmGorev
     Connection = frmDM.conAsya
     Left = 560
     Top = 232
+  end
+  object qDurLkp: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 560
+    Top = 280
+  end
+  object dsDurLkp: TUniDataSource
+    DataSet = qDurLkp
+    Left = 560
+    Top = 328
   end
 end

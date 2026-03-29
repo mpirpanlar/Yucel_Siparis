@@ -18,10 +18,16 @@ type
     UniPanel2: TUniPanel;
     btnAktiviteListesi: TUniButton;
     btnGorevListesi: TUniButton;
+    btnYeniTeklif: TUniButton;
+    btnTeklifListesi: TUniButton;
+    btnCariOzet: TUniButton;
     procedure btnYeniAktiviteClick(Sender: TObject);
     procedure btnYeniGorevClick(Sender: TObject);
     procedure btnAktiviteListesiClick(Sender: TObject);
     procedure btnGorevListesiClick(Sender: TObject);
+    procedure btnYeniTeklifClick(Sender: TObject);
+    procedure btnTeklifListesiClick(Sender: TObject);
+    procedure btnCariOzetClick(Sender: TObject);
   private
   public
   end;
@@ -34,7 +40,7 @@ implementation
 
 uses
   MainModule, uniGUIApplication, Genel, CrmAktiviteU, CrmGorevU,
-  CrmAktiviteListeU, CrmGorevListeU;
+  CrmAktiviteListeU, CrmGorevListeU, CrmTeklifU, CrmTeklifListeU, CrmCariOzetU;
 
 function frmCrmMenu: TfrmCrmMenu;
 begin
@@ -59,6 +65,21 @@ end;
 procedure TfrmCrmMenu.btnGorevListesiClick(Sender: TObject);
 begin
   xFormShow(TfrmCrmGorevListe, 'CrmGorevListesi', 1, '');
+end;
+
+procedure TfrmCrmMenu.btnYeniTeklifClick(Sender: TObject);
+begin
+  xFormShow(TfrmCrmTeklif, 'CrmYeniTeklif', 1, '');
+end;
+
+procedure TfrmCrmMenu.btnTeklifListesiClick(Sender: TObject);
+begin
+  xFormShow(TfrmCrmTeklifListe, 'CrmTeklifListesi', 1, '');
+end;
+
+procedure TfrmCrmMenu.btnCariOzetClick(Sender: TObject);
+begin
+  xFormShow(TfrmCrmCariOzet, 'CrmCariOzet', 1, '');
 end;
 
 end.

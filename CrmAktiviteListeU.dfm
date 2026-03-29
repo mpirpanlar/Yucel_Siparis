@@ -109,6 +109,47 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
       WebOptions.FetchAll = True
       TabOrder = 1
       OnAjaxEvent = grdAjaxEvent
+      Columns = <
+        item
+          FieldName = 'AKTIVITE_ID'
+          Title.Caption = 'ID'
+          Width = 55
+        end
+        item
+          FieldName = 'TIP'
+          Title.Caption = 'Tip'
+          Width = 70
+        end
+        item
+          FieldName = 'KONU'
+          Title.Caption = 'Konu'
+          Width = 260
+        end
+        item
+          FieldName = 'CARI_KOD'
+          Title.Caption = 'Cari'
+          Width = 90
+        end
+        item
+          FieldName = 'TEKLIF_NO'
+          Title.Caption = 'Teklif no'
+          Width = 100
+        end
+        item
+          FieldName = 'SIPARIS_NO'
+          Title.Caption = 'Siparis no'
+          Width = 90
+        end
+        item
+          FieldName = 'AKTIVITE_TARIHI'
+          Title.Caption = 'Tarih'
+          Width = 120
+        end
+        item
+          FieldName = 'DURUM'
+          Title.Caption = 'Durum'
+          Width = 80
+        end>
     end
   end
   object qList: TUniQuery

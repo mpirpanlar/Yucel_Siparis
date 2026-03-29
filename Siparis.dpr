@@ -42,8 +42,15 @@ uses
   CrmAktiviteU in 'CrmAktiviteU.pas' {frmCrmAktivite: TUniForm},
   CrmGorevU in 'CrmGorevU.pas' {frmCrmGorev: TUniForm},
   CrmCariSecU in 'CrmCariSecU.pas' {frmCrmCariSec: TUniForm},
+  CrmStokSecU in 'CrmStokSecU.pas' {frmCrmStokSec: TUniForm},
   CrmAktiviteListeU in 'CrmAktiviteListeU.pas' {frmCrmAktiviteListe: TUniForm},
-  CrmGorevListeU in 'CrmGorevListeU.pas' {frmCrmGorevListe: TUniForm};
+  CrmGorevListeU in 'CrmGorevListeU.pas' {frmCrmGorevListe: TUniForm},
+  CrmParamAktiviteTipU in 'CrmParamAktiviteTipU.pas' {frmCrmParamAktiviteTip: TUniForm},
+  CrmParamAktiviteDurumU in 'CrmParamAktiviteDurumU.pas' {frmCrmParamAktiviteDurum: TUniForm},
+  CrmParamTeklifDurumU in 'CrmParamTeklifDurumU.pas' {frmCrmParamTeklifDurum: TUniForm},
+  CrmTeklifU in 'CrmTeklifU.pas' {frmCrmTeklif: TUniForm},
+  CrmTeklifListeU in 'CrmTeklifListeU.pas' {frmCrmTeklifListe: TUniForm},
+  CrmCariOzetU in 'CrmCariOzetU.pas' {frmCrmCariOzet: TUniForm};
 
 {$R *.res}
 

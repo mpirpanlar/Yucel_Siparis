@@ -95,6 +95,30 @@ object frmCrmMenu: TfrmCrmMenu
         LayoutConfig.Margin = '11 2 2 2'
         OnClick = btnYeniGorevClick
       end
+      object btnYeniTeklif: TUniButton
+        Left = 16
+        Top = 139
+        Width = 193
+        Height = 38
+        Hint = ''
+        Caption = 'Yeni Teklif'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsItalic]
+        TabOrder = 4
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
+            's="btnAltMenu";'#13#10'}')
+        ScreenMask.Enabled = True
+        ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '11 2 2 2'
+        OnClick = btnYeniTeklifClick
+      end
     end
     object UniSimplePanel2: TUniSimplePanel
       Left = 296
@@ -168,6 +192,53 @@ object frmCrmMenu: TfrmCrmMenu
         LayoutConfig.Width = '100%'
         LayoutConfig.Margin = '11 2 2 2'
         OnClick = btnGorevListesiClick
+      end
+      object btnTeklifListesi: TUniButton
+        Left = 16
+        Top = 139
+        Width = 193
+        Height = 38
+        Hint = ''
+        Caption = 'Teklif Listesi'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsItalic]
+        TabOrder = 4
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
+            's="btnAltMenu";'#13#10'}')
+        ScreenMask.Enabled = True
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '11 2 2 2'
+        OnClick = btnTeklifListesiClick
+      end
+      object btnCariOzet: TUniButton
+        Left = 16
+        Top = 188
+        Width = 193
+        Height = 38
+        Hint = ''
+        Caption = 'Cari CRM '#214'zeti'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsItalic]
+        TabOrder = 5
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
+            's="btnAltMenu";'#13#10'}')
+        ScreenMask.Enabled = True
+        ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '11 2 2 2'
+        OnClick = btnCariOzetClick
       end
     end
   end

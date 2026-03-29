@@ -212,6 +212,75 @@ object frmParametreMenu: TfrmParametreMenu
         LayoutConfig.Margin = '2 2 2 2'
         OnClick = UniButton10Click
       end
+      object UniButton11: TUniButton
+        Left = 16
+        Top = 351
+        Width = 193
+        Height = 30
+        Hint = ''
+        Caption = 'CRM - Aktivite Tipleri'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsItalic]
+        TabOrder = 9
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
+            's="btnAltMenu";'#13#10'}')
+        ScreenMask.Enabled = True
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '2 2 2 2'
+        OnClick = UniButton11Click
+      end
+      object UniButton12: TUniButton
+        Left = 16
+        Top = 387
+        Width = 193
+        Height = 30
+        Hint = ''
+        Caption = 'CRM - Aktivite Durumlar'#305
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsItalic]
+        TabOrder = 10
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
+            's="btnAltMenu";'#13#10'}')
+        ScreenMask.Enabled = True
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '2 2 2 2'
+        OnClick = UniButton12Click
+      end
+      object UniButton13: TUniButton
+        Left = 16
+        Top = 423
+        Width = 193
+        Height = 30
+        Hint = ''
+        Caption = 'CRM - Teklif Durumlar'#305
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsItalic]
+        TabOrder = 11
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
+            's="btnAltMenu";'#13#10'}')
+        ScreenMask.Enabled = True
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '2 2 2 2'
+        OnClick = UniButton13Click
+      end
     end
     object UniSimplePanel2: TUniSimplePanel
       Left = 296

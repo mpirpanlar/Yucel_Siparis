@@ -3,7 +3,7 @@ object frmCrmGorevListe: TfrmCrmGorevListe
   Top = 0
   ClientHeight = 480
   ClientWidth = 900
-  Caption = 'frmCrmGorevListe'
+  Caption = 'CRM - Gorev listesi'
   OnShow = UniFormShow
   BorderStyle = bsNone
   OldCreateOrder = False
@@ -109,6 +109,52 @@ object frmCrmGorevListe: TfrmCrmGorevListe
       WebOptions.FetchAll = True
       TabOrder = 1
       OnAjaxEvent = grdAjaxEvent
+      Columns = <
+        item
+          FieldName = 'GOREV_ID'
+          Title.Caption = 'Gorev ID'
+          Width = 70
+        end
+        item
+          FieldName = 'AKTIVITE_ID'
+          Title.Caption = 'Akt. ID'
+          Width = 60
+        end
+        item
+          FieldName = 'KONU'
+          Title.Caption = 'Konu'
+          Width = 220
+        end
+        item
+          FieldName = 'CARI_KOD'
+          Title.Caption = 'Cari'
+          Width = 90
+        end
+        item
+          FieldName = 'TEKLIF_NO'
+          Title.Caption = 'Teklif no'
+          Width = 100
+        end
+        item
+          FieldName = 'DURUM'
+          Title.Caption = 'Durum'
+          Width = 75
+        end
+        item
+          FieldName = 'BITIS_TARIHI'
+          Title.Caption = 'Termin'
+          Width = 115
+        end
+        item
+          FieldName = 'ONCELIK'
+          Title.Caption = 'Oncelik'
+          Width = 70
+        end
+        item
+          FieldName = 'TAMAMLANDI'
+          Title.Caption = 'Tamam'
+          Width = 55
+        end>
     end
   end
   object qList: TUniQuery

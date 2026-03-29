@@ -1,7 +1,7 @@
 object frmCrmAktivite: TfrmCrmAktivite
   Left = 0
   Top = 0
-  ClientHeight = 440
+  ClientHeight = 512
   ClientWidth = 640
   Caption = 'Yeni Aktivite'
   OnShow = UniFormShow
@@ -14,7 +14,7 @@ object frmCrmAktivite: TfrmCrmAktivite
     Left = 0
     Top = 0
     Width = 640
-    Height = 440
+    Height = 512
     Hint = ''
     Align = alClient
     TabOrder = 0
@@ -24,7 +24,7 @@ object frmCrmAktivite: TfrmCrmAktivite
       Left = 0
       Top = 0
       Width = 640
-      Height = 388
+      Height = 460
       Hint = ''
       Align = alClient
       TabOrder = 0
@@ -39,16 +39,16 @@ object frmCrmAktivite: TfrmCrmAktivite
         Caption = 'Tip'
         TabOrder = 0
       end
-      object cbTip: TUniComboBox
+      object lkTip: TUniDBLookupComboBox
         Left = 120
         Top = 12
         Width = 480
         Height = 27
         Hint = ''
-        Style = csDropDownList
-        Text = ''
+        ListField = 'AD'
+        KeyField = 'TIP_ID'
+        ListSource = dsTipLkp
         TabOrder = 1
-        IconItems = <>
       end
       object lblKonu: TUniLabel
         Left = 16
@@ -127,51 +127,109 @@ object frmCrmAktivite: TfrmCrmAktivite
             'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
         OnClick = btnCariBulClick
       end
-      object lblTarih: TUniLabel
+      object lblTeklif: TUniLabel
         Left = 16
         Top = 220
         Width = 90
         Height = 17
         Hint = ''
-        Caption = 'Tarih'
+        Caption = 'Bagli teklif'
         TabOrder = 9
+      end
+      object lkTeklif: TUniDBLookupComboBox
+        Left = 120
+        Top = 216
+        Width = 340
+        Height = 27
+        Hint = ''
+        ListField = 'AD'
+        KeyField = 'TEKLIF_ID'
+        ListSource = dsTekLkp
+        TabOrder = 10
+      end
+      object btnTeklifYenile: TUniButton
+        Left = 470
+        Top = 214
+        Width = 130
+        Height = 30
+        Hint = 'Teklif listesini cariye gore yeniler'
+        Caption = 'Teklif yukle'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -12
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 11
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
+        OnClick = btnTeklifYenileClick
+      end
+      object lblSiparis: TUniLabel
+        Left = 16
+        Top = 256
+        Width = 90
+        Height = 17
+        Hint = ''
+        Caption = 'Siparis no (ERP)'
+        TabOrder = 12
+      end
+      object edSiparis: TUniEdit
+        Left = 120
+        Top = 252
+        Width = 340
+        Height = 27
+        Hint = 'Netsis / ERP siparis referansi (tekliften bagimsiz)'
+        Text = ''
+        TabOrder = 13
+      end
+      object lblTarih: TUniLabel
+        Left = 16
+        Top = 292
+        Width = 90
+        Height = 17
+        Hint = ''
+        Caption = 'Tarih'
+        TabOrder = 14
       end
       object dtAktivite: TUniDateTimePicker
         Left = 120
-        Top = 216
+        Top = 288
         Width = 200
         Height = 27
         Hint = ''
         DateTime = 46109.000000000000000000
         DateFormat = 'dd/MM/yyyy'
         TimeFormat = 'HH:mm:ss'
-        TabOrder = 10
+        TabOrder = 15
         DisabledDates = <>
       end
       object lblDurum: TUniLabel
         Left = 16
-        Top = 256
+        Top = 328
         Width = 90
         Height = 17
         Hint = ''
         Caption = 'Durum'
-        TabOrder = 11
+        TabOrder = 16
       end
-      object cbDurum: TUniComboBox
+      object lkDurum: TUniDBLookupComboBox
         Left = 120
-        Top = 252
-        Width = 200
+        Top = 324
+        Width = 460
         Height = 27
         Hint = ''
-        Style = csDropDownList
-        Text = ''
-        TabOrder = 12
-        IconItems = <>
+        ListField = 'AD'
+        KeyField = 'DURUM_ID'
+        ListSource = dsDurLkp
+        TabOrder = 17
       end
     end
     object panFooter: TUniPanel
       Left = 0
-      Top = 388
+      Top = 460
       Width = 640
       Height = 52
       Hint = ''
@@ -212,5 +270,35 @@ object frmCrmAktivite: TfrmCrmAktivite
     Connection = frmDM.conAsya
     Left = 560
     Top = 400
+  end
+  object qTipLkp: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 560
+    Top = 440
+  end
+  object dsTipLkp: TUniDataSource
+    DataSet = qTipLkp
+    Left = 592
+    Top = 440
+  end
+  object qDurLkp: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 560
+    Top = 480
+  end
+  object dsDurLkp: TUniDataSource
+    DataSet = qDurLkp
+    Left = 592
+    Top = 480
+  end
+  object qTekLkp: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 560
+    Top = 520
+  end
+  object dsTekLkp: TUniDataSource
+    DataSet = qTekLkp
+    Left = 592
+    Top = 520
   end
 end

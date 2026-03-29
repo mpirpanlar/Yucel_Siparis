@@ -26,6 +26,9 @@ type
     UniButton8: TUniButton;
     UniButton9: TUniButton;
     UniButton10: TUniButton;
+    UniButton11: TUniButton;
+    UniButton12: TUniButton;
+    UniButton13: TUniButton;
     procedure UniButton4Click(Sender: TObject);
     procedure UniButton2Click(Sender: TObject);
     procedure UniButton1Click(Sender: TObject);
@@ -33,6 +36,9 @@ type
     procedure UniButton8Click(Sender: TObject);
     procedure UniButton9Click(Sender: TObject);
     procedure UniButton10Click(Sender: TObject);
+    procedure UniButton11Click(Sender: TObject);
+    procedure UniButton12Click(Sender: TObject);
+    procedure UniButton13Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -46,8 +52,8 @@ implementation
 {$R *.dfm}
 
 uses
-  MainModule, uniGUIApplication, Genel, ParametrelerU, KullaniciGrupU,
-  KullanicilarU;
+  MainModule, uniGUIApplication,   Genel, ParametrelerU, KullaniciGrupU,
+  KullanicilarU, CrmParamAktiviteTipU, CrmParamAktiviteDurumU, CrmParamTeklifDurumU;
 
 //  EFaturaTanimU, SiparisBayiU, BayiTanimU, KurlarU;
 
@@ -89,6 +95,21 @@ end;
 procedure TfrmParametreMenu.UniButton9Click(Sender: TObject);
 begin
 //  xFormShowModal(TfrmBayiTanim,'BayiTanim',0,'');
+end;
+
+procedure TfrmParametreMenu.UniButton11Click(Sender: TObject);
+begin
+  xFormShow(TfrmCrmParamAktiviteTip, 'CrmParamAktiviteTip', 0, '');
+end;
+
+procedure TfrmParametreMenu.UniButton12Click(Sender: TObject);
+begin
+  xFormShow(TfrmCrmParamAktiviteDurum, 'CrmParamAktiviteDurum', 0, '');
+end;
+
+procedure TfrmParametreMenu.UniButton13Click(Sender: TObject);
+begin
+  xFormShow(TfrmCrmParamTeklifDurum, 'CrmParamTeklifDurum', 0, '');
 end;
 
 end.
