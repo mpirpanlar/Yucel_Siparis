@@ -38,6 +38,12 @@ uses
   MaliyetTriggerGuncelleU in 'MaliyetTriggerGuncelleU.pas' {frmMaliyetTriggerGuncelle: TUniForm},
   CariListesiU in 'CariListesiU.pas' {frmCariListesi: TUniForm},
   CrmSchemaU in 'CrmSchemaU.pas',
+  CrmMapsConfigU in 'CrmMapsConfigU.pas',
+  CrmRotaGeoU in 'CrmRotaGeoU.pas',
+  CrmHaritaSecU in 'CrmHaritaSecU.pas' {frmCrmHaritaSec: TUniForm},
+  CrmRotaHaritaU in 'CrmRotaHaritaU.pas' {frmCrmRotaHarita: TUniForm},
+  CrmRotaU in 'CrmRotaU.pas' {frmCrmRotaPlan: TUniForm},
+  CrmRotaListeU in 'CrmRotaListeU.pas' {frmCrmRotaListe: TUniForm},
   CrmMenuU in 'CrmMenuU.pas' {frmCrmMenu: TUniForm},
   CrmAktiviteU in 'CrmAktiviteU.pas' {frmCrmAktivite: TUniForm},
   CrmGorevU in 'CrmGorevU.pas' {frmCrmGorev: TUniForm},
@@ -50,7 +56,10 @@ uses
   CrmParamTeklifDurumU in 'CrmParamTeklifDurumU.pas' {frmCrmParamTeklifDurum: TUniForm},
   CrmTeklifU in 'CrmTeklifU.pas' {frmCrmTeklif: TUniForm},
   CrmTeklifListeU in 'CrmTeklifListeU.pas' {frmCrmTeklifListe: TUniForm},
-  CrmCariOzetU in 'CrmCariOzetU.pas' {frmCrmCariOzet: TUniForm};
+  CrmCariOzetU in 'CrmCariOzetU.pas' {frmCrmCariOzet: TUniForm},
+  CrmParamPotansiyelDurumU in 'CrmParamPotansiyelDurumU.pas' {frmCrmParamPotansiyelDurum: TUniForm},
+  CrmPotansiyelU in 'CrmPotansiyelU.pas' {frmCrmPotansiyel: TUniForm},
+  CrmPotansiyelListeU in 'CrmPotansiyelListeU.pas' {frmCrmPotansiyelListe: TUniForm};
 
 {$R *.res}
 

@@ -19,14 +19,22 @@ type
     btnAktiviteListesi: TUniButton;
     btnGorevListesi: TUniButton;
     btnYeniTeklif: TUniButton;
+    btnYeniPotansiyel: TUniButton;
+    btnYeniRotaPlan: TUniButton;
     btnTeklifListesi: TUniButton;
+    btnPotansiyelListesi: TUniButton;
+    btnTanimliRota: TUniButton;
     btnCariOzet: TUniButton;
     procedure btnYeniAktiviteClick(Sender: TObject);
     procedure btnYeniGorevClick(Sender: TObject);
     procedure btnAktiviteListesiClick(Sender: TObject);
     procedure btnGorevListesiClick(Sender: TObject);
     procedure btnYeniTeklifClick(Sender: TObject);
+    procedure btnYeniPotansiyelClick(Sender: TObject);
     procedure btnTeklifListesiClick(Sender: TObject);
+    procedure btnPotansiyelListesiClick(Sender: TObject);
+    procedure btnTanimliRotaClick(Sender: TObject);
+    procedure btnYeniRotaPlanClick(Sender: TObject);
     procedure btnCariOzetClick(Sender: TObject);
   private
   public
@@ -40,7 +48,8 @@ implementation
 
 uses
   MainModule, uniGUIApplication, Genel, CrmAktiviteU, CrmGorevU,
-  CrmAktiviteListeU, CrmGorevListeU, CrmTeklifU, CrmTeklifListeU, CrmCariOzetU;
+  CrmAktiviteListeU, CrmGorevListeU, CrmTeklifU, CrmTeklifListeU, CrmCariOzetU,
+  CrmPotansiyelU, CrmPotansiyelListeU, CrmRotaListeU, CrmRotaU;
 
 function frmCrmMenu: TfrmCrmMenu;
 begin
@@ -72,9 +81,29 @@ begin
   xFormShow(TfrmCrmTeklif, 'CrmYeniTeklif', 1, '');
 end;
 
+procedure TfrmCrmMenu.btnYeniPotansiyelClick(Sender: TObject);
+begin
+  xFormShow(TfrmCrmPotansiyel, 'CrmYeniPotansiyel', 1, '0');
+end;
+
 procedure TfrmCrmMenu.btnTeklifListesiClick(Sender: TObject);
 begin
   xFormShow(TfrmCrmTeklifListe, 'CrmTeklifListesi', 1, '');
+end;
+
+procedure TfrmCrmMenu.btnPotansiyelListesiClick(Sender: TObject);
+begin
+  xFormShow(TfrmCrmPotansiyelListe, 'CrmPotansiyelListesi', 1, '');
+end;
+
+procedure TfrmCrmMenu.btnTanimliRotaClick(Sender: TObject);
+begin
+  xFormShow(TfrmCrmRotaListe, 'CrmRotaListesi', 1, '');
+end;
+
+procedure TfrmCrmMenu.btnYeniRotaPlanClick(Sender: TObject);
+begin
+  xFormShow(TfrmCrmRotaPlan, 'CrmRotaPlan', 1, '0');
 end;
 
 procedure TfrmCrmMenu.btnCariOzetClick(Sender: TObject);

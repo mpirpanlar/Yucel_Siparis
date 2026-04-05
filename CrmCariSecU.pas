@@ -9,6 +9,8 @@ uses
   uniBasicGrid, uniDBGrid, Data.DB, MemDS, DBAccess, Uni, uniLabel;
 
 type
+  TCrmCariSecildiEvent = procedure(Sender: TObject; const ACariKod: string) of object;
+
   TfrmCrmCariSec = class(TUniForm)
     pnlToolbar: TUniPanel;
     lblBilgi: TUniLabel;
@@ -31,6 +33,8 @@ type
   public
     { Siparis / StokBul benzeri: ShowModal oncesi atanir, Sec ile doldurulur. }
     HedefCariEdit: TUniEdit;
+    { Atanirsa cari seciminde kod ile birlikte cagrilir (rota plan vb.). }
+    OnCariSecildi: TCrmCariSecildiEvent;
   end;
 
 function frmCrmCariSec: TfrmCrmCariSec;
@@ -74,14 +78,20 @@ begin
 end;
 
 procedure TfrmCrmCariSec.CariSecVeKapat;
+var
+  Ck: string;
 begin
   if not qCari.Active or qCari.IsEmpty then
   begin
     UniMainModule.saHata.Show('Once listele yapin ve bir satir secin.');
     Exit;
   end;
+  Ck := Trim(qCari.FieldByName('CARI_KOD').AsString);
   if Assigned(HedefCariEdit) then
-    HedefCariEdit.Text := Trim(qCari.FieldByName('CARI_KOD').AsString);
+    HedefCariEdit.Text := Ck;
+  if Assigned(OnCariSecildi) then
+    OnCariSecildi(Self, Ck);
+  OnCariSecildi := nil;
   HedefCariEdit := nil;
   Close;
 end;
@@ -93,6 +103,7 @@ end;
 
 procedure TfrmCrmCariSec.btnKapatClick(Sender: TObject);
 begin
+  OnCariSecildi := nil;
   HedefCariEdit := nil;
   Close;
 end;

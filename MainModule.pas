@@ -4,9 +4,12 @@ interface
 
 uses
   uniGUIMainModule, SysUtils, Classes, uniGUIBaseClasses, uniGUIClasses,
-  uniSweetAlert, uniImageList;
+  uniGUIForm, uniSweetAlert, uniImageList;
 
 type
+  { Rota plan: potansiyel listesinden secim; menude Create edilen form ile GetFormInstance ayni olmayabilir. }
+  TCrmPotListeSecildiEvent = procedure(Sender: TObject; APotansiyelId: Int64) of object;
+
   TUniMainModule = class(TUniGUIMainModule)
     saYetki: TUniSweetAlert;
     saHata: TUniSweetAlert;
@@ -17,9 +20,15 @@ type
     procedure UniGUIMainModuleSessionTimeout(ASession: TObject;
       var ExtendTimeOut: Integer);
   private
-    { Private declarations }
+    FCrmPotListeSecimCallback: TCrmPotListeSecildiEvent;
+    FCrmPotListeSecimKaynakListe: TUniForm;
   public
-    { Public declarations }
+    { Potansiyel listesi acilmadan once atanir; secimden sonra temizlenir. }
+    property CrmPotListeSecimCallback: TCrmPotListeSecildiEvent
+      read FCrmPotListeSecimCallback write FCrmPotListeSecimCallback;
+    { Callback sadece bu form orneginde (modal liste) Satir sec / cift tik ile calisir. }
+    property CrmPotListeSecimKaynakListe: TUniForm
+      read FCrmPotListeSecimKaynakListe write FCrmPotListeSecimKaynakListe;
   end;
 
 //  var

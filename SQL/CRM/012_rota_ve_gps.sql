@@ -1,0 +1,5 @@
+-- Referans: CRM sema surum 12 (CrmSchemaU.CrmSchemaApplyMigration12).
+-- Uygulama acilisinda ASYA_ENTEGRE baglantisi ile CrmEnsureDatabase otomatik calisir.
+-- Potansiyel: GPS_ENLEM, GPS_BOYLAM, HARITA_FORMATLI_ADRES
+-- CRM_CARI_LOKASYON, CRM_ROTA_PLAN, CRM_ROTA_PLAN_DURAK
+-- FormName / YETKI: CrmRotaListesi, CrmRotaPlan, CrmHaritaSec, CrmRotaHarita

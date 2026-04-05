@@ -315,6 +315,28 @@
             <DesignClass>TUniForm</DesignClass>
         </DCCReference>
         <DCCReference Include="CrmSchemaU.pas"/>
+        <DCCReference Include="CrmMapsConfigU.pas"/>
+        <DCCReference Include="CrmRotaGeoU.pas"/>
+        <DCCReference Include="CrmHaritaSecU.pas">
+            <Form>frmCrmHaritaSec</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmRotaHaritaU.pas">
+            <Form>frmCrmRotaHarita</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmRotaU.pas">
+            <Form>frmCrmRotaPlan</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmRotaListeU.pas">
+            <Form>frmCrmRotaListe</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
         <DCCReference Include="CrmMenuU.pas">
             <Form>frmCrmMenu</Form>
             <FormType>dfm</FormType>
@@ -377,6 +399,21 @@
         </DCCReference>
         <DCCReference Include="CrmCariOzetU.pas">
             <Form>frmCrmCariOzet</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmParamPotansiyelDurumU.pas">
+            <Form>frmCrmParamPotansiyelDurum</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmPotansiyelU.pas">
+            <Form>frmCrmPotansiyel</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmPotansiyelListeU.pas">
+            <Form>frmCrmPotansiyelListe</Form>
             <FormType>dfm</FormType>
             <DesignClass>TUniForm</DesignClass>
         </DCCReference>

@@ -9,7 +9,7 @@ uses
   DBAccess, Uni;
 
 const
-  CRM_SCHEMA_TARGET_VERSION = 10;
+  CRM_SCHEMA_TARGET_VERSION = 12;
 
 procedure CrmEnsureDatabase(AConn: TUniConnection);
 
@@ -581,6 +581,250 @@ begin
     'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (10, ''CRM aktivite ERP siparis referansi SIPARIS_NO'')');
 end;
 
+procedure CrmSchemaApplyMigration11(AConn: TUniConnection);
+begin
+  CrmExec(AConn,
+    'IF OBJECT_ID(''dbo.CRM_POTANSIYEL_DURUM'',''U'') IS NULL ' +
+    'CREATE TABLE dbo.CRM_POTANSIYEL_DURUM (' +
+    'POTANSIYEL_DURUM_ID BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT PK_CRM_POTANSIYEL_DURUM PRIMARY KEY, ' +
+    'KOD VARCHAR(30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, ' +
+    'ACIKLAMA VARCHAR(150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'AKTIF BIT NOT NULL CONSTRAINT DF_CRM_POTDUR_AKTIF DEFAULT (1), ' +
+    'SIRA INT NOT NULL CONSTRAINT DF_CRM_POTDUR_SIRA DEFAULT (0), ' +
+    'CONSTRAINT UQ_CRM_POTANSIYEL_DURUM_KOD UNIQUE (KOD) )');
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = ''IX_CRM_POTDUR_AKT_SIRA'' AND object_id = OBJECT_ID(''dbo.CRM_POTANSIYEL_DURUM'')) ' +
+    'CREATE INDEX IX_CRM_POTDUR_AKT_SIRA ON dbo.CRM_POTANSIYEL_DURUM (AKTIF, SIRA)');
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_POTANSIYEL_DURUM WHERE KOD = ''YENI'') ' +
+    'INSERT INTO dbo.CRM_POTANSIYEL_DURUM (KOD, ACIKLAMA, AKTIF, SIRA) VALUES (''YENI'', ''Yeni / Ilk kontak'', 1, 10)');
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_POTANSIYEL_DURUM WHERE KOD = ''ILETISIM'') ' +
+    'INSERT INTO dbo.CRM_POTANSIYEL_DURUM (KOD, ACIKLAMA, AKTIF, SIRA) VALUES (''ILETISIM'', ''Iletisim suruyor'', 1, 20)');
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_POTANSIYEL_DURUM WHERE KOD = ''TEKLIF_ASAMASI'') ' +
+    'INSERT INTO dbo.CRM_POTANSIYEL_DURUM (KOD, ACIKLAMA, AKTIF, SIRA) VALUES (''TEKLIF_ASAMASI'', ''Teklif asamasinda'', 1, 30)');
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_POTANSIYEL_DURUM WHERE KOD = ''MUZAKERE'') ' +
+    'INSERT INTO dbo.CRM_POTANSIYEL_DURUM (KOD, ACIKLAMA, AKTIF, SIRA) VALUES (''MUZAKERE'', ''Muzakere / pazarlik'', 1, 40)');
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_POTANSIYEL_DURUM WHERE KOD = ''KAZANILDI'') ' +
+    'INSERT INTO dbo.CRM_POTANSIYEL_DURUM (KOD, ACIKLAMA, AKTIF, SIRA) VALUES (''KAZANILDI'', ''Kazanildi (satis otesi: Netsis bagla)'', 1, 50)');
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_POTANSIYEL_DURUM WHERE KOD = ''KAYBEDILDI'') ' +
+    'INSERT INTO dbo.CRM_POTANSIYEL_DURUM (KOD, ACIKLAMA, AKTIF, SIRA) VALUES (''KAYBEDILDI'', ''Kaybedildi / uygun degil'', 1, 60)');
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_POTANSIYEL_DURUM WHERE KOD = ''NETSIS_BAGLI'') ' +
+    'INSERT INTO dbo.CRM_POTANSIYEL_DURUM (KOD, ACIKLAMA, AKTIF, SIRA) VALUES (''NETSIS_BAGLI'', ''Netsis cari ile baglandi'', 1, 70)');
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_POTANSIYEL_DURUM WHERE KOD = ''PASIF'') ' +
+    'INSERT INTO dbo.CRM_POTANSIYEL_DURUM (KOD, ACIKLAMA, AKTIF, SIRA) VALUES (''PASIF'', ''Pasif / takip disi'', 1, 90)');
+
+  CrmExec(AConn,
+    'IF OBJECT_ID(''dbo.CRM_POTANSIYEL_MUSTERI'',''U'') IS NULL ' +
+    'CREATE TABLE dbo.CRM_POTANSIYEL_MUSTERI (' +
+    'POTANSIYEL_ID BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT PK_CRM_POTANSIYEL_MUSTERI PRIMARY KEY, ' +
+    'FIRMA_UNVAN VARCHAR(250) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, ' +
+    'KISA_AD VARCHAR(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'MUSTERI_TIPI VARCHAR(20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT DF_CRM_POT_TIP DEFAULT (''KURUMSAL''), ' +
+    'VERGI_DAIRESI VARCHAR(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'VERGI_NO VARCHAR(20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'TC_KIMLIK_NO VARCHAR(11) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'MERSIS_NO VARCHAR(30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'NETSIS_CARI_KOD VARCHAR(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'NETSIS_BAGLANTI_UTC DATETIME2(3) NULL, ' +
+    'ULKE VARCHAR(80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'IL VARCHAR(80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'ILCE VARCHAR(80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'POSTA_KODU VARCHAR(15) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'ADRES VARCHAR(500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'TELEFON_SABIT VARCHAR(40) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'TELEFON_CEPTEL VARCHAR(40) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'TELEFON2 VARCHAR(40) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'FAKS VARCHAR(40) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'EPOSTA VARCHAR(120) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'WEB VARCHAR(250) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'YETKILI_AD_SOYAD VARCHAR(120) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'YETKILI_UNVAN VARCHAR(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'YETKILI_EPOSTA VARCHAR(120) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'YETKILI_TEL VARCHAR(40) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'MUHASEBE_YETKILI_AD VARCHAR(120) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'MUHASEBE_TEL VARCHAR(40) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'MUHASEBE_EPOSTA VARCHAR(120) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'SEKTOR VARCHAR(150) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'FAALIYET_KONUSU VARCHAR(250) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'CALISAN_SAYISI INT NULL, ' +
+    'TAHMINI_YILLIK_CIRO DECIMAL(18,2) NULL, ' +
+    'PARA_BIRIMI VARCHAR(10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT DF_CRM_POT_PB DEFAULT (''TRY''), ' +
+    'KAYNAK VARCHAR(100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'POTANSIYEL_DURUM_ID BIGINT NOT NULL, ' +
+    'ILK_ILETISIM_TARIHI DATE NULL, ' +
+    'SON_TAKIP_TARIHI DATE NULL, ' +
+    'SONRAKI_AKSYON_TARIHI DATE NULL, ' +
+    'NOTLAR VARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'OLUSTURAN_KULLANICI_ID INT NULL, ' +
+    'OLUSTURMA_UTC DATETIME2(3) NOT NULL CONSTRAINT DF_CRM_POT_OLU DEFAULT (SYSUTCDATETIME()), ' +
+    'GUNCELLEME_UTC DATETIME2(3) NULL, ' +
+    'CONSTRAINT FK_CRM_POT_POTDUR FOREIGN KEY (POTANSIYEL_DURUM_ID) REFERENCES dbo.CRM_POTANSIYEL_DURUM (POTANSIYEL_DURUM_ID), ' +
+    'CONSTRAINT CK_CRM_POT_MUSTIP CHECK (MUSTERI_TIPI IN (''KURUMSAL'', ''BIREYSEL'')) )');
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = ''IX_CRM_POT_NETSIS'' AND object_id = OBJECT_ID(''dbo.CRM_POTANSIYEL_MUSTERI'')) ' +
+    'CREATE INDEX IX_CRM_POT_NETSIS ON dbo.CRM_POTANSIYEL_MUSTERI (NETSIS_CARI_KOD)');
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = ''IX_CRM_POT_DURUM'' AND object_id = OBJECT_ID(''dbo.CRM_POTANSIYEL_MUSTERI'')) ' +
+    'CREATE INDEX IX_CRM_POT_DURUM ON dbo.CRM_POTANSIYEL_MUSTERI (POTANSIYEL_DURUM_ID)');
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = ''IX_CRM_POT_UNVAN'' AND object_id = OBJECT_ID(''dbo.CRM_POTANSIYEL_MUSTERI'')) ' +
+    'CREATE INDEX IX_CRM_POT_UNVAN ON dbo.CRM_POTANSIYEL_MUSTERI (FIRMA_UNVAN)');
+
+  if CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''FormName'' AND schema_id = SCHEMA_ID(''dbo'')') > 0 then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.FormName (FormName, FormCaption) SELECT v.FN, v.FC FROM (VALUES ' +
+      '(''CrmYeniPotansiyel'', ''CRM - Potansiyel Musteri''), (''CrmPotansiyelListesi'', ''CRM - Potansiyel Musteri Listesi''), ' +
+      '(''CrmParamPotansiyelDurum'', ''CRM - Potansiyel Durumlari'')) AS v(FN, FC) ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.FormName f WHERE f.FormName = v.FN)');
+    CrmExec(AConn,
+      'UPDATE dbo.FormName SET FormCaption = N''CRM - Potansiyel Durumlar'' + NCHAR(305) ' +
+      'WHERE FormName = ''CrmParamPotansiyelDurum''');
+  end;
+
+  if (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''YETKI'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) and
+     (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''KULLANICIGRUP'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmYeniPotansiyel'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmYeniPotansiyel'')');
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmPotansiyelListesi'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmPotansiyelListesi'')');
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmParamPotansiyelDurum'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmParamPotansiyelDurum'')');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 11) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (11, ''CRM potansiyel musteri ve Netsis cari baglanti'')');
+end;
+
+procedure CrmSchemaApplyMigration12(AConn: TUniConnection);
+begin
+  if CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.columns WHERE object_id = OBJECT_ID(''dbo.CRM_POTANSIYEL_MUSTERI'') AND name = ''GPS_ENLEM''') = 0 then
+    CrmExec(AConn,
+      'ALTER TABLE dbo.CRM_POTANSIYEL_MUSTERI ADD GPS_ENLEM DECIMAL(10,7) NULL, ' +
+      'GPS_BOYLAM DECIMAL(10,7) NULL, ' +
+      'HARITA_FORMATLI_ADRES VARCHAR(500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL');
+
+  CrmExec(AConn,
+    'IF OBJECT_ID(''dbo.CRM_CARI_LOKASYON'',''U'') IS NULL ' +
+    'CREATE TABLE dbo.CRM_CARI_LOKASYON (' +
+    'CARI_KOD VARCHAR(50) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT PK_CRM_CARI_LOK PRIMARY KEY, ' +
+    'GPS_ENLEM DECIMAL(10,7) NULL, ' +
+    'GPS_BOYLAM DECIMAL(10,7) NULL, ' +
+    'HARITA_FORMATLI_ADRES VARCHAR(500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'IL VARCHAR(80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'ILCE VARCHAR(80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'GUNCELLEME_UTC DATETIME2(3) NULL)');
+
+  CrmExec(AConn,
+    'IF OBJECT_ID(''dbo.CRM_ROTA_PLAN'',''U'') IS NULL ' +
+    'CREATE TABLE dbo.CRM_ROTA_PLAN (' +
+    'ROTA_ID BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT PK_CRM_ROTA_PLAN PRIMARY KEY, ' +
+    'BASLIK VARCHAR(200) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, ' +
+    'DETAY VARCHAR(MAX) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'BASLANGIC_ENLEM DECIMAL(10,7) NULL, ' +
+    'BASLANGIC_BOYLAM DECIMAL(10,7) NULL, ' +
+    'BASLANGIC_ADRES VARCHAR(500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'BITIS_ENLEM DECIMAL(10,7) NULL, ' +
+    'BITIS_BOYLAM DECIMAL(10,7) NULL, ' +
+    'BITIS_ADRES VARCHAR(500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'ESIK_KM INT NOT NULL CONSTRAINT DF_CRM_ROTA_ESIK DEFAULT (80), ' +
+    'PLANLAMA_TARIHI DATE NULL, ' +
+    'DURUM VARCHAR(20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT DF_CRM_ROTA_DUR DEFAULT (''TASLAK''), ' +
+    'OLUSTURAN_KULLANICI_ID INT NULL, ' +
+    'OLUSTURMA_UTC DATETIME2(3) NOT NULL CONSTRAINT DF_CRM_ROTA_OLU DEFAULT (SYSUTCDATETIME()), ' +
+    'GUNCELLEME_UTC DATETIME2(3) NULL, ' +
+    'CONSTRAINT CK_CRM_ROTA_DURUM CHECK (DURUM IN (''TASLAK'', ''ONAYLI'', ''IPTAL'')) )');
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = ''IX_CRM_ROTA_PLAN_TAR'' AND object_id = OBJECT_ID(''dbo.CRM_ROTA_PLAN'')) ' +
+    'CREATE INDEX IX_CRM_ROTA_PLAN_TAR ON dbo.CRM_ROTA_PLAN (PLANLAMA_TARIHI)');
+
+  CrmExec(AConn,
+    'IF OBJECT_ID(''dbo.CRM_ROTA_PLAN_DURAK'',''U'') IS NULL ' +
+    'CREATE TABLE dbo.CRM_ROTA_PLAN_DURAK (' +
+    'DURAK_ID BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT PK_CRM_ROTA_DURAK PRIMARY KEY, ' +
+    'ROTA_ID BIGINT NOT NULL, ' +
+    'SIRA INT NOT NULL, ' +
+    'DURAK_TIP CHAR(1) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, ' +
+    'NETSIS_CARI_KOD VARCHAR(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'POTANSIYEL_ID BIGINT NULL, ' +
+    'UNVAN_SNAPSHOT VARCHAR(250) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'IL_SNAPSHOT VARCHAR(80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'ILCE_SNAPSHOT VARCHAR(80) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'ADRES_SNAPSHOT VARCHAR(500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'GPS_ENLEM DECIMAL(10,7) NULL, ' +
+    'GPS_BOYLAM DECIMAL(10,7) NULL, ' +
+    'UYARI_METNI VARCHAR(500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'CONSTRAINT FK_CRM_ROTA_DURAK_ROTA FOREIGN KEY (ROTA_ID) REFERENCES dbo.CRM_ROTA_PLAN (ROTA_ID) ON DELETE CASCADE, ' +
+    'CONSTRAINT CK_CRM_ROTA_DURAK_TIP CHECK (DURAK_TIP IN (''C'', ''P'')), ' +
+    'CONSTRAINT CK_CRM_ROTA_DURAK_REF CHECK ( ' +
+    '(DURAK_TIP = ''C'' AND NETSIS_CARI_KOD IS NOT NULL AND POTANSIYEL_ID IS NULL) OR ' +
+    '(DURAK_TIP = ''P'' AND POTANSIYEL_ID IS NOT NULL AND NETSIS_CARI_KOD IS NULL) ) )');
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = ''IX_CRM_ROTA_DURAK_ROTA'' AND object_id = OBJECT_ID(''dbo.CRM_ROTA_PLAN_DURAK'')) ' +
+    'CREATE INDEX IX_CRM_ROTA_DURAK_ROTA ON dbo.CRM_ROTA_PLAN_DURAK (ROTA_ID, SIRA)');
+
+  if CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''FormName'' AND schema_id = SCHEMA_ID(''dbo'')') > 0 then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.FormName (FormName, FormCaption) SELECT v.FN, v.FC FROM (VALUES ' +
+      '(''CrmRotaListesi'', ''CRM - Rota planlama listesi''), (''CrmRotaPlan'', ''CRM - Rota plani''), ' +
+      '(''CrmHaritaSec'', ''CRM - Haritadan konum sec''), (''CrmRotaHarita'', ''CRM - Rota haritasi'')) AS v(FN, FC) ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.FormName f WHERE f.FormName = v.FN)');
+  end;
+
+  if (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''YETKI'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) and
+     (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''KULLANICIGRUP'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmRotaListesi'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmRotaListesi'')');
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmRotaPlan'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmRotaPlan'')');
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmHaritaSec'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmHaritaSec'')');
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmRotaHarita'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmRotaHarita'')');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 12) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (12, ''CRM rota planlama, cari lokasyon, potansiyel GPS'')');
+end;
+
 procedure CrmSchemaApplyMigration(const AConn: TUniConnection; AVersion: Integer);
 begin
   case AVersion of
@@ -594,6 +838,8 @@ begin
     8: CrmSchemaApplyMigration8(AConn);
     9: CrmSchemaApplyMigration9(AConn);
     10: CrmSchemaApplyMigration10(AConn);
+    11: CrmSchemaApplyMigration11(AConn);
+    12: CrmSchemaApplyMigration12(AConn);
   else
     raise Exception.CreateFmt('CRM sema: bilinmeyen migrasyon surumu %d', [AVersion]);
   end;

@@ -119,6 +119,54 @@ object frmCrmMenu: TfrmCrmMenu
         LayoutConfig.Margin = '11 2 2 2'
         OnClick = btnYeniTeklifClick
       end
+      object btnYeniPotansiyel: TUniButton
+        Left = 16
+        Top = 183
+        Width = 193
+        Height = 38
+        Hint = ''
+        Caption = 'Yeni Potansiyel M'#252#351'teri'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsItalic]
+        TabOrder = 5
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
+            's="btnAltMenu";'#13#10'}')
+        ScreenMask.Enabled = True
+        ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '11 2 2 2'
+        OnClick = btnYeniPotansiyelClick
+      end
+      object btnYeniRotaPlan: TUniButton
+        Left = 16
+        Top = 227
+        Width = 193
+        Height = 38
+        Hint = ''
+        Caption = 'Yeni rota planlamasi'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsItalic]
+        TabOrder = 6
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
+            's="btnAltMenu";'#13#10'}')
+        ScreenMask.Enabled = True
+        ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '11 2 2 2'
+        OnClick = btnYeniRotaPlanClick
+      end
     end
     object UniSimplePanel2: TUniSimplePanel
       Left = 296
@@ -216,9 +264,56 @@ object frmCrmMenu: TfrmCrmMenu
         LayoutConfig.Margin = '11 2 2 2'
         OnClick = btnTeklifListesiClick
       end
-      object btnCariOzet: TUniButton
+      object btnPotansiyelListesi: TUniButton
         Left = 16
         Top = 188
+        Width = 193
+        Height = 38
+        Hint = ''
+        Caption = 'Potansiyel M'#252#351'teri Listesi'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsItalic]
+        TabOrder = 5
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
+            's="btnAltMenu";'#13#10'}')
+        ScreenMask.Enabled = True
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '11 2 2 2'
+        OnClick = btnPotansiyelListesiClick
+      end
+      object btnTanimliRota: TUniButton
+        Left = 16
+        Top = 232
+        Width = 193
+        Height = 38
+        Hint = ''
+        Caption = 'Tanimli rota planlamalari'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsItalic]
+        TabOrder = 6
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
+            's="btnAltMenu";'#13#10'}')
+        ScreenMask.Enabled = True
+        ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '11 2 2 2'
+        OnClick = btnTanimliRotaClick
+      end
+      object btnCariOzet: TUniButton
+        Left = 16
+        Top = 276
         Width = 193
         Height = 38
         Hint = ''
@@ -229,7 +324,7 @@ object frmCrmMenu: TfrmCrmMenu
         Font.Height = -15
         Font.Name = 'Segoe UI'
         Font.Style = [fsItalic]
-        TabOrder = 5
+        TabOrder = 7
         ClientEvents.UniEvents.Strings = (
           
             'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
