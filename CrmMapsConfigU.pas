@@ -1,12 +1,13 @@
 unit CrmMapsConfigU;
 
-{ Google Maps JavaScript API tarayici anahtari.
-  Cloud Console: Maps JavaScript API + Geocoding API acin; HTTP referrer kisitlamasi ekleyin. }
+{ Google Maps tarayici anahtari.
+  Cloud Console: Maps JavaScript API, Geocoding API, rota haritasi icin Directions API acin;
+  faturalama acik olsun; HTTP referrer kisitlamasinda uygulama URL'lerini ekleyin. }
 
 interface
 
 const
-  CrmGoogleMapsBrowserApiKey = 'YOUR_BROWSER_KEY_HERE';
+  CrmGoogleMapsBrowserApiKey = 'AIzaSyA5-6MbmC5uVG-ep6XTEh4gUEt2Bw8VkSw';
 
 implementation
 

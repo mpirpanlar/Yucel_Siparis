@@ -7,7 +7,7 @@ uses
   Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
   uniGUIClasses, uniGUIForm, uniGUIBaseClasses, uniPanel, uniLabel,
   uniEdit, uniMemo, uniDateTimePicker, uniButton, uniDBLookupComboBox,
-  Data.DB, MemDS, DBAccess, Uni;
+  Data.DB, MemDS, DBAccess, Uni, uniMultiItem, uniComboBox, uniDBComboBox;
 
 type
   TfrmCrmAktivite = class(TUniForm)

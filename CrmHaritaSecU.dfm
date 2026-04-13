@@ -9,13 +9,15 @@ object frmCrmHaritaSec: TfrmCrmHaritaSec
   OldCreateOrder = False
   MonitoredKeys.Keys = <>
   AlignmentControl = uniAlignmentClient
-  Layout = 'fit'
   ClientEvents.UniEvents.Strings = (
-    'afterScript=function afterScript(sender)'#13#10'{'#13#10' try { var g ' +
-    '= sender.down('#39'unidbgrid'#39'); if (g) window.__crmHaritaGrdBridge=g' +
-    '; } catch (e) { }'#13#10'}')
-  PixelsPerInch = 96
-  TextHeight = 13
+    
+      'afterScript=function afterScript(sender)'#13#10'{'#13#10' try { var g = window' +
+      '.__crmHaritaGrdBridge; if (!g) g = Ext.ComponentQuery.query('#39'[name=grdPick' +
+      ']'#39')[0]; if (!g) g = Ext.ComponentQuery.query('#39'unidbgrid'#39')[0];'#13#10' if (' +
+      '!g && sender) g = sender.down('#39'unidbgrid'#39'); if (g) window.__crmHaritaGrdB' +
+      'ridge = g; } catch (e) { }'#13#10'}')
+  Layout = 'fit'
+  TextHeight = 15
   object rootPanel: TUniPanel
     Left = 0
     Top = 0
@@ -34,6 +36,8 @@ object frmCrmHaritaSec: TfrmCrmHaritaSec
       Hint = ''
       Align = alClient
       TabOrder = 0
+      ParentColor = False
+      Color = clBtnFace
     end
     object panBottom: TUniPanel
       Left = 0
@@ -49,10 +53,11 @@ object frmCrmHaritaSec: TfrmCrmHaritaSec
       object lblLat: TUniLabel
         Left = 12
         Top = 12
-        Width = 60
-        Height = 17
+        Width = 31
+        Height = 13
         Hint = ''
         Caption = 'Enlem'
+        TabOrder = 7
       end
       object edLat: TUniEdit
         Left = 80
@@ -66,10 +71,11 @@ object frmCrmHaritaSec: TfrmCrmHaritaSec
       object lblLng: TUniLabel
         Left = 220
         Top = 12
-        Width = 50
-        Height = 17
+        Width = 37
+        Height = 13
         Hint = ''
         Caption = 'Boylam'
+        TabOrder = 8
       end
       object edLng: TUniEdit
         Left = 280
@@ -89,21 +95,29 @@ object frmCrmHaritaSec: TfrmCrmHaritaSec
         Caption = 'Haritayi forma yansit'
         TabOrder = 2
         ClientEvents.UniEvents.Strings = (
-          'click=function click(sender, e, eOpts)'#13#10'{'#13#10'  var raw = se' +
-          'ssionStorage.getItem('#39'crmHaritaPick'#39');'#13#10'  if (!raw) { Ext.Msg' +
-          '.alert('#39'Harita'#39','#39'Once haritada bir nokta secin.'#39'); return;'#13#10'  }'#13#10'  va' +
-          'r o = JSON.parse(raw);'#13#10'  var g = window.__crmHaritaGrdBridge;'#13#10'  if' +
-          ' (!g) { Ext.Msg.alert('#39'Hata'#39','#39'Kopru yok; sayfayi yenileyin.'#39'); retu' +
-          'rn; }'#13#10'  ajaxRequest(g, '#39'mapPick'#39', ['#13#10'    '#39'lat='#39'+o.lat,'#13#10'    '#39'lng='#39'+o.' +
-          'lng,'#13#10'    '#39'addr='#39'+encodeURIComponent(o.addr || '#39#39')'#13#10'  ]);'#13#10'}')
+          
+            'click=function click(sender, e, eOpts)'#13#10'{'#13#10'  var raw = sessionSt' +
+            'orage.getItem('#39'crmHaritaPick'#39');'#13#10'  if (!raw && window.parent && ' +
+            'window.parent !== window) try { raw = window.parent.sessionStora' +
+            'ge.getItem('#39'crmHaritaPick'#39'); } catch (ex) {}'#13#10'  if (!raw) { Ext.' +
+            'Msg.alert('#39'Harita'#39','#39'Once haritada bir nokta secin.'#39'); return;'#13#10' ' +
+            ' }'#13#10'  var o = JSON.parse(raw);'#13#10'  var g = window.__crmHaritaGrdB' +
+            'ridge;'#13#10'  if (!g) g = Ext.ComponentQuery.query('#39'[name=grdPick]'#39')' +
+            '[0];'#13#10'  if (!g) g = Ext.ComponentQuery.query('#39'unidbgrid'#39')[0];'#13#10' ' +
+            ' if (!g && sender && sender.up) g = sender.up('#39'form'#39') && sender.' +
+            'up('#39'form'#39').down('#39'unidbgrid'#39');'#13#10'  if (!g) { Ext.Msg.alert('#39'Hata'#39',' +
+            #39'Kopru yok; sayfayi yenileyin.'#39'); return;'#13#10'  }'#13#10'  ajaxRequest(g,' +
+            ' '#39'mapPick'#39', ['#13#10'    '#39'lat='#39'+o.lat,'#13#10'    '#39'lng='#39'+o.lng,'#13#10'    '#39'addr='#39 +
+            '+encodeURIComponent(o.addr || '#39#39')'#13#10'  ]);'#13#10'}')
       end
       object lblAdr: TUniLabel
         Left = 12
         Top = 48
-        Width = 120
-        Height = 17
+        Width = 65
+        Height = 13
         Hint = ''
         Caption = 'Harita adresi'
+        TabOrder = 9
       end
       object mmAdr: TUniMemo
         Left = 12
@@ -122,8 +136,9 @@ object frmCrmHaritaSec: TfrmCrmHaritaSec
         Caption = 'Tamam'
         TabOrder = 4
         ClientEvents.UniEvents.Strings = (
-          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
-          'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
         OnClick = btnTamamClick
       end
       object btnIptal: TUniButton
@@ -143,11 +158,12 @@ object frmCrmHaritaSec: TfrmCrmHaritaSec
       Width = 24
       Height = 24
       Hint = ''
-      TabOrder = 2
       DataSource = dsPick
       Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect]
       WebOptions.Paged = False
       WebOptions.FetchAll = True
+      LoadMask.Message = 'Loading data...'
+      TabOrder = 2
       OnAjaxEvent = grdPickAjaxEvent
       Columns = <
         item

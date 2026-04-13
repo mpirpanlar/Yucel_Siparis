@@ -55,6 +55,10 @@ uses
   CrmMapsConfigU,
   Main, MainModule;
 
+{ Tarayici JS: CrmHaritaSecU.dfm icinde frmCrmHaritaSec.ClientEvents (afterScript)
+  ve btnYansit.ClientEvents (click). UniGUI, ClientEvents.UniEvents.Text ile
+  kodda atama yapildiginda JS'i virgune gore bolerek bozuyor; bu yuzden dfm kullanilir. }
+
 function frmCrmHaritaSec: TfrmCrmHaritaSec;
 begin
   Result := TfrmCrmHaritaSec(UniMainModule.GetFormInstance(TfrmCrmHaritaSec));
@@ -119,7 +123,9 @@ begin
     '<script>'#10 +
     'function crmSetHaritaPick(lat,lng,addr){'#10 +
     'var o={lat:lat,lng:lng,addr:(addr||'''')};'#10 +
-    'try{sessionStorage.setItem(''crmHaritaPick'',JSON.stringify(o));}catch(e){}'#10 +
+    'var s=JSON.stringify(o);'#10 +
+    '{ try{ if(window.parent&&window.parent!==window) window.parent.sessionStorage.setItem(''crmHaritaPick'',s);}catch(e){} }'#10 +
+    'try{ sessionStorage.setItem(''crmHaritaPick'',s);}catch(e){}'#10 +
     '}'#10 +
     'function initMap(){'#10 +
     'var c={lat:' + FormatFloat('0.######', FInitLat, FS) + ',lng:' + FormatFloat('0.######', FInitLng, FS) + '};'#10 +
@@ -128,6 +134,7 @@ begin
     'map.addListener(''click'',function(ev){'#10 +
     'var lat=ev.latLng.lat(),lng=ev.latLng.lng();'#10 +
     'if(mk) mk.setMap(null); mk=new google.maps.Marker({position:ev.latLng,map:map});'#10 +
+    'crmSetHaritaPick(lat,lng,'''');'#10 +
     'geocoder.geocode({location:ev.latLng},function(res,status){'#10 +
     'var addr=''''; if(status===''OK'' && res && res[0]) addr=res[0].formatted_address||'''';'#10 +
     'crmSetHaritaPick(lat,lng,addr);});'#10 +
@@ -162,6 +169,7 @@ begin
   MapHtmlUretVeGoster;
 end;
 
+{ btnYansit tarayicida cBtnYansitClick ile ajaxRequest cagirir; burada karsilanir. }
 procedure TfrmCrmHaritaSec.grdPickAjaxEvent(Sender: TComponent; EventName: string;
   Params: TUniStrings);
 var

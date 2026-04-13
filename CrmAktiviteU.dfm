@@ -33,8 +33,8 @@ object frmCrmAktivite: TfrmCrmAktivite
       object lblTip: TUniLabel
         Left = 16
         Top = 16
-        Width = 90
-        Height = 17
+        Width = 15
+        Height = 13
         Hint = ''
         Caption = 'Tip'
         TabOrder = 0
@@ -46,15 +46,17 @@ object frmCrmAktivite: TfrmCrmAktivite
         Height = 27
         Hint = ''
         ListField = 'AD'
-        KeyField = 'TIP_ID'
         ListSource = dsTipLkp
+        KeyField = 'TIP_ID'
+        ListFieldIndex = 0
         TabOrder = 1
+        Color = clWindow
       end
       object lblKonu: TUniLabel
         Left = 16
         Top = 52
-        Width = 90
-        Height = 17
+        Width = 27
+        Height = 13
         Hint = ''
         Caption = 'Konu'
         TabOrder = 2
@@ -71,14 +73,13 @@ object frmCrmAktivite: TfrmCrmAktivite
       object lblAciklama: TUniLabel
         Left = 16
         Top = 88
-        Width = 90
-        Height = 17
+        Width = 45
+        Height = 13
         Hint = ''
         Caption = 'A'#231#305'klama'
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Height = -12
-        Font.Name = 'Segoe UI'
         TabOrder = 4
       end
       object mmAciklama: TUniMemo
@@ -92,8 +93,8 @@ object frmCrmAktivite: TfrmCrmAktivite
       object lblCari: TUniLabel
         Left = 16
         Top = 184
-        Width = 90
-        Height = 17
+        Width = 60
+        Height = 13
         Hint = ''
         Caption = 'Cari (Netsis)'
         TabOrder = 6
@@ -130,8 +131,8 @@ object frmCrmAktivite: TfrmCrmAktivite
       object lblTeklif: TUniLabel
         Left = 16
         Top = 220
-        Width = 90
-        Height = 17
+        Width = 55
+        Height = 13
         Hint = ''
         Caption = 'Bagli teklif'
         TabOrder = 9
@@ -143,9 +144,11 @@ object frmCrmAktivite: TfrmCrmAktivite
         Height = 27
         Hint = ''
         ListField = 'AD'
-        KeyField = 'TEKLIF_ID'
         ListSource = dsTekLkp
+        KeyField = 'TEKLIF_ID'
+        ListFieldIndex = 0
         TabOrder = 10
+        Color = clWindow
       end
       object btnTeklifYenile: TUniButton
         Left = 470
@@ -170,8 +173,8 @@ object frmCrmAktivite: TfrmCrmAktivite
       object lblSiparis: TUniLabel
         Left = 16
         Top = 256
-        Width = 90
-        Height = 17
+        Width = 79
+        Height = 13
         Hint = ''
         Caption = 'Siparis no (ERP)'
         TabOrder = 12
@@ -188,8 +191,8 @@ object frmCrmAktivite: TfrmCrmAktivite
       object lblTarih: TUniLabel
         Left = 16
         Top = 292
-        Width = 90
-        Height = 17
+        Width = 24
+        Height = 13
         Hint = ''
         Caption = 'Tarih'
         TabOrder = 14
@@ -209,8 +212,8 @@ object frmCrmAktivite: TfrmCrmAktivite
       object lblDurum: TUniLabel
         Left = 16
         Top = 328
-        Width = 90
-        Height = 17
+        Width = 35
+        Height = 13
         Hint = ''
         Caption = 'Durum'
         TabOrder = 16
@@ -222,9 +225,11 @@ object frmCrmAktivite: TfrmCrmAktivite
         Height = 27
         Hint = ''
         ListField = 'AD'
-        KeyField = 'DURUM_ID'
         ListSource = dsDurLkp
+        KeyField = 'DURUM_ID'
+        ListFieldIndex = 0
         TabOrder = 17
+        Color = clWindow
       end
     end
     object panFooter: TUniPanel

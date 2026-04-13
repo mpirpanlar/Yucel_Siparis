@@ -794,10 +794,22 @@ begin
     Exit;
   end;
   Fn := 'crm_rota_' + IntToStr(GetTickCount) + '.html';
+  { DirectionsService -> Google Cloud'ta "Directions API" acik olmali + faturalama.
+    REQUEST_DENIED genelde API kapali veya anahtar kisitlamasi. Basarisizda dogrudan cizgi yedegi. }
   Html :=
-    '<!DOCTYPE html><html><head><meta charset="utf-8"/><style>html,body,' + '#map' + '{height:100%;margin:0}</style>'#10 +
+    '<!DOCTYPE html><html><head><meta charset="utf-8"/><style>html,body,' + '#map' + '{height:100%;margin:0;position:relative}</style>'#10 +
     '<script>'#10 +
     'var routePts = ' + Pts + ';'#10 +
+    'function rotaBasitCizgi(map){'#10 +
+    'var path=[];for(var i=0;i<routePts.length;i++)path.push(routePts[i]);'#10 +
+    'new google.maps.Polyline({path:path,geodesic:true,strokeColor:"#996633",strokeOpacity:0.9,strokeWeight:3,map:map});'#10 +
+    'var b=new google.maps.LatLngBounds();routePts.forEach(function(p){b.extend(p);});map.fitBounds(b);'#10 +
+    '}'#10 +
+    'function uyariBandi(map,status){'#10 +
+    'var d=document.createElement("div");d.style.cssText="position:absolute;top:0;left:0;right:0;background:#fff3cd;color:#856404;padding:10px 12px;font:12px/1.4 sans-serif;z-index:5;border-bottom:1px solid #856404";'#10 +
+    'd.innerHTML="<b>Rota cizilemedi ("+status+").</b> Google Cloud Console: <b>Directions API</b> etkin olsun, faturalama acik olsun, API anahtari HTTP referrer ile uygulama adresinize izin versin. Asagida noktalar arasi dogru cizgi gosteriliyor.";'#10 +
+    'map.getDiv().appendChild(d);'#10 +
+    '}'#10 +
     'function initMap(){'#10 +
     'var map = new google.maps.Map(document.getElementById("map"), { zoom: 6, center: routePts[0] });'#10 +
     'var ds = new google.maps.DirectionsService();'#10 +
@@ -808,7 +820,7 @@ begin
     '  for (var i=1;i<routePts.length-1;i++) req.waypoints.push({location: routePts[i], stopover: true});'#10 +
     '}'#10 +
     'ds.route(req, function(res, status) {'#10 +
-    'if (status !== google.maps.DirectionsStatus.OK) { document.getElementById("map").innerText = status; return; }'#10 +
+    'if (status !== google.maps.DirectionsStatus.OK) { uyariBandi(map,status); rotaBasitCizgi(map); return; }'#10 +
     'var cols = ["' + '#cc3366' + '","' + '#339933' + '","' + '#333399' + '"];'#10 +
     'for (var r=0;r<res.routes.length;r++) {'#10 +
     'new google.maps.Polyline({ path: res.routes[r].overview_path, strokeColor: cols[r % cols.length], strokeOpacity: 0.85, strokeWeight: 5, map: map });'#10 +
