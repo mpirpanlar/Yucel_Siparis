@@ -9,8 +9,7 @@ object frmCrmMenu: TfrmCrmMenu
   MonitoredKeys.Keys = <>
   AlignmentControl = uniAlignmentClient
   Layout = 'fit'
-  PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 15
   object UniContainerPanel1: TUniContainerPanel
     Left = 18
     Top = 19
@@ -43,7 +42,7 @@ object frmCrmMenu: TfrmCrmMenu
         Font.Style = [fsBold, fsItalic]
         TabOrder = 2
         Caption = #304#351'lemler'
-        Color = 2237106
+        Color = clFirebrick
         LayoutConfig.Width = '100%'
         LayoutConfig.Margin = '2 2 5 2'
       end
@@ -58,7 +57,6 @@ object frmCrmMenu: TfrmCrmMenu
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
         Font.Height = -15
-        Font.Name = 'Segoe UI'
         Font.Style = [fsItalic]
         TabOrder = 1
         ClientEvents.UniEvents.Strings = (
@@ -82,7 +80,6 @@ object frmCrmMenu: TfrmCrmMenu
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
         Font.Height = -15
-        Font.Name = 'Segoe UI'
         Font.Style = [fsItalic]
         TabOrder = 3
         ClientEvents.UniEvents.Strings = (
@@ -106,7 +103,6 @@ object frmCrmMenu: TfrmCrmMenu
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
         Font.Height = -15
-        Font.Name = 'Segoe UI'
         Font.Style = [fsItalic]
         TabOrder = 4
         ClientEvents.UniEvents.Strings = (
@@ -130,7 +126,6 @@ object frmCrmMenu: TfrmCrmMenu
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
         Font.Height = -15
-        Font.Name = 'Segoe UI'
         Font.Style = [fsItalic]
         TabOrder = 5
         ClientEvents.UniEvents.Strings = (
@@ -149,12 +144,11 @@ object frmCrmMenu: TfrmCrmMenu
         Width = 193
         Height = 38
         Hint = ''
-        Caption = 'Yeni rota planlamasi'
+        Caption = 'Yeni Rota Planlamas'#305
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
         Font.Height = -15
-        Font.Name = 'Segoe UI'
         Font.Style = [fsItalic]
         TabOrder = 6
         ClientEvents.UniEvents.Strings = (
@@ -191,7 +185,7 @@ object frmCrmMenu: TfrmCrmMenu
         Font.Style = [fsBold, fsItalic]
         TabOrder = 2
         Caption = 'Raporlar'
-        Color = 2237106
+        Color = clFirebrick
         LayoutConfig.Width = '100%'
         LayoutConfig.Margin = '2 2 5 2'
       end
@@ -206,7 +200,6 @@ object frmCrmMenu: TfrmCrmMenu
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
         Font.Height = -15
-        Font.Name = 'Segoe UI'
         Font.Style = [fsItalic]
         TabOrder = 1
         ClientEvents.UniEvents.Strings = (
@@ -229,7 +222,6 @@ object frmCrmMenu: TfrmCrmMenu
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
         Font.Height = -15
-        Font.Name = 'Segoe UI'
         Font.Style = [fsItalic]
         TabOrder = 3
         ClientEvents.UniEvents.Strings = (
@@ -252,7 +244,6 @@ object frmCrmMenu: TfrmCrmMenu
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
         Font.Height = -15
-        Font.Name = 'Segoe UI'
         Font.Style = [fsItalic]
         TabOrder = 4
         ClientEvents.UniEvents.Strings = (
@@ -275,7 +266,6 @@ object frmCrmMenu: TfrmCrmMenu
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
         Font.Height = -15
-        Font.Name = 'Segoe UI'
         Font.Style = [fsItalic]
         TabOrder = 5
         ClientEvents.UniEvents.Strings = (
@@ -298,7 +288,6 @@ object frmCrmMenu: TfrmCrmMenu
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
         Font.Height = -15
-        Font.Name = 'Segoe UI'
         Font.Style = [fsItalic]
         TabOrder = 6
         ClientEvents.UniEvents.Strings = (
@@ -322,7 +311,6 @@ object frmCrmMenu: TfrmCrmMenu
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
         Font.Height = -15
-        Font.Name = 'Segoe UI'
         Font.Style = [fsItalic]
         TabOrder = 7
         ClientEvents.UniEvents.Strings = (
