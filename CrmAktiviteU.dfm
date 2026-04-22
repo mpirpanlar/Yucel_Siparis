@@ -114,7 +114,7 @@ object frmCrmAktivite: TfrmCrmAktivite
         Width = 130
         Height = 30
         Hint = 'Netsis cari listesi'
-        Caption = 'Cari listele'
+        Caption = 'Cari Listele'
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
@@ -134,7 +134,7 @@ object frmCrmAktivite: TfrmCrmAktivite
         Width = 55
         Height = 13
         Hint = ''
-        Caption = 'Bagli teklif'
+        Caption = 'Ba'#287'l'#305' Teklif'
         TabOrder = 9
       end
       object lkTeklif: TUniDBLookupComboBox
@@ -156,7 +156,7 @@ object frmCrmAktivite: TfrmCrmAktivite
         Width = 130
         Height = 30
         Hint = 'Teklif listesini cariye gore yeniler'
-        Caption = 'Teklif yukle'
+        Caption = 'Teklif Y'#252'kle'
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
@@ -173,10 +173,10 @@ object frmCrmAktivite: TfrmCrmAktivite
       object lblSiparis: TUniLabel
         Left = 16
         Top = 256
-        Width = 79
+        Width = 95
         Height = 13
         Hint = ''
-        Caption = 'Siparis no (ERP)'
+        Caption = 'Sipari'#351' No (NETS'#304'S)'
         TabOrder = 12
       end
       object edSiparis: TUniEdit

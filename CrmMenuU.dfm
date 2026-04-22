@@ -39,7 +39,7 @@ object frmCrmMenu: TfrmCrmMenu
         Font.Color = clWhite
         Font.Height = -16
         Font.Name = 'Palatino Linotype'
-        Font.Style = [fsBold, fsItalic]
+        Font.Style = [fsBold]
         TabOrder = 2
         Caption = #304#351'lemler'
         Color = clFirebrick
@@ -182,7 +182,7 @@ object frmCrmMenu: TfrmCrmMenu
         Font.Color = clWhite
         Font.Height = -16
         Font.Name = 'Palatino Linotype'
-        Font.Style = [fsBold, fsItalic]
+        Font.Style = [fsBold]
         TabOrder = 2
         Caption = 'Raporlar'
         Color = clFirebrick
@@ -283,7 +283,7 @@ object frmCrmMenu: TfrmCrmMenu
         Width = 193
         Height = 38
         Hint = ''
-        Caption = 'Tanimli rota planlamalari'
+        Caption = 'Tan'#305'ml'#305' Rota Planlamalar'#305
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite

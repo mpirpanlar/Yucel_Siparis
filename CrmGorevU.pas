@@ -7,7 +7,8 @@ uses
   Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
   uniGUIClasses, uniGUIForm, uniGUIBaseClasses, uniPanel, uniLabel,
   uniEdit, uniMemo, uniComboBox, uniDateTimePicker, uniButton,
-  uniDBLookupComboBox, Data.DB, MemDS, DBAccess, Uni;
+  uniDBLookupComboBox, Data.DB, MemDS, DBAccess, Uni, uniDBComboBox,
+  uniMultiItem;
 
 type
   TfrmCrmGorev = class(TUniForm)

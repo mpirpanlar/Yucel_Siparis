@@ -11,11 +11,11 @@ object frmCrmHaritaSec: TfrmCrmHaritaSec
   AlignmentControl = uniAlignmentClient
   ClientEvents.UniEvents.Strings = (
     
-      'afterScript=function afterScript(sender)'#13#10'{'#13#10' try { var g = window' +
-      '.__crmHaritaGrdBridge; if (!g) g = Ext.ComponentQuery.query('#39'[name=grdPick' +
-      ']'#39')[0]; if (!g) g = Ext.ComponentQuery.query('#39'unidbgrid'#39')[0];'#13#10' if (' +
-      '!g && sender) g = sender.down('#39'unidbgrid'#39'); if (g) window.__crmHaritaGrdB' +
-      'ridge = g; } catch (e) { }'#13#10'}')
+      'afterScript=function afterScript(sender)'#13#10'{'#13#10' try { var g = wind' +
+      'ow.__crmHaritaGrdBridge; if (!g) g = Ext.ComponentQuery.query('#39'[' +
+      'name=grdPick]'#39')[0]; if (!g) g = Ext.ComponentQuery.query('#39'unidbg' +
+      'rid'#39')[0];'#13#10' if (!g && sender) g = sender.down('#39'unidbgrid'#39'); if (' +
+      'g) window.__crmHaritaGrdBridge = g; } catch (e) { }'#13#10'}')
   Layout = 'fit'
   TextHeight = 15
   object rootPanel: TUniPanel
@@ -92,7 +92,7 @@ object frmCrmHaritaSec: TfrmCrmHaritaSec
         Width = 160
         Height = 32
         Hint = ''
-        Caption = 'Haritayi forma yansit'
+        Caption = 'Haritayi Forma Yans'#305't'
         TabOrder = 2
         ClientEvents.UniEvents.Strings = (
           

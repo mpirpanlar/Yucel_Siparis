@@ -9,8 +9,7 @@ object frmCrmGorev: TfrmCrmGorev
   MonitoredKeys.Keys = <>
   AlignmentControl = uniAlignmentClient
   Layout = 'fit'
-  PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 15
   object rootPanel: TUniPanel
     Left = 0
     Top = 0
@@ -34,8 +33,8 @@ object frmCrmGorev: TfrmCrmGorev
       object lblKonu: TUniLabel
         Left = 16
         Top = 12
-        Width = 120
-        Height = 17
+        Width = 27
+        Height = 13
         Hint = ''
         Caption = 'Konu'
         TabOrder = 0
@@ -52,14 +51,13 @@ object frmCrmGorev: TfrmCrmGorev
       object lblAciklama: TUniLabel
         Left = 16
         Top = 48
-        Width = 120
-        Height = 17
+        Width = 45
+        Height = 13
         Hint = ''
         Caption = 'A'#231#305'klama'
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Height = -12
-        Font.Name = 'Segoe UI'
         TabOrder = 2
       end
       object mmAciklama: TUniMemo
@@ -73,8 +71,8 @@ object frmCrmGorev: TfrmCrmGorev
       object lblCari: TUniLabel
         Left = 16
         Top = 128
-        Width = 120
-        Height = 17
+        Width = 60
+        Height = 13
         Hint = ''
         Caption = 'Cari (Netsis)'
         TabOrder = 4
@@ -111,10 +109,10 @@ object frmCrmGorev: TfrmCrmGorev
       object lblBagliTeklif: TUniLabel
         Left = 16
         Top = 164
-        Width = 120
-        Height = 17
+        Width = 73
+        Height = 13
         Hint = ''
-        Caption = 'Bagli teklif no'
+        Caption = 'Ba'#287'l'#305' Teklif No'
         TabOrder = 7
       end
       object edBagliTeklifNo: TUniEdit
@@ -124,16 +122,16 @@ object frmCrmGorev: TfrmCrmGorev
         Height = 27
         Hint = 'Tekliften acilan gorevlerde dolu gelir; salt okunur'
         Text = ''
-        ReadOnly = True
         TabOrder = 8
+        ReadOnly = True
       end
       object lblBitis: TUniLabel
         Left = 16
         Top = 200
-        Width = 120
-        Height = 17
+        Width = 63
+        Height = 13
         Hint = ''
-        Caption = 'Termin (biti'#351')'
+        Caption = 'Termin Tarihi'
         TabOrder = 9
       end
       object dtBitis: TUniDateTimePicker
@@ -142,13 +140,17 @@ object frmCrmGorev: TfrmCrmGorev
         Width = 200
         Height = 27
         Hint = ''
+        DateTime = 46132.000000000000000000
+        DateFormat = 'dd/MM/yyyy'
+        TimeFormat = 'HH:mm:ss'
         TabOrder = 10
+        DisabledDates = <>
       end
       object lblOncelik: TUniLabel
         Left = 16
         Top = 236
-        Width = 120
-        Height = 17
+        Width = 39
+        Height = 13
         Hint = ''
         Caption = #214'ncelik'
         TabOrder = 11
@@ -167,8 +169,8 @@ object frmCrmGorev: TfrmCrmGorev
       object lblAtanan: TUniLabel
         Left = 16
         Top = 272
-        Width = 120
-        Height = 17
+        Width = 37
+        Height = 13
         Hint = ''
         Caption = 'Atanan'
         TabOrder = 13
@@ -180,15 +182,17 @@ object frmCrmGorev: TfrmCrmGorev
         Height = 27
         Hint = ''
         ListField = 'KullaniciAd'
-        KeyField = 'KullaniciID'
         ListSource = dsKullanici
+        KeyField = 'KullaniciID'
+        ListFieldIndex = 0
         TabOrder = 14
+        Color = clWindow
       end
       object lblDurum: TUniLabel
         Left = 16
         Top = 308
-        Width = 120
-        Height = 17
+        Width = 35
+        Height = 13
         Hint = ''
         Caption = 'Durum'
         TabOrder = 15
@@ -200,9 +204,11 @@ object frmCrmGorev: TfrmCrmGorev
         Height = 27
         Hint = ''
         ListField = 'AD'
-        KeyField = 'DURUM_ID'
         ListSource = dsDurLkp
+        KeyField = 'DURUM_ID'
+        ListFieldIndex = 0
         TabOrder = 16
+        Color = clWindow
       end
     end
     object panFooter: TUniPanel

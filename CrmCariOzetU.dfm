@@ -10,8 +10,7 @@ object frmCrmCariOzet: TfrmCrmCariOzet
   MonitoredKeys.Keys = <>
   AlignmentControl = uniAlignmentClient
   Layout = 'fit'
-  PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 15
   object rootPanel: TUniPanel
     Left = 0
     Top = 0
@@ -36,16 +35,14 @@ object frmCrmCariOzet: TfrmCrmCariOzet
       object lblCari: TUniLabel
         Left = 12
         Top = 14
-        Width = 60
-        Height = 17
+        Width = 43
+        Height = 13
         Hint = ''
-        Caption = 'Cari kod'
+        Caption = 'Cari Kod'
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
         Font.Height = -12
-        Font.Name = 'Segoe UI'
-        Font.Style = []
         TabOrder = 0
       end
       object edCariKod: TUniEdit
@@ -76,8 +73,9 @@ object frmCrmCariOzet: TfrmCrmCariOzet
         Caption = 'Listele'
         TabOrder = 3
         ClientEvents.UniEvents.Strings = (
-          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
-          'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
         OnClick = btnListeleClick
       end
       object btnAc: TUniButton
@@ -86,25 +84,27 @@ object frmCrmCariOzet: TfrmCrmCariOzet
         Width = 120
         Height = 30
         Hint = ''
-        Caption = 'Kaydi ac'
+        Caption = 'Kayd'#305' A'#231
         TabOrder = 4
         ClientEvents.UniEvents.Strings = (
-          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
-          'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
         OnClick = btnAcClick
       end
       object btnKapat: TUniButton
-        Left = 848
-        Top = 8
+        Left = 860
+        Top = 0
         Width = 100
-        Height = 30
+        Height = 48
         Hint = ''
-        Align = alRight
         Caption = 'Kapat'
+        Align = alRight
         TabOrder = 5
         ClientEvents.UniEvents.Strings = (
-          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
-          'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
         OnClick = btnKapatClick
       end
     end
@@ -124,7 +124,7 @@ object frmCrmCariOzet: TfrmCrmCariOzet
           Left = 0
           Top = 0
           Width = 952
-          Height = 482
+          Height = 484
           Hint = ''
           Align = alClient
           TabOrder = 0
@@ -134,14 +134,15 @@ object frmCrmCariOzet: TfrmCrmCariOzet
             Left = 0
             Top = 0
             Width = 952
-            Height = 482
+            Height = 484
             Hint = ''
-            Align = alClient
             DataSource = dsAkt
             Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgTabs, dgCancelOnExit, dgAutoRefreshRow]
             ReadOnly = True
             WebOptions.Paged = False
             WebOptions.FetchAll = True
+            LoadMask.Message = 'Loading data...'
+            Align = alClient
             TabOrder = 0
             OnAjaxEvent = grdAktAjaxEvent
             Columns = <
@@ -149,36 +150,43 @@ object frmCrmCariOzet: TfrmCrmCariOzet
                 FieldName = 'AKTIVITE_ID'
                 Title.Caption = 'ID'
                 Width = 50
+                ReadOnly = True
               end
               item
                 FieldName = 'TIP_GORUNEN'
                 Title.Caption = 'Tip'
                 Width = 90
+                ReadOnly = True
               end
               item
                 FieldName = 'KONU'
                 Title.Caption = 'Konu'
                 Width = 200
+                ReadOnly = True
               end
               item
                 FieldName = 'TEKLIF_NO'
                 Title.Caption = 'Teklif no'
                 Width = 90
+                ReadOnly = True
               end
               item
                 FieldName = 'SIPARIS_NO'
                 Title.Caption = 'Siparis no'
                 Width = 85
+                ReadOnly = True
               end
               item
                 FieldName = 'AKTIVITE_TARIHI'
                 Title.Caption = 'Tarih'
                 Width = 130
+                ReadOnly = True
               end
               item
                 FieldName = 'DURUM'
                 Title.Caption = 'Durum'
                 Width = 90
+                ReadOnly = True
               end>
           end
         end
@@ -190,7 +198,7 @@ object frmCrmCariOzet: TfrmCrmCariOzet
           Left = 0
           Top = 0
           Width = 952
-          Height = 482
+          Height = 484
           Hint = ''
           Align = alClient
           TabOrder = 0
@@ -200,14 +208,15 @@ object frmCrmCariOzet: TfrmCrmCariOzet
             Left = 0
             Top = 0
             Width = 952
-            Height = 482
+            Height = 484
             Hint = ''
-            Align = alClient
             DataSource = dsGrv
             Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgTabs, dgCancelOnExit, dgAutoRefreshRow]
             ReadOnly = True
             WebOptions.Paged = False
             WebOptions.FetchAll = True
+            LoadMask.Message = 'Loading data...'
+            Align = alClient
             TabOrder = 0
             OnAjaxEvent = grdGrvAjaxEvent
             Columns = <
@@ -215,36 +224,43 @@ object frmCrmCariOzet: TfrmCrmCariOzet
                 FieldName = 'GOREV_ID'
                 Title.Caption = 'Gorev ID'
                 Width = 70
+                ReadOnly = True
               end
               item
                 FieldName = 'KONU'
                 Title.Caption = 'Konu'
                 Width = 260
+                ReadOnly = True
               end
               item
                 FieldName = 'AKTIVITE_TARIHI'
                 Title.Caption = 'Aktivite tar.'
                 Width = 120
+                ReadOnly = True
               end
               item
                 FieldName = 'DURUM'
                 Title.Caption = 'Durum'
                 Width = 80
+                ReadOnly = True
               end
               item
                 FieldName = 'BITIS_TARIHI'
                 Title.Caption = 'Bitis'
                 Width = 120
+                ReadOnly = True
               end
               item
                 FieldName = 'ONCELIK'
                 Title.Caption = 'Oncelik'
                 Width = 70
+                ReadOnly = True
               end
               item
                 FieldName = 'TAMAMLANDI'
                 Title.Caption = 'Tamam'
                 Width = 60
+                ReadOnly = True
               end>
           end
         end
@@ -256,7 +272,7 @@ object frmCrmCariOzet: TfrmCrmCariOzet
           Left = 0
           Top = 0
           Width = 952
-          Height = 482
+          Height = 484
           Hint = ''
           Align = alClient
           TabOrder = 0
@@ -266,14 +282,15 @@ object frmCrmCariOzet: TfrmCrmCariOzet
             Left = 0
             Top = 0
             Width = 952
-            Height = 482
+            Height = 484
             Hint = ''
-            Align = alClient
             DataSource = dsTek
             Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgTabs, dgCancelOnExit, dgAutoRefreshRow]
             ReadOnly = True
             WebOptions.Paged = False
             WebOptions.FetchAll = True
+            LoadMask.Message = 'Loading data...'
+            Align = alClient
             TabOrder = 0
             OnAjaxEvent = grdTekAjaxEvent
             Columns = <
@@ -281,36 +298,43 @@ object frmCrmCariOzet: TfrmCrmCariOzet
                 FieldName = 'TEKLIF_ID'
                 Title.Caption = 'ID'
                 Width = 50
+                ReadOnly = True
               end
               item
                 FieldName = 'TEKLIF_NO'
                 Title.Caption = 'Teklif no'
                 Width = 100
+                ReadOnly = True
               end
               item
                 FieldName = 'SIPARIS_NO'
                 Title.Caption = 'Siparis no'
                 Width = 90
+                ReadOnly = True
               end
               item
                 FieldName = 'BASLIK'
                 Title.Caption = 'Baslik'
                 Width = 220
+                ReadOnly = True
               end
               item
                 FieldName = 'TEKLIF_TARIHI'
                 Title.Caption = 'Teklif tar.'
                 Width = 130
+                ReadOnly = True
               end
               item
                 FieldName = 'DURUM'
                 Title.Caption = 'Durum'
                 Width = 90
+                ReadOnly = True
               end
               item
                 FieldName = 'TOPLAM_NET'
                 Title.Caption = 'Toplam'
                 Width = 90
+                ReadOnly = True
               end>
           end
         end

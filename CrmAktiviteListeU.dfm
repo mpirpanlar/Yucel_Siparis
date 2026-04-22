@@ -10,8 +10,7 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
   MonitoredKeys.Keys = <>
   AlignmentControl = uniAlignmentClient
   Layout = 'fit'
-  PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 15
   object rootPanel: TUniPanel
     Left = 0
     Top = 0
@@ -59,7 +58,7 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
         Width = 140
         Height = 32
         Hint = ''
-        Caption = 'Kaydi ac'
+        Caption = 'Kayd'#305' A'#231
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
@@ -74,13 +73,13 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
         OnClick = btnAcClick
       end
       object btnKapat: TUniButton
-        Left = 788
-        Top = 8
+        Left = 800
+        Top = 0
         Width = 100
-        Height = 32
+        Height = 48
         Hint = ''
-        Align = alRight
         Caption = 'Kapat'
+        Align = alRight
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
@@ -101,12 +100,13 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
       Width = 900
       Height = 432
       Hint = ''
-      Align = alClient
       DataSource = dsList
       Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgTabs, dgCancelOnExit, dgAutoRefreshRow]
       ReadOnly = True
       WebOptions.Paged = False
       WebOptions.FetchAll = True
+      LoadMask.Message = 'Loading data...'
+      Align = alClient
       TabOrder = 1
       OnAjaxEvent = grdAjaxEvent
       Columns = <
@@ -114,41 +114,49 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
           FieldName = 'AKTIVITE_ID'
           Title.Caption = 'ID'
           Width = 55
+          ReadOnly = True
         end
         item
           FieldName = 'TIP'
           Title.Caption = 'Tip'
           Width = 70
+          ReadOnly = True
         end
         item
           FieldName = 'KONU'
           Title.Caption = 'Konu'
           Width = 260
+          ReadOnly = True
         end
         item
           FieldName = 'CARI_KOD'
           Title.Caption = 'Cari'
           Width = 90
+          ReadOnly = True
         end
         item
           FieldName = 'TEKLIF_NO'
           Title.Caption = 'Teklif no'
           Width = 100
+          ReadOnly = True
         end
         item
           FieldName = 'SIPARIS_NO'
           Title.Caption = 'Siparis no'
           Width = 90
+          ReadOnly = True
         end
         item
           FieldName = 'AKTIVITE_TARIHI'
           Title.Caption = 'Tarih'
           Width = 120
+          ReadOnly = True
         end
         item
           FieldName = 'DURUM'
           Title.Caption = 'Durum'
           Width = 80
+          ReadOnly = True
         end>
     end
   end
