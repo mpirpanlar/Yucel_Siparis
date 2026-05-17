@@ -7,7 +7,8 @@ uses
   Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
   uniGUIClasses, uniGUIForm, uniGUIBaseClasses, uniPanel, uniLabel,
   uniEdit, uniMemo, uniButton, uniCheckBox, uniComboBox, uniDateTimePicker,
-  uniDBLookupComboBox, uniPageControl, Data.DB, MemDS, DBAccess, Uni;
+  uniDBLookupComboBox, uniPageControl, Data.DB, MemDS, DBAccess, Uni,
+  uniDBComboBox, uniMultiItem;
 
 type
   TfrmCrmPotansiyel = class(TUniForm)

@@ -6,8 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics,
   Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
   uniGUIClasses, uniGUIForm, uniGUIBaseClasses, uniPanel, uniLabel,
-  uniEdit, uniMemo, uniButton, uniURLFrame,
-  uniBasicGrid, uniDBGrid, Data.DB, MemDS, DBAccess, Uni;
+  uniEdit, uniMemo, uniButton, uniURLFrame;
 
 type
   TfrmCrmHaritaSec = class(TUniForm)
@@ -23,17 +22,15 @@ type
     btnYansit: TUniButton;
     btnTamam: TUniButton;
     btnIptal: TUniButton;
-    grdPick: TUniDBGrid;
-    qPick: TUniQuery;
-    dsPick: TUniDataSource;
     procedure UniFormShow(Sender: TObject);
     procedure btnTamamClick(Sender: TObject);
     procedure btnIptalClick(Sender: TObject);
-    procedure grdPickAjaxEvent(Sender: TComponent; EventName: string; Params: TUniStrings);
+    procedure btnYansitAjaxEvent(Sender: TComponent; EventName: string; Params: TUniStrings);
   private
     FInitLat: Double;
     FInitLng: Double;
     procedure MapHtmlUretVeGoster;
+    procedure CrmHaritaWebKancalari;
     function ParamsStr(const Params: TUniStrings; const Key: string): string;
   public
     { Secim sonrasi doldurulacak kontroller (opsiyonel). }
@@ -53,11 +50,11 @@ uses
   System.IOUtils, System.StrUtils, System.NetEncoding,
   ServerModule,
   CrmMapsConfigU,
-  Main, MainModule;
+  MainModule,
+  uniGUIApplication;
 
-{ Tarayici JS: CrmHaritaSecU.dfm icinde frmCrmHaritaSec.ClientEvents (afterScript)
-  ve btnYansit.ClientEvents (click). UniGUI, ClientEvents.UniEvents.Text ile
-  kodda atama yapildiginda JS'i virgune gore bolerek bozuyor; bu yuzden dfm kullanilir. }
+{ iframe postMessage + taraf Web kancalari UniSession.AddJS ile (uzun ClientEvents dfm
+  RLINK32 hatasi veriyordu). }
 
 function frmCrmHaritaSec: TfrmCrmHaritaSec;
 begin
@@ -124,8 +121,13 @@ begin
     'function crmSetHaritaPick(lat,lng,addr){'#10 +
     'var o={lat:lat,lng:lng,addr:(addr||'''')};'#10 +
     'var s=JSON.stringify(o);'#10 +
-    '{ try{ if(window.parent&&window.parent!==window) window.parent.sessionStorage.setItem(''crmHaritaPick'',s);}catch(e){} }'#10 +
     'try{ sessionStorage.setItem(''crmHaritaPick'',s);}catch(e){}'#10 +
+    'try{'#10 +
+    'if(window.parent&&window.parent!==window){'#10 +
+    'window.parent.sessionStorage.setItem(''crmHaritaPick'',s);'#10 +
+    'window.parent.postMessage({__crmHaritaPick:1,lat:lat,lng:lng,addr:(addr||'''')},''*'');'#10 +
+    '}'#10 +
+    '}catch(e){}'#10 +
     '}'#10 +
     'function initMap(){'#10 +
     'var c={lat:' + FormatFloat('0.######', FInitLat, FS) + ',lng:' + FormatFloat('0.######', FInitLng, FS) + '};'#10 +
@@ -154,6 +156,32 @@ begin
   urlMap.URL := UniServerModule.LocalCacheURL + Fn;
 end;
 
+procedure TfrmCrmHaritaSec.CrmHaritaWebKancalari;
+begin
+  if UniSession = nil then
+    Exit;
+  UniSession.AddJS(
+    'try{' +
+    'if(!window.__crmHaritaPickMsg){window.__crmHaritaPickMsg=1;' +
+    'window.addEventListener("message",function(ev){try{' +
+    'var d=ev.data;if(!d||!d.__crmHaritaPick)return;' +
+    'var o={lat:d.lat,lng:d.lng,addr:(d.addr||"")};' +
+    'sessionStorage.setItem("crmHaritaPick",JSON.stringify(o));' +
+    '}catch(e){}});}' +
+    'Ext.defer(function(){' +
+    'var btn=Ext.ComponentQuery.query("[name=btnYansit]")[0];' +
+    'if(!btn||btn.__crmHaritaYansitHook)return;' +
+    'btn.__crmHaritaYansitHook=1;' +
+    'btn.on("click",function(b){' +
+    'var raw=sessionStorage.getItem("crmHaritaPick");' +
+    'if(!raw&&window.parent&&window.parent!==window){try{raw=window.parent.sessionStorage.getItem("crmHaritaPick");}catch(ex){}}' +
+    'if(!raw){Ext.Msg.alert("Harita","Once haritada bir nokta secin.");return;}' +
+    'var o=JSON.parse(raw);' +
+    'ajaxRequest(b,"mapPick",["lat="+o.lat,"lng="+o.lng,"addr="+encodeURIComponent(o.addr||"")]);' +
+    '});},400);' +
+    '}catch(e){}');
+end;
+
 procedure TfrmCrmHaritaSec.UniFormShow(Sender: TObject);
 begin
   if FInitLat = 0 then
@@ -163,14 +191,11 @@ begin
   edLat.Text := '';
   edLng.Text := '';
   mmAdr.Clear;
-  qPick.Close;
-  qPick.SQL.Text := 'SELECT CAST(1 AS INT) AS KOD WHERE 0 = 1';
-  qPick.Open;
   MapHtmlUretVeGoster;
+  CrmHaritaWebKancalari;
 end;
 
-{ btnYansit tarayicida cBtnYansitClick ile ajaxRequest cagirir; burada karsilanir. }
-procedure TfrmCrmHaritaSec.grdPickAjaxEvent(Sender: TComponent; EventName: string;
+procedure TfrmCrmHaritaSec.btnYansitAjaxEvent(Sender: TComponent; EventName: string;
   Params: TUniStrings);
 var
   LatS, LngS, Addr: string;

@@ -9,13 +9,6 @@ object frmCrmHaritaSec: TfrmCrmHaritaSec
   OldCreateOrder = False
   MonitoredKeys.Keys = <>
   AlignmentControl = uniAlignmentClient
-  ClientEvents.UniEvents.Strings = (
-    
-      'afterScript=function afterScript(sender)'#13#10'{'#13#10' try { var g = wind' +
-      'ow.__crmHaritaGrdBridge; if (!g) g = Ext.ComponentQuery.query('#39'[' +
-      'name=grdPick]'#39')[0]; if (!g) g = Ext.ComponentQuery.query('#39'unidbg' +
-      'rid'#39')[0];'#13#10' if (!g && sender) g = sender.down('#39'unidbgrid'#39'); if (' +
-      'g) window.__crmHaritaGrdBridge = g; } catch (e) { }'#13#10'}')
   Layout = 'fit'
   TextHeight = 15
   object rootPanel: TUniPanel
@@ -89,26 +82,16 @@ object frmCrmHaritaSec: TfrmCrmHaritaSec
       object btnYansit: TUniButton
         Left = 420
         Top = 6
-        Width = 160
+        Width = 189
         Height = 32
         Hint = ''
         Caption = 'Haritayi Forma Yans'#305't'
         TabOrder = 2
         ClientEvents.UniEvents.Strings = (
           
-            'click=function click(sender, e, eOpts)'#13#10'{'#13#10'  var raw = sessionSt' +
-            'orage.getItem('#39'crmHaritaPick'#39');'#13#10'  if (!raw && window.parent && ' +
-            'window.parent !== window) try { raw = window.parent.sessionStora' +
-            'ge.getItem('#39'crmHaritaPick'#39'); } catch (ex) {}'#13#10'  if (!raw) { Ext.' +
-            'Msg.alert('#39'Harita'#39','#39'Once haritada bir nokta secin.'#39'); return;'#13#10' ' +
-            ' }'#13#10'  var o = JSON.parse(raw);'#13#10'  var g = window.__crmHaritaGrdB' +
-            'ridge;'#13#10'  if (!g) g = Ext.ComponentQuery.query('#39'[name=grdPick]'#39')' +
-            '[0];'#13#10'  if (!g) g = Ext.ComponentQuery.query('#39'unidbgrid'#39')[0];'#13#10' ' +
-            ' if (!g && sender && sender.up) g = sender.up('#39'form'#39') && sender.' +
-            'up('#39'form'#39').down('#39'unidbgrid'#39');'#13#10'  if (!g) { Ext.Msg.alert('#39'Hata'#39',' +
-            #39'Kopru yok; sayfayi yenileyin.'#39'); return;'#13#10'  }'#13#10'  ajaxRequest(g,' +
-            ' '#39'mapPick'#39', ['#13#10'    '#39'lat='#39'+o.lat,'#13#10'    '#39'lng='#39'+o.lng,'#13#10'    '#39'addr='#39 +
-            '+encodeURIComponent(o.addr || '#39#39')'#13#10'  ]);'#13#10'}')
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.name' +
+            ' = '#39'btnYansit'#39';'#13#10'}')
+        OnAjaxEvent = btnYansitAjaxEvent
       end
       object lblAdr: TUniLabel
         Left = 12
@@ -152,35 +135,5 @@ object frmCrmHaritaSec: TfrmCrmHaritaSec
         OnClick = btnIptalClick
       end
     end
-    object grdPick: TUniDBGrid
-      Left = 2400
-      Top = 2400
-      Width = 24
-      Height = 24
-      Hint = ''
-      DataSource = dsPick
-      Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect]
-      WebOptions.Paged = False
-      WebOptions.FetchAll = True
-      LoadMask.Message = 'Loading data...'
-      TabOrder = 2
-      OnAjaxEvent = grdPickAjaxEvent
-      Columns = <
-        item
-          FieldName = 'KOD'
-          Title.Caption = 'K'
-          Width = 40
-        end>
-    end
-  end
-  object qPick: TUniQuery
-    Connection = frmDM.conAsya
-    Left = 40
-    Top = 560
-  end
-  object dsPick: TUniDataSource
-    DataSet = qPick
-    Left = 72
-    Top = 560
   end
 end
