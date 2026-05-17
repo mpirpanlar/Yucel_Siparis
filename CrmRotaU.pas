@@ -675,29 +675,33 @@ begin
 end;
 
 procedure TfrmCrmRotaPlan.btnEklePotClick(Sender: TObject);
-var
-  PotForm: TfrmCrmPotansiyelListe;
+//var
+//  PotForm: TfrmCrmPotansiyelListe;
 begin
-  { frmCrmHaritaSec / frmCrmCariSec ile ayni: UniMainModule GetFormInstance + ShowModal.
-    Create(UniApplication) bu projede modalin acilmamasina yol acabiliyor. }
-  PotForm := frmCrmPotansiyelListe;
-  { Menuden acilan liste Create ile baska instance; callback + kaynak yalnizca bu modal liste. }
-  UniMainModule.CrmPotListeSecimKaynakListe := PotForm;
-  UniMainModule.CrmPotListeSecimCallback := PotSecildi;
-  PotForm.SecimToolbarYenile;
-  PotForm.BorderStyle := bsDialog;
-  PotForm.BorderIcons := [biSystemMenu];
-  try
-    PotForm.btnListeleClick(nil);
-    PotForm.ShowModal;
-  finally
-    UniMainModule.CrmPotListeSecimCallback := nil;
-    UniMainModule.CrmPotListeSecimKaynakListe := nil;
-    PotForm.OnPotansiyelSecildi := nil;
-    PotForm.BorderStyle := bsNone;
-    PotForm.BorderIcons := [];
-    PotForm.SecimToolbarYenile;
-  end;
+  { frmCrmCariSec.OnCariSecildi ile ayni: olay bu modal liste orneginde; UniMainModule + Self
+    eslesmesi menudeki xFormShow(Create) ile GetFormInstance farki yuzunden kiriliyordu. }
+//  PotForm := frmCrmPotansiyelListe;
+//  PotForm.HedefPotansiyelIdEdit := nil;
+//  PotForm.OnPotansiyelSecildi := PotSecildi;
+//  PotForm.SecimToolbarYenile;
+//  PotForm.BorderStyle := bsDialog;
+//  PotForm.BorderIcons := [biSystemMenu];
+//  try
+//    PotForm.btnListeleClick(nil);
+//    PotForm.ShowModal;
+//  finally
+//    PotForm.OnPotansiyelSecildi := nil;
+//    PotForm.BorderStyle := bsNone;
+//    PotForm.BorderIcons := [];
+//    PotForm.SecimToolbarYenile;
+//  end;
+
+  frmCrmPotansiyelListe.HedefPotansiyelIdEdit := nil;
+  frmCrmPotansiyelListe.OnPotansiyelSecildi := PotSecildi;
+  frmCrmPotansiyelListe.edFiltUnvan.Text;
+  frmCrmPotansiyelListe.ShowModal;
+
+
 end;
 
 procedure TfrmCrmRotaPlan.btnDurakSilClick(Sender: TObject);

@@ -7,7 +7,8 @@ uses
   uniGUIForm, uniSweetAlert, uniImageList;
 
 type
-  { Rota plan: potansiyel listesinden secim; menude Create edilen form ile GetFormInstance ayni olmayabilir. }
+  { Rota artik CrmPotansiyelListe.OnPotansiyelSecildi kullanir (CrmCariSec ile ayni mantik).
+    Menudeki liste xFormShow ile Create edilen baska ornek olabilir; MainModule.Form karsilastirmasi kiriliyordu. }
   TCrmPotListeSecildiEvent = procedure(Sender: TObject; APotansiyelId: Int64) of object;
 
   TUniMainModule = class(TUniGUIMainModule)

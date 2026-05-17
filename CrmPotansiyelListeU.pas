@@ -42,16 +42,21 @@ type
     procedure grdCellClick(Column: TUniDBGridColumn);
     procedure UniFormDestroy(Sender: TObject);
   private
-    FOnPotansiyelSecildi: TCrmPotListeSecildiEvent;
-    procedure SetOnPotansiyelSecildi(const Value: TCrmPotListeSecildiEvent);
+    function SecimModuAktif: Boolean;
     procedure SecimModuToolbarGuncelle;
     procedure FiltreDurumlariDoldur;
+    procedure PotansiyelSecVeKapat;
+    function PotSeciliPotansiyelId(out APotId: Int64): Boolean;
     procedure AcKayit;
     function GomuluNavSekmesiMi: Boolean;
+    { NavPage sekmesindeki liste (bsNone); rota modalinda bsDialog -> sekme kapatilmaz, yalnizca form Close. }
+    function KapatirkenSekmeKaldir: Boolean;
   public
+    { CrmCariSecU.HedefCariEdit benzeri: ShowModal oncesi atanir, Satir sec ile POTANSIYEL_ID yazilir. }
+    HedefPotansiyelIdEdit: TUniEdit;
+    { CrmCariSecU.OnCariSecildi ile ayni: method pointer dogrudan atanir. }
+    OnPotansiyelSecildi: TCrmPotListeSecildiEvent;
     procedure SecimToolbarYenile;
-    { Rota: callback ile durak secer; normal listede de kayit acar (Kaydi ac ile ayni). }
-    property OnPotansiyelSecildi: TCrmPotListeSecildiEvent read FOnPotansiyelSecildi write SetOnPotansiyelSecildi;
   end;
 
 function frmCrmPotansiyelListe: TfrmCrmPotansiyelListe;
@@ -69,15 +74,21 @@ begin
   Result := TfrmCrmPotansiyelListe(UniMainModule.GetFormInstance(TfrmCrmPotansiyelListe));
 end;
 
-procedure TfrmCrmPotansiyelListe.SetOnPotansiyelSecildi(const Value: TCrmPotListeSecildiEvent);
+function TfrmCrmPotansiyelListe.KapatirkenSekmeKaldir: Boolean;
 begin
-  FOnPotansiyelSecildi := Value;
-  SecimModuToolbarGuncelle;
+  Result := GomuluNavSekmesiMi and (BorderStyle <> bsDialog);
 end;
 
 procedure TfrmCrmPotansiyelListe.SecimToolbarYenile;
 begin
   SecimModuToolbarGuncelle;
+end;
+
+function TfrmCrmPotansiyelListe.SecimModuAktif: Boolean;
+begin
+  Result :=
+    Assigned(HedefPotansiyelIdEdit) or Assigned(OnPotansiyelSecildi) or
+    (Assigned(UniMainModule.CrmPotListeSecimCallback) and (UniMainModule.CrmPotListeSecimKaynakListe = Self));
 end;
 
 procedure TfrmCrmPotansiyelListe.SecimModuToolbarGuncelle;
@@ -86,8 +97,7 @@ const
   RowBtnSecim = 36;
   lblTop = 4;
 begin
-  if Assigned(FOnPotansiyelSecildi) or
-    (Assigned(UniMainModule.CrmPotListeSecimCallback) and (UniMainModule.CrmPotListeSecimKaynakListe = Self)) then
+  if SecimModuAktif then
   begin
     pnlToolbar.Height := 76;
     lblSecimBilgi.Visible := True;
@@ -103,7 +113,7 @@ begin
     btnSatirSec.Visible := True;
     btnSatirSec.Enabled := True;
     btnSatirSec.Hint :=
-      'Izgarada isaretli satiri rota duragi olarak alir ve pencereyi kapatir';
+      'Secili satirin POTANSIYEL_ID degerini cagiran forma aktarir ve listeyi kapatir';
     btnSatirSec.Top := RowBtnSecim;
     btnSatirSec.Left := 120;
     btnSatirSec.Width := 150;
@@ -124,7 +134,8 @@ begin
     lblSecimBilgi.Visible := False;
     btnSatirSec.Visible := True;
     btnSatirSec.Enabled := True;
-    btnSatirSec.Hint := 'Secili potansiyel kaydini acar (Kaydi ac ile ayni)';
+    btnSatirSec.Hint :=
+      'Secim modunda: POTANSIYEL_ID yi cagiran forma aktarip listeyi kapatir. Kayit detayi icin Kaydi ac veya cift tik.';
     btnSatirSec.Left := 246;
     btnSatirSec.Width := 140;
     btnSatirSec.Height := 32;
@@ -167,46 +178,74 @@ begin
   cbFiltDurum.ItemIndex := 0;
 end;
 
-procedure TfrmCrmPotansiyelListe.AcKayit;
+function TfrmCrmPotansiyelListe.PotSeciliPotansiyelId(out APotId: Int64): Boolean;
 var
   F: TField;
-  PotId: Int64;
 begin
+  Result := False;
+  APotId := 0;
   if qList.Active then
     qList.CheckBrowseMode;
   if not qList.Active or qList.IsEmpty then
+    Exit;
+  F := qList.FindField('POTANSIYEL_ID');
+  if (F = nil) or F.IsNull then
+    Exit;
+  APotId := F.AsLargeInt;
+  if APotId <= 0 then
+    APotId := F.AsInteger;
+  Result := APotId > 0;
+end;
+
+procedure TfrmCrmPotansiyelListe.PotansiyelSecVeKapat;
+var
+  PotId: Int64;
+begin
+  if not PotSeciliPotansiyelId(PotId) then
   begin
     UniMainModule.saHata.Show('Once listele yapin ve bir satir secin.');
     Exit;
   end;
-  F := qList.FindField('POTANSIYEL_ID');
-  if (F = nil) or F.IsNull then
-    Exit;
-  PotId := F.AsLargeInt;
-  if PotId <= 0 then
-    PotId := F.AsInteger;
-  if PotId <= 0 then
-    Exit;
-  if Assigned(FOnPotansiyelSecildi) then
-  begin
-    FOnPotansiyelSecildi(Self, PotId);
-    SetOnPotansiyelSecildi(nil);
-    Close;
-    Exit;
-  end;
+//  if not SecimModuAktif then
+//  begin
+//    UniMainModule.saHata.Show(
+//      'Satir sec yalnizca potansiyel kimligini baska forma aktarmak icin kullanilir (cagiran tarafta hedef veya secim olayi). ' +
+//      'Kaydi acmak icin Kaydi ac veya satira cift tiklayin.');
+//    Exit;
+//  end;
+
+  if Assigned(HedefPotansiyelIdEdit) then
+    HedefPotansiyelIdEdit.Text := IntToStr(PotId);
+
+  if Assigned(OnPotansiyelSecildi) then
+    OnPotansiyelSecildi(Self, PotId);
+
   if Assigned(UniMainModule.CrmPotListeSecimCallback) and (UniMainModule.CrmPotListeSecimKaynakListe = Self) then
   begin
     UniMainModule.CrmPotListeSecimCallback(Self, PotId);
     UniMainModule.CrmPotListeSecimCallback := nil;
     UniMainModule.CrmPotListeSecimKaynakListe := nil;
-    SetOnPotansiyelSecildi(nil);
-    if GomuluNavSekmesiMi then
-    begin
-      if (MainForm <> nil) and (MainForm.NavPage <> nil) and (MainForm.NavPage.ActivePage <> nil) then
-        MainForm.NavPage.ActivePage.Close;
-    end
-    else
-      Close;
+  end;
+
+  OnPotansiyelSecildi := nil;
+  HedefPotansiyelIdEdit := nil;
+
+  if KapatirkenSekmeKaldir then
+  begin
+    if (MainForm <> nil) and (MainForm.NavPage <> nil) and (MainForm.NavPage.ActivePage <> nil) then
+      MainForm.NavPage.ActivePage.Close;
+  end
+  else
+    Close;
+end;
+
+procedure TfrmCrmPotansiyelListe.AcKayit;
+var
+  PotId: Int64;
+begin
+  if not PotSeciliPotansiyelId(PotId) then
+  begin
+    UniMainModule.saHata.Show('Once listele yapin ve bir satir secin.');
     Exit;
   end;
   xFormShow(TfrmCrmPotansiyel, 'CrmYeniPotansiyel', 1, IntToStr(PotId));
@@ -214,7 +253,8 @@ end;
 
 procedure TfrmCrmPotansiyelListe.UniFormDestroy(Sender: TObject);
 begin
-  FOnPotansiyelSecildi := nil;
+  OnPotansiyelSecildi := nil;
+  HedefPotansiyelIdEdit := nil;
   if UniMainModule.CrmPotListeSecimKaynakListe = Self then
   begin
     UniMainModule.CrmPotListeSecimCallback := nil;
@@ -229,7 +269,7 @@ end;
 
 procedure TfrmCrmPotansiyelListe.btnSatirSecClick(Sender: TObject);
 begin
-  AcKayit;
+  PotansiyelSecVeKapat;
 end;
 
 procedure TfrmCrmPotansiyelListe.btnYeniClick(Sender: TObject);
@@ -259,15 +299,16 @@ procedure TfrmCrmPotansiyelListe.btnKapatClick(Sender: TObject);
 var
   MF: TMainForm;
 begin
-  if Assigned(FOnPotansiyelSecildi) then
-    SetOnPotansiyelSecildi(nil);
+  HedefPotansiyelIdEdit := nil;
+  OnPotansiyelSecildi := nil;
+  SecimModuToolbarGuncelle;
   if UniMainModule.CrmPotListeSecimKaynakListe = Self then
   begin
     UniMainModule.CrmPotListeSecimCallback := nil;
     UniMainModule.CrmPotListeSecimKaynakListe := nil;
   end;
-  { Sadece CRM NavPage sekmesine gomulu liste: sekmeyi kaldir. Modal (rota vb.) her zaman formu kapat. }
-  if GomuluNavSekmesiMi then
+  { Sadece CRM NavPage sekmesine gomulu liste (modal degil): sekmeyi kaldir. }
+  if KapatirkenSekmeKaldir then
   begin
     MF := MainForm;
     if (MF <> nil) and (MF.NavPage <> nil) and (MF.NavPage.ActivePage <> nil) then
@@ -322,7 +363,12 @@ begin
       qList.CheckBrowseMode;
   end
   else if SameText(EventName, 'celldblclick') then
-    AcKayit;
+  begin
+    if SecimModuAktif then
+      PotansiyelSecVeKapat
+    else
+      AcKayit;
+  end;
 end;
 
 procedure TfrmCrmPotansiyelListe.UniFormShow(Sender: TObject);
