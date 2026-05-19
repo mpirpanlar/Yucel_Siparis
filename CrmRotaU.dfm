@@ -3,7 +3,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
   Top = 0
   ClientHeight = 700
   ClientWidth = 1020
-  Caption = 'CRM - Rota plani'
+  Caption = 'CRM - Rota plan'#305
   OnShow = UniFormShow
   BorderStyle = bsNone
   OldCreateOrder = False
@@ -40,7 +40,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         Width = 30
         Height = 13
         Hint = ''
-        Caption = 'Baslik'
+        Caption = 'Ba'#351'l'#305'k'
         TabOrder = 12
       end
       object edBaslik: TUniEdit
@@ -116,7 +116,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         Width = 67
         Height = 13
         Hint = ''
-        Caption = 'Uyari esik km'
+        Caption = 'Uyar'#305' e'#351'ik km'
         TabOrder = 16
       end
       object edEsikKm: TUniEdit
@@ -134,7 +134,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         Width = 226
         Height = 13
         Hint = ''
-        Caption = '(Rota eksenine gore capraz sapma uyaris'#196#177')'
+        Caption = '(Rota eksenine g'#246're '#231'apraz sapma uyar'#305's'#305')'
         TabOrder = 17
       end
       object lblBasE: TUniLabel
@@ -143,7 +143,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         Width = 83
         Height = 13
         Hint = ''
-        Caption = 'Baslangic GPS X'
+        Caption = 'Ba'#351'lang'#305#231' GPS X'
         TabOrder = 18
       end
       object edBasEnlem: TUniEdit
@@ -189,7 +189,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         Width = 56
         Height = 13
         Hint = ''
-        Caption = 'Bitis enlem'
+        Caption = 'Biti'#351' enlem'
         TabOrder = 20
       end
       object edBitEnlem: TUniEdit
@@ -277,7 +277,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         Width = 120
         Height = 28
         Hint = ''
-        Caption = 'Uyarilari yenile'
+        Caption = 'Uyar'#305'lar'#305' yenile'
         TabOrder = 3
         OnClick = btnUyariYenileClick
       end
@@ -286,8 +286,8 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         Top = 8
         Width = 72
         Height = 28
-        Hint = 'Secili duragi yukari tasi'
-        Caption = 'Yukari'
+        Hint = 'Se'#231'ili dura'#287#305' yukar'#305' ta'#351#305
+        Caption = 'Yukar'#305
         TabOrder = 4
         OnClick = btnDurakYukariClick
       end
@@ -296,8 +296,8 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         Top = 8
         Width = 72
         Height = 28
-        Hint = 'Secili duragi asagi tasi'
-        Caption = 'Asagi'
+        Hint = 'Se'#231'ili dura'#287#305' a'#351'a'#287#305' ta'#351#305
+        Caption = 'A'#351'a'#287#305
         TabOrder = 5
         OnClick = btnDurakAsagiClick
       end
@@ -306,8 +306,8 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         Top = 8
         Width = 120
         Height = 28
-        Hint = 'Baslangic GPS noktasina gore mesafe sirasi'
-        Caption = 'Otomatik sirala'
+        Hint = 'Ba'#351'lang'#305#231' GPS noktas'#305'na g'#246're mesafe s'#305'ras'#305
+        Caption = 'Otomatik s'#305'rala'
         TabOrder = 6
         OnClick = btnOtomatikSiralaClick
       end
@@ -316,8 +316,8 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         Top = 8
         Width = 160
         Height = 28
-        Hint = 'Tum duraklar icin gorev olustur veya guncelle'
-        Caption = 'Gorevleri olustur'
+        Hint = 'T'#252'm duraklar i'#231'in g'#246'rev olu'#351'tur veya g'#252'ncelle'
+        Caption = 'G'#246'revleri olu'#351'tur'
         TabOrder = 7
         OnClick = btnGorevOlusturClick
       end
@@ -354,7 +354,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         Width = 180
         Height = 36
         Hint = ''
-        Caption = 'Rotayi haritada'
+        Caption = 'Rotay'#305' haritada'
         TabOrder = 1
         OnClick = btnRotaHaritaClick
       end
@@ -380,13 +380,13 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       ReadOnly = True
       WebOptions.Paged = False
       WebOptions.FetchAll = True
-      LoadMask.Message = 'Loading data...'
+      LoadMask.Message = 'Y'#252'kleniyor...'
       Align = alClient
       TabOrder = 2
       Columns = <
         item
           FieldName = 'SIRA'
-          Title.Caption = 'Sira'
+          Title.Caption = 'S'#305'ra'
           Width = 45
           ReadOnly = True
         end
@@ -410,19 +410,19 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         end
         item
           FieldName = 'UNVAN'
-          Title.Caption = 'Unvan'
+          Title.Caption = #220'nvan'
           Width = 180
           ReadOnly = True
         end
         item
           FieldName = 'IL'
-          Title.Caption = 'Il'
+          Title.Caption = #304'l'
           Width = 70
           ReadOnly = True
         end
         item
           FieldName = 'ILCE'
-          Title.Caption = 'Ilce'
+          Title.Caption = #304'l'#231'e'
           Width = 80
           ReadOnly = True
         end
@@ -440,7 +440,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         end
         item
           FieldName = 'UYARI'
-          Title.Caption = 'Uyari'
+          Title.Caption = 'Uyar'#305
           Width = 240
           ReadOnly = True
         end>

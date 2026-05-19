@@ -266,11 +266,11 @@ var
   FDurak: TField;
 begin
   if (qTmp = nil) or (not qTmp.Active) then
-    raise Exception.Create('Durak sorgusu acik degil; satir okunamadi.');
+    raise Exception.Create('Durak sorgusu a'#231#305'k de'#287'il; sat'#305'r okunamad'#305'.');
 
   FDurak := QF('DURAK_ID');
   if FDurak = nil then
-    raise Exception.Create('DURAK_ID alani bulunamadi (durak sorgu kolonlari kontrol edin).');
+    raise Exception.Create('DURAK_ID alan'#305' bulunamad'#305' (durak sorgu kolonlar'#305' kontrol edin).');
 
   It := TRotaDurakItem.Create;
   try
@@ -303,7 +303,7 @@ begin
       FDuraklar.Add(It);
     except
       on E: Exception do
-        raise Exception.CreateFmt('Durak satiri okunamadi (sira=%d): %s',
+        raise Exception.CreateFmt('Durak sat'#305'r'#305' okunamad'#305' (s'#305'ra=%d): %s',
           [It.Sira, E.Message]);
     end;
   except
@@ -409,7 +409,7 @@ var
 begin
   EnsureDuraklarList;
   FRotaId := 0;
-  Caption := 'Yeni rota plani';
+  Caption := 'Yeni rota plan'#305;
   edBaslik.Text := '';
   mmDetay.Clear;
   dtPlan.DateTime := Date;
@@ -441,7 +441,7 @@ begin
   if qLoad.IsEmpty then
   begin
     qLoad.Close;
-    UniMainModule.saHata.Show('Kayit yok.');
+    UniMainModule.saHata.Show('Kay'#305't yok.');
     YeniKayit;
     Exit;
   end;
@@ -485,7 +485,7 @@ begin
   qLoad.Close;
 
   DuraklariVeritabanindanYukle;
-  Caption := 'Rota plani';
+  Caption := 'Rota plan'#305;
   GridYenile;
   except
     on E: Exception do
@@ -493,7 +493,7 @@ begin
       qLoad.Close;
       qTmp.Close;
       qGrid.Close;
-      UniMainModule.saHata.Show('Rota yuklenemedi.'#13#10 + E.Message);
+      UniMainModule.saHata.Show('Rota y'#252'klenemedi.'#13#10 + E.Message);
       YeniKayit;
     end;
   end;
@@ -559,7 +559,7 @@ begin
       qGrid.Close;
       qGrid.SQL.Text := 'SELECT CAST(NULL AS INT) AS SIRA WHERE 0 = 1';
       qGrid.Open;
-      UniMainModule.saHata.Show('Durak listesi gosterilemedi.'#13#10 + E.Message);
+      UniMainModule.saHata.Show('Durak listesi g'#246'sterilemedi.'#13#10 + E.Message);
     end;
   end;
 end;
@@ -641,7 +641,7 @@ begin
   if qNetsis.IsEmpty then
   begin
     qNetsis.Close;
-    UniMainModule.saHata.Show('Cari HV listesinde bulunamadi: ' + Ck);
+    UniMainModule.saHata.Show('Cari HV listesinde bulunamad'#305': ' + Ck);
     Exit;
   end;
   CIsim := qNetsis.FieldByName('CARI_ISIM').AsString;
@@ -699,7 +699,7 @@ begin
   if qTmp.IsEmpty then
   begin
     qTmp.Close;
-    UniMainModule.saHata.Show('Potansiyel bulunamadi.');
+    UniMainModule.saHata.Show('Potansiyel bulunamad'#305'.');
     Exit;
   end;
   It := TRotaDurakItem.Create;
@@ -878,7 +878,7 @@ var
 begin
   if Trim(edBaslik.Text) = '' then
   begin
-    UniMainModule.saHata.Show('Baslik zorunlu.');
+    UniMainModule.saHata.Show('Ba'#351'l'#305'k zorunlu.');
     Exit;
   end;
   if (cbDurum.ItemIndex < 0) or (cbDurum.ItemIndex > 2) then
@@ -1014,7 +1014,7 @@ var
 begin
   if not qGrid.Active or qGrid.IsEmpty then
   begin
-    UniMainModule.saHata.Show('Once durak secin.');
+    UniMainModule.saHata.Show(#214'nce durak se'#231'in.');
     Exit;
   end;
   Sr := qGrid.FieldByName('SIRA').AsInteger;
@@ -1109,7 +1109,7 @@ begin
     Exit;
   if (Abs(BasLat) < 1E-9) and (Abs(BasLng) < 1E-9) then
   begin
-    UniMainModule.saHata.Show('Otomatik siralama icin rota baslangic GPS (X/Y) giriniz.');
+    UniMainModule.saHata.Show('Otomatik s'#305'ralama i'#231'in rota ba'#351'lang'#305#231' GPS (X/Y) giriniz.');
     Exit;
   end;
   SetLength(Lats, N);
@@ -1210,13 +1210,13 @@ begin
   if AIt = nil then
     Exit;
   if FRotaId <= 0 then
-    raise Exception.Create('Once rotayi kaydedin.');
+    raise Exception.Create(#214'nce rotay'#305' kaydedin.');
   TaskTid := GorevTipId;
   DurId := GorevDurumIdAcik;
   if TaskTid <= 0 then
-    raise Exception.Create('CRM TASK aktivite tipi bulunamadi.');
+    raise Exception.Create('CRM TASK aktivite tipi bulunamad'#305'.');
   if DurId <= 0 then
-    raise Exception.Create('CRM ACIK durum kaydi bulunamadi.');
+    raise Exception.Create('CRM ACIK durum kayd'#305' bulunamad'#305'.');
 
   Konu := Format('Rota: %s - Durak %d: %s', [Trim(edBaslik.Text), AIt.Sira, Trim(AIt.Unvan)]);
   Acik := Format('Rota plani #%d durak ziyareti. %s', [FRotaId, Trim(AIt.Adres)]);
@@ -1301,7 +1301,7 @@ begin
     Aid := qExec.Fields[0].AsLargeInt;
   qExec.Close;
   if Aid <= 0 then
-    raise Exception.Create('Gorev aktivitesi olusturulamadi.');
+    raise Exception.Create('G'#246'rev aktivitesi olu'#351'turulamad'#305'.');
 
   qExec.Close;
   qExec.SQL.Text :=
@@ -1333,7 +1333,7 @@ procedure TfrmCrmRotaPlan.btnOtomatikSiralaClick(Sender: TObject);
 begin
   try
     OtomatikSiralaMesafe;
-    UniMainModule.saKaydet.Show('Duraklar baslangic noktasina gore mesafe sirasina gore duzenlendi.');
+    UniMainModule.saKaydet.Show('Duraklar ba'#351'lang'#305#231' noktas'#305'na g'#246're mesafe s'#305'ras'#305'na g'#246're d'#252'zenlendi.');
   except
     on E: Exception do
       UniMainModule.saHata.Show(E.Message);
@@ -1347,12 +1347,12 @@ var
 begin
   if FRotaId <= 0 then
   begin
-    UniMainModule.saHata.Show('Once rotayi kaydedin, sonra gorev olusturun.');
+    UniMainModule.saHata.Show(#214'nce rotay'#305' kaydedin, sonra g'#246'rev olu'#351'turun.');
     Exit;
   end;
   if FDuraklar.Count = 0 then
   begin
-    UniMainModule.saHata.Show('Gorev olusturmak icin en az bir durak ekleyin.');
+    UniMainModule.saHata.Show('G'#246'rev olu'#351'turmak i'#231'in en az bir durak ekleyin.');
     Exit;
   end;
   N := 0;
@@ -1367,10 +1367,10 @@ begin
     end;
     PersistDuraklar;
     GridYenile;
-    UniMainModule.saKaydet.Show(Format('%d durak icin gorev olusturuldu veya guncellendi.', [N]));
+    UniMainModule.saKaydet.Show(Format('%d durak i'#231'in g'#246'rev olu'#351'turuldu veya g'#252'ncellendi.', [N]));
   except
     on E: Exception do
-      UniMainModule.saHata.Show('Gorev olusturma hatasi: ' + E.Message);
+      UniMainModule.saHata.Show('G'#246'rev olu'#351'turma hatas'#305': ' + E.Message);
   end;
 end;
 
@@ -1426,13 +1426,13 @@ begin
   Pts := HaritaNoktaListesiJson;
   if Pts = '' then
   begin
-    UniMainModule.saHata.Show('Harita icin en az iki gecerli koordinat gerekir (baslangic, durak veya bitis).');
+    UniMainModule.saHata.Show('Harita i'#231'in en az iki ge'#231'erli koordinat gerekir (ba'#351'lang'#305#231', durak veya biti'#351').');
     Exit;
   end;
   Key := Trim(CrmGoogleMapsBrowserApiKey);
   if (Key = '') or SameText(Key, 'YOUR_BROWSER_KEY_HERE') then
   begin
-    UniMainModule.saHata.Show('Google Maps anahtari CrmMapsConfigU icinde tanimlanmali.');
+    UniMainModule.saHata.Show('Google Maps anahtar'#305' CrmMapsConfigU i'#231'inde tan'#305'mlanmal'#305'.');
     Exit;
   end;
   Fn := 'crm_rota_' + IntToStr(GetTickCount) + '.html';
