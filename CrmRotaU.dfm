@@ -143,7 +143,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         Width = 83
         Height = 13
         Hint = ''
-        Caption = 'Baslangic enlem'
+        Caption = 'Baslangic GPS X'
         TabOrder = 18
       end
       object edBasEnlem: TUniEdit
@@ -161,7 +161,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         Width = 37
         Height = 13
         Hint = ''
-        Caption = 'boylam'
+        Caption = 'GPS Y'
         TabOrder = 19
       end
       object edBasBoylam: TUniEdit
@@ -274,12 +274,52 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       object btnUyariYenile: TUniButton
         Left = 432
         Top = 8
-        Width = 140
+        Width = 120
         Height = 28
         Hint = ''
         Caption = 'Uyarilari yenile'
         TabOrder = 3
         OnClick = btnUyariYenileClick
+      end
+      object btnDurakYukari: TUniButton
+        Left = 560
+        Top = 8
+        Width = 72
+        Height = 28
+        Hint = 'Secili duragi yukari tasi'
+        Caption = 'Yukari'
+        TabOrder = 4
+        OnClick = btnDurakYukariClick
+      end
+      object btnDurakAsagi: TUniButton
+        Left = 638
+        Top = 8
+        Width = 72
+        Height = 28
+        Hint = 'Secili duragi asagi tasi'
+        Caption = 'Asagi'
+        TabOrder = 5
+        OnClick = btnDurakAsagiClick
+      end
+      object btnOtomatikSirala: TUniButton
+        Left = 716
+        Top = 8
+        Width = 120
+        Height = 28
+        Hint = 'Baslangic GPS noktasina gore mesafe sirasi'
+        Caption = 'Otomatik sirala'
+        TabOrder = 6
+        OnClick = btnOtomatikSiralaClick
+      end
+      object btnGorevOlustur: TUniButton
+        Left = 844
+        Top = 8
+        Width = 160
+        Height = 28
+        Hint = 'Tum duraklar icin gorev olustur veya guncelle'
+        Caption = 'Gorevleri olustur'
+        TabOrder = 7
+        OnClick = btnGorevOlusturClick
       end
     end
     object panFooter: TUniPanel

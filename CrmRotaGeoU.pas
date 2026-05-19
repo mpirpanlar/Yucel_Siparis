@@ -11,6 +11,10 @@ function CrmCrossTrackDistanceKm(LatP, LngP, LatA, LngA, LatB, LngB: Double): Do
 { Esik asilirsa aciklayici metin; bos ise uyari yok / kontrol yapilmadi. }
 function CrmRotaKoridorUyari(const UyariEsikKm: Integer;
   LatP, LngP, LatA, LngA, LatB, LngB: Double): string;
+{ Baslangic noktasindan en yakin komsu (nearest neighbor) ile durak sirasi uretir.
+  AIndices: FDuraklar indeksleri; cikti uzunlugu = giris. }
+procedure CrmRotaSiralaEnYakinKomsu(const BasLa, BasLn: Double;
+  const Lats, Lngs: array of Double; AOrder: TArray<Integer>);
 
 implementation
 
@@ -78,6 +82,60 @@ begin
     Exit;
   Result := Format('Rota ekseninden uzak (yaklasik %.0f km; esik %d km). Isterseniz ekleyebilirsiniz.',
     [D, UyariEsikKm]);
+end;
+
+procedure CrmRotaSiralaEnYakinKomsu(const BasLa, BasLn: Double;
+  const Lats, Lngs: array of Double; AOrder: TArray<Integer>);
+var
+  Used: TArray<Boolean>;
+  CurLa, CurLn, BestD, D: Double;
+  I, J, BestJ, OutIdx, Cnt: Integer;
+begin
+  Cnt := Length(Lats);
+  if (Cnt <= 0) or (Cnt <> Length(Lngs)) then
+    Exit;
+  SetLength(Used, Cnt);
+  for I := 0 to Cnt - 1 do
+    Used[I] := False;
+  CurLa := BasLa;
+  CurLn := BasLn;
+  OutIdx := 0;
+  while OutIdx < Cnt do
+  begin
+    BestJ := -1;
+    BestD := MaxDouble;
+    for J := 0 to Cnt - 1 do
+    begin
+      if Used[J] then
+        Continue;
+      if (Abs(Lats[J]) < 1E-9) and (Abs(Lngs[J]) < 1E-9) then
+        D := MaxDouble
+      else
+        D := CrmHaversineKm(CurLa, CurLn, Lats[J], Lngs[J]);
+      if D < BestD then
+      begin
+        BestD := D;
+        BestJ := J;
+      end;
+    end;
+    if BestJ < 0 then
+    begin
+      for J := 0 to Cnt - 1 do
+        if not Used[J] then
+        begin
+          BestJ := J;
+          Break;
+        end;
+    end;
+    Used[BestJ] := True;
+    AOrder[OutIdx] := BestJ;
+    Inc(OutIdx);
+    if (Abs(Lats[BestJ]) > 1E-9) or (Abs(Lngs[BestJ]) > 1E-9) then
+    begin
+      CurLa := Lats[BestJ];
+      CurLn := Lngs[BestJ];
+    end;
+  end;
 end;
 
 end.

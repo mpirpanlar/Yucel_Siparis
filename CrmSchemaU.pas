@@ -9,7 +9,7 @@ uses
   DBAccess, Uni;
 
 const
-  CRM_SCHEMA_TARGET_VERSION = 14;
+  CRM_SCHEMA_TARGET_VERSION = 15;
 
 procedure CrmEnsureDatabase(AConn: TUniConnection);
 
@@ -876,6 +876,92 @@ begin
     'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (14, ''PARAMETRE.NETSIS_CARI_SABLON (Netsis cari kod sablonu)'')');
 end;
 
+procedure CrmSchemaApplyMigration15(AConn: TUniConnection);
+begin
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.PARAMETRE'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.PARAMETRE'', ''GPSX'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.PARAMETRE ADD GPSX DECIMAL(18,8) NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.PARAMETRE'', ''GPSY'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.PARAMETRE ADD GPSY DECIMAL(18,8) NULL');
+  end;
+
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.CRM_ROTA_PLAN'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN'', ''GPSX'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN ADD GPSX DECIMAL(18,8) NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN'', ''GPSY'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN ADD GPSY DECIMAL(18,8) NULL');
+    CrmExec(AConn,
+      'UPDATE dbo.CRM_ROTA_PLAN SET GPSX = BASLANGIC_ENLEM, GPSY = BASLANGIC_BOYLAM ' +
+      'WHERE GPSX IS NULL AND BASLANGIC_ENLEM IS NOT NULL');
+    CrmExec(AConn,
+      'UPDATE dbo.CRM_ROTA_PLAN SET GPSY = BASLANGIC_BOYLAM ' +
+      'WHERE GPSY IS NULL AND BASLANGIC_BOYLAM IS NOT NULL');
+  end;
+
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.CRM_ROTA_PLAN_DURAK'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN_DURAK'', ''GOREV_ID'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN_DURAK ADD GOREV_ID BIGINT NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN_DURAK'', ''GPSX'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN_DURAK ADD GPSX DECIMAL(18,8) NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN_DURAK'', ''GPSY'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN_DURAK ADD GPSY DECIMAL(18,8) NULL');
+    CrmExec(AConn,
+      'UPDATE dbo.CRM_ROTA_PLAN_DURAK SET GPSX = GPS_ENLEM, GPSY = GPS_BOYLAM ' +
+      'WHERE GPSX IS NULL AND GPS_ENLEM IS NOT NULL');
+    CrmExec(AConn,
+      'UPDATE dbo.CRM_ROTA_PLAN_DURAK SET GPSY = GPS_BOYLAM ' +
+      'WHERE GPSY IS NULL AND GPS_BOYLAM IS NOT NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN OBJECT_ID(''dbo.CRM_GOREV'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+    begin
+      if CrmScalarInt(AConn,
+        'SELECT COUNT(*) FROM sys.foreign_keys WHERE name = ''FK_CRM_ROTA_DURAK_GOREV'' ' +
+        'AND parent_object_id = OBJECT_ID(''dbo.CRM_ROTA_PLAN_DURAK'')') = 0 then
+        CrmExec(AConn,
+          'ALTER TABLE dbo.CRM_ROTA_PLAN_DURAK WITH CHECK ADD CONSTRAINT FK_CRM_ROTA_DURAK_GOREV ' +
+          'FOREIGN KEY (GOREV_ID) REFERENCES dbo.CRM_GOREV (GOREV_ID) ON DELETE SET NULL');
+    end;
+    if CrmScalarInt(AConn,
+      'SELECT COUNT(*) FROM sys.indexes WHERE name = ''IX_CRM_ROTA_DURAK_GOREV'' ' +
+      'AND object_id = OBJECT_ID(''dbo.CRM_ROTA_PLAN_DURAK'')') = 0 then
+      CrmExec(AConn,
+        'CREATE INDEX IX_CRM_ROTA_DURAK_GOREV ON dbo.CRM_ROTA_PLAN_DURAK (GOREV_ID) WHERE GOREV_ID IS NOT NULL');
+  end;
+
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.CRM_AKTIVITE'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_AKTIVITE'', ''ROTA_ID'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_AKTIVITE ADD ROTA_ID BIGINT NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_AKTIVITE'', ''ROTA_DURAK_ID'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_AKTIVITE ADD ROTA_DURAK_ID BIGINT NULL');
+    if CrmScalarInt(AConn,
+      'SELECT COUNT(*) FROM sys.indexes WHERE name = ''IX_CRM_AKT_ROTA'' ' +
+      'AND object_id = OBJECT_ID(''dbo.CRM_AKTIVITE'')') = 0 then
+      CrmExec(AConn,
+        'CREATE INDEX IX_CRM_AKT_ROTA ON dbo.CRM_AKTIVITE (ROTA_ID, ROTA_DURAK_ID) WHERE ROTA_ID IS NOT NULL');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 15) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (15, ''Rota GPSX/GPSY, durak GOREV_ID, aktivite rota referansi'')');
+end;
+
 procedure CrmSchemaApplyMigration(const AConn: TUniConnection; AVersion: Integer);
 begin
   case AVersion of
@@ -893,6 +979,7 @@ begin
     12: CrmSchemaApplyMigration12(AConn);
     13: CrmSchemaApplyMigration13(AConn);
     14: CrmSchemaApplyMigration14(AConn);
+    15: CrmSchemaApplyMigration15(AConn);
   else
     raise Exception.CreateFmt('CRM sema: bilinmeyen migrasyon surumu %d', [AVersion]);
   end;
