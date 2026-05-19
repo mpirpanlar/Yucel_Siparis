@@ -106,6 +106,7 @@ type
     edNetsis: TUniEdit;
     btnCariBul: TUniButton;
     btnNetsisTemizle: TUniButton;
+    btnNetsisCariOlustur: TUniButton;
     qLoad: TUniQuery;
     qExec: TUniQuery;
     qDurLkp: TUniQuery;
@@ -115,6 +116,7 @@ type
     procedure btnKapatClick(Sender: TObject);
     procedure btnCariBulClick(Sender: TObject);
     procedure btnNetsisTemizleClick(Sender: TObject);
+    procedure btnNetsisCariOlusturClick(Sender: TObject);
     procedure btnHaritaKonumClick(Sender: TObject);
   private
     FPotansiyelId: Int64;
@@ -130,6 +132,11 @@ type
     procedure DateToParam(Q: TUniQuery; const N: string; UseIt: Boolean; D: TDateTime);
     function NetsisBaglantiUtcParam: Variant;
     procedure InitCombos;
+    function NetsisCariSablonOku: string;
+    function NetsisCariKodUret(const ASablon: string): string;
+    function SonrakiCariSiraNoFromSablon(const APrefix: string; ADigitLen: Integer): Int64;
+    function NetsisCariNetOpenXOlustur(const ACariKod: string): Boolean;
+    procedure PotansiyelNetsisKodBagla(const ACariKod: string);
   public
   end;
 
@@ -402,6 +409,138 @@ end;
 procedure TfrmCrmPotansiyel.btnNetsisTemizleClick(Sender: TObject);
 begin
   edNetsis.Text := '';
+end;
+
+function TfrmCrmPotansiyel.NetsisCariSablonOku: string;
+begin
+  Result := '120#####';
+  qLoad.Close;
+  qLoad.SQL.Text :=
+    'SELECT NETSIS_CARI_SABLON FROM dbo.PARAMETRE WITH(NOLOCK) WHERE SUBE_KODU = :SUBE';
+  qLoad.ParamByName('SUBE').AsInteger := Tmp.xSubeKodu;
+  qLoad.Open;
+  if not qLoad.IsEmpty then
+  begin
+    if (qLoad.FindField('NETSIS_CARI_SABLON') <> nil) and
+      not qLoad.FieldByName('NETSIS_CARI_SABLON').IsNull then
+    begin
+      Result := Trim(qLoad.FieldByName('NETSIS_CARI_SABLON').AsString);
+      if Result = '' then
+        Result := '120#####';
+    end;
+  end;
+  qLoad.Close;
+end;
+
+function TfrmCrmPotansiyel.SonrakiCariSiraNoFromSablon(const APrefix: string; ADigitLen: Integer): Int64;
+var
+  ToplamUz: Integer;
+begin
+  Result := 1;
+  if (APrefix = '') or (ADigitLen <= 0) then
+    Exit;
+  ToplamUz := Length(APrefix) + ADigitLen;
+  qLoad.Close;
+  qLoad.SQL.Text :=
+    'SELECT ISNULL(MAX(TRY_CAST(RIGHT(CARI_KOD, :DIG) AS BIGINT)), 0) AS MX ' +
+    'FROM YUCEL..HV_CARI_LISTESI WITH(NOLOCK) ' +
+    'WHERE CARI_KOD LIKE :PFX AND LEN(CARI_KOD) = :UZ';
+  qLoad.ParamByName('PFX').AsString := APrefix + '%';
+  qLoad.ParamByName('UZ').AsInteger := ToplamUz;
+  qLoad.ParamByName('DIG').AsInteger := ADigitLen;
+  qLoad.Open;
+  if not qLoad.IsEmpty and not qLoad.FieldByName('MX').IsNull then
+    Result := qLoad.FieldByName('MX').AsLargeInt + 1;
+  qLoad.Close;
+end;
+
+function TfrmCrmPotansiyel.NetsisCariKodUret(const ASablon: string): string;
+var
+  Sablon, Prefix: string;
+  i, HashCnt: Integer;
+  NextNo: Int64;
+  Fmt: string;
+begin
+  Sablon := Trim(ASablon);
+  if Sablon = '' then
+    Sablon := '120#####';
+  HashCnt := 0;
+  for i := 1 to Length(Sablon) do
+    if Sablon[i] = '#' then
+      Inc(HashCnt);
+  if HashCnt <= 0 then
+    Exit(Sablon);
+  Prefix := Copy(Sablon, 1, Length(Sablon) - HashCnt);
+  NextNo := SonrakiCariSiraNoFromSablon(Prefix, HashCnt);
+  Fmt := '%.' + IntToStr(HashCnt) + 'd';
+  Result := Prefix + Format(Fmt, [NextNo]);
+end;
+
+function TfrmCrmPotansiyel.NetsisCariNetOpenXOlustur(const ACariKod: string): Boolean;
+begin
+  Result := False;
+  if Trim(ACariKod) = '' then
+    Exit;
+  // TODO : NetOpenX ile cari olusturma islemleri burada yapilacak
+  // Ornek: firma unvani, vergi no, adres vb. potansiyel kaydindan NetOpenX API'ye aktarilacak.
+  Result := True;
+end;
+
+procedure TfrmCrmPotansiyel.PotansiyelNetsisKodBagla(const ACariKod: string);
+begin
+  qExec.Close;
+  qExec.SQL.Text :=
+    'UPDATE dbo.CRM_POTANSIYEL_MUSTERI SET NETSIS_CARI_KOD = :NKOD, ' +
+    'NETSIS_BAGLANTI_UTC = SYSUTCDATETIME(), GUNCELLEME_UTC = SYSUTCDATETIME() ' +
+    'WHERE POTANSIYEL_ID = :PID';
+  qExec.ParamByName('NKOD').AsString := Trim(ACariKod);
+  qExec.ParamByName('PID').AsLargeInt := FPotansiyelId;
+  qExec.Execute;
+end;
+
+procedure TfrmCrmPotansiyel.btnNetsisCariOlusturClick(Sender: TObject);
+var
+  Sablon, YeniKod: string;
+begin
+  if Trim(edNetsis.Text) <> '' then
+  begin
+    UniMainModule.saHata.Show(
+      'Bu potansiyel musteri icin zaten Netsis cari baglantisi var.' + sLineBreak +
+      'Mevcut kod: ' + Trim(edNetsis.Text));
+    Exit;
+  end;
+  if FPotansiyelId <= 0 then
+  begin
+    UniMainModule.saHata.Show('Once potansiyel musteriyi kaydedin, sonra Netsis cari olusturabilirsiniz.');
+    Exit;
+  end;
+
+  try
+    Sablon := NetsisCariSablonOku;
+    YeniKod := NetsisCariKodUret(Sablon);
+    if Trim(YeniKod) = '' then
+    begin
+      UniMainModule.saHata.Show('Netsis cari kodu uretilemedi. PARAMETRE.NETSIS_CARI_SABLON degerini kontrol edin.');
+      Exit;
+    end;
+
+    if not NetsisCariNetOpenXOlustur(YeniKod) then
+    begin
+      UniMainModule.saHata.Show('Netsis cari olusturma islemi tamamlanamadi.');
+      Exit;
+    end;
+{
+    PotansiyelNetsisKodBagla(YeniKod);
+    edNetsis.Text := YeniKod;
+    FYuklenenNetsis := YeniKod;
+    FHasLoadedBagUtc := True;
+    FLoadedBaglantiUtc := Now;
+    UniMainModule.saKaydet.Show('Netsis cari kodu olusturuldu ve potansiyel kayda baglandi: ' + YeniKod);
+}
+  except
+    on E: Exception do
+      UniMainModule.saHata.Show('Netsis cari olusturma hatasi: ' + E.Message);
+  end;
 end;
 
 procedure TfrmCrmPotansiyel.btnHaritaKonumClick(Sender: TObject);

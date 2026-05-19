@@ -25,6 +25,7 @@ type
     btnPotansiyelListesi: TUniButton;
     btnTanimliRota: TUniButton;
     btnCariOzet: TUniButton;
+    btnCariGpsListe: TUniButton;
     procedure btnYeniAktiviteClick(Sender: TObject);
     procedure btnYeniGorevClick(Sender: TObject);
     procedure btnAktiviteListesiClick(Sender: TObject);
@@ -36,6 +37,7 @@ type
     procedure btnTanimliRotaClick(Sender: TObject);
     procedure btnYeniRotaPlanClick(Sender: TObject);
     procedure btnCariOzetClick(Sender: TObject);
+    procedure btnCariGpsListeClick(Sender: TObject);
   private
   public
   end;
@@ -49,7 +51,7 @@ implementation
 uses
   MainModule, uniGUIApplication, Genel, CrmAktiviteU, CrmGorevU,
   CrmAktiviteListeU, CrmGorevListeU, CrmTeklifU, CrmTeklifListeU, CrmCariOzetU,
-  CrmPotansiyelU, CrmPotansiyelListeU, CrmRotaListeU, CrmRotaU;
+  CrmPotansiyelU, CrmPotansiyelListeU, CrmRotaListeU, CrmRotaU, CrmCariGpsListeU;
 
 function frmCrmMenu: TfrmCrmMenu;
 begin
@@ -109,6 +111,11 @@ end;
 procedure TfrmCrmMenu.btnCariOzetClick(Sender: TObject);
 begin
   xFormShow(TfrmCrmCariOzet, 'CrmCariOzet', 1, '');
+end;
+
+procedure TfrmCrmMenu.btnCariGpsListeClick(Sender: TObject);
+begin
+  xFormShow(TfrmCrmCariGpsListe, 'CrmCariGpsListe', 1, '');
 end;
 
 end.

@@ -1,4 +1,4 @@
-object frmCrmCariSec: TfrmCrmCariSec
+﻿object frmCrmCariSec: TfrmCrmCariSec
   Left = 0
   Top = 0
   ClientHeight = 520
@@ -25,15 +25,16 @@ object frmCrmCariSec: TfrmCrmCariSec
     object lblBilgi: TUniLabel
       Left = 12
       Top = 8
-      Width = 870
-      Height = 28
+      Width = 329
+      Height = 13
       Hint = ''
-      Caption = 'Cari adi/kodu yazip Listele; satir secip Se'#351' veya satira cift tiklayin.'
+      Caption = 
+        'Cari adi/kodu yazip Listele; satir secip Se'#351' veya satira cift ti' +
+        'klayin.'
       ParentFont = False
       Font.Charset = TURKISH_CHARSET
       Font.Color = clGray
       Font.Height = -12
-      Font.Name = 'Segoe UI'
       TabOrder = 0
     end
     object edArama: TUniEdit
@@ -46,7 +47,6 @@ object frmCrmCariSec: TfrmCrmCariSec
       ParentFont = False
       Font.Charset = TURKISH_CHARSET
       Font.Height = -13
-      Font.Name = 'Segoe UI'
       TabOrder = 1
       EmptyText = 'Cari ad / kod'
       ClearButton = True
@@ -80,7 +80,7 @@ object frmCrmCariSec: TfrmCrmCariSec
       Width = 120
       Height = 32
       Hint = 'Secili satiri aktarir'
-      Caption = 'Se'#351
+      Caption = 'Se'#231
       ParentFont = False
       Font.Charset = TURKISH_CHARSET
       Font.Color = clWhite
@@ -121,12 +121,13 @@ object frmCrmCariSec: TfrmCrmCariSec
     Width = 900
     Height = 428
     Hint = ''
-    Align = alClient
     DataSource = dsCari
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgTabs, dgCancelOnExit, dgAutoRefreshRow]
     ReadOnly = True
     WebOptions.Paged = False
     WebOptions.FetchAll = True
+    LoadMask.Message = 'Loading data...'
+    Align = alClient
     TabOrder = 1
     OnAjaxEvent = grdCariAjaxEvent
   end

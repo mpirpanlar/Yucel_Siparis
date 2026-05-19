@@ -22,6 +22,7 @@ type
     lblCari: TUniLabel;
     edCariKod: TUniEdit;
     btnCariBul: TUniButton;
+    lblCariAd: TUniLabel;
     lblTeklif: TUniLabel;
     lkTeklif: TUniDBLookupComboBox;
     btnTeklifYenile: TUniButton;
@@ -75,8 +76,10 @@ begin
   if not VarIsNull(lkTeklif.KeyValue) and not VarIsEmpty(lkTeklif.KeyValue) then
     PrevTkl := lkTeklif.KeyValue;
   frmCrmCariSec.HedefCariEdit := edCariKod;
+  frmCrmCariSec.HedefCariAdLabel := lblCariAd;
   frmCrmCariSec.edArama.Text := Trim(edCariKod.Text);
   frmCrmCariSec.ShowModal;
+  //frmCrmCariSec.HedefCariAdLabel := nil;
   TeklifLookupYenile(0);
   if PrevTkl > 0 then
   begin
@@ -129,11 +132,21 @@ begin
   if ATeklifId <= 0 then
     Exit;
   qLoad.Close;
-  qLoad.SQL.Text := 'SELECT CARI_KOD FROM dbo.CRM_TEKLIF WHERE TEKLIF_ID = :T';
+  qLoad.SQL.Text :=
+    'SELECT T.CARI_KOD, C.CARI_ISIM FROM dbo.CRM_TEKLIF T ' +
+    'LEFT JOIN YUCEL..HV_CARI_LISTESI C WITH(NOLOCK) ON C.CARI_KOD = T.CARI_KOD ' +
+    'WHERE T.TEKLIF_ID = :T';
   qLoad.ParamByName('T').AsLargeInt := ATeklifId;
   qLoad.Open;
-  if not qLoad.IsEmpty and not qLoad.FieldByName('CARI_KOD').IsNull then
-    edCariKod.Text := Trim(qLoad.FieldByName('CARI_KOD').AsString);
+  if not qLoad.IsEmpty then
+  begin
+    if not qLoad.FieldByName('CARI_KOD').IsNull then
+      edCariKod.Text := Trim(qLoad.FieldByName('CARI_KOD').AsString);
+    if (qLoad.FindField('CARI_ISIM') <> nil) and not qLoad.FieldByName('CARI_ISIM').IsNull then
+      lblCariAd.Caption := Trim(qLoad.FieldByName('CARI_ISIM').AsString)
+    else
+      lblCariAd.Caption := '';
+  end;
   qLoad.Close;
   TeklifLookupYenile(ATeklifId);
   if qTekLkp.Active and qTekLkp.Locate('TEKLIF_ID', ATeklifId, []) then
@@ -195,6 +208,7 @@ begin
   edKonu.Text := '';
   mmAciklama.Text := '';
   edCariKod.Text := '';
+  lblCariAd.Caption := '';
   dtAktivite.DateTime := Now;
   AcLookupSorgulari;
   VarsayilanSecimler;
@@ -210,9 +224,10 @@ var
 begin
   qLoad.Close;
   qLoad.SQL.Text :=
-    'SELECT A.AKTIVITE_TIP_ID, A.AKTIVITE_DURUM_ID, A.KONU, A.ACIKLAMA, A.CARI_KOD, A.AKTIVITE_TARIHI, A.DURUM, A.TEKLIF_ID, A.SIPARIS_NO, TK.KOD AS TIP_KOD ' +
+    'SELECT A.AKTIVITE_TIP_ID, A.AKTIVITE_DURUM_ID, A.KONU, A.ACIKLAMA, A.CARI_KOD, A.AKTIVITE_TARIHI, A.DURUM, A.TEKLIF_ID, A.SIPARIS_NO, TK.KOD AS TIP_KOD, C.CARI_ISIM ' +
     'FROM dbo.CRM_AKTIVITE A ' +
     'LEFT JOIN dbo.CRM_AKTIVITE_TIP TK ON TK.TIP_ID = A.AKTIVITE_TIP_ID ' +
+    'LEFT JOIN YUCEL..HV_CARI_LISTESI C WITH(NOLOCK) ON C.CARI_KOD = A.CARI_KOD ' +
     'WHERE A.AKTIVITE_ID = :ID';
   qLoad.ParamByName('ID').AsLargeInt := FAktiviteId;
   qLoad.Open;
@@ -248,9 +263,18 @@ begin
   edKonu.Text := qLoad.FieldByName('KONU').AsString;
   mmAciklama.Text := qLoad.FieldByName('ACIKLAMA').AsString;
   if qLoad.FieldByName('CARI_KOD').IsNull then
-    edCariKod.Text := ''
+  begin
+    edCariKod.Text := '';
+    lblCariAd.Caption := '';
+  end
   else
+  begin
     edCariKod.Text := qLoad.FieldByName('CARI_KOD').AsString;
+    if (qLoad.FindField('CARI_ISIM') <> nil) and not qLoad.FieldByName('CARI_ISIM').IsNull then
+      lblCariAd.Caption := Trim(qLoad.FieldByName('CARI_ISIM').AsString)
+    else
+      lblCariAd.Caption := '';
+  end;
   if qLoad.FieldByName('AKTIVITE_TARIHI').IsNull then
     dtAktivite.DateTime := Now
   else

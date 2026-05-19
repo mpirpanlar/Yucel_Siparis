@@ -33,6 +33,8 @@ type
   public
     { Siparis / StokBul benzeri: ShowModal oncesi atanir, Sec ile doldurulur. }
     HedefCariEdit: TUniEdit;
+    { HedefCariEdit ile ayni mantik: secimde griddeki CARI_ISIM yazilir. }
+    HedefCariAdLabel: TUniLabel;
     { Atanirsa cari seciminde kod ile birlikte cagrilir (rota plan vb.). }
     OnCariSecildi: TCrmCariSecildiEvent;
   end;
@@ -68,10 +70,10 @@ var
 begin
   F := SqlQuote(edArama.Text);
   if F = '' then
-    SQL := 'SELECT TOP 400 * FROM HV_CARI_LISTESI ORDER BY CARI_KOD'
+    SQL := 'SELECT TOP 400 * FROM YUCEL..HV_CARI_LISTESI ORDER BY CARI_KOD'
   else
     SQL :=
-      'SELECT * FROM HV_CARI_LISTESI WHERE ' +
+      'SELECT * FROM YUCEL..HV_CARI_LISTESI WHERE ' +
       '(DBO.TRK(CARI_ISIM) LIKE ''%' + F + '%'' OR CARI_KOD LIKE ''%' + F + '%'') ' +
       'ORDER BY CARI_KOD';
   Genel.xTabloAc(qCari, SQL);
@@ -79,7 +81,7 @@ end;
 
 procedure TfrmCrmCariSec.CariSecVeKapat;
 var
-  Ck: string;
+  Ck, Ci: string;
 begin
   if not qCari.Active or qCari.IsEmpty then
   begin
@@ -87,12 +89,18 @@ begin
     Exit;
   end;
   Ck := Trim(qCari.FieldByName('CARI_KOD').AsString);
+  Ci := '';
+  if (qCari.FindField('CARI_ISIM') <> nil) and not qCari.FieldByName('CARI_ISIM').IsNull then
+    Ci := Trim(qCari.FieldByName('CARI_ISIM').AsString);
   if Assigned(HedefCariEdit) then
     HedefCariEdit.Text := Ck;
+  if Assigned(HedefCariAdLabel) then
+    HedefCariAdLabel.Caption := Ci;
   if Assigned(OnCariSecildi) then
     OnCariSecildi(Self, Ck);
   OnCariSecildi := nil;
   HedefCariEdit := nil;
+  HedefCariAdLabel := nil;
   Close;
 end;
 
@@ -105,6 +113,7 @@ procedure TfrmCrmCariSec.btnKapatClick(Sender: TObject);
 begin
   OnCariSecildi := nil;
   HedefCariEdit := nil;
+  HedefCariAdLabel := nil;
   Close;
 end;
 

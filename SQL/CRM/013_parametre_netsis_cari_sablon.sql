@@ -1,0 +1,20 @@
+/*
+  CRM surum 14 - PARAMETRE.NETSIS_CARI_SABLON (Netsis cari kod sablonu).
+  Veritabani: ASYA_ENTEGRE
+  Canlida CrmSchemaU.CrmSchemaApplyMigration14 + CRM_SCHEMA_TARGET_VERSION = 14 ile otomatik uygulanir.
+  Script idempotent: tekrar calistirilabilir.
+*/
+
+SET NOCOUNT ON;
+
+IF COL_LENGTH('dbo.PARAMETRE', 'NETSIS_CARI_SABLON') IS NULL
+BEGIN
+  ALTER TABLE dbo.PARAMETRE ADD NETSIS_CARI_SABLON NVARCHAR(35) NULL;
+END;
+GO
+
+UPDATE dbo.PARAMETRE
+SET NETSIS_CARI_SABLON = N'120#####'
+WHERE NETSIS_CARI_SABLON IS NULL
+   OR LTRIM(RTRIM(NETSIS_CARI_SABLON)) = N'';
+GO

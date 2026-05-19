@@ -59,7 +59,9 @@ uses
   CrmCariOzetU in 'CrmCariOzetU.pas' {frmCrmCariOzet: TUniForm},
   CrmParamPotansiyelDurumU in 'CrmParamPotansiyelDurumU.pas' {frmCrmParamPotansiyelDurum: TUniForm},
   CrmPotansiyelU in 'CrmPotansiyelU.pas' {frmCrmPotansiyel: TUniForm},
-  CrmPotansiyelListeU in 'CrmPotansiyelListeU.pas' {frmCrmPotansiyelListe: TUniForm};
+  CrmPotansiyelListeU in 'CrmPotansiyelListeU.pas' {frmCrmPotansiyelListe: TUniForm},
+  CrmCariGpsListeU in 'CrmCariGpsListeU.pas' {frmCrmCariGpsListe: TUniForm},
+  CrmCariGpsU in 'CrmCariGpsU.pas' {frmCrmCariGps: TUniForm};
 
 {$R *.res}
 

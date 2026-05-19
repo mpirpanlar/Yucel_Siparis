@@ -386,14 +386,28 @@ var
   It: TRotaDurakItem;
   Ge, Gb: Double;
   CIsim, CI, CC, CAD: string;
+
+  procedure NetsisGpsOku(out AEnlem, ABoylam: Double);
+  begin
+    AEnlem := 0;
+    ABoylam := 0;
+    if (qNetsis.FindField('KULL1N') <> nil) and not qNetsis.FieldByName('KULL1N').IsNull then
+      AEnlem := qNetsis.FieldByName('KULL1N').AsFloat;
+    if (qNetsis.FindField('KULL2N') <> nil) and not qNetsis.FieldByName('KULL2N').IsNull then
+      ABoylam := qNetsis.FieldByName('KULL2N').AsFloat;
+  end;
+
 begin
   Ck := Trim(ACariKod);
   if Ck = '' then
     Exit;
   qNetsis.Close;
   qNetsis.SQL.Text :=
-    'SELECT TOP 1 CARI_KOD, CARI_ISIM, ISNULL(CARI_IL, N'''') AS CI, ISNULL(CARI_ILCE, N'''') AS CC, ' +
-    'ISNULL(CARI_ADRES, N'''') AS CAD FROM HV_CARI_LISTESI WHERE CARI_KOD = :K';
+    'SELECT TOP 1 C.CARI_KOD, C.CARI_ISIM, ISNULL(C.CARI_IL, N'''') AS CI, ISNULL(C.CARI_ILCE, N'''') AS CC, ' +
+    'ISNULL(C.CARI_ADRES, N'''') AS CAD, T.KULL1N, T.KULL2N ' +
+    'FROM YUCEL..HV_CARI_LISTESI C WITH(NOLOCK) ' +
+    'LEFT JOIN TBLCASABITEK T WITH(NOLOCK) ON T.CARI_KOD = C.CARI_KOD ' +
+    'WHERE C.CARI_KOD = :K';
   qNetsis.ParamByName('K').AsString := Ck;
   qNetsis.Open;
   if qNetsis.IsEmpty then
@@ -406,23 +420,26 @@ begin
   CI := qNetsis.FieldByName('CI').AsString;
   CC := qNetsis.FieldByName('CC').AsString;
   CAD := qNetsis.FieldByName('CAD').AsString;
+  NetsisGpsOku(Ge, Gb);
   qNetsis.Close;
 
-  Ge := 0;
-  Gb := 0;
-  qTmp.Close;
-  qTmp.SQL.Text :=
-    'SELECT GPS_ENLEM, GPS_BOYLAM FROM dbo.CRM_CARI_LOKASYON WHERE CARI_KOD = :K';
-  qTmp.ParamByName('K').AsString := Ck;
-  qTmp.Open;
-  if not qTmp.IsEmpty then
+  { Netsis TBLCASABITEK bos ise eski CRM_CARI_LOKASYON kaydina dus. }
+  if (Abs(Ge) < 1E-9) and (Abs(Gb) < 1E-9) then
   begin
-    if not qTmp.FieldByName('GPS_ENLEM').IsNull then
-      Ge := qTmp.FieldByName('GPS_ENLEM').AsFloat;
-    if not qTmp.FieldByName('GPS_BOYLAM').IsNull then
-      Gb := qTmp.FieldByName('GPS_BOYLAM').AsFloat;
+    qTmp.Close;
+    qTmp.SQL.Text :=
+      'SELECT GPS_ENLEM, GPS_BOYLAM FROM dbo.CRM_CARI_LOKASYON WHERE CARI_KOD = :K';
+    qTmp.ParamByName('K').AsString := Ck;
+    qTmp.Open;
+    if not qTmp.IsEmpty then
+    begin
+      if not qTmp.FieldByName('GPS_ENLEM').IsNull then
+        Ge := qTmp.FieldByName('GPS_ENLEM').AsFloat;
+      if not qTmp.FieldByName('GPS_BOYLAM').IsNull then
+        Gb := qTmp.FieldByName('GPS_BOYLAM').AsFloat;
+    end;
+    qTmp.Close;
   end;
-  qTmp.Close;
 
   It := TRotaDurakItem.Create;
   It.Sira := SonSira + 1;

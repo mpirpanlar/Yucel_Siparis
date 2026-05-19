@@ -9,7 +9,7 @@ uses
   DBAccess, Uni;
 
 const
-  CRM_SCHEMA_TARGET_VERSION = 12;
+  CRM_SCHEMA_TARGET_VERSION = 14;
 
 procedure CrmEnsureDatabase(AConn: TUniConnection);
 
@@ -825,6 +825,57 @@ begin
     'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (12, ''CRM rota planlama, cari lokasyon, potansiyel GPS'')');
 end;
 
+procedure CrmSchemaApplyMigration13(AConn: TUniConnection);
+begin
+  if CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''FormName'' AND schema_id = SCHEMA_ID(''dbo'')') > 0 then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.FormName (FormName, FormCaption) SELECT v.FN, v.FC FROM (VALUES ' +
+      '(''CrmCariGpsListe'', ''CRM - Netsis Cari GPS Listesi''), ' +
+      '(''CrmCariGps'', ''CRM - Netsis Cari GPS'')) AS v(FN, FC) ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.FormName f WHERE f.FormName = v.FN)');
+  end;
+
+  if (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''YETKI'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) and
+     (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''KULLANICIGRUP'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmCariGpsListe'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmCariGpsListe'')');
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmCariGps'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmCariGps'')');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 13) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (13, ''CRM Netsis cari GPS (TBLCASABITEK KULL1N/KULL2N)'')');
+end;
+
+procedure CrmSchemaApplyMigration14(AConn: TUniConnection);
+begin
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.PARAMETRE'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.PARAMETRE'', ''NETSIS_CARI_SABLON'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn,
+        'ALTER TABLE dbo.PARAMETRE ADD NETSIS_CARI_SABLON NVARCHAR(35) NULL');
+    CrmExec(AConn,
+      'UPDATE dbo.PARAMETRE SET NETSIS_CARI_SABLON = N''120#####'' ' +
+      'WHERE NETSIS_CARI_SABLON IS NULL OR LTRIM(RTRIM(NETSIS_CARI_SABLON)) = N''''');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 14) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (14, ''PARAMETRE.NETSIS_CARI_SABLON (Netsis cari kod sablonu)'')');
+end;
+
 procedure CrmSchemaApplyMigration(const AConn: TUniConnection; AVersion: Integer);
 begin
   case AVersion of
@@ -840,6 +891,8 @@ begin
     10: CrmSchemaApplyMigration10(AConn);
     11: CrmSchemaApplyMigration11(AConn);
     12: CrmSchemaApplyMigration12(AConn);
+    13: CrmSchemaApplyMigration13(AConn);
+    14: CrmSchemaApplyMigration14(AConn);
   else
     raise Exception.CreateFmt('CRM sema: bilinmeyen migrasyon surumu %d', [AVersion]);
   end;

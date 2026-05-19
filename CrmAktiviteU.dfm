@@ -1,7 +1,7 @@
 object frmCrmAktivite: TfrmCrmAktivite
   Left = 0
   Top = 0
-  ClientHeight = 512
+  ClientHeight = 536
   ClientWidth = 640
   Caption = 'Yeni Aktivite'
   OnShow = UniFormShow
@@ -14,7 +14,7 @@ object frmCrmAktivite: TfrmCrmAktivite
     Left = 0
     Top = 0
     Width = 640
-    Height = 512
+    Height = 536
     Hint = ''
     Align = alClient
     TabOrder = 0
@@ -24,7 +24,7 @@ object frmCrmAktivite: TfrmCrmAktivite
       Left = 0
       Top = 0
       Width = 640
-      Height = 460
+      Height = 484
       Hint = ''
       Align = alClient
       TabOrder = 0
@@ -128,9 +128,23 @@ object frmCrmAktivite: TfrmCrmAktivite
             'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
         OnClick = btnCariBulClick
       end
+      object lblCariAd: TUniLabel
+        Left = 120
+        Top = 208
+        Width = 480
+        Height = 15
+        Hint = ''
+        AutoSize = False
+        Caption = ''
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clGray
+        Font.Height = -12
+        TabOrder = 18
+      end
       object lblTeklif: TUniLabel
         Left = 16
-        Top = 220
+        Top = 244
         Width = 55
         Height = 13
         Hint = ''
@@ -139,7 +153,7 @@ object frmCrmAktivite: TfrmCrmAktivite
       end
       object lkTeklif: TUniDBLookupComboBox
         Left = 120
-        Top = 216
+        Top = 240
         Width = 340
         Height = 27
         Hint = ''
@@ -152,7 +166,7 @@ object frmCrmAktivite: TfrmCrmAktivite
       end
       object btnTeklifYenile: TUniButton
         Left = 470
-        Top = 214
+        Top = 238
         Width = 130
         Height = 30
         Hint = 'Teklif listesini cariye gore yeniler'
@@ -172,7 +186,7 @@ object frmCrmAktivite: TfrmCrmAktivite
       end
       object lblSiparis: TUniLabel
         Left = 16
-        Top = 256
+        Top = 280
         Width = 95
         Height = 13
         Hint = ''
@@ -181,7 +195,7 @@ object frmCrmAktivite: TfrmCrmAktivite
       end
       object edSiparis: TUniEdit
         Left = 120
-        Top = 252
+        Top = 276
         Width = 340
         Height = 27
         Hint = 'Netsis / ERP siparis referansi (tekliften bagimsiz)'
@@ -190,7 +204,7 @@ object frmCrmAktivite: TfrmCrmAktivite
       end
       object lblTarih: TUniLabel
         Left = 16
-        Top = 292
+        Top = 316
         Width = 24
         Height = 13
         Hint = ''
@@ -199,7 +213,7 @@ object frmCrmAktivite: TfrmCrmAktivite
       end
       object dtAktivite: TUniDateTimePicker
         Left = 120
-        Top = 288
+        Top = 312
         Width = 200
         Height = 27
         Hint = ''
@@ -211,7 +225,7 @@ object frmCrmAktivite: TfrmCrmAktivite
       end
       object lblDurum: TUniLabel
         Left = 16
-        Top = 328
+        Top = 352
         Width = 35
         Height = 13
         Hint = ''
@@ -220,7 +234,7 @@ object frmCrmAktivite: TfrmCrmAktivite
       end
       object lkDurum: TUniDBLookupComboBox
         Left = 120
-        Top = 324
+        Top = 348
         Width = 460
         Height = 27
         Hint = ''
@@ -234,7 +248,7 @@ object frmCrmAktivite: TfrmCrmAktivite
     end
     object panFooter: TUniPanel
       Left = 0
-      Top = 460
+      Top = 484
       Width = 640
       Height = 52
       Hint = ''

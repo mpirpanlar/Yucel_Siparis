@@ -74,7 +74,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
       Width = 920
       Height = 588
       Hint = ''
-      ActivePage = tabKonum
+      ActivePage = tabTakip
       Align = alClient
       TabOrder = 0
       object tabFirma: TUniTabSheet
@@ -870,6 +870,26 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Caption = 'Baglantiyi sil'
           TabOrder = 13
           OnClick = btnNetsisTemizleClick
+        end
+        object btnNetsisCariOlustur: TUniButton
+          Left = 704
+          Top = 290
+          Width = 184
+          Height = 30
+          Hint = 'Potansiyel icin yeni Netsis cari hesabi olusturur'
+          Caption = 'Netsis Cari Olu'#351'tur'
+          ParentFont = False
+          Font.Charset = TURKISH_CHARSET
+          Font.Color = clWhite
+          Font.Height = -12
+          Font.Name = 'Segoe UI Semibold'
+          Font.Style = [fsBold]
+          TabOrder = 14
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+              'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+          OnClick = btnNetsisCariOlusturClick
         end
       end
     end

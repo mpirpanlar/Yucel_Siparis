@@ -323,6 +323,29 @@ object frmCrmMenu: TfrmCrmMenu
         LayoutConfig.Margin = '11 2 2 2'
         OnClick = btnCariOzetClick
       end
+      object btnCariGpsListe: TUniButton
+        Left = 16
+        Top = 320
+        Width = 193
+        Height = 38
+        Hint = ''
+        Caption = 'Netsis Cari GPS'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Style = [fsItalic]
+        TabOrder = 8
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
+            's="btnAltMenu";'#13#10'}')
+        ScreenMask.Enabled = True
+        ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '11 2 2 2'
+        OnClick = btnCariGpsListeClick
+      end
     end
   end
 end
