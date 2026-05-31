@@ -3,7 +3,7 @@ object frmCrmGorevListe: TfrmCrmGorevListe
   Top = 0
   ClientHeight = 480
   ClientWidth = 900
-  Caption = 'CRM - Gorev listesi'
+  Caption = 'CRM - G'#246'rev Listesi'
   OnShow = UniFormShow
   BorderStyle = bsNone
   OldCreateOrder = False
@@ -21,17 +21,18 @@ object frmCrmGorevListe: TfrmCrmGorevListe
     TabOrder = 0
     BorderStyle = ubsNone
     Caption = ''
+    Layout = 'vbox'
     object pnlToolbar: TUniPanel
       Left = 0
       Top = 0
       Width = 900
       Height = 48
       Hint = ''
-      Align = alTop
       TabOrder = 0
       BorderStyle = ubsNone
       Caption = ''
       Color = 10865101
+      LayoutConfig.Width = '100%'
       object btnListele: TUniButton
         Left = 12
         Top = 8
@@ -106,13 +107,15 @@ object frmCrmGorevListe: TfrmCrmGorevListe
       WebOptions.Paged = False
       WebOptions.FetchAll = True
       LoadMask.Message = 'Loading data...'
-      Align = alClient
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
       TabOrder = 1
       OnAjaxEvent = grdAjaxEvent
       Columns = <
         item
           FieldName = 'GOREV_ID'
-          Title.Caption = 'Gorev ID'
+          Title.Caption = 'G'#246'rev ID'
           Width = 70
           ReadOnly = True
         end
@@ -136,7 +139,7 @@ object frmCrmGorevListe: TfrmCrmGorevListe
         end
         item
           FieldName = 'TEKLIF_NO'
-          Title.Caption = 'Teklif no'
+          Title.Caption = 'Teklif No'
           Width = 100
           ReadOnly = True
         end
@@ -154,7 +157,7 @@ object frmCrmGorevListe: TfrmCrmGorevListe
         end
         item
           FieldName = 'ONCELIK'
-          Title.Caption = 'Oncelik'
+          Title.Caption = #214'ncelik'
           Width = 70
           ReadOnly = True
         end

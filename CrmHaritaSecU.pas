@@ -232,7 +232,7 @@ begin
   HedefEnlemEdit := nil;
   HedefBoylamEdit := nil;
   HedefHaritaAdresMemo := nil;
-  Close;
+  ModalResult := mrOK;
 end;
 
 procedure TfrmCrmHaritaSec.btnIptalClick(Sender: TObject);
@@ -240,7 +240,7 @@ begin
   HedefEnlemEdit := nil;
   HedefBoylamEdit := nil;
   HedefHaritaAdresMemo := nil;
-  Close;
+  ModalResult := mrCancel;
 end;
 
 end.

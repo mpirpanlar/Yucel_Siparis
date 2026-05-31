@@ -130,7 +130,7 @@ begin
   begin
     if not qDur.Active or qDur.IsEmpty then
     begin
-      UniMainModule.saHata.Show('Once bir satir secin veya Yeni ile ekleyin.');
+      UniMainModule.saHata.Show('Önce bir satýr seçin veya Yeni ile ekleyin.');
       Exit;
     end;
     Did := qDur.FieldByName('TEKLIF_DURUM_ID').AsLargeInt;
@@ -148,7 +148,7 @@ begin
   except
     on E: Exception do
     begin
-      UniMainModule.saHata.Show('Kayit hatasi: ' + E.Message);
+      UniMainModule.saHata.Show('Kayýt hatasý: ' + E.Message);
       Exit;
     end;
   end;

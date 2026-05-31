@@ -234,7 +234,7 @@ begin
   if qLoad.IsEmpty then
   begin
     qLoad.Close;
-    UniMainModule.saHata.Show('Aktivite bulunamadi.');
+    UniMainModule.saHata.Show('Aktivite bulunamadý.');
     YeniKayit;
     Exit;
   end;
@@ -242,7 +242,7 @@ begin
   if SameText(TipKod, 'TASK') then
   begin
     qLoad.Close;
-    UniMainModule.saHata.Show('Bu kayit gorev tipindedir; Gorev listesinden aciniz.');
+    UniMainModule.saHata.Show('Bu kayýt görev tipindedir; Görev listesinden açýnýz.');
     YeniKayit;
     Exit;
   end;
@@ -316,12 +316,12 @@ begin
   end;
   if VarIsNull(lkTip.KeyValue) or VarIsEmpty(lkTip.KeyValue) then
   begin
-    UniMainModule.saHata.Show('Aktivite tipi seciniz.');
+    UniMainModule.saHata.Show('Aktivite tipi seçiniz.');
     Exit;
   end;
   if VarIsNull(lkDurum.KeyValue) or VarIsEmpty(lkDurum.KeyValue) then
   begin
-    UniMainModule.saHata.Show('Durum seciniz.');
+    UniMainModule.saHata.Show('Durum seçiniz.');
     Exit;
   end;
 
@@ -329,7 +329,7 @@ begin
   Dkod := DurumKodFromLookup;
   if SameText(Tkod, 'TASK') then
   begin
-    UniMainModule.saHata.Show('TASK tipi yalnizca gorev formundan kullanilir.');
+    UniMainModule.saHata.Show('TASK tipi yalnýzca görev formundan kullanýlýr.');
     Exit;
   end;
 
@@ -345,7 +345,7 @@ begin
         not SameText(Trim(edCariKod.Text), Trim(qLoad.FieldByName('CARI_KOD').AsString)) then
       begin
         qLoad.Close;
-        UniMainModule.saHata.Show('Secilen teklifin cari kodu ile aktivite carisi uyusmuyor.');
+        UniMainModule.saHata.Show('Seçilen teklifin cari kodu ile aktivite carisi uyuþmuyor.');
         Exit;
       end;
     end;

@@ -58,7 +58,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 58
         Height = 17
         Hint = ''
-        Caption = 'Teklif no'
+        Caption = 'Teklif No'
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
@@ -87,7 +87,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 110
         Height = 32
         Hint = ''
-        Caption = 'Onizleme'
+        Caption = #214'nizleme'
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
@@ -106,7 +106,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 150
         Height = 32
         Hint = 'Bu teklifle on baglantili yeni CRM aktivitesi acar'
-        Caption = 'Yeni aktivite'
+        Caption = 'Yeni Aktivite'
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
@@ -125,7 +125,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 140
         Height = 32
         Hint = 'Bu teklifle bagli yeni CRM gorevi (TASK) acar; TEKLIF_ID kayda yazilir'
-        Caption = 'Yeni gorev'
+        Caption = 'Yeni G'#246'rev'
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
@@ -176,7 +176,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 80
         Height = 17
         Hint = ''
-        Caption = 'Baslik'
+        Caption = 'Ba'#351'l'#305'k'
         TabOrder = 0
       end
       object edBaslik: TUniEdit
@@ -214,7 +214,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 80
         Height = 17
         Hint = ''
-        Caption = 'Cari kod'
+        Caption = 'Cari Kod'
         TabOrder = 4
       end
       object edCariKod: TUniEdit
@@ -242,7 +242,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 70
         Height = 17
         Hint = ''
-        Caption = 'Teklif tar.'
+        Caption = 'Teklif Tar.'
         TabOrder = 7
       end
       object dtTeklif: TUniDateTimePicker
@@ -263,7 +263,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 60
         Height = 17
         Hint = ''
-        Caption = 'Gecerlilik'
+        Caption = 'Ge'#231'erlilik'
         TabOrder = 9
       end
       object dtGecer: TUniDateTimePicker
@@ -284,7 +284,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 120
         Height = 17
         Hint = ''
-        Caption = 'Siparis no (ERP)'
+        Caption = 'Sipari'#351' No (ERP)'
         TabOrder = 11
       end
       object edSiparis: TUniEdit
@@ -302,7 +302,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 80
         Height = 17
         Hint = ''
-        Caption = 'Aciklama'
+        Caption = 'A'#231#305'klama'
         TabOrder = 13
       end
       object mmNot: TUniMemo
@@ -332,7 +332,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 960
         Height = 22
         Hint = ''
-        Caption = 'Bagli aktiviteler (bos olabilir; cift tik: ac)'
+        Caption = 'Ba'#287'l'#305' aktiviteler (bo'#351' olabilir; '#231'ift t'#305'k: a'#231')'
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Height = -12
@@ -384,7 +384,7 @@ object frmCrmTeklif: TfrmCrmTeklif
           end
           item
             FieldName = 'SIPARIS_NO'
-            Title.Caption = 'Siparis no'
+            Title.Caption = 'Sipari'#351' No'
             Width = 90
           end>
       end
@@ -407,7 +407,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 960
         Height = 22
         Hint = ''
-        Caption = 'Bagli gorevler (TASK; bos olabilir; cift tik: ac)'
+        Caption = 'Ba'#287'l'#305' g'#246'revler (TASK; bo'#351' olabilir; '#231'ift t'#305'k: a'#231')'
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Height = -12
@@ -459,7 +459,7 @@ object frmCrmTeklif: TfrmCrmTeklif
           end
           item
             FieldName = 'ONCELIK'
-            Title.Caption = 'Oncelik'
+            Title.Caption = #214'ncelik'
             Width = 70
           end
           item
@@ -487,7 +487,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 960
         Height = 22
         Hint = ''
-        Caption = 'Teklif satirlari (CRM_TEKLIF_SATIR)'
+        Caption = 'Teklif sat'#305'rlar'#305' (CRM_TEKLIF_SATIR)'
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Height = -12
@@ -514,12 +514,12 @@ object frmCrmTeklif: TfrmCrmTeklif
         Columns = <
           item
             FieldName = 'STOK_KOD'
-            Title.Caption = 'Stok kod'
+            Title.Caption = 'Stok Kod'
             Width = 100
           end
           item
             FieldName = 'STOK_ADI'
-            Title.Caption = 'Stok adi'
+            Title.Caption = 'Stok Ad'#305
             Width = 220
           end
           item
@@ -534,7 +534,7 @@ object frmCrmTeklif: TfrmCrmTeklif
           end
           item
             FieldName = 'BIRIM_FIYAT'
-            Title.Caption = 'Birim fiyat'
+            Title.Caption = 'Birim Fiyat'
             Width = 90
           end
           item
@@ -561,7 +561,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 70
         Height = 17
         Hint = ''
-        Caption = 'Stok kod'
+        Caption = 'Stok Kod'
         TabOrder = 0
       end
       object edStokKod: TUniEdit
@@ -589,7 +589,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 52
         Height = 17
         Hint = ''
-        Caption = 'Stok ad'
+        Caption = 'Stok Ad'
         TabOrder = 3
       end
       object edStokAd: TUniEdit
@@ -625,7 +625,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 56
         Height = 17
         Hint = ''
-        Caption = 'Birim fiyat'
+        Caption = 'Birim Fiyat'
         TabOrder = 6
       end
       object edBirimFiyat: TUniEdit
@@ -663,7 +663,7 @@ object frmCrmTeklif: TfrmCrmTeklif
         Width = 80
         Height = 17
         Hint = ''
-        Caption = 'Satir toplami'
+        Caption = 'Sat'#305'r Toplam'#305
         TabOrder = 10
       end
       object lblToplam: TUniLabel

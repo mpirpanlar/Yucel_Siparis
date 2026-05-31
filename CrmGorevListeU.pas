@@ -46,7 +46,7 @@ procedure TfrmCrmGorevListe.AcKayit;
 begin
   if not qList.Active or qList.IsEmpty then
   begin
-    UniMainModule.saHata.Show('Once listele yapin ve bir satir secin.');
+    UniMainModule.saHata.Show('Önce listele yapýn ve bir satýr seçin.');
     Exit;
   end;
   if qList.FieldByName('AKTIVITE_ID').IsNull then

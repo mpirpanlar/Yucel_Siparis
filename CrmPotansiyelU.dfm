@@ -3,7 +3,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
   Top = 0
   ClientHeight = 640
   ClientWidth = 920
-  Caption = 'CRM - Potansiyel musteri'
+  Caption = 'CRM - Potansiyel M'#252#351'teri'
   OnShow = UniFormShow
   BorderStyle = bsNone
   OldCreateOrder = False
@@ -79,14 +79,14 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
       TabOrder = 0
       object tabFirma: TUniTabSheet
         Hint = ''
-        Caption = 'Firma / ticari'
+        Caption = 'Firma / Ticari'
         object lblUnvan: TUniLabel
           Left = 16
           Top = 16
           Width = 71
           Height = 13
           Hint = ''
-          Caption = 'Firma unvan *'
+          Caption = 'Firma Unvan *'
           TabOrder = 0
         end
         object edUnvan: TUniEdit
@@ -104,7 +104,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 36
           Height = 13
           Hint = ''
-          Caption = 'Kisa ad'
+          Caption = 'K'#305'sa Ad'
           TabOrder = 2
         end
         object edKisa: TUniEdit
@@ -122,7 +122,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 59
           Height = 13
           Hint = ''
-          Caption = 'Musteri tipi'
+          Caption = 'M'#252#351'teri Tipi'
           TabOrder = 4
         end
         object cbMustTip: TUniComboBox
@@ -142,7 +142,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 63
           Height = 13
           Hint = ''
-          Caption = 'Vergi dairesi'
+          Caption = 'Vergi Dairesi'
           TabOrder = 6
         end
         object edVdaire: TUniEdit
@@ -160,7 +160,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 43
           Height = 13
           Hint = ''
-          Caption = 'Vergi no'
+          Caption = 'Vergi No'
           TabOrder = 8
         end
         object edVno: TUniEdit
@@ -178,7 +178,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 61
           Height = 13
           Hint = ''
-          Caption = 'TC kimlik no'
+          Caption = 'TC Kimlik No'
           TabOrder = 10
         end
         object edTc: TUniEdit
@@ -214,7 +214,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 33
           Height = 13
           Hint = ''
-          Caption = 'Sektor'
+          Caption = 'Sekt'#246'r'
           TabOrder = 14
         end
         object edSektor: TUniEdit
@@ -232,7 +232,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 81
           Height = 13
           Hint = ''
-          Caption = 'Faaliyet konusu'
+          Caption = 'Faaliyet Konusu'
           TabOrder = 16
         end
         object edFaal: TUniEdit
@@ -250,7 +250,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 67
           Height = 13
           Hint = ''
-          Caption = 'Calisan sayisi'
+          Caption = #199'al'#305#351'an Say'#305's'#305
           TabOrder = 18
         end
         object edCalisan: TUniEdit
@@ -268,7 +268,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 87
           Height = 13
           Hint = ''
-          Caption = 'Tahmini yillik ciro'
+          Caption = 'Tahmini Y'#305'll'#305'k Ciro'
           TabOrder = 20
         end
         object edCiro: TUniEdit
@@ -286,7 +286,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 54
           Height = 13
           Hint = ''
-          Caption = 'Para birimi'
+          Caption = 'Para Birimi'
           TabOrder = 22
         end
         object cbPara: TUniComboBox
@@ -306,7 +306,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 87
           Height = 13
           Hint = ''
-          Caption = 'Kaynak (referans)'
+          Caption = 'Kaynak (Referans)'
           TabOrder = 24
         end
         object edKaynak: TUniEdit
@@ -328,7 +328,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 23
           Height = 13
           Hint = ''
-          Caption = 'Ulke'
+          Caption = #220'lke'
           TabOrder = 0
         end
         object edUlke: TUniEdit
@@ -346,7 +346,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 6
           Height = 13
           Hint = ''
-          Caption = 'Il'
+          Caption = #304'l'
           TabOrder = 2
         end
         object edIl: TUniEdit
@@ -364,7 +364,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 17
           Height = 13
           Hint = ''
-          Caption = 'Ilce'
+          Caption = #304'l'#231'e'
           TabOrder = 4
         end
         object edIlce: TUniEdit
@@ -382,7 +382,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 58
           Height = 13
           Hint = ''
-          Caption = 'Posta kodu'
+          Caption = 'Posta Kodu'
           TabOrder = 6
         end
         object edPk: TUniEdit
@@ -414,14 +414,14 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
       end
       object tabKonum: TUniTabSheet
         Hint = ''
-        Caption = 'Konum / harita'
+        Caption = 'Konum / Harita'
         object lblGpsE: TUniLabel
           Left = 16
           Top = 16
           Width = 54
           Height = 13
           Hint = ''
-          Caption = 'GPS enlem'
+          Caption = 'GPS Enlem'
           TabOrder = 4
         end
         object edGpsEnlem: TUniEdit
@@ -439,7 +439,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 60
           Height = 13
           Hint = ''
-          Caption = 'GPS boylam'
+          Caption = 'GPS Boylam'
           TabOrder = 5
         end
         object edGpsBoylam: TUniEdit
@@ -457,7 +457,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 200
           Height = 32
           Hint = ''
-          Caption = 'Haritadan konum sec (Google)'
+          Caption = 'Haritadan Konum Se'#231' (Google)'
           TabOrder = 2
           OnClick = btnHaritaKonumClick
         end
@@ -467,7 +467,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 149
           Height = 13
           Hint = ''
-          Caption = 'Harita / geocoder adres satiri'
+          Caption = 'Harita / Geocoder Adres Sat'#305'r'#305
           TabOrder = 6
         end
         object mmHaritaAdres: TUniMemo
@@ -484,22 +484,20 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 471
           Height = 13
           Hint = ''
-          Caption = 
-            'Haritada tiklayin, Yansit ile forma alin, Tamam ile karta aktar'#196 +
-            #177'n. Anahtar: CrmMapsConfigU.'
+          Caption = 'Haritada t'#305'klay'#305'n, Yans'#305't ile forma al'#305'n, Tamam ile karta aktar'#305'n. Anahtar: CrmMapsConfigU.'
           TabOrder = 7
         end
       end
       object tabIletisim: TUniTabSheet
         Hint = ''
-        Caption = 'Iletisim / yetkili'
+        Caption = #304'leti'#351'im / Yetkili'
         object lblTel: TUniLabel
           Left = 16
           Top = 16
           Width = 47
           Height = 13
           Hint = ''
-          Caption = 'Tel (sabit)'
+          Caption = 'Tel (Sabit)'
           TabOrder = 0
         end
         object edTel: TUniEdit
@@ -535,7 +533,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 36
           Height = 13
           Hint = ''
-          Caption = 'Cep tel'
+          Caption = 'Cep Tel'
           TabOrder = 4
         end
         object edCep: TUniEdit
@@ -589,7 +587,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 53
           Height = 13
           Hint = ''
-          Caption = 'Web sitesi'
+          Caption = 'Web Sitesi'
           TabOrder = 10
         end
         object edWeb: TUniEdit
@@ -607,7 +605,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 78
           Height = 13
           Hint = ''
-          Caption = 'Yetkili ad soyad'
+          Caption = 'Yetkili Ad Soyad'
           TabOrder = 12
         end
         object edYetAd: TUniEdit
@@ -643,7 +641,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 71
           Height = 13
           Hint = ''
-          Caption = 'Yetkili e-posta'
+          Caption = 'Yetkili E-posta'
           TabOrder = 16
         end
         object edYetEposta: TUniEdit
@@ -661,7 +659,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 45
           Height = 13
           Hint = ''
-          Caption = 'Yetkili tel'
+          Caption = 'Yetkili Tel'
           TabOrder = 18
         end
         object edYetTel: TUniEdit
@@ -679,7 +677,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 95
           Height = 13
           Hint = ''
-          Caption = 'Muhasebe yetkilisi'
+          Caption = 'Muhasebe Yetkilisi'
           TabOrder = 20
         end
         object edMuhAd: TUniEdit
@@ -697,7 +695,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 43
           Height = 13
           Hint = ''
-          Caption = 'Muh. tel'
+          Caption = 'Muh. Tel'
           TabOrder = 22
         end
         object edMuhTel: TUniEdit
@@ -715,7 +713,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 69
           Height = 13
           Hint = ''
-          Caption = 'Muh. e-posta'
+          Caption = 'Muh. E-posta'
           TabOrder = 24
         end
         object edMuhEposta: TUniEdit
@@ -730,7 +728,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
       end
       object tabTakip: TUniTabSheet
         Hint = ''
-        Caption = 'Durum / Netsis / notlar'
+        Caption = 'Durum / Netsis / Notlar'
         object lblDurum: TUniLabel
           Left = 16
           Top = 16
@@ -759,7 +757,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 180
           Height = 22
           Hint = ''
-          Caption = 'Ilk iletisim tarihi var'
+          Caption = #304'lk '#304'leti'#351'im Tarihi Var'
           TabOrder = 2
         end
         object dtIlk: TUniDateTimePicker
@@ -780,7 +778,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 160
           Height = 22
           Hint = ''
-          Caption = 'Son takip tarihi var'
+          Caption = 'Son Takip Tarihi Var'
           TabOrder = 4
         end
         object dtSonTakip: TUniDateTimePicker
@@ -801,7 +799,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 170
           Height = 22
           Hint = ''
-          Caption = 'Sonraki aksiyon tarihi'
+          Caption = 'Sonraki Aksiyon Tarihi'
           TabOrder = 6
         end
         object dtSonraki: TUniDateTimePicker
@@ -839,7 +837,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 134
           Height = 13
           Hint = ''
-          Caption = 'Netsis cari kodu (baglanti)'
+          Caption = 'Netsis Cari Kodu (Ba'#287'lant'#305')'
           TabOrder = 10
         end
         object edNetsis: TUniEdit
@@ -857,7 +855,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 120
           Height = 30
           Hint = ''
-          Caption = 'Netsis cari bul'
+          Caption = 'Netsis Cari Bul'
           TabOrder = 12
           OnClick = btnCariBulClick
         end
@@ -867,7 +865,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Width = 120
           Height = 30
           Hint = ''
-          Caption = 'Baglantiyi sil'
+          Caption = 'Ba'#287'lant'#305'y'#305' Sil'
           TabOrder = 13
           OnClick = btnNetsisTemizleClick
         end

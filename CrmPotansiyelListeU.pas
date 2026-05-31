@@ -49,12 +49,12 @@ type
     function PotSeciliPotansiyelId(out APotId: Int64): Boolean;
     procedure AcKayit;
     function GomuluNavSekmesiMi: Boolean;
-    { NavPage sekmesindeki liste (bsNone); rota modalinda bsDialog -> sekme kapatilmaz, yalnizca form Close. }
+    { NavPage sekmesindeki liste (bsNone); rota modalýnda bsDialog -> sekme kapatýlmaz, yalnýzca form Close. }
     function KapatirkenSekmeKaldir: Boolean;
   public
-    { CrmCariSecU.HedefCariEdit benzeri: ShowModal oncesi atanir, Satir sec ile POTANSIYEL_ID yazilir. }
+    { CrmCariSecU.HedefCariEdit benzeri: ShowModal öncesi atanýr, Satýr seç ile POTANSIYEL_ID yazýlýr. }
     HedefPotansiyelIdEdit: TUniEdit;
-    { CrmCariSecU.OnCariSecildi ile ayni: method pointer dogrudan atanir. }
+    { CrmCariSecU.OnCariSecildi ile ayný: method pointer doðrudan atanýr. }
     OnPotansiyelSecildi: TCrmPotListeSecildiEvent;
     procedure SecimToolbarYenile;
   end;
@@ -113,7 +113,7 @@ begin
     btnSatirSec.Visible := True;
     btnSatirSec.Enabled := True;
     btnSatirSec.Hint :=
-      'Secili satirin POTANSIYEL_ID degerini cagiran forma aktarir ve listeyi kapatir';
+      'Seçili satýrýn POTANSIYEL_ID deðerini çaðýran forma aktarýr ve listeyi kapatýr';
     btnSatirSec.Top := RowBtnSecim;
     btnSatirSec.Left := 120;
     btnSatirSec.Width := 150;
@@ -126,7 +126,7 @@ begin
     btnKapat.BringToFront;
     btnSatirSec.BringToFront;
     btnListele.BringToFront;
-    Caption := 'CRM - Potansiyel secimi (rota)';
+    Caption := 'CRM - Potansiyel Seçimi (Rota)';
   end
   else
   begin
@@ -135,7 +135,7 @@ begin
     btnSatirSec.Visible := True;
     btnSatirSec.Enabled := True;
     btnSatirSec.Hint :=
-      'Secim modunda: POTANSIYEL_ID yi cagiran forma aktarip listeyi kapatir. Kayit detayi icin Kaydi ac veya cift tik.';
+      'Seçim modunda: POTANSIYEL_ID yi çaðýran forma aktarýp listeyi kapatýr. Kayýt detayý için Kaydý aç veya çift týk.';
     btnSatirSec.Left := 246;
     btnSatirSec.Width := 140;
     btnSatirSec.Height := 32;
@@ -154,14 +154,14 @@ begin
     btnKapat.Height := 32;
     btnKapat.Width := 100;
     btnKapat.Left := Max(380, pnlToolbar.ClientWidth - btnKapat.Width - 12);
-    Caption := 'CRM - Potansiyel musteri listesi';
+    Caption := 'CRM - Potansiyel Müþteri Listesi';
   end;
 end;
 
 procedure TfrmCrmPotansiyelListe.FiltreDurumlariDoldur;
 begin
   cbFiltDurum.Items.Clear;
-  cbFiltDurum.Items.Add('(Tumu)');
+  cbFiltDurum.Items.Add('(Tümü)');
   try
     qFilt.Close;
     qFilt.SQL.Text :=
@@ -203,7 +203,7 @@ var
 begin
   if not PotSeciliPotansiyelId(PotId) then
   begin
-    UniMainModule.saHata.Show('Once listele yapin ve bir satir secin.');
+    UniMainModule.saHata.Show('Önce listele yapýn ve bir satýr seçin.');
     Exit;
   end;
 //  if not SecimModuAktif then
@@ -245,7 +245,7 @@ var
 begin
   if not PotSeciliPotansiyelId(PotId) then
   begin
-    UniMainModule.saHata.Show('Once listele yapin ve bir satir secin.');
+    UniMainModule.saHata.Show('Önce listele yapýn ve bir satýr seçin.');
     Exit;
   end;
   xFormShow(TfrmCrmPotansiyel, 'CrmYeniPotansiyel', 1, IntToStr(PotId));
@@ -307,7 +307,7 @@ begin
     UniMainModule.CrmPotListeSecimCallback := nil;
     UniMainModule.CrmPotListeSecimKaynakListe := nil;
   end;
-  { Sadece CRM NavPage sekmesine gomulu liste (modal degil): sekmeyi kaldir. }
+  { Sadece CRM NavPage sekmesine gömülü liste (modal deðil): sekmeyi kaldýr. }
   if KapatirkenSekmeKaldir then
   begin
     MF := MainForm;

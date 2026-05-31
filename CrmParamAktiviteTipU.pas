@@ -7,7 +7,8 @@ uses
   Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
   uniGUIClasses, uniGUIForm, uniGUIBaseClasses, uniPanel, uniLabel,
   uniEdit, uniButton, uniBasicGrid, uniDBGrid, uniDBLookupComboBox,
-  uniCheckBox, Data.DB, MemDS, DBAccess, Uni;
+  uniCheckBox, Data.DB, MemDS, DBAccess, Uni, uniMultiItem, uniComboBox,
+  uniDBComboBox;
 
 type
   TfrmCrmParamAktiviteTip = class(TUniForm)
@@ -160,13 +161,13 @@ begin
   begin
     if not qTip.Active or qTip.IsEmpty then
     begin
-      UniMainModule.saHata.Show('Once bir satir secin veya Yeni ile ekleyin.');
+      UniMainModule.saHata.Show('Önce bir satýr seçin veya Yeni ile ekleyin.');
       Exit;
     end;
     Tid := qTip.FieldByName('TIP_ID').AsLargeInt;
     if not (VarIsNull(UstId) or VarIsEmpty(UstId)) and (UstId = Tid) then
     begin
-      UniMainModule.saHata.Show('Ust tip kendi kaydina isaret edemez.');
+      UniMainModule.saHata.Show('Üst tip kendi kaydýna iþaret edemez.');
       Exit;
     end;
     qExec.SQL.Text :=
@@ -187,7 +188,7 @@ begin
   except
     on E: Exception do
     begin
-      UniMainModule.saHata.Show('Kayit hatasi: ' + E.Message);
+      UniMainModule.saHata.Show('Kayýt hatasý: ' + E.Message);
       Exit;
     end;
   end;

@@ -92,7 +92,7 @@ object frmCrmGorev: TfrmCrmGorev
         Width = 130
         Height = 30
         Hint = 'Netsis cari listesi'
-        Caption = 'Cari listele'
+        Caption = 'Cari Listele'
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite

@@ -182,7 +182,7 @@ procedure TfrmCrmGorev.YeniGorevState;
 begin
   FAktiviteId := 0;
   FBaslangicTeklifId := 0;
-  Caption := 'Yeni Gorev';
+  Caption := 'Yeni Görev';
   edKonu.Text := '';
   mmAciklama.Text := '';
   edCariKod.Text := '';
@@ -212,7 +212,7 @@ begin
   if qLoad.IsEmpty then
   begin
     qLoad.Close;
-    UniMainModule.saHata.Show('Gorev bulunamadi.');
+    UniMainModule.saHata.Show('Görev bulunamadý.');
     FAktiviteId := 0;
     KullanicilariAc;
     YeniGorevState;
@@ -262,7 +262,7 @@ begin
   else
     VarsayilanDurum;
 
-  Caption := 'Gorev';
+  Caption := 'Görev';
 end;
 
 procedure TfrmCrmGorev.UniFormShow(Sender: TObject);
@@ -297,7 +297,7 @@ begin
   end;
   if VarIsNull(lkDurum.KeyValue) or VarIsEmpty(lkDurum.KeyValue) then
   begin
-    UniMainModule.saHata.Show('Durum seciniz.');
+    UniMainModule.saHata.Show('Durum seçiniz.');
     Exit;
   end;
 
@@ -347,7 +347,7 @@ begin
     TaskTid := GorevTipId;
     if TaskTid <= 0 then
     begin
-      UniMainModule.saHata.Show('CRM: TASK aktivite tipi bulunamadi. Veritabani migrasyonunu calistirin.');
+      UniMainModule.saHata.Show('CRM: TASK aktivite tipi bulunamadý. Veritabaný migrasyonunu çalýþtýrýn.');
       Exit;
     end;
 
@@ -363,7 +363,7 @@ begin
           not SameText(Trim(edCariKod.Text), Trim(qLoad.FieldByName('CARI_KOD').AsString)) then
         begin
           qLoad.Close;
-          UniMainModule.saHata.Show('Secilen teklifin cari kodu ile gorev carisi uyusmuyor.');
+          UniMainModule.saHata.Show('Seçilen teklifin cari kodu ile görev carisi uyuþmuyor.');
           Exit;
         end;
       end;
@@ -399,7 +399,7 @@ begin
 
     if Aid <= 0 then
     begin
-      UniMainModule.saHata.Show('CRM aktivite kaydi olusmadi (AktiviteID alinamadi).');
+      UniMainModule.saHata.Show('CRM aktivite kaydý oluþmadý (AktiviteID alýnamadý).');
       Exit;
     end;
 
@@ -422,10 +422,10 @@ begin
     else
       qInsGor.ParamByName('TAMUTC').Clear;
     qInsGor.Execute;
-    Caption := 'Gorev';
+    Caption := 'Görev';
   end;
 
-  UniMainModule.saKaydet.Show('Gorev kaydedildi.');
+  UniMainModule.saKaydet.Show('Görev kaydedildi.');
 end;
 
 end.

@@ -22,17 +22,18 @@ object frmCrmParamTeklifDurum: TfrmCrmParamTeklifDurum
     TabOrder = 0
     BorderStyle = ubsNone
     Caption = ''
+    Layout = 'vbox'
     object pnlToolbar: TUniPanel
       Left = 0
       Top = 0
       Width = 880
       Height = 44
       Hint = ''
-      Align = alTop
       TabOrder = 0
       BorderStyle = ubsNone
       Caption = ''
       Color = 10865101
+      LayoutConfig.Width = '100%'
       object btnListele: TUniButton
         Left = 8
         Top = 6
@@ -93,11 +94,11 @@ object frmCrmParamTeklifDurum: TfrmCrmParamTeklifDurum
       Width = 880
       Height = 96
       Hint = ''
-      Align = alTop
       TabOrder = 1
       BorderStyle = ubsNone
       Caption = ''
       Color = 15790320
+      LayoutConfig.Width = '100%'
       object lblKod: TUniLabel
         Left = 12
         Top = 12
@@ -122,7 +123,7 @@ object frmCrmParamTeklifDurum: TfrmCrmParamTeklifDurum
         Width = 80
         Height = 17
         Hint = ''
-        Caption = 'Aciklama'
+        Caption = 'A'#231#305'klama'
         TabOrder = 2
       end
       object edAciklama: TUniEdit
@@ -149,7 +150,7 @@ object frmCrmParamTeklifDurum: TfrmCrmParamTeklifDurum
         Width = 60
         Height = 17
         Hint = ''
-        Caption = 'Sira'
+        Caption = 'S'#305'ra'
         TabOrder = 5
       end
       object edSira: TUniEdit
@@ -168,8 +169,10 @@ object frmCrmParamTeklifDurum: TfrmCrmParamTeklifDurum
       Width = 880
       Height = 380
       Hint = ''
-      Align = alClient
       DataSource = dsDur
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
       Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgTabs, dgCancelOnExit, dgAutoRefreshRow]
       ReadOnly = True
       WebOptions.Paged = False

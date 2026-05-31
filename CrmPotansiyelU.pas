@@ -137,6 +137,7 @@ type
     function SonrakiCariSiraNoFromSablon(const APrefix: string; ADigitLen: Integer): Int64;
     function NetsisCariNetOpenXOlustur(const ACariKod: string): Boolean;
     procedure PotansiyelNetsisKodBagla(const ACariKod: string);
+    procedure HaritaAdresiniAyikla(const AAddr: string);
   public
   end;
 
@@ -223,7 +224,7 @@ begin
   FPotansiyelId := 0;
   FYuklenenNetsis := '';
   FHasLoadedBagUtc := False;
-  Caption := 'Yeni potansiyel musteri';
+  Caption := 'Yeni Potansiyel Müþteri';
   edUnvan.Text := '';
   edKisa.Text := '';
   cbMustTip.ItemIndex := 0;
@@ -280,7 +281,7 @@ begin
   if qLoad.IsEmpty then
   begin
     qLoad.Close;
-    UniMainModule.saHata.Show('Kayit bulunamadi.');
+    UniMainModule.saHata.Show('Kayýt bulunamadý.');
     YeniKayit;
     Exit;
   end;
@@ -370,7 +371,7 @@ begin
   if FHasLoadedBagUtc then
     FLoadedBaglantiUtc := qLoad.FieldByName('NETSIS_BAGLANTI_UTC').AsDateTime;
   qLoad.Close;
-  Caption := 'Potansiyel musteri';
+  Caption := 'Potansiyel Müþteri';
 end;
 
 procedure TfrmCrmPotansiyel.InitCombos;
@@ -481,8 +482,8 @@ begin
   Result := False;
   if Trim(ACariKod) = '' then
     Exit;
-  // TODO : NetOpenX ile cari olusturma islemleri burada yapilacak
-  // Ornek: firma unvani, vergi no, adres vb. potansiyel kaydindan NetOpenX API'ye aktarilacak.
+  // TODO : NetOpenX ile cari oluþturma iþlemleri burada yapýlacak
+  // Örnek: firma unvaný, vergi no, adres vb. potansiyel kaydýndan NetOpenX API'ye aktarýlacak.
   Result := True;
 end;
 
@@ -505,13 +506,13 @@ begin
   if Trim(edNetsis.Text) <> '' then
   begin
     UniMainModule.saHata.Show(
-      'Bu potansiyel musteri icin zaten Netsis cari baglantisi var.' + sLineBreak +
+      'Bu potansiyel müþteri için zaten Netsis cari baðlantýsý var.' + sLineBreak +
       'Mevcut kod: ' + Trim(edNetsis.Text));
     Exit;
   end;
   if FPotansiyelId <= 0 then
   begin
-    UniMainModule.saHata.Show('Once potansiyel musteriyi kaydedin, sonra Netsis cari olusturabilirsiniz.');
+    UniMainModule.saHata.Show('Önce potansiyel müþteriyi kaydedin, sonra Netsis cari oluþturabilirsiniz.');
     Exit;
   end;
 
@@ -520,13 +521,13 @@ begin
     YeniKod := NetsisCariKodUret(Sablon);
     if Trim(YeniKod) = '' then
     begin
-      UniMainModule.saHata.Show('Netsis cari kodu uretilemedi. PARAMETRE.NETSIS_CARI_SABLON degerini kontrol edin.');
+      UniMainModule.saHata.Show('Netsis cari kodu üretilemedi. PARAMETRE.NETSIS_CARI_SABLON deðerini kontrol edin.');
       Exit;
     end;
 
     if not NetsisCariNetOpenXOlustur(YeniKod) then
     begin
-      UniMainModule.saHata.Show('Netsis cari olusturma islemi tamamlanamadi.');
+      UniMainModule.saHata.Show('Netsis cari oluþturma iþlemi tamamlanamadý.');
       Exit;
     end;
 {
@@ -535,24 +536,109 @@ begin
     FYuklenenNetsis := YeniKod;
     FHasLoadedBagUtc := True;
     FLoadedBaglantiUtc := Now;
-    UniMainModule.saKaydet.Show('Netsis cari kodu olusturuldu ve potansiyel kayda baglandi: ' + YeniKod);
+    UniMainModule.saKaydet.Show('Netsis cari kodu oluþturuldu ve potansiyel kayda baðlandý: ' + YeniKod);
 }
   except
     on E: Exception do
-      UniMainModule.saHata.Show('Netsis cari olusturma hatasi: ' + E.Message);
+      UniMainModule.saHata.Show('Netsis cari oluþturma hatasý: ' + E.Message);
   end;
+end;
+
+procedure TfrmCrmPotansiyel.HaritaAdresiniAyikla(const AAddr: string);
+
+  function TumuRakam(const S: string): Boolean;
+  var
+    I: Integer;
+  begin
+    Result := S <> '';
+    for I := 1 to Length(S) do
+      if not CharInSet(S[I], ['0'..'9']) then
+      begin
+        Result := False;
+        Break;
+      end;
+  end;
+
+var
+  Adr, SehirBolum, IlceIl, Pk, Il, Ilce, Ulke, Detay, Token: string;
+  Parts: TArray<string>;
+  N, I, SpacePos, SlashPos: Integer;
+begin
+  // Google formatted_address (ornek: 'Sokak/Cadde, 35220 Konak/Izmir, Turkiye')
+  // virgulle ayrilan parcalardan ulke / il / ilce / posta kodu / adres detayi cikarilir.
+  Adr := Trim(AAddr);
+  if Adr = '' then
+    Exit;
+
+  Parts := Adr.Split([',']);
+  N := Length(Parts);
+  for I := 0 to N - 1 do
+    Parts[I] := Trim(Parts[I]);
+
+  Ulke := '';
+  Pk := '';
+  Il := '';
+  Ilce := '';
+  Detay := '';
+
+  if N >= 1 then
+    Ulke := Parts[N - 1];
+
+  if N >= 2 then
+  begin
+    SehirBolum := Parts[N - 2];
+    SpacePos := Pos(' ', SehirBolum);
+    if SpacePos > 0 then
+    begin
+      Token := Copy(SehirBolum, 1, SpacePos - 1);
+      if (Length(Token) >= 4) and (Length(Token) <= 6) and TumuRakam(Token) then
+      begin
+        Pk := Token;
+        IlceIl := Trim(Copy(SehirBolum, SpacePos + 1, MaxInt));
+      end
+      else
+        IlceIl := SehirBolum;
+    end
+    else
+      IlceIl := SehirBolum;
+
+    SlashPos := Pos('/', IlceIl);
+    if SlashPos > 0 then
+    begin
+      Ilce := Trim(Copy(IlceIl, 1, SlashPos - 1));
+      Il := Trim(Copy(IlceIl, SlashPos + 1, MaxInt));
+    end
+    else
+      Il := Trim(IlceIl);
+  end;
+
+  if N >= 3 then
+    for I := 0 to N - 3 do
+    begin
+      if Detay <> '' then
+        Detay := Detay + ', ';
+      Detay := Detay + Parts[I];
+    end;
+
+  if Ulke <> '' then edUlke.Text := Ulke;
+  if Il <> '' then edIl.Text := Il;
+  if Ilce <> '' then edIlce.Text := Ilce;
+  if Pk <> '' then edPk.Text := Pk;
+  if Detay <> '' then mmAdres.Text := Detay;
 end;
 
 procedure TfrmCrmPotansiyel.btnHaritaKonumClick(Sender: TObject);
 begin
-  with frmCrmHaritaSec do
-  begin
-    MerkezAyarla(ParseDecimal(edGpsEnlem.Text), ParseDecimal(edGpsBoylam.Text));
-    HedefEnlemEdit := edGpsEnlem;
-    HedefBoylamEdit := edGpsBoylam;
-    HedefHaritaAdresMemo := mmHaritaAdres;
-    ShowModal;
-  end;
+  frmCrmHaritaSec.MerkezAyarla(ParseDecimal(edGpsEnlem.Text), ParseDecimal(edGpsBoylam.Text));
+  frmCrmHaritaSec.HedefEnlemEdit := edGpsEnlem;
+  frmCrmHaritaSec.HedefBoylamEdit := edGpsBoylam;
+  frmCrmHaritaSec.HedefHaritaAdresMemo := mmHaritaAdres;
+  frmCrmHaritaSec.ShowModal(
+    procedure(ASender: TComponent; AResult: Integer)
+    begin
+      if AResult = mrOK then
+        HaritaAdresiniAyikla(mmHaritaAdres.Text);
+    end);
 end;
 
 procedure TfrmCrmPotansiyel.btnKaydetClick(Sender: TObject);
@@ -569,7 +655,7 @@ begin
   end;
   if VarIsNull(lkDurum.KeyValue) or VarIsEmpty(lkDurum.KeyValue) then
   begin
-    UniMainModule.saHata.Show('Durum seciniz.');
+    UniMainModule.saHata.Show('Durum seçiniz.');
     Exit;
   end;
 

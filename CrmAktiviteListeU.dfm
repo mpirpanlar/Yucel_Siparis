@@ -3,7 +3,7 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
   Top = 0
   ClientHeight = 480
   ClientWidth = 900
-  Caption = 'frmCrmAktiviteListe'
+  Caption = 'CRM - Aktivite Listesi'
   OnShow = UniFormShow
   BorderStyle = bsNone
   OldCreateOrder = False
@@ -21,17 +21,18 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
     TabOrder = 0
     BorderStyle = ubsNone
     Caption = ''
+    Layout = 'vbox'
     object pnlToolbar: TUniPanel
       Left = 0
       Top = 0
       Width = 900
       Height = 48
       Hint = ''
-      Align = alTop
       TabOrder = 0
       BorderStyle = ubsNone
       Caption = ''
       Color = 10865101
+      LayoutConfig.Width = '100%'
       object btnListele: TUniButton
         Left = 12
         Top = 8
@@ -106,7 +107,9 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
       WebOptions.Paged = False
       WebOptions.FetchAll = True
       LoadMask.Message = 'Loading data...'
-      Align = alClient
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
       TabOrder = 1
       OnAjaxEvent = grdAjaxEvent
       Columns = <
@@ -136,13 +139,13 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
         end
         item
           FieldName = 'TEKLIF_NO'
-          Title.Caption = 'Teklif no'
+          Title.Caption = 'Teklif No'
           Width = 100
           ReadOnly = True
         end
         item
           FieldName = 'SIPARIS_NO'
-          Title.Caption = 'Siparis no'
+          Title.Caption = 'Sipari'#351' No'
           Width = 90
           ReadOnly = True
         end

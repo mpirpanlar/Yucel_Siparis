@@ -3,7 +3,7 @@ object frmCrmTeklifListe: TfrmCrmTeklifListe
   Top = 0
   ClientHeight = 560
   ClientWidth = 900
-  Caption = 'frmCrmTeklifListe'
+  Caption = 'CRM - Teklif Listesi'
   OnShow = UniFormShow
   BorderStyle = bsNone
   OldCreateOrder = False
@@ -22,17 +22,18 @@ object frmCrmTeklifListe: TfrmCrmTeklifListe
     TabOrder = 0
     BorderStyle = ubsNone
     Caption = ''
+    Layout = 'vbox'
     object pnlToolbar: TUniPanel
       Left = 0
       Top = 0
       Width = 900
       Height = 48
       Hint = ''
-      Align = alTop
       TabOrder = 0
       BorderStyle = ubsNone
       Caption = ''
       Color = 10865101
+      LayoutConfig.Width = '100%'
       object btnListele: TUniButton
         Left = 12
         Top = 8
@@ -58,7 +59,7 @@ object frmCrmTeklifListe: TfrmCrmTeklifListe
         Width = 140
         Height = 32
         Hint = ''
-        Caption = 'Kaydi ac'
+        Caption = 'Kayd'#305' A'#231
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
@@ -98,11 +99,11 @@ object frmCrmTeklifListe: TfrmCrmTeklifListe
       Width = 900
       Height = 72
       Hint = ''
-      Align = alTop
       TabOrder = 1
       BorderStyle = ubsNone
       Caption = ''
       Color = 15790320
+      LayoutConfig.Width = '100%'
       object lblFiltCari: TUniLabel
         Left = 8
         Top = 12
@@ -127,7 +128,7 @@ object frmCrmTeklifListe: TfrmCrmTeklifListe
         Width = 50
         Height = 17
         Hint = ''
-        Caption = 'Teklif no'
+        Caption = 'Teklif No'
         TabOrder = 2
       end
       object edFiltNo: TUniEdit
@@ -145,7 +146,7 @@ object frmCrmTeklifListe: TfrmCrmTeklifListe
         Width = 110
         Height = 22
         Hint = ''
-        Caption = 'Tarih filtresi'
+        Caption = 'Tarih Filtresi'
         TabOrder = 4
       end
       object lblFiltTarBas: TUniLabel
@@ -154,7 +155,7 @@ object frmCrmTeklifListe: TfrmCrmTeklifListe
         Width = 20
         Height = 17
         Hint = ''
-        Caption = 'Bas'
+        Caption = 'Ba'#351
         TabOrder = 5
       end
       object dtFiltBas: TUniDateTimePicker
@@ -211,7 +212,7 @@ object frmCrmTeklifListe: TfrmCrmTeklifListe
         Width = 70
         Height = 17
         Hint = ''
-        Caption = 'Siparis no'
+        Caption = 'Sipari'#351' No'
         TabOrder = 11
       end
       object edFiltSip: TUniEdit
@@ -230,13 +231,15 @@ object frmCrmTeklifListe: TfrmCrmTeklifListe
       Width = 900
       Height = 440
       Hint = ''
-      Align = alClient
       DataSource = dsList
       Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgTabs, dgCancelOnExit, dgAutoRefreshRow]
       ReadOnly = True
       WebOptions.Paged = False
       WebOptions.FetchAll = True
       TabOrder = 2
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
       OnAjaxEvent = grdAjaxEvent
       Columns = <
         item
@@ -246,12 +249,12 @@ object frmCrmTeklifListe: TfrmCrmTeklifListe
         end
         item
           FieldName = 'TEKLIF_NO'
-          Title.Caption = 'Teklif no'
+          Title.Caption = 'Teklif No'
           Width = 100
         end
         item
           FieldName = 'SIPARIS_NO'
-          Title.Caption = 'Siparis no'
+          Title.Caption = 'Sipari'#351' No'
           Width = 90
         end
         item
@@ -261,7 +264,7 @@ object frmCrmTeklifListe: TfrmCrmTeklifListe
         end
         item
           FieldName = 'BASLIK'
-          Title.Caption = 'Baslik'
+          Title.Caption = 'Ba'#351'l'#305'k'
           Width = 200
         end
         item

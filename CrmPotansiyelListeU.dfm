@@ -3,7 +3,7 @@ object frmCrmPotansiyelListe: TfrmCrmPotansiyelListe
   Top = 0
   ClientHeight = 560
   ClientWidth = 1000
-  Caption = 'CRM - Potansiyel musteri listesi'
+  Caption = 'CRM - Potansiyel M'#252#351'teri Listesi'
   OnShow = UniFormShow
   BorderStyle = bsNone
   OldCreateOrder = False
@@ -22,17 +22,18 @@ object frmCrmPotansiyelListe: TfrmCrmPotansiyelListe
     TabOrder = 0
     BorderStyle = ubsNone
     Caption = ''
+    Layout = 'vbox'
     object pnlToolbar: TUniPanel
       Left = 0
       Top = 0
       Width = 1000
       Height = 48
       Hint = ''
-      Align = alTop
       TabOrder = 0
       BorderStyle = ubsNone
       Caption = ''
       Color = 10865101
+      LayoutConfig.Width = '100%'
       object lblSecimBilgi: TUniLabel
         Left = 12
         Top = 4
@@ -40,10 +41,7 @@ object frmCrmPotansiyelListe: TfrmCrmPotansiyelListe
         Height = 13
         Hint = ''
         Visible = False
-        Caption = 
-          'Filtre + Listele; istenen satira tiklayin, ardindan asagidaki Sa' +
-          'tir sec ile onaylayin. Cift tik da ayni sekilde secer ve kapatir' +
-          '.'
+        Caption = 'Filtre + Listele; istenen sat'#305'ra t'#305'klay'#305'n, ard'#305'ndan a'#351'a'#287#305'daki Sat'#305'r se'#231' ile onaylay'#305'n. '#199'ift t'#305'k da ayn'#305' '#351'ekilde se'#231'er ve kapat'#305'r.'
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clGray
@@ -78,7 +76,7 @@ object frmCrmPotansiyelListe: TfrmCrmPotansiyelListe
         Hint = 
           'Izgarada isaretli satiri rota duragi olarak alir ve pencereyi ka' +
           'patir'
-        Caption = 'Satir sec'
+        Caption = 'Sat'#305'r Se'#231
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
@@ -100,7 +98,7 @@ object frmCrmPotansiyelListe: TfrmCrmPotansiyelListe
         Width = 120
         Height = 32
         Hint = ''
-        Caption = 'Yeni kay'#305't'
+        Caption = 'Yeni Kay'#305't'
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
@@ -120,7 +118,7 @@ object frmCrmPotansiyelListe: TfrmCrmPotansiyelListe
         Width = 120
         Height = 32
         Hint = ''
-        Caption = 'Kayd'#305' a'#231
+        Caption = 'Kayd'#305' A'#231
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
@@ -161,18 +159,18 @@ object frmCrmPotansiyelListe: TfrmCrmPotansiyelListe
       Width = 1000
       Height = 72
       Hint = ''
-      Align = alTop
       TabOrder = 1
       BorderStyle = ubsNone
       Caption = ''
       Color = 15790320
+      LayoutConfig.Width = '100%'
       object lblFiltUnvan: TUniLabel
         Left = 12
         Top = 12
         Width = 70
         Height = 13
         Hint = ''
-        Caption = 'Firma / unvan'
+        Caption = 'Firma / Unvan'
         TabOrder = 0
       end
       object edFiltUnvan: TUniEdit
@@ -190,7 +188,7 @@ object frmCrmPotansiyelListe: TfrmCrmPotansiyelListe
         Width = 75
         Height = 13
         Hint = ''
-        Caption = 'Netsis cari kod'
+        Caption = 'Netsis Cari Kod'
         TabOrder = 2
       end
       object edFiltNetsis: TUniEdit
@@ -228,7 +226,7 @@ object frmCrmPotansiyelListe: TfrmCrmPotansiyelListe
         Width = 320
         Height = 22
         Hint = ''
-        Caption = 'Sadece Netsis cariye bagli kayitlar'
+        Caption = 'Sadece Netsis Cariye Ba'#287'l'#305' Kay'#305'tlar'
         TabOrder = 6
       end
     end
@@ -244,7 +242,9 @@ object frmCrmPotansiyelListe: TfrmCrmPotansiyelListe
       WebOptions.Paged = False
       WebOptions.FetchAll = True
       LoadMask.Message = 'Loading data...'
-      Align = alClient
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
       TabOrder = 2
       OnAjaxEvent = grdAjaxEvent
       OnCellClick = grdCellClick
@@ -257,19 +257,19 @@ object frmCrmPotansiyelListe: TfrmCrmPotansiyelListe
         end
         item
           FieldName = 'FIRMA_UNVAN'
-          Title.Caption = 'Firma unvan'
+          Title.Caption = 'Firma Unvan'
           Width = 260
           ReadOnly = True
         end
         item
           FieldName = 'KISA_AD'
-          Title.Caption = 'Kisa ad'
+          Title.Caption = 'K'#305'sa Ad'
           Width = 120
           ReadOnly = True
         end
         item
           FieldName = 'NETSIS_CARI_KOD'
-          Title.Caption = 'Netsis cari'
+          Title.Caption = 'Netsis Cari'
           Width = 100
           ReadOnly = True
         end
@@ -281,13 +281,13 @@ object frmCrmPotansiyelListe: TfrmCrmPotansiyelListe
         end
         item
           FieldName = 'IL'
-          Title.Caption = 'Il'
+          Title.Caption = #304'l'
           Width = 80
           ReadOnly = True
         end
         item
           FieldName = 'ILCE'
-          Title.Caption = 'Ilce'
+          Title.Caption = #304'l'#231'e'
           Width = 90
           ReadOnly = True
         end
@@ -305,7 +305,7 @@ object frmCrmPotansiyelListe: TfrmCrmPotansiyelListe
         end
         item
           FieldName = 'OLUSTURMA_UTC'
-          Title.Caption = 'Olusturma'
+          Title.Caption = 'Olu'#351'turma'
           Width = 130
           ReadOnly = True
         end>

@@ -10,8 +10,7 @@ object frmCrmParamAktiviteTip: TfrmCrmParamAktiviteTip
   MonitoredKeys.Keys = <>
   AlignmentControl = uniAlignmentClient
   Layout = 'fit'
-  PixelsPerInch = 96
-  TextHeight = 13
+  TextHeight = 15
   object rootPanel: TUniPanel
     Left = 0
     Top = 0
@@ -22,17 +21,18 @@ object frmCrmParamAktiviteTip: TfrmCrmParamAktiviteTip
     TabOrder = 0
     BorderStyle = ubsNone
     Caption = ''
+    Layout = 'vbox'
     object pnlToolbar: TUniPanel
       Left = 0
       Top = 0
       Width = 900
       Height = 44
       Hint = ''
-      Align = alTop
       TabOrder = 0
       BorderStyle = ubsNone
       Caption = ''
       Color = 10865101
+      LayoutConfig.Width = '100%'
       object btnListele: TUniButton
         Left = 8
         Top = 6
@@ -42,8 +42,9 @@ object frmCrmParamAktiviteTip: TfrmCrmParamAktiviteTip
         Caption = 'Listele'
         TabOrder = 0
         ClientEvents.UniEvents.Strings = (
-          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
-          'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
         OnClick = btnListeleClick
       end
       object btnYeni: TUniButton
@@ -55,8 +56,9 @@ object frmCrmParamAktiviteTip: TfrmCrmParamAktiviteTip
         Caption = 'Yeni'
         TabOrder = 1
         ClientEvents.UniEvents.Strings = (
-          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
-          'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
         OnClick = btnYeniClick
       end
       object btnKaydet: TUniButton
@@ -68,22 +70,24 @@ object frmCrmParamAktiviteTip: TfrmCrmParamAktiviteTip
         Caption = 'Kaydet'
         TabOrder = 2
         ClientEvents.UniEvents.Strings = (
-          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
-          'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
         OnClick = btnKaydetClick
       end
       object btnKapat: TUniButton
-        Left = 790
-        Top = 6
+        Left = 800
+        Top = 0
         Width = 100
-        Height = 30
+        Height = 44
         Hint = ''
-        Align = alRight
         Caption = 'Kapat'
+        Align = alRight
         TabOrder = 3
         ClientEvents.UniEvents.Strings = (
-          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
-          'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
         OnClick = btnKapatClick
       end
     end
@@ -93,16 +97,16 @@ object frmCrmParamAktiviteTip: TfrmCrmParamAktiviteTip
       Width = 900
       Height = 120
       Hint = ''
-      Align = alTop
       TabOrder = 1
       BorderStyle = ubsNone
       Caption = ''
       Color = 15790320
+      LayoutConfig.Width = '100%'
       object lblKod: TUniLabel
         Left = 12
         Top = 12
-        Width = 80
-        Height = 17
+        Width = 20
+        Height = 13
         Hint = ''
         Caption = 'Kod'
         TabOrder = 0
@@ -119,10 +123,10 @@ object frmCrmParamAktiviteTip: TfrmCrmParamAktiviteTip
       object lblAciklama: TUniLabel
         Left = 280
         Top = 12
-        Width = 80
-        Height = 17
+        Width = 45
+        Height = 13
         Hint = ''
-        Caption = 'Aciklama'
+        Caption = 'A'#231#305'klama'
         TabOrder = 2
       end
       object edAciklama: TUniEdit
@@ -137,10 +141,10 @@ object frmCrmParamAktiviteTip: TfrmCrmParamAktiviteTip
       object lblUst: TUniLabel
         Left = 12
         Top = 48
-        Width = 80
-        Height = 17
+        Width = 34
+        Height = 13
         Hint = ''
-        Caption = 'Ust tip'
+        Caption = #220'st Tip'
         TabOrder = 4
       end
       object lkUst: TUniDBLookupComboBox
@@ -150,9 +154,11 @@ object frmCrmParamAktiviteTip: TfrmCrmParamAktiviteTip
         Height = 27
         Hint = ''
         ListField = 'AD'
-        KeyField = 'TIP_ID'
         ListSource = dsUst
+        KeyField = 'TIP_ID'
+        ListFieldIndex = 0
         TabOrder = 5
+        Color = clWindow
       end
       object chkAktif: TUniCheckBox
         Left = 520
@@ -166,10 +172,10 @@ object frmCrmParamAktiviteTip: TfrmCrmParamAktiviteTip
       object lblSira: TUniLabel
         Left = 660
         Top = 48
-        Width = 60
-        Height = 17
+        Width = 19
+        Height = 13
         Hint = ''
-        Caption = 'Sira'
+        Caption = 'S'#305'ra'
         TabOrder = 7
       end
       object edSira: TUniEdit
@@ -188,12 +194,15 @@ object frmCrmParamAktiviteTip: TfrmCrmParamAktiviteTip
       Width = 900
       Height = 396
       Hint = ''
-      Align = alClient
       DataSource = dsTip
       Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgTabs, dgCancelOnExit, dgAutoRefreshRow]
       ReadOnly = True
       WebOptions.Paged = False
       WebOptions.FetchAll = True
+      LoadMask.Message = 'Loading data...'
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
       TabOrder = 2
     end
   end
