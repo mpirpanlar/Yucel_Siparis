@@ -1,7 +1,7 @@
 object frmCrmAktivite: TfrmCrmAktivite
   Left = 0
   Top = 0
-  ClientHeight = 536
+  ClientHeight = 780
   ClientWidth = 640
   Caption = 'Yeni Aktivite'
   OnShow = UniFormShow
@@ -14,20 +14,32 @@ object frmCrmAktivite: TfrmCrmAktivite
     Left = 0
     Top = 0
     Width = 640
-    Height = 536
+    Height = 780
     Hint = ''
     Align = alClient
     TabOrder = 0
     BorderStyle = ubsNone
     Caption = ''
-    object panMain: TUniPanel
+    object pgc: TUniPageControl
       Left = 0
       Top = 0
       Width = 640
-      Height = 484
+      Height = 728
       Hint = ''
+      ActivePage = tsGenel
       Align = alClient
       TabOrder = 0
+      object tsGenel: TUniTabSheet
+        Hint = ''
+        Caption = 'Genel'
+        object panMain: TUniPanel
+          Left = 0
+          Top = 0
+          Width = 640
+          Height = 728
+          Hint = ''
+          Align = alClient
+          TabOrder = 0
       BorderStyle = ubsNone
       Caption = ''
       object lblTip: TUniLabel
@@ -51,6 +63,7 @@ object frmCrmAktivite: TfrmCrmAktivite
         ListFieldIndex = 0
         TabOrder = 1
         Color = clWindow
+        OnCloseUp = lkTipCloseUp
       end
       object lblKonu: TUniLabel
         Left = 16
@@ -245,10 +258,202 @@ object frmCrmAktivite: TfrmCrmAktivite
         TabOrder = 17
         Color = clWindow
       end
+      object lblOncelik: TUniLabel
+        Left = 16
+        Top = 388
+        Width = 39
+        Height = 13
+        Hint = ''
+        Caption = #214'ncelik'
+        TabOrder = 19
+      end
+      object cbOncelik: TUniComboBox
+        Left = 120
+        Top = 384
+        Width = 200
+        Height = 27
+        Hint = ''
+        Style = csDropDownList
+        Text = ''
+        TabOrder = 20
+        IconItems = <>
+      end
+      object lblEkler: TUniLabel
+        Left = 16
+        Top = 428
+        Width = 68
+        Height = 13
+        Hint = ''
+        Caption = 'Ekler (Dosya)'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clNavy
+        Font.Height = -12
+        Font.Style = [fsBold]
+        TabOrder = 21
+      end
+      object btnEkEkle: TUniButton
+        Left = 120
+        Top = 446
+        Width = 150
+        Height = 30
+        Hint = 'PDF, PNG, JPG, Excel, Word vb. dosya ekleyin'
+        Caption = 'Dosya Ekle'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -12
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 22
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+        OnClick = btnEkEkleClick
+      end
+      object btnEkIndir: TUniButton
+        Left = 300
+        Top = 446
+        Width = 130
+        Height = 30
+        Hint = 'Se'#231'ili eki indir'
+        Caption = #304'ndir'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Height = -12
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 23
+        OnClick = btnEkIndirClick
+      end
+      object btnEkSil: TUniButton
+        Left = 440
+        Top = 446
+        Width = 130
+        Height = 30
+        Hint = 'Se'#231'ili eki sil'
+        Caption = 'Sil'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Height = -12
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 24
+        OnClick = btnEkSilClick
+      end
+      object grdEk: TUniDBGrid
+        Left = 16
+        Top = 488
+        Width = 600
+        Height = 228
+        Hint = ''
+        DataSource = dsEk
+        Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgAlwaysShowSelection, dgTabs, dgAutoRefreshRow]
+        ReadOnly = True
+        WebOptions.Paged = False
+        WebOptions.FetchAll = True
+        LoadMask.Message = 'Loading data...'
+        TabOrder = 25
+        OnAjaxEvent = grdEkAjaxEvent
+        Columns = <
+          item
+            FieldName = 'EK_ID'
+            Title.Caption = 'ID'
+            Width = 55
+            ReadOnly = True
+          end
+          item
+            FieldName = 'DOSYA_ADI'
+            Title.Caption = 'Dosya Ad'#305
+            Width = 320
+            ReadOnly = True
+          end
+          item
+            FieldName = 'UZANTI'
+            Title.Caption = 'T'#252'r'
+            Width = 70
+            ReadOnly = True
+          end
+          item
+            FieldName = 'BOYUT'
+            Title.Caption = 'Boyut (byte)'
+            Width = 100
+            ReadOnly = True
+          end
+          item
+            FieldName = 'YUKLEME_UTC'
+            Title.Caption = 'Y'#252'kleme'
+            Width = 140
+            ReadOnly = True
+          end>
+      end
+        end
+      end
+      object tsKontrol: TUniTabSheet
+        Hint = ''
+        Caption = 'Kontrol Listesi'
+        object panKontrolTb: TUniPanel
+          Left = 0
+          Top = 0
+          Width = 640
+          Height = 40
+          Hint = ''
+          Align = alTop
+          TabOrder = 0
+          BorderStyle = ubsNone
+          Caption = ''
+          Color = 15790320
+          object lblKontrolBilgi: TUniLabel
+            Left = 12
+            Top = 12
+            Width = 420
+            Height = 16
+            Hint = ''
+            Caption = 'Aktivite tipine ba'#287'l'#305' soru setleri'
+            TabOrder = 0
+          end
+          object btnKontrolKaydet: TUniButton
+            Left = 470
+            Top = 6
+            Width = 150
+            Height = 28
+            Hint = ''
+            Caption = 'Cevaplar'#305' Kaydet'
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Color = clWhite
+            Font.Height = -12
+            Font.Name = 'Segoe UI Semibold'
+            Font.Style = [fsBold]
+            TabOrder = 1
+            ClientEvents.UniEvents.Strings = (
+              
+                'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+            OnClick = btnKontrolKaydetClick
+          end
+        end
+        object panKontrol: TUniPanel
+          Left = 0
+          Top = 40
+          Width = 640
+          Height = 688
+          Hint = ''
+          Align = alClient
+          TabOrder = 1
+          BorderStyle = ubsNone
+          Caption = ''
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      config' +
+              '.autoScroll = true;'#13#10'      config.scrollable = true;'#13#10'}')
+        end
+      end
     end
     object panFooter: TUniPanel
       Left = 0
-      Top = 484
+      Top = 728
       Width = 640
       Height = 52
       Hint = ''
@@ -280,35 +485,55 @@ object frmCrmAktivite: TfrmCrmAktivite
       end
     end
   end
+  object fuEk: TUniFileUpload
+    MaxAllowedSize = 52428800
+    Title = 'Dosya Ekle'
+    Messages.Uploading = 'Uploading...'
+    Messages.PleaseWait = 'Please Wait'
+    Messages.Cancel = 'Cancel'
+    Messages.Processing = 'Processing...'
+    Messages.UploadError = 'Upload Error'
+    Messages.Upload = 'Upload'
+    Messages.NoFileError = 'Please select a file'
+    Messages.BrowseText = 'Browse...'
+    Messages.UploadTimeout = 'Timeout occurred...'
+    Messages.MaxSizeError = 'File is bigger than maximum allowed size'
+    Messages.MaxFilesError = 'You can upload maximum %d files.'
+    Width = 160
+    ButtonOnly = True
+    OnCompleted = fuEkCompleted
+    Left = 288
+    Top = 608
+  end
   object qExec: TUniQuery
     Connection = frmDM.conAsya
-    Left = 560
-    Top = 360
+    Left = 328
+    Top = 608
   end
   object qLoad: TUniQuery
     Connection = frmDM.conAsya
-    Left = 560
-    Top = 400
+    Left = 392
+    Top = 592
   end
   object qTipLkp: TUniQuery
     Connection = frmDM.conAsya
-    Left = 560
-    Top = 440
+    Left = 512
+    Top = 632
   end
   object dsTipLkp: TUniDataSource
     DataSet = qTipLkp
-    Left = 592
-    Top = 440
+    Left = 464
+    Top = 632
   end
   object qDurLkp: TUniQuery
     Connection = frmDM.conAsya
-    Left = 560
-    Top = 480
+    Left = 528
+    Top = 608
   end
   object dsDurLkp: TUniDataSource
     DataSet = qDurLkp
-    Left = 592
-    Top = 480
+    Left = 568
+    Top = 592
   end
   object qTekLkp: TUniQuery
     Connection = frmDM.conAsya
@@ -319,5 +544,40 @@ object frmCrmAktivite: TfrmCrmAktivite
     DataSet = qTekLkp
     Left = 592
     Top = 520
+  end
+  object qEk: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 408
+    Top = 552
+  end
+  object dsEk: TUniDataSource
+    DataSet = qEk
+    Left = 456
+    Top = 584
+  end
+  object qEkExec: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 472
+    Top = 528
+  end
+  object qKontrol: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 328
+    Top = 552
+  end
+  object qSecenek: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 360
+    Top = 552
+  end
+  object qCevap: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 392
+    Top = 552
+  end
+  object qKontrolExec: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 424
+    Top = 552
   end
 end

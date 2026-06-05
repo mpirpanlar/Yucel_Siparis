@@ -46,7 +46,7 @@ procedure TfrmCrmAktiviteListe.AcKayit;
 begin
   if not qList.Active or qList.IsEmpty then
   begin
-    UniMainModule.saHata.Show('÷nce listele yap˝n ve bir sat˝r seÁin.');
+    UniMainModule.saHata.Show('ùnce listele yapùn ve bir satùr seùin.');
     Exit;
   end;
   if qList.FieldByName('AKTIVITE_ID').IsNull then
@@ -68,7 +68,12 @@ procedure TfrmCrmAktiviteListe.btnListeleClick(Sender: TObject);
 begin
   qList.Close;
   qList.SQL.Text :=
-    'SELECT A.AKTIVITE_ID, A.TIP, A.KONU, A.CARI_KOD, A.AKTIVITE_TARIHI, A.DURUM, T.TEKLIF_NO, A.SIPARIS_NO ' +
+    'SELECT A.AKTIVITE_ID, A.TIP, A.KONU, A.CARI_KOD, A.AKTIVITE_TARIHI, A.DURUM, ' +
+    'CASE A.ONCELIK ' +
+    'WHEN ''DUSUK'' THEN N''D' + #$00FC + #$015F + #$00FC + 'k'' ' +
+    'WHEN ''YUKSEK'' THEN N''Y' + #$00FC + 'ksek'' ' +
+    'ELSE N''Orta'' END AS ONCELIK, ' +
+    'T.TEKLIF_NO, A.SIPARIS_NO ' +
     'FROM dbo.CRM_AKTIVITE A ' +
     'LEFT JOIN dbo.CRM_TEKLIF T ON T.TEKLIF_ID = A.TEKLIF_ID ' +
     'WHERE A.TIP <> ''TASK'' ORDER BY A.AKTIVITE_ID DESC';

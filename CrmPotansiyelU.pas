@@ -149,7 +149,8 @@ implementation
 
 uses
   System.DateUtils,
-  uniGUIApplication, MainModule, DMU, TmpU, CrmCariSecU, CrmHaritaSecU, Main;
+  uniGUIApplication, MainModule, DMU, TmpU, CrmCariSecU, CrmHaritaSecU, Main,
+  NetOpenX50_TLB;
 
 function frmCrmPotansiyel: TfrmCrmPotansiyel;
 begin
@@ -224,7 +225,7 @@ begin
   FPotansiyelId := 0;
   FYuklenenNetsis := '';
   FHasLoadedBagUtc := False;
-  Caption := 'Yeni Potansiyel Müþteri';
+  Caption := 'Yeni Potansiyel Mï¿½ï¿½teri';
   edUnvan.Text := '';
   edKisa.Text := '';
   cbMustTip.ItemIndex := 0;
@@ -281,7 +282,7 @@ begin
   if qLoad.IsEmpty then
   begin
     qLoad.Close;
-    UniMainModule.saHata.Show('Kayýt bulunamadý.');
+    UniMainModule.saHata.Show('Kayï¿½t bulunamadï¿½.');
     YeniKayit;
     Exit;
   end;
@@ -371,7 +372,7 @@ begin
   if FHasLoadedBagUtc then
     FLoadedBaglantiUtc := qLoad.FieldByName('NETSIS_BAGLANTI_UTC').AsDateTime;
   qLoad.Close;
-  Caption := 'Potansiyel Müþteri';
+  Caption := 'Potansiyel Mï¿½ï¿½teri';
 end;
 
 procedure TfrmCrmPotansiyel.InitCombos;
@@ -478,13 +479,59 @@ begin
 end;
 
 function TfrmCrmPotansiyel.NetsisCariNetOpenXOlustur(const ACariKod: string): Boolean;
+var
+  Kernel: IKernel;
+  Sirket: ISirket;
+  Cari: ICari;
+  CariTemel: ICariTemelBilgi;
+  CariEk: ICariEkBilgi;
+  Kullanici, Sifre, Firma, Telefon: string;
+  Sube: Integer;
 begin
   Result := False;
   if Trim(ACariKod) = '' then
     Exit;
-  // TODO : NetOpenX ile cari oluþturma iþlemleri burada yapýlacak
-  // Örnek: firma unvaný, vergi no, adres vb. potansiyel kaydýndan NetOpenX API'ye aktarýlacak.
-  Result := True;
+
+  Kullanici := Tmp.xNetsisKullanici;
+  Sifre := Tmp.xNetsisSifre;
+  Firma := Tmp.xNetsisSirketKodu;
+  Sube := Tmp.xSubeKodu;
+
+  Kernel := CoKernel.Create;
+  Sirket := Kernel.yeniSirket(vtMSSQL, Firma, 'TemelSet', '', Kullanici, Sifre, Sube);
+
+  Cari := Kernel.yeniCari(Sirket);
+  CariTemel := Cari.TemelBilgi;
+  CariEk := Cari.EkBilgi;
+
+  Telefon := Trim(edTel.Text);
+  if Telefon = '' then
+    Telefon := Trim(edCep.Text);
+
+  Cari.NetsisTransaction(ttBaslat);
+  try
+    CariTemel.CARI_KOD := Trim(ACariKod);
+    CariTemel.CARI_ISIM := Trim(edUnvan.Text);
+    CariTemel.CARI_TIP := 'A';
+    CariTemel.CARI_ADRES := Trim(mmAdres.Text);
+    CariTemel.CARI_IL := Trim(edIl.Text);
+    CariTemel.CARI_ILCE := Trim(edIlce.Text);
+    CariTemel.CARI_TEL := Telefon;
+    CariTemel.VERGI_DAIRESI := Trim(edVdaire.Text);
+    CariTemel.VERGI_NUMARASI := Trim(edVno.Text);
+    CariTemel.ULKE_KODU := 'TR';
+    CariTemel.EMAIL := Trim(edEposta.Text);
+
+    CariEk.CARI_KOD := Trim(ACariKod);
+    CariEk.TcKimlikNo := Trim(edTc.Text);
+
+    Cari.kayitYeni;
+    Cari.NetsisTransaction(ttBitir);
+    Result := True;
+  except
+    Cari.NetsisTransaction(ttGeriAl);
+    raise;
+  end;
 end;
 
 procedure TfrmCrmPotansiyel.PotansiyelNetsisKodBagla(const ACariKod: string);
@@ -506,13 +553,13 @@ begin
   if Trim(edNetsis.Text) <> '' then
   begin
     UniMainModule.saHata.Show(
-      'Bu potansiyel müþteri için zaten Netsis cari baðlantýsý var.' + sLineBreak +
+      'Bu potansiyel mï¿½ï¿½teri iï¿½in zaten Netsis cari baï¿½lantï¿½sï¿½ var.' + sLineBreak +
       'Mevcut kod: ' + Trim(edNetsis.Text));
     Exit;
   end;
   if FPotansiyelId <= 0 then
   begin
-    UniMainModule.saHata.Show('Önce potansiyel müþteriyi kaydedin, sonra Netsis cari oluþturabilirsiniz.');
+    UniMainModule.saHata.Show('ï¿½nce potansiyel mï¿½ï¿½teriyi kaydedin, sonra Netsis cari oluï¿½turabilirsiniz.');
     Exit;
   end;
 
@@ -521,26 +568,25 @@ begin
     YeniKod := NetsisCariKodUret(Sablon);
     if Trim(YeniKod) = '' then
     begin
-      UniMainModule.saHata.Show('Netsis cari kodu üretilemedi. PARAMETRE.NETSIS_CARI_SABLON deðerini kontrol edin.');
+      UniMainModule.saHata.Show('Netsis cari kodu ï¿½retilemedi. PARAMETRE.NETSIS_CARI_SABLON deï¿½erini kontrol edin.');
       Exit;
     end;
 
     if not NetsisCariNetOpenXOlustur(YeniKod) then
     begin
-      UniMainModule.saHata.Show('Netsis cari oluþturma iþlemi tamamlanamadý.');
+      UniMainModule.saHata.Show('Netsis cari oluï¿½turma iï¿½lemi tamamlanamadï¿½.');
       Exit;
     end;
-{
+
     PotansiyelNetsisKodBagla(YeniKod);
     edNetsis.Text := YeniKod;
     FYuklenenNetsis := YeniKod;
     FHasLoadedBagUtc := True;
     FLoadedBaglantiUtc := Now;
-    UniMainModule.saKaydet.Show('Netsis cari kodu oluþturuldu ve potansiyel kayda baðlandý: ' + YeniKod);
-}
+    UniMainModule.saKaydet.Show('Netsis cari kodu oluï¿½turuldu ve potansiyel kayda baï¿½landï¿½: ' + YeniKod);
   except
     on E: Exception do
-      UniMainModule.saHata.Show('Netsis cari oluþturma hatasý: ' + E.Message);
+      UniMainModule.saHata.Show('Netsis cari oluï¿½turma hatasï¿½: ' + E.Message);
   end;
 end;
 
@@ -655,7 +701,7 @@ begin
   end;
   if VarIsNull(lkDurum.KeyValue) or VarIsEmpty(lkDurum.KeyValue) then
   begin
-    UniMainModule.saHata.Show('Durum seçiniz.');
+    UniMainModule.saHata.Show('Durum seï¿½iniz.');
     Exit;
   end;
 

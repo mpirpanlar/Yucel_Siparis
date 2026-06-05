@@ -61,7 +61,9 @@ uses
   CrmPotansiyelU in 'CrmPotansiyelU.pas' {frmCrmPotansiyel: TUniForm},
   CrmPotansiyelListeU in 'CrmPotansiyelListeU.pas' {frmCrmPotansiyelListe: TUniForm},
   CrmCariGpsListeU in 'CrmCariGpsListeU.pas' {frmCrmCariGpsListe: TUniForm},
-  CrmCariGpsU in 'CrmCariGpsU.pas' {frmCrmCariGps: TUniForm};
+  CrmCariGpsU in 'CrmCariGpsU.pas' {frmCrmCariGps: TUniForm},
+  CrmSoruSetiU in 'CrmSoruSetiU.pas' {frmCrmSoruSeti: TUniForm},
+  CrmKontrolRaporU in 'CrmKontrolRaporU.pas' {frmCrmKontrolRapor: TUniForm};
 
 {$R *.res}
 

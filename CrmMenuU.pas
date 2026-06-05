@@ -26,6 +26,8 @@ type
     btnTanimliRota: TUniButton;
     btnCariOzet: TUniButton;
     btnCariGpsListe: TUniButton;
+    btnSoruSeti: TUniButton;
+    btnKontrolRapor: TUniButton;
     procedure btnYeniAktiviteClick(Sender: TObject);
     procedure btnYeniGorevClick(Sender: TObject);
     procedure btnAktiviteListesiClick(Sender: TObject);
@@ -38,6 +40,8 @@ type
     procedure btnYeniRotaPlanClick(Sender: TObject);
     procedure btnCariOzetClick(Sender: TObject);
     procedure btnCariGpsListeClick(Sender: TObject);
+    procedure btnSoruSetiClick(Sender: TObject);
+    procedure btnKontrolRaporClick(Sender: TObject);
   private
   public
   end;
@@ -51,7 +55,8 @@ implementation
 uses
   MainModule, uniGUIApplication, Genel, CrmAktiviteU, CrmGorevU,
   CrmAktiviteListeU, CrmGorevListeU, CrmTeklifU, CrmTeklifListeU, CrmCariOzetU,
-  CrmPotansiyelU, CrmPotansiyelListeU, CrmRotaListeU, CrmRotaU, CrmCariGpsListeU;
+  CrmPotansiyelU, CrmPotansiyelListeU, CrmRotaListeU, CrmRotaU, CrmCariGpsListeU,
+  CrmSoruSetiU, CrmKontrolRaporU;
 
 function frmCrmMenu: TfrmCrmMenu;
 begin
@@ -116,6 +121,16 @@ end;
 procedure TfrmCrmMenu.btnCariGpsListeClick(Sender: TObject);
 begin
   xFormShow(TfrmCrmCariGpsListe, 'CrmCariGpsListe', 1, '');
+end;
+
+procedure TfrmCrmMenu.btnSoruSetiClick(Sender: TObject);
+begin
+  xFormShow(TfrmCrmSoruSeti, 'CrmSoruSeti', 1, '');
+end;
+
+procedure TfrmCrmMenu.btnKontrolRaporClick(Sender: TObject);
+begin
+  xFormShow(TfrmCrmKontrolRapor, 'CrmKontrolRapor', 1, '');
 end;
 
 end.

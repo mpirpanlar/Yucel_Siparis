@@ -9,7 +9,7 @@ uses
   DBAccess, Uni;
 
 const
-  CRM_SCHEMA_TARGET_VERSION = 15;
+  CRM_SCHEMA_TARGET_VERSION = 18;
 
 procedure CrmEnsureDatabase(AConn: TUniConnection);
 
@@ -962,6 +962,209 @@ begin
     'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (15, ''Rota GPSX/GPSY, durak GOREV_ID, aktivite rota referansi'')');
 end;
 
+procedure CrmSchemaApplyMigration16(AConn: TUniConnection);
+begin
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.CRM_AKTIVITE'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_AKTIVITE'', ''ONCELIK'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn,
+        'ALTER TABLE dbo.CRM_AKTIVITE ADD ONCELIK VARCHAR(10) COLLATE SQL_Latin1_General_CP1_CI_AS ' +
+        'NOT NULL CONSTRAINT DF_CRM_AKT_ONCELIK DEFAULT (''ORTA'')');
+
+    CrmExec(AConn,
+      'UPDATE dbo.CRM_AKTIVITE SET ONCELIK = ''ORTA'' ' +
+      'WHERE ONCELIK IS NULL OR ONCELIK NOT IN (''DUSUK'', ''ORTA'', ''YUKSEK'')');
+
+    if CrmScalarInt(AConn,
+      'SELECT COUNT(*) FROM sys.check_constraints WHERE name = ''CK_CRM_AKT_ONCELIK'' ' +
+      'AND parent_object_id = OBJECT_ID(''dbo.CRM_AKTIVITE'')') = 0 then
+      CrmExec(AConn,
+        'ALTER TABLE dbo.CRM_AKTIVITE ADD CONSTRAINT CK_CRM_AKT_ONCELIK ' +
+        'CHECK (ONCELIK IN (''DUSUK'', ''ORTA'', ''YUKSEK''))');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 16) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (16, ''CRM aktivite oncelik (ONCELIK)'')');
+end;
+
+procedure CrmSchemaApplyMigration17(AConn: TUniConnection);
+begin
+  CrmExec(AConn,
+    'IF OBJECT_ID(''dbo.CRM_AKTIVITE_EK'',''U'') IS NULL ' +
+    'CREATE TABLE dbo.CRM_AKTIVITE_EK (' +
+    'EK_ID BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT PK_CRM_AKTIVITE_EK PRIMARY KEY, ' +
+    'AKTIVITE_ID BIGINT NOT NULL, ' +
+    'DOSYA_ADI NVARCHAR(260) NOT NULL, ' +
+    'UZANTI VARCHAR(20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'BOYUT BIGINT NULL, ' +
+    'ICERIK VARBINARY(MAX) NOT NULL, ' +
+    'YUKLEYEN_KULLANICI_ID INT NULL, ' +
+    'YUKLEME_UTC DATETIME2(3) NOT NULL CONSTRAINT DF_CRM_AKT_EK_UTC DEFAULT (SYSUTCDATETIME()), ' +
+    'CONSTRAINT FK_CRM_AKT_EK_AKT FOREIGN KEY (AKTIVITE_ID) ' +
+    'REFERENCES dbo.CRM_AKTIVITE (AKTIVITE_ID) ON DELETE CASCADE)');
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = ''IX_CRM_AKT_EK_AKT'' AND object_id = OBJECT_ID(''dbo.CRM_AKTIVITE_EK'')) ' +
+    'CREATE INDEX IX_CRM_AKT_EK_AKT ON dbo.CRM_AKTIVITE_EK (AKTIVITE_ID)');
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 17) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (17, ''CRM aktivite ekleri (CRM_AKTIVITE_EK, VARBINARY)'')');
+end;
+
+procedure CrmSchemaApplyMigration18(AConn: TUniConnection);
+begin
+  { Aktivite durumlarina "kapanis mi" isareti: zorunlu kontrol listesi denetimi
+    aktivite bu durumlardan birine getirilmeye calisilirken yapilir. }
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.CRM_AKTIVITE_DURUM'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_AKTIVITE_DURUM'', ''KAPANIS_MI'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn,
+        'ALTER TABLE dbo.CRM_AKTIVITE_DURUM ADD KAPANIS_MI BIT NOT NULL ' +
+        'CONSTRAINT DF_CRM_DUR_KAPANIS DEFAULT (0)');
+    CrmExec(AConn,
+      'UPDATE dbo.CRM_AKTIVITE_DURUM SET KAPANIS_MI = 1 ' +
+      'WHERE KOD IN (''TAMAMLANDI'', ''BITTI'', ''GERCEKLESTI'')');
+  end;
+
+  CrmExec(AConn,
+    'IF OBJECT_ID(''dbo.CRM_SORU_SETI'',''U'') IS NULL ' +
+    'CREATE TABLE dbo.CRM_SORU_SETI (' +
+    'SET_ID BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT PK_CRM_SORU_SETI PRIMARY KEY, ' +
+    'KOD VARCHAR(30) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'BASLIK NVARCHAR(200) NOT NULL, ' +
+    'ACIKLAMA NVARCHAR(500) NULL, ' +
+    'AKTIF BIT NOT NULL CONSTRAINT DF_CRM_SSET_AKTIF DEFAULT (1), ' +
+    'SIRA INT NOT NULL CONSTRAINT DF_CRM_SSET_SIRA DEFAULT (0), ' +
+    'OLUSTURMA_UTC DATETIME2(3) NOT NULL CONSTRAINT DF_CRM_SSET_OLU DEFAULT (SYSUTCDATETIME()), ' +
+    'GUNCELLEME_UTC DATETIME2(3) NULL )');
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = ''UQ_CRM_SORU_SETI_KOD'' AND object_id = OBJECT_ID(''dbo.CRM_SORU_SETI'')) ' +
+    'CREATE UNIQUE INDEX UQ_CRM_SORU_SETI_KOD ON dbo.CRM_SORU_SETI (KOD) WHERE KOD IS NOT NULL');
+
+  CrmExec(AConn,
+    'IF OBJECT_ID(''dbo.CRM_SORU'',''U'') IS NULL ' +
+    'CREATE TABLE dbo.CRM_SORU (' +
+    'SORU_ID BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT PK_CRM_SORU PRIMARY KEY, ' +
+    'SET_ID BIGINT NOT NULL, ' +
+    'SIRA INT NOT NULL CONSTRAINT DF_CRM_SORU_SIRA DEFAULT (0), ' +
+    'SORU_METNI NVARCHAR(500) NOT NULL, ' +
+    'CEVAP_TIPI VARCHAR(20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL CONSTRAINT DF_CRM_SORU_CT DEFAULT (''METIN''), ' +
+    'ZORUNLU BIT NOT NULL CONSTRAINT DF_CRM_SORU_ZOR DEFAULT (0), ' +
+    'AKTIF BIT NOT NULL CONSTRAINT DF_CRM_SORU_AKTIF DEFAULT (1), ' +
+    'CONSTRAINT FK_CRM_SORU_SET FOREIGN KEY (SET_ID) REFERENCES dbo.CRM_SORU_SETI (SET_ID) ON DELETE CASCADE, ' +
+    'CONSTRAINT CK_CRM_SORU_CT CHECK (CEVAP_TIPI IN ' +
+    '(''EVET_HAYIR'', ''TEK_SECIM'', ''COK_SECIM'', ''METIN'', ''SAYI'', ''TARIH'', ''PUAN'')) )');
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = ''IX_CRM_SORU_SET'' AND object_id = OBJECT_ID(''dbo.CRM_SORU'')) ' +
+    'CREATE INDEX IX_CRM_SORU_SET ON dbo.CRM_SORU (SET_ID, SIRA)');
+
+  CrmExec(AConn,
+    'IF OBJECT_ID(''dbo.CRM_SORU_SECENEK'',''U'') IS NULL ' +
+    'CREATE TABLE dbo.CRM_SORU_SECENEK (' +
+    'SECENEK_ID BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT PK_CRM_SORU_SECENEK PRIMARY KEY, ' +
+    'SORU_ID BIGINT NOT NULL, ' +
+    'SIRA INT NOT NULL CONSTRAINT DF_CRM_SSEC_SIRA DEFAULT (0), ' +
+    'METIN NVARCHAR(300) NOT NULL, ' +
+    'AKTIF BIT NOT NULL CONSTRAINT DF_CRM_SSEC_AKTIF DEFAULT (1), ' +
+    'CONSTRAINT FK_CRM_SSEC_SORU FOREIGN KEY (SORU_ID) REFERENCES dbo.CRM_SORU (SORU_ID) ON DELETE CASCADE )');
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = ''IX_CRM_SSEC_SORU'' AND object_id = OBJECT_ID(''dbo.CRM_SORU_SECENEK'')) ' +
+    'CREATE INDEX IX_CRM_SSEC_SORU ON dbo.CRM_SORU_SECENEK (SORU_ID, SIRA)');
+
+  CrmExec(AConn,
+    'IF OBJECT_ID(''dbo.CRM_TIP_SORU_SETI'',''U'') IS NULL ' +
+    'CREATE TABLE dbo.CRM_TIP_SORU_SETI (' +
+    'ATAMA_ID BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT PK_CRM_TIP_SORU_SETI PRIMARY KEY, ' +
+    'AKTIVITE_TIP_ID BIGINT NOT NULL, ' +
+    'SET_ID BIGINT NOT NULL, ' +
+    'ZORUNLU_MU BIT NOT NULL CONSTRAINT DF_CRM_TSS_ZOR DEFAULT (1), ' +
+    'AKTIF BIT NOT NULL CONSTRAINT DF_CRM_TSS_AKTIF DEFAULT (1), ' +
+    'CONSTRAINT UQ_CRM_TIP_SORU_SETI UNIQUE (AKTIVITE_TIP_ID, SET_ID), ' +
+    'CONSTRAINT FK_CRM_TSS_TIP FOREIGN KEY (AKTIVITE_TIP_ID) REFERENCES dbo.CRM_AKTIVITE_TIP (TIP_ID), ' +
+    'CONSTRAINT FK_CRM_TSS_SET FOREIGN KEY (SET_ID) REFERENCES dbo.CRM_SORU_SETI (SET_ID) ON DELETE CASCADE )');
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = ''IX_CRM_TSS_TIP'' AND object_id = OBJECT_ID(''dbo.CRM_TIP_SORU_SETI'')) ' +
+    'CREATE INDEX IX_CRM_TSS_TIP ON dbo.CRM_TIP_SORU_SETI (AKTIVITE_TIP_ID, AKTIF)');
+
+  CrmExec(AConn,
+    'IF OBJECT_ID(''dbo.CRM_AKTIVITE_CEVAP'',''U'') IS NULL ' +
+    'CREATE TABLE dbo.CRM_AKTIVITE_CEVAP (' +
+    'CEVAP_ID BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT PK_CRM_AKTIVITE_CEVAP PRIMARY KEY, ' +
+    'AKTIVITE_ID BIGINT NOT NULL, ' +
+    'SET_ID BIGINT NULL, ' +
+    'SORU_ID BIGINT NOT NULL, ' +
+    'SORU_METNI_KOPYA NVARCHAR(500) NULL, ' +
+    'CEVAP_TIPI VARCHAR(20) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'CEVAP_METIN NVARCHAR(MAX) NULL, ' +
+    'CEVAP_SAYI DECIMAL(18,4) NULL, ' +
+    'CEVAP_TARIH DATETIME2(3) NULL, ' +
+    'CEVAP_BIT BIT NULL, ' +
+    'CEVAPLAYAN_KULLANICI_ID INT NULL, ' +
+    'CEVAP_UTC DATETIME2(3) NOT NULL CONSTRAINT DF_CRM_ACEV_UTC DEFAULT (SYSUTCDATETIME()), ' +
+    'CONSTRAINT UQ_CRM_AKT_CEVAP UNIQUE (AKTIVITE_ID, SORU_ID), ' +
+    'CONSTRAINT FK_CRM_ACEV_AKT FOREIGN KEY (AKTIVITE_ID) REFERENCES dbo.CRM_AKTIVITE (AKTIVITE_ID) ON DELETE CASCADE, ' +
+    'CONSTRAINT FK_CRM_ACEV_SORU FOREIGN KEY (SORU_ID) REFERENCES dbo.CRM_SORU (SORU_ID) )');
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = ''IX_CRM_ACEV_AKT'' AND object_id = OBJECT_ID(''dbo.CRM_AKTIVITE_CEVAP'')) ' +
+    'CREATE INDEX IX_CRM_ACEV_AKT ON dbo.CRM_AKTIVITE_CEVAP (AKTIVITE_ID)');
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = ''IX_CRM_ACEV_SORU'' AND object_id = OBJECT_ID(''dbo.CRM_AKTIVITE_CEVAP'')) ' +
+    'CREATE INDEX IX_CRM_ACEV_SORU ON dbo.CRM_AKTIVITE_CEVAP (SORU_ID)');
+
+  CrmExec(AConn,
+    'IF OBJECT_ID(''dbo.CRM_AKTIVITE_CEVAP_SECENEK'',''U'') IS NULL ' +
+    'CREATE TABLE dbo.CRM_AKTIVITE_CEVAP_SECENEK (' +
+    'ID BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT PK_CRM_AKT_CEVAP_SEC PRIMARY KEY, ' +
+    'CEVAP_ID BIGINT NOT NULL, ' +
+    'SECENEK_ID BIGINT NULL, ' +
+    'SECENEK_METNI_KOPYA NVARCHAR(300) NULL, ' +
+    'CONSTRAINT FK_CRM_ACEVSEC_CEVAP FOREIGN KEY (CEVAP_ID) REFERENCES dbo.CRM_AKTIVITE_CEVAP (CEVAP_ID) ON DELETE CASCADE )');
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = ''IX_CRM_ACEVSEC_CEVAP'' AND object_id = OBJECT_ID(''dbo.CRM_AKTIVITE_CEVAP_SECENEK'')) ' +
+    'CREATE INDEX IX_CRM_ACEVSEC_CEVAP ON dbo.CRM_AKTIVITE_CEVAP_SECENEK (CEVAP_ID)');
+
+  if CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''FormName'' AND schema_id = SCHEMA_ID(''dbo'')') > 0 then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.FormName (FormName, FormCaption) SELECT v.FN, v.FC FROM (VALUES ' +
+      '(''CrmSoruSeti'', ''CRM - Kontrol Listesi (Soru Setleri)''), ' +
+      '(''CrmKontrolRapor'', ''CRM - Kontrol Listesi Raporu'')) AS v(FN, FC) ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.FormName f WHERE f.FormName = v.FN)');
+  end;
+
+  if (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''YETKI'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) and
+     (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''KULLANICIGRUP'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmSoruSeti'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmSoruSeti'')');
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmKontrolRapor'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmKontrolRapor'')');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 18) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (18, ''CRM aktivite kontrol listesi: soru setleri, sorular, secenekler, tip atama, cevaplar, durum KAPANIS_MI'')');
+end;
+
 procedure CrmSchemaApplyMigration(const AConn: TUniConnection; AVersion: Integer);
 begin
   case AVersion of
@@ -980,6 +1183,9 @@ begin
     13: CrmSchemaApplyMigration13(AConn);
     14: CrmSchemaApplyMigration14(AConn);
     15: CrmSchemaApplyMigration15(AConn);
+    16: CrmSchemaApplyMigration16(AConn);
+    17: CrmSchemaApplyMigration17(AConn);
+    18: CrmSchemaApplyMigration18(AConn);
   else
     raise Exception.CreateFmt('CRM sema: bilinmeyen migrasyon surumu %d', [AVersion]);
   end;

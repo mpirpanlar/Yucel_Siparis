@@ -161,6 +161,29 @@ object frmCrmMenu: TfrmCrmMenu
         LayoutConfig.Margin = '11 2 2 2'
         OnClick = btnYeniRotaPlanClick
       end
+      object btnSoruSeti: TUniButton
+        Left = 16
+        Top = 271
+        Width = 193
+        Height = 38
+        Hint = ''
+        Caption = 'Kontrol Listesi Tan'#305'mlar'#305
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Style = [fsItalic]
+        TabOrder = 7
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
+            's="btnAltMenu";'#13#10'}')
+        ScreenMask.Enabled = True
+        ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '11 2 2 2'
+        OnClick = btnSoruSetiClick
+      end
     end
     object UniSimplePanel2: TUniSimplePanel
       Left = 296
@@ -345,6 +368,29 @@ object frmCrmMenu: TfrmCrmMenu
         LayoutConfig.Width = '100%'
         LayoutConfig.Margin = '11 2 2 2'
         OnClick = btnCariGpsListeClick
+      end
+      object btnKontrolRapor: TUniButton
+        Left = 16
+        Top = 364
+        Width = 193
+        Height = 38
+        Hint = ''
+        Caption = 'Kontrol Listesi Raporu'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Style = [fsItalic]
+        TabOrder = 9
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
+            's="btnAltMenu";'#13#10'}')
+        ScreenMask.Enabled = True
+        ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '11 2 2 2'
+        OnClick = btnKontrolRaporClick
       end
     end
   end

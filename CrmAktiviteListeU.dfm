@@ -160,6 +160,12 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
           Title.Caption = 'Durum'
           Width = 80
           ReadOnly = True
+        end
+        item
+          FieldName = 'ONCELIK'
+          Title.Caption = #214'ncelik'
+          Width = 80
+          ReadOnly = True
         end>
     end
   end
