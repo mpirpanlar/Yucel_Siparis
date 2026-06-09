@@ -1,4 +1,4 @@
-# 2026 - Mayıs Güncellemeleri
+# 2026 - CRM Güncellemeleri
 
 ## 31.05.2026 - Pazar Güncellemeleri
 
@@ -20,7 +20,7 @@
 16. CRM Teklif listesi (CrmTeklifListeU): form başlığı "CRM - Teklif Listesi" yapıldı, filtre etiketleri ve grid sütun başlıkları düzeltildi (ör. "Kaydı Aç", "Teklif No", "Tarih Filtresi", "Sipariş No", "Başlık"), mesaj metinleri düzeltildi ("(Tümü)", "Önce listele yapın ve bir satır seçin.", "Tarih başlangıç bitişten büyük olamaz.") ve listeleme grid'i vbox + flex yerleşimine geçirilerek tam ekran yapıldı.
 17. CRM Potansiyel müşteri kartı (CrmPotansiyelU): Konum sekmesindeki "Haritadan konum seç" işleminden dönen formatlı adres ayrıştırılarak Adres sekmesindeki Ülke, Şehir (İl), İlçe, Posta Kodu ve Adres detayı alanları otomatik dolduruluyor (ayrıştırılabildiği kadarıyla; harita formu mrOK ile kapanınca çalışır). Harita seçim formu (CrmHaritaSecU) Tamam/İptal düğmeleri ModalResult döndürecek şekilde güncellendi.
 
-## 05.06.2026 - Perşembe Güncellemeleri
+## 05.06.2026 - Cuma Güncellemeleri
 
 18. CRM Aktivite Kontrol Listesi (şema sürüm 18, CrmSchemaU): soru seti, soru, seçenek, tip–set atama ve aktivite cevap tabloları eklendi (`CRM_SORU_SETI`, `CRM_SORU`, `CRM_SORU_SECENEK`, `CRM_TIP_SORU_SETI`, `CRM_AKTIVITE_CEVAP`, `CRM_AKTIVITE_CEVAP_SECENEK`); cevap kaydında soru/seçenek metni snapshot olarak saklanır.
 19. CRM Aktivite Durum (CRM_AKTIVITE_DURUM): `KAPANIS_MI` alanı eklendi; kapanış olarak işaretlenen durumlara (varsayılan: TAMAMLANDI, BITTI, GERCEKLESTI) geçişte zorunlu kontrol listesi soruları cevaplanmadan kayıt tamamlanamaz.
@@ -28,3 +28,17 @@
 21. CRM Aktivite kartı (CrmAktiviteU): form PageControl yapısına geçirildi ("Genel" + "Kontrol Listesi" sekmeleri); seçili aktivite tipine atanan setlerin soruları cevap tipine uygun kontrollerle dinamik oluşturulur, cevaplar kayıt sırasında saklanır/yüklenir.
 22. CRM Kontrol Listesi Raporu (CrmKontrolRaporU): tip, set ve tarih aralığına göre detay (aktivite/personel/soru/cevap) ve özet (cevap sayısı, Evet/Hayır, ortalama puan) raporu eklendi; CRM menüsüne "Kontrol Listesi Raporu" girişi eklendi (FormName: CrmKontrolRapor).
 23. CRM örnek kontrol listesi verisi (CrmKontrolListesiOrnekVeri.sql): Yücel Group iş koluna uygun 5 örnek set tanımı eklendi (ZIYARET, TEKNIK_GEREKSINIM, NUMUNE, SIKAYET, LEAD); ilgili aktivite tiplerine atamaları script içinde yapılır.
+24. CRM Takvim (CrmTakvimU, şema sürüm 19): aktivite ve görevler FullCalendar ile ay/hafta/gün görünümünde listelenir; kaynak (aktivite/görev), personel ve tamamlanan filtreleri; etkinliğe tıklayınca ilgili kart formu açılır. CRM menüsüne "CRM Takvimi" girişi eklendi (FormName: CrmTakvim).
+
+## 09.06.2026 - Salı Güncellemeleri
+
+25. CRM Takvim (CrmTakvimU): FullCalendar'dan gelen ISO tarih aralığı (`yyyy-mm-dd`) artık doğru ayrıştırılıyor; Mayıs gibi geçmiş aylara gidildiğinde o aya ait aktiviteler/görevler listelenir (önceden aralık parse hatası nedeniyle yalnızca içinde bulunulan ay yükleniyordu).
+26. CRM Takvim (CrmTakvimU): iframe ile Delphi arasındaki Ajax/postMessage köprüsü için `btnCalHook` ve `urlCal` bileşenlerine Ext.js `name` tanımı eklendi; etkinlikler artık takvim grid'ine yansır. Personel filtresi: "Bana atanan görevler" modunda oluşturduğunuz aktiviteler de görünür; "Benim oluşturduklarım" modunda size atanan görevler de dahil edilir.
+27. CRM Aktivite/Görev Tarihçesi (şema sürüm 20, CrmAktiviteLogU, CrmAktiviteTarihceU): `CRM_AKTIVITE_LOG` tablosu ile durum, tarih, atama, konu ve açıklama değişiklikleri kaydedilir; ayrı tarihçe ekranı ve aktivite/görev kartlarında "Tarihçe" sekmesi eklendi.
+28. CRM Aktivite Durum Raporu (CrmAktiviteRaporU): plan veya tamamlanma tarihine göre filtreleme; detay, durum/personel özeti ve yapılmayanlar (geciken) sekmeleri; tamamlanan tanımı `KAPANIS_MI=1` (aktivite) / görev tamamlanma; CRM menüsüne ayrı rapor ve tarihçe girişleri eklendi.
+29. CRM menüsü (CrmMenuU): alt menü üç sütuna ayrıldı — İşlemler, Listeler, Raporlar; taşma giderildi, sütunlar eşit genişlikte (flex) yerleşim.
+30. CRM Tarihçe (şema sürüm 21): mevcut aktivite/görev kayıtları için `OLUSTUR` log satırları geri yüklendi; tarihçe raporu tarih filtresi gün bazında düzeltildi, grid sütunları genişletildi.
+31. CRM Tarihçe, Aktivite Durum Raporu ve Kontrol Listesi Raporu: listeleme grid'leri Aktivite Listesi ile aynı vbox + flex (LayoutConfig) yerleşimine geçirilerek tarayıcıda tam ekran doldurması sağlandı.
+32. CRM Cari Özeti (CrmCariOzetU), Tanımlı Rota Planlamaları (CrmRotaListeU) ve Netsis Cari GPS (CrmCariGpsListeU): grid'ler vbox + flex yerleşimine geçirilerek tam ekran doldurması sağlandı.
+33. CRM Rota Km / Mesafe Raporları (şema sürüm 22, CrmRotaMesafeU, CrmRotaKmRaporU): Google Directions API ile yol mesafesi hesaplama; rota planına çoklu personel atama (`CRM_ROTA_PLAN_PERSONEL`); GPS eksik bacak seçeneği (0 km + uyarı veya toplamdan hariç); rota listesi ve plan formunda km kolonları; rapor sekmeleri: Rota, Bacak, Özet Personel, Özet Dönem, GPS Eksik Cari; CRM menüsüne "Rota Km Raporu" eklendi (FormName: CrmRotaKmRapor).
+34. CRM Aktivite Listesi (şema sürüm 23, CrmAktiviteListeU): filtre paneli — tip, durum ve öncelik çoklu seçim (CheckedComboBox tarzı); varsayılan son 30 gün tarih aralığı (revize edilebilir); opsiyonel Netsis cari ve potansiyel müşteri filtresi; grid'e cari ünvan, potansiyel unvan ve parametre tablosundan tip/durum açıklamaları eklendi; `CRM_AKTIVITE.POTANSIYEL_ID` alanı.

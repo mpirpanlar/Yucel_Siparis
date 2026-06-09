@@ -9,7 +9,7 @@ uses
   DBAccess, Uni;
 
 const
-  CRM_SCHEMA_TARGET_VERSION = 18;
+  CRM_SCHEMA_TARGET_VERSION = 23;
 
 procedure CrmEnsureDatabase(AConn: TUniConnection);
 
@@ -1165,6 +1165,185 @@ begin
     'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (18, ''CRM aktivite kontrol listesi: soru setleri, sorular, secenekler, tip atama, cevaplar, durum KAPANIS_MI'')');
 end;
 
+procedure CrmSchemaApplyMigration19(AConn: TUniConnection);
+begin
+  if CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''FormName'' AND schema_id = SCHEMA_ID(''dbo'')') > 0 then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.FormName (FormName, FormCaption) SELECT v.FN, v.FC FROM (VALUES ' +
+      '(''CrmTakvim'', ''CRM - Takvim'')) AS v(FN, FC) ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.FormName f WHERE f.FormName = v.FN)');
+  end;
+
+  if (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''YETKI'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) and
+     (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''KULLANICIGRUP'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmTakvim'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmTakvim'')');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 19) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (19, ''CRM aktivite/gorev takvim ekrani (FormName, YETKI)'')');
+end;
+
+procedure CrmSchemaApplyMigration20(AConn: TUniConnection);
+begin
+  CrmExec(AConn,
+    'IF OBJECT_ID(''dbo.CRM_AKTIVITE_LOG'',''U'') IS NULL ' +
+    'CREATE TABLE dbo.CRM_AKTIVITE_LOG (' +
+    'LOG_ID BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT PK_CRM_AKTIVITE_LOG PRIMARY KEY, ' +
+    'AKTIVITE_ID BIGINT NOT NULL, ' +
+    'KAYNAK VARCHAR(10) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, ' +
+    'ISLEM VARCHAR(30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, ' +
+    'ALAN_ADI VARCHAR(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'ESKI_DEGER VARCHAR(500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'YENI_DEGER VARCHAR(500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'ACIKLAMA VARCHAR(500) COLLATE SQL_Latin1_General_CP1_CI_AS NULL, ' +
+    'KULLANICI_ID INT NULL, ' +
+    'ISLEM_UTC DATETIME2(3) NOT NULL CONSTRAINT DF_CRM_AKTLOG_UTC DEFAULT (SYSUTCDATETIME()), ' +
+    'CONSTRAINT FK_CRM_AKTLOG_AKT FOREIGN KEY (AKTIVITE_ID) REFERENCES dbo.CRM_AKTIVITE (AKTIVITE_ID) ON DELETE CASCADE )');
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = ''IX_CRM_AKTLOG_AKT'' AND object_id = OBJECT_ID(''dbo.CRM_AKTIVITE_LOG'')) ' +
+    'CREATE INDEX IX_CRM_AKTLOG_AKT ON dbo.CRM_AKTIVITE_LOG (AKTIVITE_ID, ISLEM_UTC DESC)');
+
+  if CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''FormName'' AND schema_id = SCHEMA_ID(''dbo'')') > 0 then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.FormName (FormName, FormCaption) SELECT v.FN, v.FC FROM (VALUES ' +
+      '(''CrmAktiviteRapor'', ''CRM - Aktivite Durum Raporu''), ' +
+      '(''CrmAktiviteTarihce'', ''CRM - Aktivite/Gorev Tarihcesi'')) AS v(FN, FC) ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.FormName f WHERE f.FormName = v.FN)');
+  end;
+
+  if (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''YETKI'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) and
+     (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''KULLANICIGRUP'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, v.FN, 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'CROSS JOIN (VALUES (''CrmAktiviteRapor''), (''CrmAktiviteTarihce'')) AS v(FN) ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = v.FN)');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 20) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (20, ''CRM aktivite log/tarihce tablosu, durum raporu (FormName, YETKI)'')');
+end;
+
+procedure CrmSchemaApplyMigration21(AConn: TUniConnection);
+begin
+  { Mevcut aktivite/gorev kayitlari icin OLUSTUR log satiri (tarihce raporu bos kalmasin). }
+  CrmExec(AConn,
+    'INSERT INTO dbo.CRM_AKTIVITE_LOG (AKTIVITE_ID, KAYNAK, ISLEM, ALAN_ADI, ESKI_DEGER, YENI_DEGER, ACIKLAMA, KULLANICI_ID, ISLEM_UTC) ' +
+    'SELECT A.AKTIVITE_ID, CASE WHEN A.TIP = ''TASK'' THEN ''GOREV'' ELSE ''AKTIVITE'' END, ''OLUSTUR'', ''Konu'', '''', ' +
+    'LEFT(A.KONU, 500), ''Mevcut kayit (ilk yukleme)'', A.OLUSTURAN_KULLANICI_ID, A.OLUSTURMA_UTC ' +
+    'FROM dbo.CRM_AKTIVITE A ' +
+    'WHERE NOT EXISTS (SELECT 1 FROM dbo.CRM_AKTIVITE_LOG L WHERE L.AKTIVITE_ID = A.AKTIVITE_ID AND L.ISLEM = ''OLUSTUR'')');
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 21) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (21, ''CRM_AKTIVITE_LOG: mevcut aktivite/gorev kayitlari icin OLUSTUR geri yukleme'')');
+end;
+
+procedure CrmSchemaApplyMigration22(AConn: TUniConnection);
+begin
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.CRM_ROTA_PLAN'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN'', ''TOPLAM_YOL_KM'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN ADD TOPLAM_YOL_KM DECIMAL(10,2) NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN'', ''MESAFE_HESAP_UTC'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN ADD MESAFE_HESAP_UTC DATETIME2(3) NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN'', ''GPS_EKSIK_MOD'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN ADD GPS_EKSIK_MOD INT NOT NULL CONSTRAINT DF_CRM_ROTA_GPSMOD DEFAULT (0)');
+  end;
+
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.CRM_ROTA_PLAN_DURAK'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN_DURAK'', ''BACAK_KM'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN_DURAK ADD BACAK_KM DECIMAL(10,2) NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN_DURAK'', ''GPS_EKSIK'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN_DURAK ADD GPS_EKSIK BIT NOT NULL CONSTRAINT DF_CRM_ROTA_DGPS DEFAULT (0)');
+  end;
+
+  CrmExec(AConn,
+    'IF OBJECT_ID(''dbo.CRM_ROTA_PLAN_PERSONEL'',''U'') IS NULL ' +
+    'CREATE TABLE dbo.CRM_ROTA_PLAN_PERSONEL (' +
+    'ROTA_ID BIGINT NOT NULL, ' +
+    'KULLANICI_ID INT NOT NULL, ' +
+    'CONSTRAINT PK_CRM_ROTA_PLAN_PERS PRIMARY KEY (ROTA_ID, KULLANICI_ID), ' +
+    'CONSTRAINT FK_CRM_ROTA_PERS_ROTA FOREIGN KEY (ROTA_ID) REFERENCES dbo.CRM_ROTA_PLAN (ROTA_ID) ON DELETE CASCADE )');
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = ''IX_CRM_ROTA_PERS_KUL'' AND object_id = OBJECT_ID(''dbo.CRM_ROTA_PLAN_PERSONEL'')) ' +
+    'CREATE INDEX IX_CRM_ROTA_PERS_KUL ON dbo.CRM_ROTA_PLAN_PERSONEL (KULLANICI_ID, ROTA_ID)');
+
+  if CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''FormName'' AND schema_id = SCHEMA_ID(''dbo'')') > 0 then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.FormName (FormName, FormCaption) SELECT v.FN, v.FC FROM (VALUES ' +
+      '(''CrmRotaKmRapor'', ''CRM - Rota Km Raporu'')) AS v(FN, FC) ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.FormName f WHERE f.FormName = v.FN)');
+  end;
+
+  if (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''YETKI'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) and
+     (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''KULLANICIGRUP'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmRotaKmRapor'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmRotaKmRapor'')');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 22) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (22, ''Rota yol km, personel atama, km raporu (FormName, YETKI)'')');
+end;
+
+procedure CrmSchemaApplyMigration23(AConn: TUniConnection);
+begin
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.CRM_AKTIVITE'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_AKTIVITE'', ''POTANSIYEL_ID'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_AKTIVITE ADD POTANSIYEL_ID BIGINT NULL');
+    if CrmScalarInt(AConn,
+      'SELECT COUNT(*) FROM sys.foreign_keys WHERE name = ''FK_CRM_AKT_POT''') = 0 then
+      if CrmScalarInt(AConn,
+        'SELECT CASE WHEN OBJECT_ID(''dbo.CRM_POTANSIYEL_MUSTERI'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+        CrmExec(AConn,
+          'ALTER TABLE dbo.CRM_AKTIVITE ADD CONSTRAINT FK_CRM_AKT_POT FOREIGN KEY (POTANSIYEL_ID) ' +
+          'REFERENCES dbo.CRM_POTANSIYEL_MUSTERI (POTANSIYEL_ID)');
+    if CrmScalarInt(AConn,
+      'SELECT COUNT(*) FROM sys.indexes WHERE name = ''IX_CRM_AKT_POT'' AND object_id = OBJECT_ID(''dbo.CRM_AKTIVITE'')') = 0 then
+      CrmExec(AConn, 'CREATE INDEX IX_CRM_AKT_POT ON dbo.CRM_AKTIVITE (POTANSIYEL_ID)');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 23) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (23, ''CRM_AKTIVITE.POTANSIYEL_ID (potansiyel musteri baglantisi)'')');
+end;
+
 procedure CrmSchemaApplyMigration(const AConn: TUniConnection; AVersion: Integer);
 begin
   case AVersion of
@@ -1186,6 +1365,11 @@ begin
     16: CrmSchemaApplyMigration16(AConn);
     17: CrmSchemaApplyMigration17(AConn);
     18: CrmSchemaApplyMigration18(AConn);
+    19: CrmSchemaApplyMigration19(AConn);
+    20: CrmSchemaApplyMigration20(AConn);
+    21: CrmSchemaApplyMigration21(AConn);
+    22: CrmSchemaApplyMigration22(AConn);
+    23: CrmSchemaApplyMigration23(AConn);
   else
     raise Exception.CreateFmt('CRM sema: bilinmeyen migrasyon surumu %d', [AVersion]);
   end;

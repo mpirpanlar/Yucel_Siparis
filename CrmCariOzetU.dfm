@@ -21,17 +21,18 @@ object frmCrmCariOzet: TfrmCrmCariOzet
     TabOrder = 0
     BorderStyle = ubsNone
     Caption = ''
+    Layout = 'vbox'
     object pnlToolbar: TUniPanel
       Left = 0
       Top = 0
       Width = 960
       Height = 48
       Hint = ''
-      Align = alTop
       TabOrder = 0
       BorderStyle = ubsNone
       Caption = ''
       Color = 10865101
+      LayoutConfig.Width = '100%'
       object lblCari: TUniLabel
         Left = 12
         Top = 14
@@ -115,21 +116,26 @@ object frmCrmCariOzet: TfrmCrmCariOzet
       Height = 512
       Hint = ''
       ActivePage = tabAktivite
-      Align = alClient
       TabOrder = 1
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
       object tabAktivite: TUniTabSheet
         Hint = ''
         Caption = 'Aktiviteler'
+        Layout = 'fit'
         object panAkt: TUniPanel
           Left = 0
           Top = 0
           Width = 952
           Height = 484
           Hint = ''
-          Align = alClient
           TabOrder = 0
           BorderStyle = ubsNone
           Caption = ''
+          LayoutConfig.Flex = 1
+          LayoutConfig.Height = '100%'
+          LayoutConfig.Width = '100%'
           object grdAkt: TUniDBGrid
             Left = 0
             Top = 0
@@ -142,7 +148,9 @@ object frmCrmCariOzet: TfrmCrmCariOzet
             WebOptions.Paged = False
             WebOptions.FetchAll = True
             LoadMask.Message = 'Loading data...'
-            Align = alClient
+            LayoutConfig.Flex = 1
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Width = '100%'
             TabOrder = 0
             OnAjaxEvent = grdAktAjaxEvent
             Columns = <
@@ -194,16 +202,19 @@ object frmCrmCariOzet: TfrmCrmCariOzet
       object tabGorev: TUniTabSheet
         Hint = ''
         Caption = 'G'#246'revler'
+        Layout = 'fit'
         object panGrv: TUniPanel
           Left = 0
           Top = 0
           Width = 952
           Height = 484
           Hint = ''
-          Align = alClient
           TabOrder = 0
           BorderStyle = ubsNone
           Caption = ''
+          LayoutConfig.Flex = 1
+          LayoutConfig.Height = '100%'
+          LayoutConfig.Width = '100%'
           object grdGrv: TUniDBGrid
             Left = 0
             Top = 0
@@ -216,7 +227,9 @@ object frmCrmCariOzet: TfrmCrmCariOzet
             WebOptions.Paged = False
             WebOptions.FetchAll = True
             LoadMask.Message = 'Loading data...'
-            Align = alClient
+            LayoutConfig.Flex = 1
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Width = '100%'
             TabOrder = 0
             OnAjaxEvent = grdGrvAjaxEvent
             Columns = <
@@ -268,16 +281,19 @@ object frmCrmCariOzet: TfrmCrmCariOzet
       object tabTeklif: TUniTabSheet
         Hint = ''
         Caption = 'Teklifler'
+        Layout = 'fit'
         object panTek: TUniPanel
           Left = 0
           Top = 0
           Width = 952
           Height = 484
           Hint = ''
-          Align = alClient
           TabOrder = 0
           BorderStyle = ubsNone
           Caption = ''
+          LayoutConfig.Flex = 1
+          LayoutConfig.Height = '100%'
+          LayoutConfig.Width = '100%'
           object grdTek: TUniDBGrid
             Left = 0
             Top = 0
@@ -290,7 +306,9 @@ object frmCrmCariOzet: TfrmCrmCariOzet
             WebOptions.Paged = False
             WebOptions.FetchAll = True
             LoadMask.Message = 'Loading data...'
-            Align = alClient
+            LayoutConfig.Flex = 1
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Width = '100%'
             TabOrder = 0
             OnAjaxEvent = grdTekAjaxEvent
             Columns = <

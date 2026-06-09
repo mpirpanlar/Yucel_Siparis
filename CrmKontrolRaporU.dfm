@@ -21,17 +21,18 @@ object frmCrmKontrolRapor: TfrmCrmKontrolRapor
     TabOrder = 0
     BorderStyle = ubsNone
     Caption = ''
+    Layout = 'vbox'
     object panTop: TUniPanel
       Left = 0
       Top = 0
       Width = 1010
       Height = 88
       Hint = ''
-      Align = alTop
       TabOrder = 0
       BorderStyle = ubsNone
       Caption = ''
       Color = 15790320
+      LayoutConfig.Width = '100%'
       object lblTip: TUniLabel
         Left = 12
         Top = 12
@@ -157,11 +158,14 @@ object frmCrmKontrolRapor: TfrmCrmKontrolRapor
       Height = 552
       Hint = ''
       ActivePage = tsDetay
-      Align = alClient
       TabOrder = 1
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
       object tsDetay: TUniTabSheet
         Hint = ''
         Caption = 'Detay'
+        Layout = 'fit'
         object grdDetay: TUniDBGrid
           Left = 0
           Top = 0
@@ -174,13 +178,16 @@ object frmCrmKontrolRapor: TfrmCrmKontrolRapor
           WebOptions.Paged = False
           WebOptions.FetchAll = True
           LoadMask.Message = 'Loading data...'
-          Align = alClient
+          LayoutConfig.Flex = 1
+          LayoutConfig.Height = '100%'
+          LayoutConfig.Width = '100%'
           TabOrder = 0
         end
       end
       object tsOzet: TUniTabSheet
         Hint = ''
         Caption = #214'zet'
+        Layout = 'fit'
         object grdOzet: TUniDBGrid
           Left = 0
           Top = 0
@@ -193,7 +200,9 @@ object frmCrmKontrolRapor: TfrmCrmKontrolRapor
           WebOptions.Paged = False
           WebOptions.FetchAll = True
           LoadMask.Message = 'Loading data...'
-          Align = alClient
+          LayoutConfig.Flex = 1
+          LayoutConfig.Height = '100%'
+          LayoutConfig.Width = '100%'
           TabOrder = 0
         end
       end

@@ -9,6 +9,9 @@ interface
 const
   CrmGoogleMapsBrowserApiKey = 'AIzaSyA5-6MbmC5uVG-ep6XTEh4gUEt2Bw8VkSw';
 
+{ Sunucu tarafli Directions cagrisi icin API anahtarinda IP kisitlamasi veya
+  ayri sunucu anahtari gerekebilir; Directions API etkin olmali. }
+
 implementation
 
 end.

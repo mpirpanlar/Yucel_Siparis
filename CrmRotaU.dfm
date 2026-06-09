@@ -322,6 +322,98 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         OnClick = btnGorevOlusturClick
       end
     end
+    object panPersonel: TUniPanel
+      Left = 0
+      Top = 276
+      Width = 1020
+      Height = 72
+      Hint = ''
+      Align = alTop
+      TabOrder = 2
+      BorderStyle = ubsNone
+      Caption = ''
+      Color = 15790320
+      object lblAtanan: TUniLabel
+        Left = 8
+        Top = 8
+        Width = 90
+        Height = 13
+        Hint = ''
+        Caption = 'Atanan personel'
+        TabOrder = 0
+      end
+      object lkPersonel: TUniDBLookupComboBox
+        Left = 8
+        Top = 28
+        Width = 200
+        Height = 24
+        Hint = ''
+        ListField = 'KullaniciAd'
+        ListSource = dsKullanici
+        KeyField = 'KullaniciID'
+        ListFieldIndex = 0
+        TabOrder = 1
+        Color = clWindow
+      end
+      object btnPersEkle: TUniButton
+        Left = 216
+        Top = 26
+        Width = 60
+        Height = 28
+        Hint = ''
+        Caption = 'Ekle'
+        TabOrder = 2
+        OnClick = btnPersEkleClick
+      end
+      object btnPersSil: TUniButton
+        Left = 280
+        Top = 26
+        Width = 60
+        Height = 28
+        Hint = ''
+        Caption = 'Sil'
+        TabOrder = 3
+        OnClick = btnPersSilClick
+      end
+      object lbPersonel: TUniListBox
+        Left = 360
+        Top = 8
+        Width = 280
+        Height = 56
+        Hint = ''
+        TabOrder = 4
+      end
+      object lblToplamKm: TUniLabel
+        Left = 660
+        Top = 8
+        Width = 120
+        Height = 13
+        Hint = ''
+        Caption = 'Toplam yol: - km'
+        TabOrder = 5
+      end
+      object cbGpsMod: TUniComboBox
+        Left = 660
+        Top = 28
+        Width = 220
+        Height = 24
+        Hint = ''
+        Style = csDropDownList
+        Text = ''
+        TabOrder = 6
+        IconItems = <>
+      end
+      object btnMesafeHesapla: TUniButton
+        Left = 888
+        Top = 26
+        Width = 120
+        Height = 28
+        Hint = ''
+        Caption = 'Yol km hesapla'
+        TabOrder = 7
+        OnClick = btnMesafeHesaplaClick
+      end
+    end
     object panFooter: TUniPanel
       Left = 0
       Top = 648
@@ -441,7 +533,13 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         item
           FieldName = 'UYARI'
           Title.Caption = 'Uyar'#305
-          Width = 240
+          Width = 180
+          ReadOnly = True
+        end
+        item
+          FieldName = 'BACAK_KM'
+          Title.Caption = 'Bacak km'
+          Width = 70
           ReadOnly = True
         end>
     end
@@ -474,6 +572,16 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
   object qTmp: TUniQuery
     Connection = frmDM.conAsya
     Left = 200
+    Top = 640
+  end
+  object qKullanici: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 232
+    Top = 640
+  end
+  object dsKullanici: TUniDataSource
+    DataSet = qKullanici
+    Left = 264
     Top = 640
   end
 end

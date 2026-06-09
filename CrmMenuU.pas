@@ -18,6 +18,8 @@ type
     UniPanel2: TUniPanel;
     btnAktiviteListesi: TUniButton;
     btnGorevListesi: TUniButton;
+    UniSimplePanel3: TUniSimplePanel;
+    UniPanel3: TUniPanel;
     btnYeniTeklif: TUniButton;
     btnYeniPotansiyel: TUniButton;
     btnYeniRotaPlan: TUniButton;
@@ -28,6 +30,10 @@ type
     btnCariGpsListe: TUniButton;
     btnSoruSeti: TUniButton;
     btnKontrolRapor: TUniButton;
+    btnTakvim: TUniButton;
+    btnAktiviteRapor: TUniButton;
+    btnAktiviteTarihce: TUniButton;
+    btnRotaKmRapor: TUniButton;
     procedure btnYeniAktiviteClick(Sender: TObject);
     procedure btnYeniGorevClick(Sender: TObject);
     procedure btnAktiviteListesiClick(Sender: TObject);
@@ -42,6 +48,10 @@ type
     procedure btnCariGpsListeClick(Sender: TObject);
     procedure btnSoruSetiClick(Sender: TObject);
     procedure btnKontrolRaporClick(Sender: TObject);
+    procedure btnTakvimClick(Sender: TObject);
+    procedure btnAktiviteRaporClick(Sender: TObject);
+    procedure btnAktiviteTarihceClick(Sender: TObject);
+    procedure btnRotaKmRaporClick(Sender: TObject);
   private
   public
   end;
@@ -56,7 +66,7 @@ uses
   MainModule, uniGUIApplication, Genel, CrmAktiviteU, CrmGorevU,
   CrmAktiviteListeU, CrmGorevListeU, CrmTeklifU, CrmTeklifListeU, CrmCariOzetU,
   CrmPotansiyelU, CrmPotansiyelListeU, CrmRotaListeU, CrmRotaU, CrmCariGpsListeU,
-  CrmSoruSetiU, CrmKontrolRaporU;
+  CrmSoruSetiU, CrmKontrolRaporU, CrmTakvimU, CrmAktiviteRaporU, CrmAktiviteTarihceU, CrmRotaKmRaporU;
 
 function frmCrmMenu: TfrmCrmMenu;
 begin
@@ -131,6 +141,26 @@ end;
 procedure TfrmCrmMenu.btnKontrolRaporClick(Sender: TObject);
 begin
   xFormShow(TfrmCrmKontrolRapor, 'CrmKontrolRapor', 1, '');
+end;
+
+procedure TfrmCrmMenu.btnTakvimClick(Sender: TObject);
+begin
+  xFormShow(TfrmCrmTakvim, 'CrmTakvim', 1, '');
+end;
+
+procedure TfrmCrmMenu.btnAktiviteRaporClick(Sender: TObject);
+begin
+  xFormShow(TfrmCrmAktiviteRapor, 'CrmAktiviteRapor', 1, '');
+end;
+
+procedure TfrmCrmMenu.btnAktiviteTarihceClick(Sender: TObject);
+begin
+  xFormShow(TfrmCrmAktiviteTarihce, 'CrmAktiviteTarihce', 1, '');
+end;
+
+procedure TfrmCrmMenu.btnRotaKmRaporClick(Sender: TObject);
+begin
+  xFormShow(TfrmCrmRotaKmRapor, 'CrmRotaKmRapor', 1, '');
 end;
 
 end.

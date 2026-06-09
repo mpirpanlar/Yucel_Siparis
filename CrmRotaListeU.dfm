@@ -21,17 +21,18 @@ object frmCrmRotaListe: TfrmCrmRotaListe
     TabOrder = 0
     BorderStyle = ubsNone
     Caption = ''
+    Layout = 'vbox'
     object pnlToolbar: TUniPanel
       Left = 0
       Top = 0
       Width = 1000
       Height = 48
       Hint = ''
-      Align = alTop
       TabOrder = 0
       BorderStyle = ubsNone
       Caption = ''
       Color = 10865101
+      LayoutConfig.Width = '100%'
       object btnListele: TUniButton
         Left = 12
         Top = 8
@@ -140,11 +141,11 @@ object frmCrmRotaListe: TfrmCrmRotaListe
       Width = 1000
       Height = 64
       Hint = ''
-      Align = alTop
       TabOrder = 1
       BorderStyle = ubsNone
       Caption = ''
       Color = 15790320
+      LayoutConfig.Width = '100%'
       object lblFiltBaslik: TUniLabel
         Left = 12
         Top = 16
@@ -176,7 +177,9 @@ object frmCrmRotaListe: TfrmCrmRotaListe
       WebOptions.Paged = False
       WebOptions.FetchAll = True
       LoadMask.Message = 'Y'#252'kleniyor...'
-      Align = alClient
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
       TabOrder = 2
       OnAjaxEvent = grdAjaxEvent
       Columns = <
@@ -199,6 +202,26 @@ object frmCrmRotaListe: TfrmCrmRotaListe
           FieldName = 'PLANLAMA_TARIHI'
           Title.Caption = 'Plan tarihi'
           Width = 100
+        end
+        item
+          FieldName = 'OLUSTURAN'
+          Title.Caption = 'Olu'#351'turan'
+          Width = 100
+        end
+        item
+          FieldName = 'ATANAN'
+          Title.Caption = 'Atanan'
+          Width = 120
+        end
+        item
+          FieldName = 'DURAK_SAY'
+          Title.Caption = 'Durak'
+          Width = 55
+        end
+        item
+          FieldName = 'TOPLAM_KM'
+          Title.Caption = 'Toplam km'
+          Width = 80
         end
         item
           FieldName = 'OLUSTURMA_UTC'

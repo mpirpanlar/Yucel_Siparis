@@ -71,6 +71,8 @@ type
     pgc: TUniPageControl;
     tsGenel: TUniTabSheet;
     tsKontrol: TUniTabSheet;
+    tsTarihce: TUniTabSheet;
+    grdTarihce: TUniDBGrid;
     panKontrolTb: TUniPanel;
     lblKontrolBilgi: TUniLabel;
     btnKontrolKaydet: TUniButton;
@@ -79,6 +81,9 @@ type
     qSecenek: TUniQuery;
     qCevap: TUniQuery;
     qKontrolExec: TUniQuery;
+    qLog: TUniQuery;
+    dsLog: TUniDataSource;
+    qLogExec: TUniQuery;
     procedure UniFormShow(Sender: TObject);
     procedure btnKaydetClick(Sender: TObject);
     procedure btnCariBulClick(Sender: TObject);
@@ -104,6 +109,8 @@ type
     procedure EnsureEkUpload;
     function AktiviteKaydet: Boolean;
     procedure EkListele;
+    procedure TarihceYukle;
+    procedure AktiviteLogKaydet(const IsNew: Boolean; const OldKonu, OldAcik, OldTarStr, OldDurAd: string);
     procedure EkIndir;
     procedure EkSil;
     procedure AcLookupSorgulari;
@@ -128,7 +135,7 @@ implementation
 {$R *.dfm}
 
 uses
-  uniGUIApplication, MainModule, DMU, TmpU, CrmCariSecU, ServerModule;
+  uniGUIApplication, MainModule, DMU, TmpU, CrmCariSecU, ServerModule, CrmAktiviteLogU;
 
 procedure TfrmCrmAktivite.btnCariBulClick(Sender: TObject);
 var
@@ -385,7 +392,32 @@ begin
   qLoad.Close;
   EkListele;
   KontrolListesiYukle;
+  TarihceYukle;
   Caption := 'Aktivite';
+end;
+
+procedure TfrmCrmAktivite.TarihceYukle;
+begin
+  CrmTarihceYukle(qLog, FAktiviteId);
+end;
+
+procedure TfrmCrmAktivite.AktiviteLogKaydet(const IsNew: Boolean; const OldKonu, OldAcik, OldTarStr, OldDurAd: string);
+var
+  KulId: Integer;
+begin
+  if FAktiviteId <= 0 then
+    Exit;
+  KulId := Tmp.xKullaniciID;
+  if IsNew then
+  begin
+    CrmLogEkle(qLogExec, FAktiviteId, 'AKTIVITE', 'OLUSTUR', '', '', edKonu.Text, 'Yeni aktivite', KulId);
+    Exit;
+  end;
+  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'AKTIVITE', 'KONU_DEGIS', 'Konu', OldKonu, edKonu.Text, KulId);
+  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'AKTIVITE', 'ACIKLAMA_DEGIS', 'Aciklama', OldAcik, mmAciklama.Text, KulId);
+  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'AKTIVITE', 'TARIH_DEGIS', 'Aktivite Tarihi', OldTarStr,
+    CrmTarihMetin(dtAktivite.DateTime), KulId);
+  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'AKTIVITE', 'DURUM_DEGIS', 'Durum', OldDurAd, Trim(lkDurum.Text), KulId);
 end;
 
 procedure TfrmCrmAktivite.EnsureEkUpload;
@@ -428,8 +460,35 @@ function TfrmCrmAktivite.AktiviteKaydet: Boolean;
 var
   NewId: Int64;
   Tkod, Dkod: string;
+  IsNew: Boolean;
+  OldKonu, OldAcik, OldDurAd, OldTarStr: string;
+  OldDurId: Int64;
 begin
   Result := False;
+  IsNew := FAktiviteId <= 0;
+  OldKonu := '';
+  OldAcik := '';
+  OldDurAd := '';
+  OldTarStr := '';
+  OldDurId := 0;
+  if FAktiviteId > 0 then
+  begin
+    qLoad.Close;
+    qLoad.SQL.Text :=
+      'SELECT KONU, ACIKLAMA, AKTIVITE_TARIHI, AKTIVITE_DURUM_ID FROM dbo.CRM_AKTIVITE WHERE AKTIVITE_ID = :ID';
+    qLoad.ParamByName('ID').AsLargeInt := FAktiviteId;
+    qLoad.Open;
+    if not qLoad.IsEmpty then
+    begin
+      OldKonu := qLoad.FieldByName('KONU').AsString;
+      OldAcik := qLoad.FieldByName('ACIKLAMA').AsString;
+      OldTarStr := CrmTarihMetin(qLoad.FieldByName('AKTIVITE_TARIHI').AsDateTime);
+      if not qLoad.FieldByName('AKTIVITE_DURUM_ID').IsNull then
+        OldDurId := qLoad.FieldByName('AKTIVITE_DURUM_ID').AsLargeInt;
+    end;
+    qLoad.Close;
+    OldDurAd := CrmDurumMetni(qLogExec, OldDurId);
+  end;
   if Trim(edKonu.Text) = '' then
   begin
     UniMainModule.saHata.Show('Konu zorunludur.');
@@ -532,10 +591,14 @@ begin
   if FAktiviteId > 0 then
     KontrolCevaplariKaydet;
 
+  if FAktiviteId > 0 then
+    AktiviteLogKaydet(IsNew, OldKonu, OldAcik, OldTarStr, OldDurAd);
+
   UniMainModule.saKaydet.Show('Aktivite kaydedildi.');
   if FAktiviteId > 0 then
     Caption := 'Aktivite';
   EkListele;
+  TarihceYukle;
   Result := True;
 end;
 

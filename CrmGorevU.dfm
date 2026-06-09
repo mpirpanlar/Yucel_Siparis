@@ -20,16 +20,28 @@ object frmCrmGorev: TfrmCrmGorev
     TabOrder = 0
     BorderStyle = ubsNone
     Caption = ''
-    object panMain: TUniPanel
+    object pgc: TUniPageControl
       Left = 0
       Top = 0
       Width = 640
       Height = 484
       Hint = ''
+      ActivePage = tsGenel
       Align = alClient
       TabOrder = 0
-      BorderStyle = ubsNone
-      Caption = ''
+      object tsGenel: TUniTabSheet
+        Hint = ''
+        Caption = 'Genel'
+        object panMain: TUniPanel
+          Left = 0
+          Top = 0
+          Width = 632
+          Height = 456
+          Hint = ''
+          Align = alClient
+          TabOrder = 0
+          BorderStyle = ubsNone
+          Caption = ''
       object lblKonu: TUniLabel
         Left = 16
         Top = 12
@@ -210,6 +222,27 @@ object frmCrmGorev: TfrmCrmGorev
         TabOrder = 16
         Color = clWindow
       end
+        end
+      end
+      object tsTarihce: TUniTabSheet
+        Hint = ''
+        Caption = 'Tarih'#231'e'
+        object grdTarihce: TUniDBGrid
+          Left = 0
+          Top = 0
+          Width = 632
+          Height = 456
+          Hint = ''
+          DataSource = dsLog
+          Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgTabs, dgCancelOnExit]
+          ReadOnly = True
+          WebOptions.Paged = False
+          WebOptions.FetchAll = True
+          LoadMask.Message = 'Loading data...'
+          Align = alClient
+          TabOrder = 0
+        end
+      end
     end
     object panFooter: TUniPanel
       Left = 0
@@ -279,5 +312,20 @@ object frmCrmGorev: TfrmCrmGorev
     DataSet = qDurLkp
     Left = 560
     Top = 328
+  end
+  object qLog: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 560
+    Top = 376
+  end
+  object dsLog: TUniDataSource
+    DataSet = qLog
+    Left = 592
+    Top = 376
+  end
+  object qLogExec: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 624
+    Top = 376
   end
 end

@@ -21,17 +21,18 @@ object frmCrmCariGpsListe: TfrmCrmCariGpsListe
     TabOrder = 0
     BorderStyle = ubsNone
     Caption = ''
+    Layout = 'vbox'
     object pnlToolbar: TUniPanel
       Left = 0
       Top = 0
       Width = 980
       Height = 52
       Hint = ''
-      Align = alTop
       TabOrder = 0
       BorderStyle = ubsNone
       Caption = ''
       Color = 10865101
+      LayoutConfig.Width = '100%'
       object lblArama: TUniLabel
         Left = 12
         Top = 16
@@ -125,7 +126,9 @@ object frmCrmCariGpsListe: TfrmCrmCariGpsListe
       WebOptions.Paged = False
       WebOptions.FetchAll = True
       LoadMask.Message = 'Loading data...'
-      Align = alClient
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
       TabOrder = 1
       OnAjaxEvent = grdAjaxEvent
       Columns = <

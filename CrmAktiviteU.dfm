@@ -450,6 +450,25 @@ object frmCrmAktivite: TfrmCrmAktivite
               '.autoScroll = true;'#13#10'      config.scrollable = true;'#13#10'}')
         end
       end
+      object tsTarihce: TUniTabSheet
+        Hint = ''
+        Caption = 'Tarih'#231'e'
+        object grdTarihce: TUniDBGrid
+          Left = 0
+          Top = 0
+          Width = 632
+          Height = 728
+          Hint = ''
+          DataSource = dsLog
+          Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgTabs, dgCancelOnExit]
+          ReadOnly = True
+          WebOptions.Paged = False
+          WebOptions.FetchAll = True
+          LoadMask.Message = 'Loading data...'
+          Align = alClient
+          TabOrder = 0
+        end
+      end
     end
     object panFooter: TUniPanel
       Left = 0
@@ -578,6 +597,21 @@ object frmCrmAktivite: TfrmCrmAktivite
   object qKontrolExec: TUniQuery
     Connection = frmDM.conAsya
     Left = 424
+    Top = 552
+  end
+  object qLog: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 488
+    Top = 552
+  end
+  object dsLog: TUniDataSource
+    DataSet = qLog
+    Left = 520
+    Top = 552
+  end
+  object qLogExec: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 552
     Top = 552
   end
 end

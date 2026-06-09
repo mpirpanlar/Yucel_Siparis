@@ -40,6 +40,7 @@ uses
   CrmSchemaU in 'CrmSchemaU.pas',
   CrmMapsConfigU in 'CrmMapsConfigU.pas',
   CrmRotaGeoU in 'CrmRotaGeoU.pas',
+  CrmRotaMesafeU in 'CrmRotaMesafeU.pas',
   CrmHaritaSecU in 'CrmHaritaSecU.pas' {frmCrmHaritaSec: TUniForm},
   CrmRotaHaritaU in 'CrmRotaHaritaU.pas' {frmCrmRotaHarita: TUniForm},
   CrmRotaU in 'CrmRotaU.pas' {frmCrmRotaPlan: TUniForm},
@@ -63,7 +64,12 @@ uses
   CrmCariGpsListeU in 'CrmCariGpsListeU.pas' {frmCrmCariGpsListe: TUniForm},
   CrmCariGpsU in 'CrmCariGpsU.pas' {frmCrmCariGps: TUniForm},
   CrmSoruSetiU in 'CrmSoruSetiU.pas' {frmCrmSoruSeti: TUniForm},
-  CrmKontrolRaporU in 'CrmKontrolRaporU.pas' {frmCrmKontrolRapor: TUniForm};
+  CrmKontrolRaporU in 'CrmKontrolRaporU.pas' {frmCrmKontrolRapor: TUniForm},
+  CrmTakvimU in 'CrmTakvimU.pas' {frmCrmTakvim: TUniForm},
+  CrmAktiviteLogU in 'CrmAktiviteLogU.pas',
+  CrmAktiviteRaporU in 'CrmAktiviteRaporU.pas' {frmCrmAktiviteRapor: TUniForm},
+  CrmAktiviteTarihceU in 'CrmAktiviteTarihceU.pas' {frmCrmAktiviteTarihce: TUniForm},
+  CrmRotaKmRaporU in 'CrmRotaKmRaporU.pas' {frmCrmRotaKmRapor: TUniForm};
 
 {$R *.res}
 

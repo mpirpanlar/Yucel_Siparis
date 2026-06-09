@@ -8,11 +8,13 @@ uses
   uniGUIClasses, uniGUIForm, uniGUIBaseClasses, uniPanel, uniLabel,
   uniEdit, uniMemo, uniComboBox, uniDateTimePicker, uniButton,
   uniDBLookupComboBox, Data.DB, MemDS, DBAccess, Uni, uniDBComboBox,
-  uniMultiItem;
+  uniMultiItem, uniPageControl, uniBasicGrid, uniDBGrid;
 
 type
   TfrmCrmGorev = class(TUniForm)
     rootPanel: TUniPanel;
+    pgc: TUniPageControl;
+    tsGenel: TUniTabSheet;
     panMain: TUniPanel;
     lblKonu: TUniLabel;
     edKonu: TUniEdit;
@@ -31,6 +33,8 @@ type
     lkAtanan: TUniDBLookupComboBox;
     lblDurum: TUniLabel;
     lkDurum: TUniDBLookupComboBox;
+    tsTarihce: TUniTabSheet;
+    grdTarihce: TUniDBGrid;
     panFooter: TUniPanel;
     btnKaydet: TUniButton;
     qKullanici: TUniQuery;
@@ -40,6 +44,9 @@ type
     qInsGor: TUniQuery;
     qDurLkp: TUniQuery;
     dsDurLkp: TUniDataSource;
+    qLog: TUniQuery;
+    dsLog: TUniDataSource;
+    qLogExec: TUniQuery;
     procedure UniFormShow(Sender: TObject);
     procedure btnKaydetClick(Sender: TObject);
     procedure btnCariBulClick(Sender: TObject);
@@ -56,6 +63,9 @@ type
     procedure YukleGorev;
     function DurumKodFromLookup: string;
     function GorevTipId: Int64;
+    procedure TarihceYukle;
+    procedure GorevLogKaydet(const IsNew: Boolean; const OldKonu, OldAcik, OldDurAd, OldBitisStr, OldAtananAd: string;
+      OldTamam: Boolean);
   public
   end;
 
@@ -66,7 +76,7 @@ implementation
 {$R *.dfm}
 
 uses
-  uniGUIApplication, MainModule, DMU, TmpU, CrmCariSecU;
+  uniGUIApplication, MainModule, DMU, TmpU, CrmCariSecU, CrmAktiviteLogU;
 
 procedure TfrmCrmGorev.btnCariBulClick(Sender: TObject);
 begin
@@ -182,7 +192,7 @@ procedure TfrmCrmGorev.YeniGorevState;
 begin
   FAktiviteId := 0;
   FBaslangicTeklifId := 0;
-  Caption := 'Yeni Gˆrev';
+  Caption := 'Yeni Gùrev';
   edKonu.Text := '';
   mmAciklama.Text := '';
   edCariKod.Text := '';
@@ -212,7 +222,7 @@ begin
   if qLoad.IsEmpty then
   begin
     qLoad.Close;
-    UniMainModule.saHata.Show('Gˆrev bulunamad˝.');
+    UniMainModule.saHata.Show('Gùrev bulunamadù.');
     FAktiviteId := 0;
     KullanicilariAc;
     YeniGorevState;
@@ -262,7 +272,48 @@ begin
   else
     VarsayilanDurum;
 
-  Caption := 'Gˆrev';
+  Caption := 'G' + #$00F6 + 'rev';
+  TarihceYukle;
+end;
+
+procedure TfrmCrmGorev.TarihceYukle;
+begin
+  CrmTarihceYukle(qLog, FAktiviteId);
+end;
+
+procedure TfrmCrmGorev.GorevLogKaydet(const IsNew: Boolean; const OldKonu, OldAcik, OldDurAd, OldBitisStr,
+  OldAtananAd: string; OldTamam: Boolean);
+var
+  KulId: Integer;
+  YeniAtanan, YeniTamStr, EskiTamStr: string;
+begin
+  if FAktiviteId <= 0 then
+    Exit;
+  KulId := Tmp.xKullaniciID;
+  if IsNew then
+  begin
+    CrmLogEkle(qLogExec, FAktiviteId, 'GOREV', 'OLUSTUR', '', '', edKonu.Text, 'Yeni gorev', KulId);
+    Exit;
+  end;
+  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'GOREV', 'KONU_DEGIS', 'Konu', OldKonu, edKonu.Text, KulId);
+  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'GOREV', 'ACIKLAMA_DEGIS', 'Aciklama', OldAcik, mmAciklama.Text, KulId);
+  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'GOREV', 'DURUM_DEGIS', 'Durum', OldDurAd, Trim(lkDurum.Text), KulId);
+  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'GOREV', 'TARIH_DEGIS', 'Termin Tarihi', OldBitisStr,
+    CrmTarihMetin(dtBitis.DateTime), KulId);
+  if VarIsEmpty(lkAtanan.KeyValue) or VarIsNull(lkAtanan.KeyValue) then
+    YeniAtanan := ''
+  else
+    YeniAtanan := Trim(lkAtanan.Text);
+  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'GOREV', 'ATAMA_DEGIS', 'Atanan', OldAtananAd, YeniAtanan, KulId);
+  if SameText(DurumKodFromLookup, 'TAMAMLANDI') then
+    YeniTamStr := 'Evet'
+  else
+    YeniTamStr := 'Hayir';
+  if OldTamam then
+    EskiTamStr := 'Evet'
+  else
+    EskiTamStr := 'Hayir';
+  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'GOREV', 'TAMAMLANDI', 'Tamamlandi', EskiTamStr, YeniTamStr, KulId);
 end;
 
 procedure TfrmCrmGorev.UniFormShow(Sender: TObject);
@@ -289,7 +340,43 @@ var
   Tamam: Integer;
   TaskTid: Int64;
   Dkod: string;
+  IsNew: Boolean;
+  OldKonu, OldAcik, OldDurAd, OldBitisStr, OldAtananAd: string;
+  OldDurId, OldAtananId: Int64;
+  OldTamam: Boolean;
 begin
+  IsNew := FAktiviteId <= 0;
+  OldKonu := '';
+  OldAcik := '';
+  OldDurAd := '';
+  OldBitisStr := '';
+  OldAtananAd := '';
+  OldTamam := False;
+  OldDurId := 0;
+  OldAtananId := 0;
+  if FAktiviteId > 0 then
+  begin
+    qLoad.Close;
+    qLoad.SQL.Text :=
+      'SELECT A.KONU, A.ACIKLAMA, A.AKTIVITE_DURUM_ID, G.BITIS_TARIHI, G.ATANAN_KULLANICI_ID, G.TAMAMLANDI ' +
+      'FROM dbo.CRM_AKTIVITE A INNER JOIN dbo.CRM_GOREV G ON G.AKTIVITE_ID = A.AKTIVITE_ID WHERE A.AKTIVITE_ID = :ID';
+    qLoad.ParamByName('ID').AsLargeInt := FAktiviteId;
+    qLoad.Open;
+    if not qLoad.IsEmpty then
+    begin
+      OldKonu := qLoad.FieldByName('KONU').AsString;
+      OldAcik := qLoad.FieldByName('ACIKLAMA').AsString;
+      OldBitisStr := CrmTarihMetin(qLoad.FieldByName('BITIS_TARIHI').AsDateTime);
+      OldTamam := qLoad.FieldByName('TAMAMLANDI').AsBoolean;
+      if not qLoad.FieldByName('AKTIVITE_DURUM_ID').IsNull then
+        OldDurId := qLoad.FieldByName('AKTIVITE_DURUM_ID').AsLargeInt;
+      if not qLoad.FieldByName('ATANAN_KULLANICI_ID').IsNull then
+        OldAtananId := qLoad.FieldByName('ATANAN_KULLANICI_ID').AsInteger;
+    end;
+    qLoad.Close;
+    OldDurAd := CrmDurumMetni(qLogExec, OldDurId);
+    OldAtananAd := CrmKullaniciMetni(qLogExec, OldAtananId);
+  end;
   if Trim(edKonu.Text) = '' then
   begin
     UniMainModule.saHata.Show('Konu zorunludur.');
@@ -297,7 +384,7 @@ begin
   end;
   if VarIsNull(lkDurum.KeyValue) or VarIsEmpty(lkDurum.KeyValue) then
   begin
-    UniMainModule.saHata.Show('Durum seÁiniz.');
+    UniMainModule.saHata.Show('Durum seùiniz.');
     Exit;
   end;
 
@@ -347,7 +434,7 @@ begin
     TaskTid := GorevTipId;
     if TaskTid <= 0 then
     begin
-      UniMainModule.saHata.Show('CRM: TASK aktivite tipi bulunamad˝. Veritaban˝ migrasyonunu Áal˝˛t˝r˝n.');
+      UniMainModule.saHata.Show('CRM: TASK aktivite tipi bulunamadù. Veritabanù migrasyonunu ùalùùtùrùn.');
       Exit;
     end;
 
@@ -363,7 +450,7 @@ begin
           not SameText(Trim(edCariKod.Text), Trim(qLoad.FieldByName('CARI_KOD').AsString)) then
         begin
           qLoad.Close;
-          UniMainModule.saHata.Show('SeÁilen teklifin cari kodu ile gˆrev carisi uyu˛muyor.');
+          UniMainModule.saHata.Show('Seùilen teklifin cari kodu ile gùrev carisi uyuùmuyor.');
           Exit;
         end;
       end;
@@ -399,7 +486,7 @@ begin
 
     if Aid <= 0 then
     begin
-      UniMainModule.saHata.Show('CRM aktivite kayd˝ olu˛mad˝ (AktiviteID al˝namad˝).');
+      UniMainModule.saHata.Show('CRM aktivite kaydù oluùmadù (AktiviteID alùnamadù).');
       Exit;
     end;
 
@@ -422,10 +509,16 @@ begin
     else
       qInsGor.ParamByName('TAMUTC').Clear;
     qInsGor.Execute;
-    Caption := 'Gˆrev';
+    Caption := 'G' + #$00F6 + 'rev';
   end;
 
-  UniMainModule.saKaydet.Show('Gˆrev kaydedildi.');
+  if FAktiviteId > 0 then
+  begin
+    GorevLogKaydet(IsNew, OldKonu, OldAcik, OldDurAd, OldBitisStr, OldAtananAd, OldTamam);
+    TarihceYukle;
+  end;
+
+  UniMainModule.saKaydet.Show('G' + #$00F6 + 'rev kaydedildi.');
 end;
 
 end.
