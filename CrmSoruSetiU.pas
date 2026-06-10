@@ -1,4 +1,4 @@
-unit CrmSoruSetiU;
+﻿unit CrmSoruSetiU;
 
 { CRM Aktivite Kontrol Listesi yonetimi:
   - Soru setleri (CRM_SORU_SETI)

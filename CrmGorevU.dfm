@@ -118,28 +118,107 @@ object frmCrmGorev: TfrmCrmGorev
             'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
         OnClick = btnCariBulClick
       end
-      object lblBagliTeklif: TUniLabel
+      object lblTeklif: TUniLabel
         Left = 16
         Top = 164
-        Width = 73
+        Width = 55
         Height = 13
         Hint = ''
-        Caption = 'Ba'#287'l'#305' Teklif No'
+        Caption = 'Ba'#287'l'#305' Teklif'
         TabOrder = 7
       end
-      object edBagliTeklifNo: TUniEdit
+      object lkTeklif: TUniDBLookupComboBox
         Left = 160
         Top = 160
-        Width = 440
+        Width = 300
         Height = 27
-        Hint = 'Tekliften acilan gorevlerde dolu gelir; salt okunur'
-        Text = ''
+        Hint = ''
+        ListField = 'AD'
+        ListSource = dsTekLkp
+        KeyField = 'TEKLIF_ID'
+        ListFieldIndex = 0
         TabOrder = 8
+        Color = clWindow
+        OnCloseUp = lkTeklifCloseUp
+      end
+      object btnTeklifYenile: TUniButton
+        Left = 470
+        Top = 158
+        Width = 130
+        Height = 30
+        Hint = 'Teklif listesini cariye gore yeniler'
+        Caption = 'Teklif Y'#252'kle'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -12
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 9
+        OnClick = btnTeklifYenileClick
+      end
+      object lblSiparis: TUniLabel
+        Left = 16
+        Top = 200
+        Width = 95
+        Height = 13
+        Hint = ''
+        Caption = 'Sipari'#351' No (NETS'#304'S)'
+        TabOrder = 10
+      end
+      object edSiparis: TUniEdit
+        Left = 160
+        Top = 196
+        Width = 300
+        Height = 27
+        Hint = ''
+        Text = ''
+        TabOrder = 11
         ReadOnly = True
+      end
+      object btnSiparisBul: TUniButton
+        Left = 470
+        Top = 194
+        Width = 130
+        Height = 30
+        Hint = 'Netsis siparis listesi'
+        Caption = 'Sipari'#351' Se'#231
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -12
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 12
+        OnClick = btnSiparisBulClick
+      end
+      object lblSiparisTar: TUniLabel
+        Left = 160
+        Top = 224
+        Width = 100
+        Height = 15
+        Hint = ''
+        Caption = ''
+        ParentFont = False
+        Font.Color = clGray
+        Font.Height = -12
+        TabOrder = 19
+      end
+      object lblSiparisAcik: TUniLabel
+        Left = 260
+        Top = 224
+        Width = 340
+        Height = 15
+        Hint = ''
+        Caption = ''
+        ParentFont = False
+        Font.Color = clGray
+        Font.Height = -12
+        TabOrder = 20
       end
       object lblBitis: TUniLabel
         Left = 16
-        Top = 200
+        Top = 248
         Width = 63
         Height = 13
         Hint = ''
@@ -148,7 +227,7 @@ object frmCrmGorev: TfrmCrmGorev
       end
       object dtBitis: TUniDateTimePicker
         Left = 160
-        Top = 196
+        Top = 244
         Width = 200
         Height = 27
         Hint = ''
@@ -160,7 +239,7 @@ object frmCrmGorev: TfrmCrmGorev
       end
       object lblOncelik: TUniLabel
         Left = 16
-        Top = 236
+        Top = 284
         Width = 39
         Height = 13
         Hint = ''
@@ -169,7 +248,7 @@ object frmCrmGorev: TfrmCrmGorev
       end
       object cbOncelik: TUniComboBox
         Left = 160
-        Top = 232
+        Top = 280
         Width = 200
         Height = 27
         Hint = ''
@@ -180,7 +259,7 @@ object frmCrmGorev: TfrmCrmGorev
       end
       object lblAtanan: TUniLabel
         Left = 16
-        Top = 272
+        Top = 320
         Width = 37
         Height = 13
         Hint = ''
@@ -189,7 +268,7 @@ object frmCrmGorev: TfrmCrmGorev
       end
       object lkAtanan: TUniDBLookupComboBox
         Left = 160
-        Top = 268
+        Top = 316
         Width = 440
         Height = 27
         Hint = ''
@@ -202,7 +281,7 @@ object frmCrmGorev: TfrmCrmGorev
       end
       object lblDurum: TUniLabel
         Left = 16
-        Top = 308
+        Top = 356
         Width = 35
         Height = 13
         Hint = ''
@@ -211,7 +290,7 @@ object frmCrmGorev: TfrmCrmGorev
       end
       object lkDurum: TUniDBLookupComboBox
         Left = 160
-        Top = 304
+        Top = 352
         Width = 440
         Height = 27
         Hint = ''
@@ -221,6 +300,7 @@ object frmCrmGorev: TfrmCrmGorev
         ListFieldIndex = 0
         TabOrder = 16
         Color = clWindow
+        OnCloseUp = lkDurumCloseUp
       end
         end
       end
@@ -327,5 +407,26 @@ object frmCrmGorev: TfrmCrmGorev
     Connection = frmDM.conAsya
     Left = 624
     Top = 376
+  end
+  object qTekLkp: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 560
+    Top = 424
+  end
+  object dsTekLkp: TUniDataSource
+    DataSet = qTekLkp
+    Left = 592
+    Top = 424
+  end
+  object saBaglantiDurum: TUniSweetAlert
+    Title = 'Durum g'#252'ncelle'
+    ConfirmButtonText = 'Evet'
+    CancelButtonText = 'Hay'#305'r'
+    AlertType = atQuestion
+    Padding = 20
+    ShowCancelButton = True
+    OnConfirm = saBaglantiDurumConfirm
+    Left = 480
+    Top = 424
   end
 end

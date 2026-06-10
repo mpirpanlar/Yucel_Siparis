@@ -9,6 +9,7 @@ uses
   uniEdit, uniMemo, uniDateTimePicker, uniButton, uniDBLookupComboBox,
   Data.DB, MemDS, DBAccess, Uni, uniMultiItem, uniComboBox, uniDBComboBox,
   uniBasicGrid, uniDBGrid, uniFileUpload, uniCheckBox, uniPageControl,
+  uniSweetAlert,
   System.Generics.Collections;
 
 type
@@ -43,6 +44,10 @@ type
     btnTeklifYenile: TUniButton;
     lblSiparis: TUniLabel;
     edSiparis: TUniEdit;
+    btnSiparisBul: TUniButton;
+    lblSiparisTar: TUniLabel;
+    lblSiparisAcik: TUniLabel;
+    saBaglantiDurum: TUniSweetAlert;
     lblTarih: TUniLabel;
     dtAktivite: TUniDateTimePicker;
     lblDurum: TUniLabel;
@@ -87,7 +92,11 @@ type
     procedure UniFormShow(Sender: TObject);
     procedure btnKaydetClick(Sender: TObject);
     procedure btnCariBulClick(Sender: TObject);
+    procedure btnSiparisBulClick(Sender: TObject);
     procedure btnTeklifYenileClick(Sender: TObject);
+    procedure lkTeklifCloseUp(Sender: TObject);
+    procedure lkDurumCloseUp(Sender: TObject);
+    procedure saBaglantiDurumConfirm(Sender: TObject);
     procedure fuEkCompleted(Sender: TObject; AStream: TFileStream);
     procedure btnEkEkleClick(Sender: TObject);
     procedure btnEkIndirClick(Sender: TObject);
@@ -97,6 +106,7 @@ type
     procedure btnKontrolKaydetClick(Sender: TObject);
   private
     FAktiviteId: Int64;
+    FPendingDurumId: Int64;
     FKontroller: TObjectList<TSoruKontrol>;
     FDinamik: TObjectList<TComponent>;
     procedure KontrolControlsTemizle;
@@ -124,6 +134,9 @@ type
     procedure YukleOncelik;
     function OncelikKodFromCombo: string;
     procedure ComboSetOncelik(const AKod: string);
+    procedure BaglantiDurumDegerlendir(const AKaynakTip: string);
+    procedure SiparisSecildi(Sender: TObject; const ASiparisKod: string);
+    function MevcutDurumId: Int64;
   public
     destructor Destroy; override;
   end;
@@ -135,7 +148,8 @@ implementation
 {$R *.dfm}
 
 uses
-  uniGUIApplication, MainModule, DMU, TmpU, CrmCariSecU, ServerModule, CrmAktiviteLogU;
+  uniGUIApplication, MainModule, DMU, TmpU, CrmCariSecU, CrmSiparisSecU, CrmBaglantiDurumU,
+  ServerModule, CrmAktiviteLogU;
 
 procedure TfrmCrmAktivite.btnCariBulClick(Sender: TObject);
 var
@@ -174,6 +188,72 @@ begin
     else
       lkTeklif.KeyValue := Null;
   end;
+end;
+
+function TfrmCrmAktivite.MevcutDurumId: Int64;
+begin
+  Result := 0;
+  if VarIsNull(lkDurum.KeyValue) or VarIsEmpty(lkDurum.KeyValue) then
+    Exit;
+  Result := lkDurum.KeyValue;
+end;
+
+procedure TfrmCrmAktivite.BaglantiDurumDegerlendir(const AKaynakTip: string);
+var
+  K: TCrmBaglantiKuralSonuc;
+begin
+  K := CrmBaglantiKuralGet(qLoad, AKaynakTip);
+  if not K.Bulundu then
+    Exit;
+  if MevcutDurumId = K.HedefDurumId then
+    Exit;
+  if K.PromptKullanici then
+  begin
+    FPendingDurumId := K.HedefDurumId;
+    saBaglantiDurum.Text :=
+      CrmKaynakTipAciklama(AKaynakTip) + ': durumu "' + K.HedefDurumAd + '" yapilsin mi?';
+    saBaglantiDurum.Show;
+  end
+  else if K.SessizUygula then
+    lkDurum.KeyValue := K.HedefDurumId;
+end;
+
+procedure TfrmCrmAktivite.saBaglantiDurumConfirm(Sender: TObject);
+begin
+  if FPendingDurumId > 0 then
+    lkDurum.KeyValue := FPendingDurumId;
+  FPendingDurumId := 0;
+end;
+
+procedure TfrmCrmAktivite.SiparisSecildi(Sender: TObject; const ASiparisKod: string);
+begin
+  BaglantiDurumDegerlendir(CRM_KAYNAK_SIPARIS);
+end;
+
+procedure TfrmCrmAktivite.btnSiparisBulClick(Sender: TObject);
+begin
+  frmCrmSiparisSec.HedefSiparisEdit := edSiparis;
+  frmCrmSiparisSec.HedefSiparisTarLabel := lblSiparisTar;
+  frmCrmSiparisSec.HedefSiparisAcikLabel := lblSiparisAcik;
+  frmCrmSiparisSec.FiltreCariKod := Trim(edCariKod.Text);
+  frmCrmSiparisSec.OnSiparisSecildi := SiparisSecildi;
+  frmCrmSiparisSec.edArama.Text := Trim(edSiparis.Text);
+  frmCrmSiparisSec.ShowModal;
+  frmCrmSiparisSec.OnSiparisSecildi := nil;
+end;
+
+procedure TfrmCrmAktivite.lkTeklifCloseUp(Sender: TObject);
+begin
+  BaglantiDurumDegerlendir(CRM_KAYNAK_TEKLIF);
+end;
+
+procedure TfrmCrmAktivite.lkDurumCloseUp(Sender: TObject);
+var
+  Did: Int64;
+begin
+  Did := MevcutDurumId;
+  if CrmDurumKapanisMi(qLoad, Did) then
+    BaglantiDurumDegerlendir(CRM_KAYNAK_KAPANIS);
 end;
 
 function frmCrmAktivite: TfrmCrmAktivite;
@@ -222,6 +302,7 @@ begin
     lkTeklif.KeyValue := ATeklifId
   else
     lkTeklif.KeyValue := Null;
+  BaglantiDurumDegerlendir(CRM_KAYNAK_TEKLIF);
 end;
 
 procedure TfrmCrmAktivite.TeklifLookupYenile(AForceTid: Int64);
@@ -313,6 +394,8 @@ begin
   TeklifLookupYenile(0);
   lkTeklif.KeyValue := Null;
   edSiparis.Text := '';
+  lblSiparisTar.Caption := '';
+  lblSiparisAcik.Caption := '';
   YukleOncelik;
   EkListele;
   KontrolListesiYukle;
@@ -384,6 +467,8 @@ begin
     edSiparis.Text := Trim(qLoad.FieldByName('SIPARIS_NO').AsString)
   else
     edSiparis.Text := '';
+  lblSiparisTar.Caption := '';
+  lblSiparisAcik.Caption := '';
   YukleOncelik;
   if (qLoad.FindField('ONCELIK') <> nil) and not qLoad.FieldByName('ONCELIK').IsNull then
     ComboSetOncelik(qLoad.FieldByName('ONCELIK').AsString)

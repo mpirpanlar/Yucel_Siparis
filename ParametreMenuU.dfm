@@ -304,6 +304,28 @@ object frmParametreMenu: TfrmParametreMenu
         LayoutConfig.Margin = '2 2 2 2'
         OnClick = UniButton14Click
       end
+      object UniButton15: TUniButton
+        Left = 16
+        Top = 495
+        Width = 193
+        Height = 30
+        Hint = ''
+        Caption = 'CRM - Ba'#287'lant'#305' Durum Kurallar'#305
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsItalic]
+        TabOrder = 13
+        ClientEvents.UniEvents.Strings = (
+          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
+          's="btnAltMenu";'#13#10'}')
+        ScreenMask.Enabled = True
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '2 2 2 2'
+        OnClick = UniButton15Click
+      end
     end
     object UniSimplePanel2: TUniSimplePanel
       Left = 296

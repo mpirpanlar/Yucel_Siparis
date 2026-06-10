@@ -23,17 +23,18 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
     TabOrder = 0
     BorderStyle = ubsNone
     Caption = ''
+    Layout = 'vbox'
     object panUst: TUniPanel
       Left = 0
       Top = 0
       Width = 1020
       Height = 232
       Hint = ''
-      Align = alTop
       TabOrder = 0
       BorderStyle = ubsNone
       Caption = ''
       Color = clWhite
+      LayoutConfig.Width = '100%'
       object lblBaslik: TUniLabel
         Left = 12
         Top = 12
@@ -236,11 +237,11 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       Width = 1020
       Height = 44
       Hint = ''
-      Align = alTop
       TabOrder = 1
       BorderStyle = ubsNone
       Caption = ''
       Color = 15790320
+      LayoutConfig.Width = '100%'
       object btnEkleCari: TUniButton
         Left = 8
         Top = 8
@@ -328,11 +329,11 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       Width = 1020
       Height = 72
       Hint = ''
-      Align = alTop
       TabOrder = 2
       BorderStyle = ubsNone
       Caption = ''
       Color = 15790320
+      LayoutConfig.Width = '100%'
       object lblAtanan: TUniLabel
         Left = 8
         Top = 8
@@ -414,58 +415,11 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         OnClick = btnMesafeHesaplaClick
       end
     end
-    object panFooter: TUniPanel
-      Left = 0
-      Top = 648
-      Width = 1020
-      Height = 52
-      Hint = ''
-      Align = alBottom
-      TabOrder = 3
-      BorderStyle = ubsNone
-      Caption = ''
-      Color = 15790320
-      object btnKaydet: TUniButton
-        Left = 320
-        Top = 8
-        Width = 140
-        Height = 36
-        Hint = ''
-        Caption = 'Kaydet'
-        TabOrder = 0
-        ClientEvents.UniEvents.Strings = (
-          
-            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
-            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
-        ScreenMask.Enabled = True
-        OnClick = btnKaydetClick
-      end
-      object btnRotaHarita: TUniButton
-        Left = 480
-        Top = 8
-        Width = 180
-        Height = 36
-        Hint = ''
-        Caption = 'Rotay'#305' haritada'
-        TabOrder = 1
-        OnClick = btnRotaHaritaClick
-      end
-      object btnKapat: TUniButton
-        Left = 880
-        Top = 8
-        Width = 100
-        Height = 36
-        Hint = ''
-        Caption = 'Kapat'
-        TabOrder = 2
-        OnClick = btnKapatClick
-      end
-    end
     object grdDurak: TUniDBGrid
       Left = 0
-      Top = 276
+      Top = 348
       Width = 1020
-      Height = 372
+      Height = 300
       Hint = ''
       DataSource = dsGrid
       Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgAlwaysShowSelection, dgConfirmDelete, dgTabs, dgCancelOnExit, dgAutoRefreshRow]
@@ -473,8 +427,10 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       WebOptions.Paged = False
       WebOptions.FetchAll = True
       LoadMask.Message = 'Y'#252'kleniyor...'
-      Align = alClient
-      TabOrder = 2
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
+      TabOrder = 3
       Columns = <
         item
           FieldName = 'SIRA'
@@ -542,6 +498,53 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
           Width = 70
           ReadOnly = True
         end>
+    end
+    object panFooter: TUniPanel
+      Left = 0
+      Top = 648
+      Width = 1020
+      Height = 52
+      Hint = ''
+      TabOrder = 4
+      BorderStyle = ubsNone
+      Caption = ''
+      Color = 15790320
+      LayoutConfig.Width = '100%'
+      object btnKaydet: TUniButton
+        Left = 320
+        Top = 8
+        Width = 140
+        Height = 36
+        Hint = ''
+        Caption = 'Kaydet'
+        TabOrder = 0
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+        ScreenMask.Enabled = True
+        OnClick = btnKaydetClick
+      end
+      object btnRotaHarita: TUniButton
+        Left = 480
+        Top = 8
+        Width = 180
+        Height = 36
+        Hint = ''
+        Caption = 'Rotay'#305' haritada'
+        TabOrder = 1
+        OnClick = btnRotaHaritaClick
+      end
+      object btnKapat: TUniButton
+        Left = 880
+        Top = 8
+        Width = 100
+        Height = 36
+        Hint = ''
+        Caption = 'Kapat'
+        TabOrder = 2
+        OnClick = btnKapatClick
+      end
     end
   end
   object qGrid: TUniQuery

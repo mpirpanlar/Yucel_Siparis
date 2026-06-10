@@ -37,8 +37,8 @@ object frmCrmSoruSeti: TfrmCrmSoruSeti
         object lblSorular: TUniLabel
           Left = 8
           Top = 230
-          Width = 100
-          Height = 16
+          Width = 44
+          Height = 17
           Hint = ''
           Caption = 'Sorular'
           ParentFont = False
@@ -49,8 +49,8 @@ object frmCrmSoruSeti: TfrmCrmSoruSeti
         object lblSecenekler: TUniLabel
           Left = 8
           Top = 506
-          Width = 200
-          Height = 16
+          Width = 245
+          Height = 17
           Hint = ''
           Caption = 'Se'#231'enekler (Tek/'#199'ok se'#231'im sorular'#305' i'#231'in)'
           ParentFont = False
@@ -166,7 +166,7 @@ object frmCrmSoruSeti: TfrmCrmSoruSeti
           object lblBaslik: TUniLabel
             Left = 8
             Top = 48
-            Width = 40
+            Width = 30
             Height = 13
             Hint = ''
             Caption = 'Ba'#351'l'#305'k'
@@ -184,7 +184,7 @@ object frmCrmSoruSeti: TfrmCrmSoruSeti
           object lblSetAciklama: TUniLabel
             Left = 8
             Top = 84
-            Width = 50
+            Width = 45
             Height = 13
             Hint = ''
             Caption = 'A'#231#305'klama'
@@ -233,7 +233,7 @@ object frmCrmSoruSeti: TfrmCrmSoruSeti
           Width = 90
           Height = 28
           Hint = ''
-          Caption = 'Soru Yeni'
+          Caption = 'Yeni Soru'
           TabOrder = 5
           OnClick = btnSoruYeniClick
         end
@@ -284,7 +284,7 @@ object frmCrmSoruSeti: TfrmCrmSoruSeti
           object lblSoruMetni: TUniLabel
             Left = 8
             Top = 8
-            Width = 70
+            Width = 57
             Height = 13
             Hint = ''
             Caption = 'Soru Metni'
@@ -301,7 +301,7 @@ object frmCrmSoruSeti: TfrmCrmSoruSeti
           object lblCevapTipi: TUniLabel
             Left = 8
             Top = 112
-            Width = 60
+            Width = 52
             Height = 13
             Hint = ''
             Caption = 'Cevap Tipi'
@@ -313,7 +313,9 @@ object frmCrmSoruSeti: TfrmCrmSoruSeti
             Width = 200
             Height = 24
             Hint = ''
+            Text = ''
             TabOrder = 3
+            IconItems = <>
           end
           object chkZorunlu: TUniCheckBox
             Left = 300
@@ -411,7 +413,7 @@ object frmCrmSoruSeti: TfrmCrmSoruSeti
         object lblAtamaTip: TUniLabel
           Left = 8
           Top = 16
-          Width = 80
+          Width = 59
           Height = 13
           Hint = ''
           Caption = 'Aktivite Tipi'
@@ -434,7 +436,7 @@ object frmCrmSoruSeti: TfrmCrmSoruSeti
         object lblSetEkle: TUniLabel
           Left = 8
           Top = 56
-          Width = 70
+          Width = 46
           Height = 13
           Hint = ''
           Caption = 'Soru Seti'
@@ -459,8 +461,8 @@ object frmCrmSoruSeti: TfrmCrmSoruSeti
           Width = 120
           Height = 22
           Hint = ''
-          Caption = 'Zorunlu'
           Checked = True
+          Caption = 'Zorunlu'
           TabOrder = 4
         end
         object btnAta: TUniButton

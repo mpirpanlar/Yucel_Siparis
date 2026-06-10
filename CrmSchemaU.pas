@@ -9,7 +9,7 @@ uses
   DBAccess, Uni;
 
 const
-  CRM_SCHEMA_TARGET_VERSION = 23;
+  CRM_SCHEMA_TARGET_VERSION = 24;
 
 procedure CrmEnsureDatabase(AConn: TUniConnection);
 
@@ -1344,6 +1344,46 @@ begin
     'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (23, ''CRM_AKTIVITE.POTANSIYEL_ID (potansiyel musteri baglantisi)'')');
 end;
 
+procedure CrmSchemaApplyMigration24(AConn: TUniConnection);
+begin
+  CrmExec(AConn,
+    'IF OBJECT_ID(''dbo.CRM_BAGLANTI_DURUM_KURAL'',''U'') IS NULL ' +
+    'CREATE TABLE dbo.CRM_BAGLANTI_DURUM_KURAL (' +
+    'KURAL_ID BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT PK_CRM_BAGLANTI_DURUM_KURAL PRIMARY KEY, ' +
+    'KAYNAK_TIP VARCHAR(30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL, ' +
+    'HEDEF_DURUM_ID BIGINT NOT NULL, ' +
+    'PROMPT_KULLANICI BIT NOT NULL CONSTRAINT DF_CRM_BAGL_DUR_PR DEFAULT (1), ' +
+    'SESSIZ_UYGULA BIT NOT NULL CONSTRAINT DF_CRM_BAGL_DUR_SE DEFAULT (0), ' +
+    'AKTIF BIT NOT NULL CONSTRAINT DF_CRM_BAGL_DUR_AK DEFAULT (1), ' +
+    'SIRA INT NOT NULL CONSTRAINT DF_CRM_BAGL_DUR_SR DEFAULT (0), ' +
+    'CONSTRAINT UQ_CRM_BAGL_DUR_KAYNAK UNIQUE (KAYNAK_TIP), ' +
+    'CONSTRAINT FK_CRM_BAGL_DUR_DUR FOREIGN KEY (HEDEF_DURUM_ID) REFERENCES dbo.CRM_AKTIVITE_DURUM (DURUM_ID) )');
+
+  if CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''FormName'' AND schema_id = SCHEMA_ID(''dbo'')') > 0 then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.FormName (FormName, FormCaption) SELECT v.FN, v.FC FROM (VALUES ' +
+      '(''CrmParamBaglantiDurum'', ''CRM - Baglanti Durum Kurallari'')) AS v(FN, FC) ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.FormName f WHERE f.FormName = v.FN)');
+  end;
+
+  if (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''YETKI'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) and
+     (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''KULLANICIGRUP'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmParamBaglantiDurum'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmParamBaglantiDurum'')');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 24) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (24, ''Baglanti durum kurallari, Netsis siparis secimi (FormName, YETKI)'')');
+end;
+
 procedure CrmSchemaApplyMigration(const AConn: TUniConnection; AVersion: Integer);
 begin
   case AVersion of
@@ -1370,6 +1410,7 @@ begin
     21: CrmSchemaApplyMigration21(AConn);
     22: CrmSchemaApplyMigration22(AConn);
     23: CrmSchemaApplyMigration23(AConn);
+    24: CrmSchemaApplyMigration24(AConn);
   else
     raise Exception.CreateFmt('CRM sema: bilinmeyen migrasyon surumu %d', [AVersion]);
   end;

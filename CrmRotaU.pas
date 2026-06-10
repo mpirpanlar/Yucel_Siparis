@@ -267,6 +267,21 @@ procedure TfrmCrmRotaPlan.DurakSatiriniListeyeEkle;
     Result := F.AsInteger;
   end;
 
+  function QBool(const AName: string; const ADefault: Boolean = False): Boolean;
+  var
+    F: TField;
+  begin
+    Result := ADefault;
+    F := QF(AName);
+    if (F = nil) or F.IsNull then
+      Exit;
+    try
+      Result := F.AsBoolean;
+    except
+      Result := F.AsInteger <> 0;
+    end;
+  end;
+
   function QStr(const AName: string): string;
   var
     F: TField;
@@ -332,7 +347,7 @@ begin
       if QF('BACAK_KM') <> nil then
         It.BacakKm := QFloat('BACAK_KM', 0);
       if QF('GPS_EKSIK') <> nil then
-        It.BacakGpsEksik := QInt('GPS_EKSIK', 0) = 1;
+        It.BacakGpsEksik := QBool('GPS_EKSIK', False);
       FDuraklar.Add(It);
     except
       on E: Exception do
