@@ -57,7 +57,7 @@ var
 begin
   if not qList.Active or qList.IsEmpty then
   begin
-    UniMainModule.saHata.Show('Once listele yapin ve bir satir secin.');
+    UniMainModule.saHata.Show(#214'nce listele yap'#305'n ve bir sat'#305'r se'#231'in.');
     Exit;
   end;
   Ck := Trim(qList.FieldByName('CARI_KOD').AsString);

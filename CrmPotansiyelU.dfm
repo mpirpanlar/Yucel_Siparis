@@ -32,8 +32,48 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
       BorderStyle = ubsNone
       Caption = ''
       Color = 15790320
+      object btnYeniAktivite: TUniButton
+        Left = 16
+        Top = 8
+        Width = 140
+        Height = 36
+        Hint = ''
+        Caption = 'Yeni Aktivite'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 2
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
+        OnClick = btnYeniAktiviteClick
+      end
+      object btnYeniGorev: TUniButton
+        Left = 168
+        Top = 8
+        Width = 140
+        Height = 36
+        Hint = ''
+        Caption = 'Yeni G'#246'rev'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 3
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
+        OnClick = btnYeniGorevClick
+      end
       object btnKaydet: TUniButton
-        Left = 320
+        Left = 328
         Top = 8
         Width = 140
         Height = 36

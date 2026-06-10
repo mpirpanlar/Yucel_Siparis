@@ -333,6 +333,125 @@ object frmParametreler: TfrmParametreler
             Layout = 'vbox'
             LayoutConfig.Height = '100%'
             LayoutConfig.Margin = '2 2 2 2'
+            object lblRotaGpsBaslik: TUniLabel
+              Left = 12
+              Top = 8
+              Width = 220
+              Height = 17
+              Hint = ''
+              Caption = 'Rota ba'#351'lang'#305#231' GPS (varsay'#305'lan)'
+              ParentFont = False
+              Font.Height = -15
+              Font.Style = [fsBold]
+              TabOrder = 0
+              LayoutConfig.Width = '100%'
+              LayoutConfig.Margin = '5 5 5 5'
+            end
+            object edParamGpsX: TUniEdit
+              Left = 12
+              Top = 32
+              Width = 220
+              Height = 22
+              Hint = ''
+              Text = ''
+              TabOrder = 1
+              FieldLabel = 'Enlem (GPSX)'
+              FieldLabelWidth = 120
+              LayoutConfig.Width = '100%'
+              LayoutConfig.Margin = '3 3 3 3'
+            end
+            object edParamGpsY: TUniEdit
+              Left = 12
+              Top = 72
+              Width = 220
+              Height = 22
+              Hint = ''
+              Text = ''
+              TabOrder = 2
+              FieldLabel = 'Boylam (GPSY)'
+              FieldLabelWidth = 120
+              LayoutConfig.Width = '100%'
+              LayoutConfig.Margin = '3 3 3 3'
+            end
+            object btnParamHaritaGps: TUniButton
+              Left = 12
+              Top = 112
+              Width = 160
+              Height = 28
+              Hint = ''
+              Caption = 'Haritadan se'#231
+              TabOrder = 3
+              LayoutConfig.Margin = '3 3 3 3'
+              OnClick = btnParamHaritaGpsClick
+            end
+            object lblRotaGorevBaslik: TUniLabel
+              Left = 12
+              Top = 148
+              Width = 220
+              Height = 17
+              Hint = ''
+              Caption = 'Rota onay '#8211' g'#246'rev olu'#351'turma'
+              ParentFont = False
+              Font.Height = -15
+              Font.Style = [fsBold]
+              TabOrder = 4
+              LayoutConfig.Width = '100%'
+              LayoutConfig.Margin = '8 5 5 5'
+            end
+            object cbParamOnayGorev: TUniComboBox
+              Left = 12
+              Top = 172
+              Width = 220
+              Height = 24
+              Hint = ''
+              Style = csDropDownList
+              Text = ''
+              TabOrder = 5
+              FieldLabel = 'Onayda g'#246'rev'
+              FieldLabelWidth = 120
+              LayoutConfig.Width = '100%'
+              LayoutConfig.Margin = '3 3 3 3'
+            end
+            object cbParamGorevZaman: TUniComboBox
+              Left = 12
+              Top = 212
+              Width = 220
+              Height = 24
+              Hint = ''
+              Style = csDropDownList
+              Text = ''
+              TabOrder = 6
+              FieldLabel = 'Zaman plan'#305
+              FieldLabelWidth = 120
+              LayoutConfig.Width = '100%'
+              LayoutConfig.Margin = '3 3 3 3'
+            end
+            object edParamGorevBasSaat: TUniEdit
+              Left = 12
+              Top = 252
+              Width = 220
+              Height = 22
+              Hint = ''
+              Text = '09:00'
+              TabOrder = 7
+              FieldLabel = 'Ba'#351'lang'#305#231' saati'
+              FieldLabelWidth = 120
+              LayoutConfig.Width = '100%'
+              LayoutConfig.Margin = '3 3 3 3'
+            end
+            object edParamGorevDurakDk: TUniEdit
+              Left = 12
+              Top = 292
+              Width = 220
+              Height = 22
+              Hint = ''
+              Text = '45'
+              TabOrder = 8
+              FieldLabel = 'Durak dk (slot)'
+              FieldLabelWidth = 120
+              LayoutConfig.Width = '100%'
+              LayoutConfig.Margin = '3 3 3 3'
+            end
           end
         end
         object TabFatura: TUniTabSheet
@@ -729,6 +848,11 @@ object frmParametreler: TfrmParametreler
         end
       end
     end
+  end
+  object qExec: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 72
+    Top = 160
   end
   object saSor: TUniSweetAlert
     Title = 'SER'#304' DE'#286#304#350'T'#304'R'

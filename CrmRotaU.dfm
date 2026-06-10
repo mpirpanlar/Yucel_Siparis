@@ -235,7 +235,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       Left = 0
       Top = 232
       Width = 1020
-      Height = 44
+      Height = 76
       Hint = ''
       TabOrder = 1
       BorderStyle = ubsNone
@@ -255,15 +255,25 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       object btnEklePot: TUniButton
         Left = 156
         Top = 8
-        Width = 160
+        Width = 140
         Height = 28
         Hint = ''
         Caption = 'Durak: Potansiyel'
         TabOrder = 1
         OnClick = btnEklePotClick
       end
+      object btnEkleBolge: TUniButton
+        Left = 304
+        Top = 8
+        Width = 140
+        Height = 28
+        Hint = 'Il / ilce filtresi ile cari ve potansiyel toplu se'#231'im'
+        Caption = 'B'#246'lgeden se'#231
+        TabOrder = 8
+        OnClick = btnEkleBolgeClick
+      end
       object btnDurakSil: TUniButton
-        Left = 324
+        Left = 452
         Top = 8
         Width = 100
         Height = 28
@@ -273,7 +283,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         OnClick = btnDurakSilClick
       end
       object btnUyariYenile: TUniButton
-        Left = 432
+        Left = 560
         Top = 8
         Width = 120
         Height = 28
@@ -283,7 +293,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         OnClick = btnUyariYenileClick
       end
       object btnDurakYukari: TUniButton
-        Left = 560
+        Left = 688
         Top = 8
         Width = 72
         Height = 28
@@ -293,7 +303,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         OnClick = btnDurakYukariClick
       end
       object btnDurakAsagi: TUniButton
-        Left = 638
+        Left = 766
         Top = 8
         Width = 72
         Height = 28
@@ -303,7 +313,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         OnClick = btnDurakAsagiClick
       end
       object btnOtomatikSirala: TUniButton
-        Left = 716
+        Left = 844
         Top = 8
         Width = 120
         Height = 28
@@ -313,8 +323,8 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         OnClick = btnOtomatikSiralaClick
       end
       object btnGorevOlustur: TUniButton
-        Left = 844
-        Top = 8
+        Left = 8
+        Top = 40
         Width = 160
         Height = 28
         Hint = 'T'#252'm duraklar i'#231'in g'#246'rev olu'#351'tur veya g'#252'ncelle'
@@ -585,6 +595,31 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
   object dsKullanici: TUniDataSource
     DataSet = qKullanici
     Left = 264
+    Top = 640
+  end
+  object saMukerrer: TUniSweetAlert
+    Title = 'M'#252'kerrer durak'
+    Text = 'Bu kay'#305't zaten rotada.'
+    ConfirmButtonText = 'Yine de ekle'
+    CancelButtonText = 'Yaln'#305'z yeni olanlar'
+    AlertType = atQuestion
+    Padding = 20
+    ShowCancelButton = True
+    OnConfirm = saMukerrerConfirm
+    OnDismiss = saMukerrerDismiss
+    Left = 296
+    Top = 640
+  end
+  object saOnayGorev: TUniSweetAlert
+    Title = 'G'#246'rev olu'#351'tur'
+    Text = 'Rota onayland'#305'. G'#246'revler olu'#351'turulsun mu?'
+    ConfirmButtonText = 'Evet, olu'#351'tur'
+    CancelButtonText = 'Hay'#305'r'
+    AlertType = atQuestion
+    Padding = 20
+    ShowCancelButton = True
+    OnConfirm = saOnayGorevConfirm
+    Left = 328
     Top = 640
   end
 end

@@ -14,7 +14,9 @@ type
     yParaBirimi, yNetsisProjeUygulamasi, yNetsisSirketKodu, yKullaniciAdi, yNetsisKullanici, yNetsisSifre, yNetsisPlasiyer : String;
     yDovizTakip : SmallInt;
     yCrmYeniAktiviteTeklifId: Int64;
+    yCrmYeniAktivitePotId: Int64;
     yCrmYeniGorevTeklifId: Int64;
+    yCrmYeniGorevPotId: Int64;
 
   public
     { Public declarations }
@@ -34,8 +36,9 @@ type
     property xNetsisPlasiyer : String read yNetsisPlasiyer write yNetsisPlasiyer;
     property xDovizTakip : SmallInt read yDovizTakip write yDovizTakip;
     property xCrmYeniAktiviteTeklifId: Int64 read yCrmYeniAktiviteTeklifId write yCrmYeniAktiviteTeklifId;
+    property xCrmYeniAktivitePotId: Int64 read yCrmYeniAktivitePotId write yCrmYeniAktivitePotId;
     property xCrmYeniGorevTeklifId: Int64 read yCrmYeniGorevTeklifId write yCrmYeniGorevTeklifId;
-
+    property xCrmYeniGorevPotId: Int64 read yCrmYeniGorevPotId write yCrmYeniGorevPotId;
 
   end;
 

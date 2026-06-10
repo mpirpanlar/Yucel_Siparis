@@ -37,8 +37,6 @@ type
     procedure saSilConfirm(Sender: TObject);
   private
     procedure AcKayit;
-    procedure GorevSilById(AGorevId: Int64);
-    procedure RotaGorevleriniSil(ARotaId: Int64);
     procedure SilSeciliKayit;
   public
   end;
@@ -50,7 +48,7 @@ implementation
 {$R *.dfm}
 
 uses
-  uniGUIApplication, MainModule, DMU, Main, Genel, CrmRotaU;
+  uniGUIApplication, MainModule, DMU, Main, Genel, CrmRotaU, CrmRotaGorevU;
 
 function frmCrmRotaListe: TfrmCrmRotaListe;
 begin
@@ -67,48 +65,6 @@ begin
   if qList.FieldByName('ROTA_ID').IsNull then
     Exit;
   xFormShow(TfrmCrmRotaPlan, 'CrmRotaPlan', 1, qList.FieldByName('ROTA_ID').AsString);
-end;
-
-procedure TfrmCrmRotaListe.GorevSilById(AGorevId: Int64);
-var
-  Aid: Int64;
-begin
-  if AGorevId <= 0 then
-    Exit;
-  Aid := 0;
-  qExec.Close;
-  qExec.SQL.Text := 'SELECT AKTIVITE_ID FROM dbo.CRM_GOREV WHERE GOREV_ID = :G';
-  qExec.ParamByName('G').AsLargeInt := AGorevId;
-  qExec.Open;
-  if not qExec.IsEmpty then
-    Aid := qExec.Fields[0].AsLargeInt;
-  qExec.Close;
-  if Aid > 0 then
-  begin
-    qExec.SQL.Text := 'DELETE FROM dbo.CRM_AKTIVITE WHERE AKTIVITE_ID = :A';
-    qExec.ParamByName('A').AsLargeInt := Aid;
-    qExec.Execute;
-  end;
-end;
-
-procedure TfrmCrmRotaListe.RotaGorevleriniSil(ARotaId: Int64);
-var
-  Gid: Int64;
-begin
-  if ARotaId <= 0 then
-    Exit;
-  qExec.Close;
-  qExec.SQL.Text :=
-    'SELECT GOREV_ID FROM dbo.CRM_ROTA_PLAN_DURAK WHERE ROTA_ID = :R AND GOREV_ID IS NOT NULL';
-  qExec.ParamByName('R').AsLargeInt := ARotaId;
-  qExec.Open;
-  while not qExec.Eof do
-  begin
-    Gid := qExec.FieldByName('GOREV_ID').AsLargeInt;
-    qExec.Next;
-    GorevSilById(Gid);
-  end;
-  qExec.Close;
 end;
 
 procedure TfrmCrmRotaListe.SilSeciliKayit;
@@ -128,7 +84,7 @@ begin
   Baslik := Trim(qList.FieldByName('BASLIK').AsString);
 
   try
-    RotaGorevleriniSil(RotaId);
+    CrmRotaGorevleriniIptal(qExec, RotaId, True);
 
     qExec.Close;
     qExec.SQL.Text :=
@@ -142,9 +98,9 @@ begin
     qExec.Execute;
 
     if Baslik <> '' then
-      saSilOk.Show('Rota silindi: ' + Baslik + '.')
+      saSilOk.Show('Rota silindi: ' + Baslik + '. Ba'#287'l'#305' g'#246'revler iptal edildi.')
     else
-      saSilOk.Show('Rota silindi.');
+      saSilOk.Show('Rota silindi. Ba'#287'l'#305' g'#246'revler iptal edildi.');
     btnListeleClick(nil);
   except
     on E: Exception do

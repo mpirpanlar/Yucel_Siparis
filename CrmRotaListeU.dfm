@@ -247,7 +247,7 @@ object frmCrmRotaListe: TfrmCrmRotaListe
   end
   object saSil: TUniSweetAlert
     Title = 'Rota sil'
-    Text = 'Se'#231'ili rota ve t'#252'm duraklar'#305' silinecek. Emin misiniz?'
+    Text = 'Se'#231'ili rota silinecek; ba'#287'l'#305' g'#246'revler IPTAL durumuna al'#305'nacak. Emin misiniz?'
     ConfirmButtonText = 'Evet, sil'
     CancelButtonText = #304'ptal'
     AlertType = atQuestion

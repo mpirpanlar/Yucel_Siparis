@@ -3,7 +3,7 @@ object frmCrmCariGpsListe: TfrmCrmCariGpsListe
   Top = 0
   ClientHeight = 520
   ClientWidth = 980
-  Caption = 'frmCrmCariGpsListe'
+  Caption = 'CRM - Netsis Cari GPS Listesi'
   OnShow = UniFormShow
   BorderStyle = bsNone
   OldCreateOrder = False
@@ -116,7 +116,7 @@ object frmCrmCariGpsListe: TfrmCrmCariGpsListe
     end
     object grd: TUniDBGrid
       Left = 0
-      Top = 52
+      Top = 0
       Width = 980
       Height = 468
       Hint = ''
@@ -125,9 +125,8 @@ object frmCrmCariGpsListe: TfrmCrmCariGpsListe
       ReadOnly = True
       WebOptions.Paged = False
       WebOptions.FetchAll = True
-      LoadMask.Message = 'Loading data...'
+      LoadMask.Message = 'Y'#252'kleniyor...'
       LayoutConfig.Flex = 1
-      LayoutConfig.Height = '100%'
       LayoutConfig.Width = '100%'
       TabOrder = 1
       OnAjaxEvent = grdAjaxEvent

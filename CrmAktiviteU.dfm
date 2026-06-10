@@ -155,9 +155,62 @@ object frmCrmAktivite: TfrmCrmAktivite
             Font.Height = -12
             TabOrder = 18
           end
+          object lblPot: TUniLabel
+            Left = 16
+            Top = 228
+            Width = 55
+            Height = 13
+            Hint = ''
+            Caption = 'Potansiyel'
+            TabOrder = 30
+          end
+          object edPotId: TUniEdit
+            Left = 120
+            Top = 224
+            Width = 340
+            Height = 27
+            Hint = ''
+            Text = ''
+            TabOrder = 31
+            ReadOnly = True
+          end
+          object btnPotBul: TUniButton
+            Left = 470
+            Top = 222
+            Width = 130
+            Height = 30
+            Hint = 'Potansiyel m'#252#351'teri listesi'
+            Caption = 'Potansiyel Se'#231
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Color = clWhite
+            Font.Height = -12
+            Font.Name = 'Segoe UI Semibold'
+            Font.Style = [fsBold]
+            TabOrder = 32
+            ClientEvents.UniEvents.Strings = (
+              
+                'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+            OnClick = btnPotBulClick
+          end
+          object lblPotUnvan: TUniLabel
+            Left = 120
+            Top = 252
+            Width = 480
+            Height = 15
+            Hint = ''
+            AutoSize = False
+            Caption = ''
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Color = clGray
+            Font.Height = -12
+            TabOrder = 33
+          end
           object lblTeklif: TUniLabel
             Left = 16
-            Top = 244
+            Top = 276
             Width = 55
             Height = 13
             Hint = ''
@@ -166,7 +219,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object lkTeklif: TUniDBLookupComboBox
             Left = 120
-            Top = 240
+            Top = 272
             Width = 340
             Height = 27
             Hint = ''
@@ -180,7 +233,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object btnTeklifYenile: TUniButton
             Left = 470
-            Top = 238
+            Top = 270
             Width = 130
             Height = 30
             Hint = 'Teklif listesini cariye gore yeniler'
@@ -200,7 +253,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object lblSiparis: TUniLabel
             Left = 16
-            Top = 280
+            Top = 312
             Width = 95
             Height = 13
             Hint = ''
@@ -209,7 +262,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object edSiparis: TUniEdit
             Left = 120
-            Top = 276
+            Top = 308
             Width = 280
             Height = 27
             Hint = 'Netsis siparis referansi (secim ile)'
@@ -219,7 +272,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object btnSiparisBul: TUniButton
             Left = 408
-            Top = 274
+            Top = 306
             Width = 192
             Height = 30
             Hint = 'Netsis siparis listesi'
@@ -239,7 +292,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object lblSiparisTar: TUniLabel
             Left = 120
-            Top = 304
+            Top = 336
             Width = 100
             Height = 15
             Hint = ''
@@ -253,7 +306,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object lblSiparisAcik: TUniLabel
             Left = 220
-            Top = 304
+            Top = 336
             Width = 380
             Height = 15
             Hint = ''
@@ -267,7 +320,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object lblTarih: TUniLabel
             Left = 16
-            Top = 328
+            Top = 360
             Width = 24
             Height = 13
             Hint = ''
@@ -276,7 +329,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object dtAktivite: TUniDateTimePicker
             Left = 120
-            Top = 324
+            Top = 356
             Width = 200
             Height = 27
             Hint = ''
@@ -288,7 +341,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object lblDurum: TUniLabel
             Left = 16
-            Top = 364
+            Top = 396
             Width = 35
             Height = 13
             Hint = ''
@@ -297,7 +350,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object lkDurum: TUniDBLookupComboBox
             Left = 120
-            Top = 360
+            Top = 392
             Width = 460
             Height = 27
             Hint = ''
@@ -311,7 +364,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object lblOncelik: TUniLabel
             Left = 16
-            Top = 400
+            Top = 432
             Width = 39
             Height = 13
             Hint = ''
@@ -320,7 +373,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object cbOncelik: TUniComboBox
             Left = 120
-            Top = 396
+            Top = 428
             Width = 200
             Height = 27
             Hint = ''
@@ -331,7 +384,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object lblEkler: TUniLabel
             Left = 16
-            Top = 440
+            Top = 472
             Width = 68
             Height = 13
             Hint = ''
@@ -345,7 +398,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object btnEkEkle: TUniButton
             Left = 120
-            Top = 458
+            Top = 490
             Width = 150
             Height = 30
             Hint = 'PDF, PNG, JPG, Excel, Word vb. dosya ekleyin'
@@ -365,7 +418,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object btnEkIndir: TUniButton
             Left = 300
-            Top = 446
+            Top = 478
             Width = 130
             Height = 30
             Hint = 'Se'#231'ili eki indir'
@@ -380,7 +433,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object btnEkSil: TUniButton
             Left = 440
-            Top = 446
+            Top = 478
             Width = 130
             Height = 30
             Hint = 'Se'#231'ili eki sil'
@@ -395,7 +448,7 @@ object frmCrmAktivite: TfrmCrmAktivite
           end
           object grdEk: TUniDBGrid
             Left = 16
-            Top = 488
+            Top = 520
             Width = 600
             Height = 228
             Hint = ''

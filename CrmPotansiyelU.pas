@@ -15,6 +15,8 @@ type
     rootPanel: TUniPanel;
     panFooter: TUniPanel;
     btnKaydet: TUniButton;
+    btnYeniAktivite: TUniButton;
+    btnYeniGorev: TUniButton;
     btnKapat: TUniButton;
     pc: TUniPageControl;
     tabFirma: TUniTabSheet;
@@ -113,6 +115,8 @@ type
     dsDurLkp: TUniDataSource;
     procedure UniFormShow(Sender: TObject);
     procedure btnKaydetClick(Sender: TObject);
+    procedure btnYeniAktiviteClick(Sender: TObject);
+    procedure btnYeniGorevClick(Sender: TObject);
     procedure btnKapatClick(Sender: TObject);
     procedure btnCariBulClick(Sender: TObject);
     procedure btnNetsisTemizleClick(Sender: TObject);
@@ -149,8 +153,8 @@ implementation
 
 uses
   System.DateUtils,
-  uniGUIApplication, MainModule, DMU, TmpU, CrmCariSecU, CrmHaritaSecU, Main,
-  NetOpenX50_TLB;
+  uniGUIApplication, MainModule, DMU, TmpU, CrmCariSecU, CrmHaritaSecU, Main, Genel,
+  CrmAktiviteU, CrmGorevU, NetOpenX50_TLB;
 
 function frmCrmPotansiyel: TfrmCrmPotansiyel;
 begin
@@ -845,6 +849,30 @@ begin
     Hint := IntToStr(NewId);
     YukleKayit;
   end;
+end;
+
+procedure TfrmCrmPotansiyel.btnYeniAktiviteClick(Sender: TObject);
+begin
+  if FPotansiyelId <= 0 then
+  begin
+    UniMainModule.saHata.Show(#214'nce potansiyel m'#252#351'teriyi kaydedin.');
+    Exit;
+  end;
+  Tmp.xCrmYeniAktivitePotId := FPotansiyelId;
+  Tmp.xCrmYeniAktiviteTeklifId := 0;
+  xFormShow(TfrmCrmAktivite, 'CrmYeniAktivite', 0, '0');
+end;
+
+procedure TfrmCrmPotansiyel.btnYeniGorevClick(Sender: TObject);
+begin
+  if FPotansiyelId <= 0 then
+  begin
+    UniMainModule.saHata.Show(#214'nce potansiyel m'#252#351'teriyi kaydedin.');
+    Exit;
+  end;
+  Tmp.xCrmYeniGorevPotId := FPotansiyelId;
+  Tmp.xCrmYeniGorevTeklifId := 0;
+  xFormShow(TfrmCrmGorev, 'CrmYeniGorev', 0, '0');
 end;
 
 procedure TfrmCrmPotansiyel.btnKapatClick(Sender: TObject);

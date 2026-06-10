@@ -39,6 +39,10 @@ type
     edCariKod: TUniEdit;
     btnCariBul: TUniButton;
     lblCariAd: TUniLabel;
+    lblPot: TUniLabel;
+    edPotId: TUniEdit;
+    btnPotBul: TUniButton;
+    lblPotUnvan: TUniLabel;
     lblTeklif: TUniLabel;
     lkTeklif: TUniDBLookupComboBox;
     btnTeklifYenile: TUniButton;
@@ -92,6 +96,7 @@ type
     procedure UniFormShow(Sender: TObject);
     procedure btnKaydetClick(Sender: TObject);
     procedure btnCariBulClick(Sender: TObject);
+    procedure btnPotBulClick(Sender: TObject);
     procedure btnSiparisBulClick(Sender: TObject);
     procedure btnTeklifYenileClick(Sender: TObject);
     procedure lkTeklifCloseUp(Sender: TObject);
@@ -127,6 +132,10 @@ type
     procedure VarsayilanSecimler;
     procedure TeklifLookupYenile(AForceTid: Int64);
     procedure UygulaBaslangicTeklif(ATeklifId: Int64);
+    procedure UygulaBaslangicPotansiyel(APotId: Int64);
+    procedure PotSecildi(Sender: TObject; APotId: Int64);
+    procedure PotansiyelUnvanYukle(APotId: Int64);
+    function PotansiyelIdOku: Int64;
     procedure YeniKayit;
     procedure YukleKayit;
     function TipKodFromLookup: string;
@@ -149,7 +158,7 @@ implementation
 
 uses
   uniGUIApplication, MainModule, DMU, TmpU, CrmCariSecU, CrmSiparisSecU, CrmBaglantiDurumU,
-  ServerModule, CrmAktiviteLogU;
+  CrmPotansiyelListeU, ServerModule, CrmAktiviteLogU;
 
 procedure TfrmCrmAktivite.btnCariBulClick(Sender: TObject);
 var
@@ -171,6 +180,87 @@ begin
     else
       lkTeklif.KeyValue := Null;
   end;
+end;
+
+function TfrmCrmAktivite.PotansiyelIdOku: Int64;
+begin
+  Result := StrToInt64Def(Trim(edPotId.Text), 0);
+end;
+
+procedure TfrmCrmAktivite.PotansiyelUnvanYukle(APotId: Int64);
+begin
+  lblPotUnvan.Caption := '';
+  if APotId <= 0 then
+    Exit;
+  qLoad.Close;
+  qLoad.SQL.Text :=
+    'SELECT FIRMA_UNVAN FROM dbo.CRM_POTANSIYEL_MUSTERI WHERE POTANSIYEL_ID = :ID';
+  qLoad.ParamByName('ID').AsLargeInt := APotId;
+  qLoad.Open;
+  if not qLoad.IsEmpty then
+    lblPotUnvan.Caption := Trim(qLoad.FieldByName('FIRMA_UNVAN').AsString);
+  qLoad.Close;
+end;
+
+procedure TfrmCrmAktivite.PotSecildi(Sender: TObject; APotId: Int64);
+var
+  Ck, CariAd: string;
+begin
+  edPotId.Text := IntToStr(APotId);
+  PotansiyelUnvanYukle(APotId);
+  if (APotId <= 0) or (Trim(edCariKod.Text) <> '') then
+    Exit;
+  qLoad.Close;
+  qLoad.SQL.Text :=
+    'SELECT P.NETSIS_CARI_KOD, C.CARI_ISIM FROM dbo.CRM_POTANSIYEL_MUSTERI P ' +
+    'LEFT JOIN YUCEL..HV_CARI_LISTESI C WITH(NOLOCK) ON C.CARI_KOD = P.NETSIS_CARI_KOD ' +
+    'WHERE P.POTANSIYEL_ID = :ID';
+  qLoad.ParamByName('ID').AsLargeInt := APotId;
+  qLoad.Open;
+  if not qLoad.IsEmpty then
+  begin
+    if not qLoad.FieldByName('NETSIS_CARI_KOD').IsNull then
+      Ck := Trim(qLoad.FieldByName('NETSIS_CARI_KOD').AsString)
+    else
+      Ck := '';
+    if Ck <> '' then
+    begin
+      edCariKod.Text := Ck;
+      if (qLoad.FindField('CARI_ISIM') <> nil) and not qLoad.FieldByName('CARI_ISIM').IsNull then
+        CariAd := Trim(qLoad.FieldByName('CARI_ISIM').AsString)
+      else
+        CariAd := '';
+      lblCariAd.Caption := CariAd;
+      TeklifLookupYenile(0);
+    end;
+  end;
+  qLoad.Close;
+end;
+
+procedure TfrmCrmAktivite.btnPotBulClick(Sender: TObject);
+begin
+  frmCrmPotansiyelListe.HedefPotansiyelIdEdit := edPotId;
+  frmCrmPotansiyelListe.OnPotansiyelSecildi := PotSecildi;
+  frmCrmPotansiyelListe.SecimToolbarYenile;
+  frmCrmPotansiyelListe.BorderStyle := bsDialog;
+  frmCrmPotansiyelListe.BorderIcons := [biSystemMenu];
+  try
+    frmCrmPotansiyelListe.btnListeleClick(nil);
+    frmCrmPotansiyelListe.ShowModal;
+  finally
+    frmCrmPotansiyelListe.OnPotansiyelSecildi := nil;
+    frmCrmPotansiyelListe.HedefPotansiyelIdEdit := nil;
+    frmCrmPotansiyelListe.BorderStyle := bsNone;
+    frmCrmPotansiyelListe.BorderIcons := [];
+    frmCrmPotansiyelListe.SecimToolbarYenile;
+  end;
+end;
+
+procedure TfrmCrmAktivite.UygulaBaslangicPotansiyel(APotId: Int64);
+begin
+  if APotId <= 0 then
+    Exit;
+  PotSecildi(Self, APotId);
 end;
 
 procedure TfrmCrmAktivite.btnTeklifYenileClick(Sender: TObject);
@@ -388,6 +478,8 @@ begin
   mmAciklama.Text := '';
   edCariKod.Text := '';
   lblCariAd.Caption := '';
+  edPotId.Text := '';
+  lblPotUnvan.Caption := '';
   dtAktivite.DateTime := Now;
   AcLookupSorgulari;
   VarsayilanSecimler;
@@ -408,10 +500,12 @@ var
 begin
   qLoad.Close;
   qLoad.SQL.Text :=
-    'SELECT A.AKTIVITE_TIP_ID, A.AKTIVITE_DURUM_ID, A.KONU, A.ACIKLAMA, A.CARI_KOD, A.AKTIVITE_TARIHI, A.DURUM, A.ONCELIK, A.TEKLIF_ID, A.SIPARIS_NO, TK.KOD AS TIP_KOD, C.CARI_ISIM ' +
+    'SELECT A.AKTIVITE_TIP_ID, A.AKTIVITE_DURUM_ID, A.KONU, A.ACIKLAMA, A.CARI_KOD, A.POTANSIYEL_ID, ' +
+    'A.AKTIVITE_TARIHI, A.DURUM, A.ONCELIK, A.TEKLIF_ID, A.SIPARIS_NO, TK.KOD AS TIP_KOD, C.CARI_ISIM, P.FIRMA_UNVAN AS POT_UNVAN ' +
     'FROM dbo.CRM_AKTIVITE A ' +
     'LEFT JOIN dbo.CRM_AKTIVITE_TIP TK ON TK.TIP_ID = A.AKTIVITE_TIP_ID ' +
     'LEFT JOIN YUCEL..HV_CARI_LISTESI C WITH(NOLOCK) ON C.CARI_KOD = A.CARI_KOD ' +
+    'LEFT JOIN dbo.CRM_POTANSIYEL_MUSTERI P ON P.POTANSIYEL_ID = A.POTANSIYEL_ID ' +
     'WHERE A.AKTIVITE_ID = :ID';
   qLoad.ParamByName('ID').AsLargeInt := FAktiviteId;
   qLoad.Open;
@@ -458,6 +552,19 @@ begin
       lblCariAd.Caption := Trim(qLoad.FieldByName('CARI_ISIM').AsString)
     else
       lblCariAd.Caption := '';
+  end;
+  if (qLoad.FindField('POTANSIYEL_ID') <> nil) and not qLoad.FieldByName('POTANSIYEL_ID').IsNull then
+  begin
+    edPotId.Text := qLoad.FieldByName('POTANSIYEL_ID').AsString;
+    if (qLoad.FindField('POT_UNVAN') <> nil) and not qLoad.FieldByName('POT_UNVAN').IsNull then
+      lblPotUnvan.Caption := Trim(qLoad.FieldByName('POT_UNVAN').AsString)
+    else
+      PotansiyelUnvanYukle(qLoad.FieldByName('POTANSIYEL_ID').AsLargeInt);
+  end
+  else
+  begin
+    edPotId.Text := '';
+    lblPotUnvan.Caption := '';
   end;
   if qLoad.FieldByName('AKTIVITE_TARIHI').IsNull then
     dtAktivite.DateTime := Now
@@ -525,18 +632,22 @@ end;
 
 procedure TfrmCrmAktivite.UniFormShow(Sender: TObject);
 var
-  PrefTeklif: Int64;
+  PrefTeklif, PrefPot: Int64;
 begin
   EnsureEkUpload;
   FAktiviteId := StrToInt64Def(Trim(Hint), 0);
   PrefTeklif := Tmp.xCrmYeniAktiviteTeklifId;
+  PrefPot := Tmp.xCrmYeniAktivitePotId;
   Tmp.xCrmYeniAktiviteTeklifId := 0;
+  Tmp.xCrmYeniAktivitePotId := 0;
   if FAktiviteId > 0 then
     YukleKayit
   else
   begin
     YeniKayit;
-    if PrefTeklif > 0 then
+    if PrefPot > 0 then
+      UygulaBaslangicPotansiyel(PrefPot)
+    else if PrefTeklif > 0 then
       UygulaBaslangicTeklif(PrefTeklif);
   end;
 end;
@@ -625,16 +736,16 @@ begin
   if FAktiviteId > 0 then
   begin
     qExec.SQL.Add('UPDATE dbo.CRM_AKTIVITE SET TIP = :TIP, KONU = :KONU, ACIKLAMA = :ACIKLAMA, CARI_KOD = :CARI_KOD,');
-    qExec.SQL.Add('AKTIVITE_TARIHI = :AKTIVITE_TARIHI, DURUM = :DURUM, ONCELIK = :ONCELIK,');
+    qExec.SQL.Add('POTANSIYEL_ID = :PID, AKTIVITE_TARIHI = :AKTIVITE_TARIHI, DURUM = :DURUM, ONCELIK = :ONCELIK,');
     qExec.SQL.Add('AKTIVITE_TIP_ID = :TID_REF, AKTIVITE_DURUM_ID = :DID_REF, TEKLIF_ID = :TID_TEK, SIPARIS_NO = :SIPNO, GUNCELLEME_UTC = SYSUTCDATETIME()');
     qExec.SQL.Add('WHERE AKTIVITE_ID = :ID');
     qExec.ParamByName('ID').AsLargeInt := FAktiviteId;
   end
   else
   begin
-    qExec.SQL.Add('INSERT INTO dbo.CRM_AKTIVITE (TIP, KONU, ACIKLAMA, CARI_KOD, AKTIVITE_TARIHI, DURUM, ONCELIK, OLUSTURAN_KULLANICI_ID, AKTIVITE_TIP_ID, AKTIVITE_DURUM_ID, TEKLIF_ID, SIPARIS_NO)');
+    qExec.SQL.Add('INSERT INTO dbo.CRM_AKTIVITE (TIP, KONU, ACIKLAMA, CARI_KOD, POTANSIYEL_ID, AKTIVITE_TARIHI, DURUM, ONCELIK, OLUSTURAN_KULLANICI_ID, AKTIVITE_TIP_ID, AKTIVITE_DURUM_ID, TEKLIF_ID, SIPARIS_NO)');
     qExec.SQL.Add('OUTPUT INSERTED.AKTIVITE_ID');
-    qExec.SQL.Add('VALUES (:TIP, :KONU, :ACIKLAMA, :CARI_KOD, :AKTIVITE_TARIHI, :DURUM, :ONCELIK, :KUL, :TID_REF, :DID_REF, :TID_TEK, :SIPNO)');
+    qExec.SQL.Add('VALUES (:TIP, :KONU, :ACIKLAMA, :CARI_KOD, :PID, :AKTIVITE_TARIHI, :DURUM, :ONCELIK, :KUL, :TID_REF, :DID_REF, :TID_TEK, :SIPNO)');
   end;
 
   qExec.ParamByName('TIP').AsString := Tkod;
@@ -645,6 +756,10 @@ begin
     qExec.ParamByName('CARI_KOD').AsString := Trim(edCariKod.Text)
   else
     qExec.ParamByName('CARI_KOD').Clear;
+  if PotansiyelIdOku > 0 then
+    qExec.ParamByName('PID').AsLargeInt := PotansiyelIdOku
+  else
+    qExec.ParamByName('PID').Clear;
   qExec.ParamByName('AKTIVITE_TARIHI').AsDateTime := dtAktivite.DateTime;
   qExec.ParamByName('DURUM').AsString := Dkod;
   qExec.ParamByName('TID_REF').AsLargeInt := lkTip.KeyValue;

@@ -7,7 +7,7 @@ uses
   Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
   uniGUIClasses, uniGUIForm, uniBasicGrid, uniDBGrid, uniDBEdit, uniMultiItem,
   uniComboBox, uniDBComboBox, uniDBLookupComboBox, uniPageControl, uniPanel,
-  uniCheckBox, uniDBCheckBox, uniBitBtn, uniSpeedButton, uniEdit, uniButton,
+  uniCheckBox, uniDBCheckBox, uniBitBtn, uniSpeedButton, uniEdit, uniButton, uniLabel,
   uniGUIBaseClasses, Data.DB, MemDS, DBAccess, Uni, uniSweetAlert;
 
 type
@@ -57,6 +57,16 @@ type
     saSor: TUniSweetAlert;
     UniDBComboBox1: TUniDBComboBox;
     UniDBComboBox2: TUniDBComboBox;
+    edParamGpsX: TUniEdit;
+    edParamGpsY: TUniEdit;
+    btnParamHaritaGps: TUniButton;
+    lblRotaGpsBaslik: TUniLabel;
+    lblRotaGorevBaslik: TUniLabel;
+    cbParamOnayGorev: TUniComboBox;
+    cbParamGorevZaman: TUniComboBox;
+    edParamGorevBasSaat: TUniEdit;
+    edParamGorevDurakDk: TUniEdit;
+    qExec: TUniQuery;
     procedure UniFormShow(Sender: TObject);
     procedure btnGenelClick(Sender: TObject);
     procedure btnYetkiliClick(Sender: TObject);
@@ -72,10 +82,16 @@ type
     procedure bntKaydetClick(Sender: TObject);
     procedure btnKapatClick(Sender: TObject);
     procedure btnDuzenleClick(Sender: TObject);
+    procedure btnParamHaritaGpsClick(Sender: TObject);
   private
-    { Private declarations }
+    function ParseGpsDec(const S: string): Double;
+    function GpsDecToText(const V: Double): string;
+    procedure RotaGpsYukle;
+    procedure RotaGpsKaydet;
+    procedure RotaGorevParamDoldur;
+    procedure RotaGorevYukle;
+    procedure RotaGorevKaydet;
   public
-    { Public declarations }
   end;
 
 function frmParametreler: TfrmParametreler;
@@ -85,7 +101,7 @@ implementation
 {$R *.dfm}
 
 uses
-  MainModule, uniGUIApplication, DMU, Genel, Main;
+  MainModule, uniGUIApplication, DMU, Genel, Main, TmpU, CrmHaritaSecU, CrmRotaGorevU;
 
 function frmParametreler: TfrmParametreler;
 begin
@@ -94,9 +110,145 @@ end;
 
 procedure TfrmParametreler.bntKaydetClick(Sender: TObject);
 begin
-//  if frmDM.qParametre.State IN [dsEdit,dsInsert] then frmDM.qParametre.Post;
-//  frmDM.qParametre.Refresh;
-//  UniMainModule.saKaydet.Show;
+  RotaGpsKaydet;
+  RotaGorevKaydet;
+  UniMainModule.saKaydet.Show('Parametreler kaydedildi.');
+end;
+
+procedure TfrmParametreler.RotaGorevParamDoldur;
+begin
+  if cbParamOnayGorev.Items.Count = 0 then
+  begin
+    cbParamOnayGorev.Items.Add('Kapal'#305' (manuel)');
+    cbParamOnayGorev.Items.Add('Onayda sor');
+    cbParamOnayGorev.Items.Add('Her zaman otomatik');
+  end;
+  if cbParamGorevZaman.Items.Count = 0 then
+  begin
+    cbParamGorevZaman.Items.Add('Ayn'#305' g'#252'n');
+    cbParamGorevZaman.Items.Add('Ayn'#305' g'#252'n + saat slotu');
+  end;
+end;
+
+function TfrmParametreler.ParseGpsDec(const S: string): Double;
+var
+  T: string;
+  FS: TFormatSettings;
+begin
+  T := Trim(StringReplace(S, ',', '.', [rfReplaceAll]));
+  FS := TFormatSettings.Invariant;
+  Result := StrToFloatDef(T, 0, FS);
+end;
+
+function TfrmParametreler.GpsDecToText(const V: Double): string;
+begin
+  if Abs(V) < 1E-12 then
+    Result := ''
+  else
+    Result := FormatFloat('0.########', V, TFormatSettings.Invariant);
+end;
+
+procedure TfrmParametreler.RotaGpsYukle;
+var
+  Gx, Gy: Double;
+begin
+  edParamGpsX.Text := '';
+  edParamGpsY.Text := '';
+  qExec.Close;
+  qExec.SQL.Text := 'SELECT GPSX, GPSY FROM dbo.PARAMETRE WITH(NOLOCK) WHERE SUBE_KODU = :SUBE';
+  qExec.ParamByName('SUBE').AsInteger := Tmp.xSubeKodu;
+  qExec.Open;
+  if qExec.IsEmpty then
+  begin
+    qExec.Close;
+    Exit;
+  end;
+  Gx := 0;
+  Gy := 0;
+  if (qExec.FindField('GPSX') <> nil) and not qExec.FieldByName('GPSX').IsNull then
+    Gx := qExec.FieldByName('GPSX').AsFloat;
+  if (qExec.FindField('GPSY') <> nil) and not qExec.FieldByName('GPSY').IsNull then
+    Gy := qExec.FieldByName('GPSY').AsFloat;
+  qExec.Close;
+  edParamGpsX.Text := GpsDecToText(Gx);
+  edParamGpsY.Text := GpsDecToText(Gy);
+end;
+
+procedure TfrmParametreler.RotaGpsKaydet;
+var
+  Gx, Gy: Double;
+begin
+  Gx := ParseGpsDec(edParamGpsX.Text);
+  Gy := ParseGpsDec(edParamGpsY.Text);
+  qExec.Close;
+  qExec.SQL.Text :=
+    'UPDATE dbo.PARAMETRE SET GPSX = :GX, GPSY = :GY WHERE SUBE_KODU = :SUBE';
+  qExec.ParamByName('SUBE').AsInteger := Tmp.xSubeKodu;
+  if Abs(Gx) < 1E-12 then
+    qExec.ParamByName('GX').Clear
+  else
+    qExec.ParamByName('GX').AsFloat := Gx;
+  if Abs(Gy) < 1E-12 then
+    qExec.ParamByName('GY').Clear
+  else
+    qExec.ParamByName('GY').AsFloat := Gy;
+  qExec.Execute;
+end;
+
+procedure TfrmParametreler.RotaGorevYukle;
+var
+  Ayar: TRotaGorevAyar;
+begin
+  RotaGorevParamDoldur;
+  Ayar := CrmRotaGorevAyarOku(frmDM.conAsya, Tmp.xSubeKodu);
+  if (Ayar.OnayGorevOto >= 0) and (Ayar.OnayGorevOto <= 2) then
+    cbParamOnayGorev.ItemIndex := Ayar.OnayGorevOto
+  else
+    cbParamOnayGorev.ItemIndex := ROTA_GOREV_OTO_SOR;
+  if Ayar.ZamanMod = ROTA_GOREV_ZAMAN_GUN_SAAT then
+    cbParamGorevZaman.ItemIndex := 1
+  else
+    cbParamGorevZaman.ItemIndex := 0;
+  edParamGorevBasSaat.Text := Ayar.BasSaat;
+  edParamGorevDurakDk.Text := IntToStr(Ayar.DurakDakika);
+end;
+
+procedure TfrmParametreler.RotaGorevKaydet;
+var
+  Oto, Zaman, Dk: Integer;
+begin
+  Oto := cbParamOnayGorev.ItemIndex;
+  if (Oto < 0) or (Oto > 2) then
+    Oto := ROTA_GOREV_OTO_SOR;
+  Zaman := cbParamGorevZaman.ItemIndex;
+  if Zaman < 0 then
+    Zaman := 0;
+  if Zaman > 1 then
+    Zaman := 1;
+  Dk := StrToIntDef(Trim(edParamGorevDurakDk.Text), 45);
+  if Dk <= 0 then
+    Dk := 45;
+  qExec.Close;
+  qExec.SQL.Text :=
+    'UPDATE dbo.PARAMETRE SET ROTA_ONAYDA_GOREV_OTO = :OTO, ROTA_GOREV_ZAMAN_MOD = :ZM, ' +
+    'ROTA_GOREV_BAS_SAAT = :BS, ROTA_GOREV_DURAK_DK = :DK WHERE SUBE_KODU = :SUBE';
+  qExec.ParamByName('SUBE').AsInteger := Tmp.xSubeKodu;
+  qExec.ParamByName('OTO').AsInteger := Oto;
+  qExec.ParamByName('ZM').AsInteger := Zaman;
+  if Trim(edParamGorevBasSaat.Text) = '' then
+    qExec.ParamByName('BS').AsString := '09:00'
+  else
+    qExec.ParamByName('BS').AsString := Trim(edParamGorevBasSaat.Text);
+  qExec.ParamByName('DK').AsInteger := Dk;
+  qExec.Execute;
+end;
+
+procedure TfrmParametreler.btnParamHaritaGpsClick(Sender: TObject);
+begin
+  frmCrmHaritaSec.MerkezAyarla(ParseGpsDec(edParamGpsX.Text), ParseGpsDec(edParamGpsY.Text));
+  frmCrmHaritaSec.HedefEnlemEdit := edParamGpsX;
+  frmCrmHaritaSec.HedefBoylamEdit := edParamGpsY;
+  frmCrmHaritaSec.ShowModal;
 end;
 
 procedure TfrmParametreler.btnDuzenleClick(Sender: TObject);
@@ -175,30 +327,9 @@ if saSor.Tag=5 then xUpdateTablo('Update FisNo set FisNo='''+edEArsivSeriNo.Text
 end;
 
 procedure TfrmParametreler.UniFormShow(Sender: TObject);
-var
-  Qry:Tuniquery;
 begin
-//     Qry:=Tuniquery.Create(nil);
-//     Qry.Connection:=frmDM.conAsya;
-//
-//     xTabloAc(Qry,'Select FisNo FROM FisNo where TabloAdi=''KFatura''');
-//     edFaturaSeriNo.Text:=Qry.FieldByName('FisNo').AsString;
-//
-//     xTabloAc(Qry,'Select FisNo FROM FisNo where TabloAdi=''EFatura''');
-//     edEFaturaSeriNo.Text:=Qry.FieldByName('FisNo').AsString;
-//
-//     xTabloAc(Qry,'Select FisNo FROM FisNo where TabloAdi=''EArsiv''');
-//     edEArsivSeriNo.Text:=Qry.FieldByName('FisNo').AsString;
-//
-//     xTabloAc(Qry,'Select FisNo FROM FisNo where TabloAdi=''CariKart''');
-//     edCariNo.Text:=Qry.FieldByName('FisNo').AsString;
-//
-//     xTabloAc(Qry,'Select FisNo FROM FisNo where TabloAdi=''StokKart''');
-//     edStokNo.Text:=Qry.FieldByName('FisNo').AsString;
-//     Qry.Free;
-//
-//    tabGenel.Enabled:=False;
-//    TabFatura.Enabled:=false;
+  RotaGpsYukle;
+  RotaGorevYukle;
 end;
 
 end.

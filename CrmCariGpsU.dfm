@@ -1,21 +1,22 @@
 object frmCrmCariGps: TfrmCrmCariGps
   Left = 0
   Top = 0
-  ClientHeight = 420
-  ClientWidth = 720
-  Caption = 'frmCrmCariGps'
+  ClientHeight = 640
+  ClientWidth = 960
+  Caption = 'CRM - Netsis Cari GPS'
   OnShow = UniFormShow
   BorderStyle = bsNone
   OldCreateOrder = False
   MonitoredKeys.Keys = <>
   AlignmentControl = uniAlignmentClient
   Layout = 'fit'
+  OnCreate = UniFormCreate
   TextHeight = 15
   object rootPanel: TUniPanel
     Left = 0
     Top = 0
-    Width = 720
-    Height = 420
+    Width = 960
+    Height = 640
     Hint = ''
     Align = alClient
     TabOrder = 0
@@ -24,18 +25,21 @@ object frmCrmCariGps: TfrmCrmCariGps
     object panMain: TUniPanel
       Left = 0
       Top = 0
-      Width = 720
-      Height = 360
+      Width = 960
+      Height = 580
       Hint = ''
       Align = alClient
       TabOrder = 0
       BorderStyle = ubsNone
       Caption = ''
+      DesignSize = (
+        960
+        580)
       object lblCariKod: TUniLabel
         Left = 16
         Top = 16
-        Width = 48
-        Height = 15
+        Width = 43
+        Height = 13
         Hint = ''
         Caption = 'Cari kod'
         TabOrder = 0
@@ -43,37 +47,37 @@ object frmCrmCariGps: TfrmCrmCariGps
       object edCariKod: TUniEdit
         Left = 128
         Top = 12
-        Width = 180
+        Width = 200
         Height = 28
         Hint = ''
         Text = ''
-        ReadOnly = True
         TabOrder = 1
+        ReadOnly = True
       end
       object lblCariIsim: TUniLabel
         Left = 16
         Top = 52
-        Width = 45
-        Height = 15
+        Width = 39
+        Height = 13
         Hint = ''
-        Caption = 'Cari adi'
+        Caption = 'Cari ad'#305
         TabOrder = 2
       end
       object edCariIsim: TUniEdit
         Left = 128
         Top = 48
-        Width = 560
+        Width = 200
         Height = 28
         Hint = ''
         Text = ''
-        ReadOnly = True
         TabOrder = 3
+        ReadOnly = True
       end
       object lblGpsE: TUniLabel
         Left = 16
         Top = 96
-        Width = 108
-        Height = 15
+        Width = 101
+        Height = 13
         Hint = ''
         Caption = 'GPS enlem (KULL1N)'
         TabOrder = 4
@@ -88,57 +92,95 @@ object frmCrmCariGps: TfrmCrmCariGps
         TabOrder = 5
       end
       object lblGpsB: TUniLabel
-        Left = 344
-        Top = 96
-        Width = 114
-        Height = 15
+        Left = 16
+        Top = 136
+        Width = 107
+        Height = 13
         Hint = ''
         Caption = 'GPS boylam (KULL2N)'
         TabOrder = 6
       end
       object edGpsBoylam: TUniEdit
-        Left = 464
-        Top = 92
+        Left = 128
+        Top = 132
         Width = 200
         Height = 28
         Hint = ''
         Text = ''
         TabOrder = 7
       end
-      object btnHaritaKonum: TUniButton
-        Left = 16
-        Top = 132
-        Width = 240
-        Height = 32
-        Hint = ''
-        Caption = 'Haritadan konum sec (Google)'
-        TabOrder = 8
-        OnClick = btnHaritaKonumClick
-      end
       object lblHarFmt: TUniLabel
         Left = 16
         Top = 176
-        Width = 149
-        Height = 15
+        Width = 188
+        Height = 13
         Hint = ''
-        Caption = 'Harita / geocoder adres satiri'
-        TabOrder = 9
+        Caption = 'Harita / geocoder adres (bilgi ama'#231'l'#305')'
+        TabOrder = 8
       end
       object mmHaritaAdres: TUniMemo
         Left = 16
         Top = 196
-        Width = 672
-        Height = 140
+        Width = 300
+        Height = 72
         Hint = ''
         Lines.Strings = (
           '')
+        TabOrder = 9
+      end
+      object lblBilgi: TUniLabel
+        Left = 16
+        Top = 276
+        Width = 300
+        Height = 72
+        Hint = ''
+        AutoSize = False
+        Caption = 
+          'Haritada t'#305'klayarak konum se'#231'in. Kaydet yaln'#305'zca GPS koordinatla' +
+          'r'#305'n'#305' Netsis TBLCASABITEK (KULL1N/KULL2N) alanlar'#305'na yazar; cari ' +
+          'adres sat'#305'rlar'#305'n'#305' otomatik g'#252'ncellenmez.'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clGray
+        Font.Height = -12
         TabOrder = 10
+      end
+      object btnHaritaKonum: TUniButton
+        Left = 16
+        Top = 360
+        Width = 300
+        Height = 32
+        Hint = 'Tam ekran harita se'#231'im penceresi'
+        Caption = 'Tam ekran harita'
+        TabOrder = 11
+        OnClick = btnHaritaKonumClick
+      end
+      object btnHaritaYenile: TUniButton
+        Left = 16
+        Top = 400
+        Width = 300
+        Height = 32
+        Hint = 'Haritay'#305' mevcut koordinatlara odakla'
+        Caption = 'Haritay'#305' yenile'
+        TabOrder = 12
+        OnClick = btnHaritaYenileClick
+      end
+      object urlMap: TUniURLFrame
+        Left = 336
+        Top = 8
+        Width = 612
+        Height = 560
+        Hint = ''
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        TabOrder = 13
+        ParentColor = False
+        Color = clBtnFace
       end
     end
     object panFooter: TUniPanel
       Left = 0
-      Top = 360
-      Width = 720
+      Top = 580
+      Width = 960
       Height = 60
       Hint = ''
       Align = alBottom
@@ -147,7 +189,7 @@ object frmCrmCariGps: TfrmCrmCariGps
       Caption = ''
       Color = 15790320
       object btnKaydet: TUniButton
-        Left = 240
+        Left = 340
         Top = 12
         Width = 140
         Height = 36
@@ -168,7 +210,7 @@ object frmCrmCariGps: TfrmCrmCariGps
         OnClick = btnKaydetClick
       end
       object btnKapat: TUniButton
-        Left = 560
+        Left = 840
         Top = 12
         Width = 100
         Height = 36
@@ -182,6 +224,21 @@ object frmCrmCariGps: TfrmCrmCariGps
         OnClick = btnKapatClick
       end
     end
+  end
+  object btnMapPick: TUniButton
+    Left = 48
+    Top = 600
+    Width = 1
+    Height = 1
+    Hint = ''
+    Visible = False
+    Caption = 'MapPick'
+    TabOrder = 1
+    ClientEvents.UniEvents.Strings = (
+      
+        'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.name' +
+        ' = '#39'btnMapPick'#39';'#13#10'}')
+    OnAjaxEvent = btnMapPickAjaxEvent
   end
   object qLoad: TUniQuery
     Connection = frmDM.conNetsis
