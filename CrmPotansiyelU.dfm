@@ -28,7 +28,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
       Width = 920
       Height = 588
       Hint = ''
-      ActivePage = tabTakip
+      ActivePage = tabFirma
       TabOrder = 0
       LayoutConfig.Flex = 1
       LayoutConfig.Height = '100%'
@@ -749,6 +749,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
       object tabTakip: TUniTabSheet
         Hint = ''
         Caption = 'Durum / Netsis / Notlar'
+        Visible = False
         Layout = 'fit'
         object panTakip: TUniPanel
           Left = 0
