@@ -72,6 +72,7 @@ uses
   CrmKontrolRaporU in 'CrmKontrolRaporU.pas' {frmCrmKontrolRapor: TUniForm},
   CrmTakvimU in 'CrmTakvimU.pas' {frmCrmTakvim: TUniForm},
   CrmAktiviteLogU in 'CrmAktiviteLogU.pas',
+  CrmAktiviteKontrolU in 'CrmAktiviteKontrolU.pas',
   CrmAktiviteRaporU in 'CrmAktiviteRaporU.pas' {frmCrmAktiviteRapor: TUniForm},
   CrmAktiviteTarihceU in 'CrmAktiviteTarihceU.pas' {frmCrmAktiviteTarihce: TUniForm},
   CrmRotaKmRaporU in 'CrmRotaKmRaporU.pas' {frmCrmRotaKmRapor: TUniForm};

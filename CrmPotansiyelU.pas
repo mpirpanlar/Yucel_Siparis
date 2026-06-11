@@ -20,6 +20,7 @@ type
     btnKapat: TUniButton;
     pc: TUniPageControl;
     tabFirma: TUniTabSheet;
+    panFirma: TUniPanel;
     lblUnvan: TUniLabel;
     edUnvan: TUniEdit;
     lblKisa: TUniLabel;
@@ -47,6 +48,7 @@ type
     lblKaynak: TUniLabel;
     edKaynak: TUniEdit;
     tabAdres: TUniTabSheet;
+    panAdres: TUniPanel;
     lblUlke: TUniLabel;
     edUlke: TUniEdit;
     lblIl: TUniLabel;
@@ -58,6 +60,7 @@ type
     lblAdres: TUniLabel;
     mmAdres: TUniMemo;
     tabKonum: TUniTabSheet;
+    panKonum: TUniPanel;
     lblGpsE: TUniLabel;
     edGpsEnlem: TUniEdit;
     lblGpsB: TUniLabel;
@@ -67,6 +70,7 @@ type
     mmHaritaAdres: TUniMemo;
     lblKonumBilgi: TUniLabel;
     tabIletisim: TUniTabSheet;
+    panIletisim: TUniPanel;
     lblTel: TUniLabel;
     edTel: TUniEdit;
     lblTel2: TUniLabel;
@@ -94,6 +98,7 @@ type
     lblMuhEposta: TUniLabel;
     edMuhEposta: TUniEdit;
     tabTakip: TUniTabSheet;
+    panTakip: TUniPanel;
     lblDurum: TUniLabel;
     lkDurum: TUniDBLookupComboBox;
     chkIlkTar: TUniCheckBox;

@@ -10,10 +10,12 @@ uses
 
 type
   TCrmCariSecildiEvent = procedure(Sender: TObject; const ACariKod: string) of object;
+  TCrmCariSecildiCokluEvent = procedure(Sender: TObject; ACariKodlar: TStringList) of object;
 
   TfrmCrmCariSec = class(TUniForm)
     pnlToolbar: TUniPanel;
     lblBilgi: TUniLabel;
+    lblSecili: TUniLabel;
     edArama: TUniEdit;
     btnListele: TUniButton;
     btnSec: TUniButton;
@@ -27,9 +29,17 @@ type
     procedure btnKapatClick(Sender: TObject);
     procedure edAramaKeyPress(Sender: TObject; var Key: Char);
     procedure grdCariAjaxEvent(Sender: TComponent; EventName: string; Params: TUniStrings);
+    procedure grdCariSelectionChange(Sender: TObject);
   private
+    FCokluSecimModu: Boolean;
     procedure CariSecVeKapat;
+    procedure CokluSecVeKapat;
+    procedure GuncelleSeciliSayisi;
+    function SeciliCariKodlari: TStringList;
     function SqlQuote(const S: string): string;
+    procedure SecimModuArayuz;
+    function CokluSecimYolu: Boolean;
+    procedure SecimYapVeKapat;
   public
     { Siparis / StokBul benzeri: ShowModal oncesi atanir, Sec ile doldurulur. }
     HedefCariEdit: TUniEdit;
@@ -37,6 +47,10 @@ type
     HedefCariAdLabel: TUniLabel;
     { Atanirsa cari seciminde kod ile birlikte cagrilir (rota plan vb.). }
     OnCariSecildi: TCrmCariSecildiEvent;
+    { Rota plan: birden fazla cari kodu; liste sahipligi cagirana gecer. }
+    OnCariSecildiCoklu: TCrmCariSecildiCokluEvent;
+    property CokluSecimModu: Boolean read FCokluSecimModu write FCokluSecimModu;
+    procedure SecimToolbarYenile;
   end;
 
 function frmCrmCariSec: TfrmCrmCariSec;
@@ -58,9 +72,124 @@ begin
   Result := StringReplace(Trim(S), '''', '''''', [rfReplaceAll]);
 end;
 
+function TfrmCrmCariSec.CokluSecimYolu: Boolean;
+begin
+  Result := FCokluSecimModu or Assigned(OnCariSecildiCoklu);
+end;
+
+procedure TfrmCrmCariSec.SecimToolbarYenile;
+begin
+  SecimModuArayuz;
+end;
+
+procedure TfrmCrmCariSec.SecimModuArayuz;
+begin
+  if CokluSecimYolu then
+  begin
+    FCokluSecimModu := True;
+    grdCari.Options := grdCari.Options + [dgMultiSelect, dgAlwaysShowSelection];
+    btnSec.Caption := 'Se'#231'ilenleri ekle';
+    btnSec.Hint := 'Isaretli satirlari rotaya eklemek uzere dondurur';
+    lblBilgi.Caption :=
+      'Cari adi/kodu yazip Listele; Ctrl veya tiklayarak birden fazla satir secin, ardindan Secilenleri ekle.';
+    lblSecili.Visible := True;
+    GuncelleSeciliSayisi;
+  end
+  else
+  begin
+    grdCari.Options := grdCari.Options - [dgMultiSelect];
+    grdCari.Options := grdCari.Options + [dgAlwaysShowSelection];
+    btnSec.Caption := 'Se'#231;
+    btnSec.Hint := 'Secili satiri aktarir';
+    lblBilgi.Caption :=
+      'Cari adi/kodu yazip Listele; satir secip Sec veya satira cift tiklayin.';
+    lblSecili.Visible := False;
+  end;
+end;
+
 procedure TfrmCrmCariSec.UniFormShow(Sender: TObject);
 begin
   qCari.Close;
+  SecimModuArayuz;
+end;
+
+procedure TfrmCrmCariSec.GuncelleSeciliSayisi;
+begin
+  if not lblSecili.Visible then
+    Exit;
+  if grdCari.SelectedRows.Count > 0 then
+    lblSecili.Caption := Format('Secili: %d', [grdCari.SelectedRows.Count])
+  else
+    lblSecili.Caption := 'Secili: 0';
+end;
+
+procedure TfrmCrmCariSec.grdCariSelectionChange(Sender: TObject);
+begin
+  GuncelleSeciliSayisi;
+end;
+
+function TfrmCrmCariSec.SeciliCariKodlari: TStringList;
+var
+  I: Integer;
+  Bm: TBookmark;
+  Ck: string;
+begin
+  Result := TStringList.Create;
+  Result.Sorted := False;
+  Result.Duplicates := dupIgnore;
+  if not qCari.Active or qCari.IsEmpty then
+    Exit;
+  qCari.CheckBrowseMode;
+  if grdCari.SelectedRows.Count > 0 then
+  begin
+    for I := 0 to grdCari.SelectedRows.Count - 1 do
+    begin
+      Bm := grdCari.SelectedRows[I];
+      qCari.Bookmark := Bm;
+      Ck := Trim(qCari.FieldByName('CARI_KOD').AsString);
+      if Ck <> '' then
+        Result.Add(Ck);
+    end;
+  end
+  else
+  begin
+    Ck := Trim(qCari.FieldByName('CARI_KOD').AsString);
+    if Ck <> '' then
+      Result.Add(Ck);
+  end;
+end;
+
+procedure TfrmCrmCariSec.CokluSecVeKapat;
+var
+  Liste: TStringList;
+begin
+  Liste := SeciliCariKodlari;
+  if Liste.Count = 0 then
+  begin
+    Liste.Free;
+    UniMainModule.saHata.Show('Once listele yapin ve en az bir satir secin.');
+    Exit;
+  end;
+  if Assigned(OnCariSecildiCoklu) then
+    OnCariSecildiCoklu(Self, Liste)
+  else
+    Liste.Free;
+  OnCariSecildi := nil;
+  OnCariSecildiCoklu := nil;
+  FCokluSecimModu := False;
+  Close;
+end;
+
+procedure TfrmCrmCariSec.SecimYapVeKapat;
+begin
+  if CokluSecimYolu and (grdCari.SelectedRows.Count > 1) then
+    CokluSecVeKapat
+  else if Assigned(OnCariSecildi) then
+    CariSecVeKapat
+  else if CokluSecimYolu then
+    CokluSecVeKapat
+  else
+    CariSecVeKapat;
 end;
 
 procedure TfrmCrmCariSec.btnListeleClick(Sender: TObject);
@@ -106,14 +235,18 @@ end;
 
 procedure TfrmCrmCariSec.btnSecClick(Sender: TObject);
 begin
-  CariSecVeKapat;
+  SecimYapVeKapat;
 end;
 
 procedure TfrmCrmCariSec.btnKapatClick(Sender: TObject);
 begin
   OnCariSecildi := nil;
+  OnCariSecildiCoklu := nil;
+  FCokluSecimModu := False;
   HedefCariEdit := nil;
   HedefCariAdLabel := nil;
+  if UniMainModule.CrmRotaDurakSecimAktif then
+    UniMainModule.CrmRotaDurakSecimBitir;
   Close;
 end;
 
@@ -130,7 +263,7 @@ procedure TfrmCrmCariSec.grdCariAjaxEvent(Sender: TComponent; EventName: string;
   Params: TUniStrings);
 begin
   if SameText(EventName, 'celldblclick') then
-    CariSecVeKapat;
+    SecimYapVeKapat;
 end;
 
 end.

@@ -136,7 +136,9 @@ type
     procedure HesaplaTumUyari;
     function SonSira: Integer;
     procedure CariSecildi(Sender: TObject; const ACariKod: string);
+    procedure CariSecildiCoklu(Sender: TObject; ACariKodlar: TStringList);
     procedure PotSecildi(Sender: TObject; APotId: Int64);
+    procedure PotSecildiCoklu(Sender: TObject; APotIds: TStringList);
     procedure AddDurakCari(const ACariKod: string);
     procedure AddDurakPot(APotId: Int64);
     function DurakMukerrerCari(const ACariKod: string): Boolean;
@@ -144,7 +146,10 @@ type
     procedure InternalAddDurakCari(const ACariKod: string);
     procedure InternalAddDurakPot(APotId: Int64);
     procedure AddDurakFromKayit(AKayit: TRotaSecimKayit);
-    procedure EkleSecimListesi(AListe: TObjectList; AMukerrerleriDahilEt: Boolean);
+    function EkleSecimListesi(AListe: TObjectList; AMukerrerleriDahilEt: Boolean; out AMukerrer: Integer): Integer;
+    procedure TopluEkleMesaj(AEklendi, AMukerrer: Integer);
+    procedure TopluEkleCariKodlar(ACariKodlar: TStringList);
+    procedure TopluEklePotIds(APotIds: TStringList);
     procedure RotaDurakSecildi(Sender: TObject; AListe: TObjectList);
     procedure PersistDuraklar;
     procedure SyncGorevDurakRefs;
@@ -671,7 +676,6 @@ end;
 
 procedure TfrmCrmRotaPlan.CariSecildi(Sender: TObject; const ACariKod: string);
 begin
-  frmCrmCariSec.OnCariSecildi := nil;
   AddDurakCari(ACariKod);
 end;
 
@@ -897,69 +901,155 @@ begin
   FDuraklar.Add(It);
 end;
 
-procedure TfrmCrmRotaPlan.EkleSecimListesi(AListe: TObjectList; AMukerrerleriDahilEt: Boolean);
+procedure TfrmCrmRotaPlan.TopluEkleMesaj(AEklendi, AMukerrer: Integer);
+begin
+  if (AEklendi > 0) or (AMukerrer > 0) then
+  begin
+    HesaplaTumUyari;
+    GridYenile;
+  end;
+  if (AEklendi = 0) and (AMukerrer = 0) then
+    UniMainModule.saHata.Show('Eklenecek durak se'#231'ilmedi.')
+  else if (AEklendi = 0) and (AMukerrer > 0) then
+    UniMainModule.saHata.Show(Format('%d m'#252'kerrer atland'#305'; yeni durak eklenmedi.', [AMukerrer]))
+  else if AMukerrer > 0 then
+    UniMainModule.saKaydet.Show(Format('%d m'#252'kerrer atland'#305', %d durak eklendi.', [AMukerrer, AEklendi]))
+  else
+    UniMainModule.saKaydet.Show(Format('%d durak eklendi.', [AEklendi]));
+end;
+
+procedure TfrmCrmRotaPlan.TopluEkleCariKodlar(ACariKodlar: TStringList);
 var
-  I, N: Integer;
+  I, Ekl, Muk: Integer;
+  Ck: string;
+begin
+  Ekl := 0;
+  Muk := 0;
+  if ACariKodlar = nil then
+    Exit;
+  for I := 0 to ACariKodlar.Count - 1 do
+  begin
+    Ck := Trim(ACariKodlar[I]);
+    if Ck = '' then
+      Continue;
+    if DurakMukerrerCari(Ck) then
+      Inc(Muk)
+    else
+    begin
+      InternalAddDurakCari(Ck);
+      Inc(Ekl);
+    end;
+  end;
+  TopluEkleMesaj(Ekl, Muk);
+end;
+
+procedure TfrmCrmRotaPlan.TopluEklePotIds(APotIds: TStringList);
+var
+  I, Ekl, Muk: Integer;
+  PotId: Int64;
+  Ck: string;
+begin
+  Ekl := 0;
+  Muk := 0;
+  if APotIds = nil then
+    Exit;
+  for I := 0 to APotIds.Count - 1 do
+  begin
+    PotId := StrToInt64Def(Trim(APotIds[I]), 0);
+    if PotId <= 0 then
+      Continue;
+    qTmp.Close;
+    qTmp.SQL.Text :=
+      'SELECT LTRIM(RTRIM(ISNULL(NETSIS_CARI_KOD, N''''))) AS K FROM dbo.CRM_POTANSIYEL_MUSTERI WHERE POTANSIYEL_ID = :ID';
+    qTmp.ParamByName('ID').AsLargeInt := PotId;
+    qTmp.Open;
+    Ck := '';
+    if not qTmp.IsEmpty then
+      Ck := Trim(qTmp.FieldByName('K').AsString);
+    qTmp.Close;
+    if Ck <> '' then
+    begin
+      if DurakMukerrerCari(Ck) then
+        Inc(Muk)
+      else
+      begin
+        InternalAddDurakCari(Ck);
+        Inc(Ekl);
+      end;
+    end
+    else if DurakMukerrerPot(PotId) then
+      Inc(Muk)
+    else
+    begin
+      InternalAddDurakPot(PotId);
+      Inc(Ekl);
+    end;
+  end;
+  TopluEkleMesaj(Ekl, Muk);
+end;
+
+procedure TfrmCrmRotaPlan.CariSecildiCoklu(Sender: TObject; ACariKodlar: TStringList);
+begin
+  try
+    TopluEkleCariKodlar(ACariKodlar);
+  finally
+    ACariKodlar.Free;
+  end;
+end;
+
+procedure TfrmCrmRotaPlan.PotSecildiCoklu(Sender: TObject; APotIds: TStringList);
+begin
+  try
+    TopluEklePotIds(APotIds);
+  finally
+    APotIds.Free;
+  end;
+end;
+
+function TfrmCrmRotaPlan.EkleSecimListesi(AListe: TObjectList; AMukerrerleriDahilEt: Boolean;
+  out AMukerrer: Integer): Integer;
+var
+  I: Integer;
   Kay: TRotaSecimKayit;
 begin
+  Result := 0;
+  AMukerrer := 0;
   if AListe = nil then
     Exit;
-  N := 0;
   for I := 0 to AListe.Count - 1 do
   begin
     Kay := TRotaSecimKayit(AListe[I]);
     if Kay.Tip = 'C' then
     begin
       if (not AMukerrerleriDahilEt) and DurakMukerrerCari(Kay.CariKod) then
+      begin
+        Inc(AMukerrer);
         Continue;
+      end;
       AddDurakFromKayit(Kay);
-      Inc(N);
+      Inc(Result);
     end
     else if Kay.Tip = 'P' then
     begin
       if (not AMukerrerleriDahilEt) and DurakMukerrerPot(Kay.PotId) then
+      begin
+        Inc(AMukerrer);
         Continue;
+      end;
       AddDurakFromKayit(Kay);
-      Inc(N);
+      Inc(Result);
     end;
   end;
-  if N > 0 then
-  begin
-    HesaplaTumUyari;
-    GridYenile;
-    UniMainModule.saKaydet.Show(Format('%d durak eklendi.', [N]));
-  end
-  else
-    UniMainModule.saHata.Show('Eklenecek yeni durak kalmad'#305'.');
 end;
 
 procedure TfrmCrmRotaPlan.RotaDurakSecildi(Sender: TObject; AListe: TObjectList);
 var
-  I, Muk: Integer;
-  Kay: TRotaSecimKayit;
+  Ekl, Muk: Integer;
 begin
   if (AListe = nil) or (AListe.Count = 0) then
     Exit;
-  Muk := 0;
-  for I := 0 to AListe.Count - 1 do
-  begin
-    Kay := TRotaSecimKayit(AListe[I]);
-    if (Kay.Tip = 'C') and DurakMukerrerCari(Kay.CariKod) then
-      Inc(Muk)
-    else if (Kay.Tip = 'P') and DurakMukerrerPot(Kay.PotId) then
-      Inc(Muk);
-  end;
-  if Muk > 0 then
-  begin
-    FMukerrerMod := 0;
-    FPendSecim := AListe;
-    saMukerrer.Title := 'M'#252'kerrer duraklar';
-    saMukerrer.Text := Format('%d se'#231'im zaten rotada.'#13#10 +
-      'Evet = yine de ekle, Hay'#305'r = yaln'#305'z yeni olanlar', [Muk]);
-    saMukerrer.Show;
-    Exit;
-  end;
-  EkleSecimListesi(AListe, True);
+  Ekl := EkleSecimListesi(AListe, False, Muk);
+  TopluEkleMesaj(Ekl, Muk);
 end;
 
 procedure TfrmCrmRotaPlan.saMukerrerConfirm(Sender: TObject);
@@ -967,7 +1057,6 @@ begin
   case FMukerrerMod of
     1: InternalAddDurakCari(FPendCariKod);
     2: InternalAddDurakPot(FPendPotId);
-    0: EkleSecimListesi(FPendSecim, True);
   end;
   FMukerrerMod := -1;
   FPendSecim := nil;
@@ -975,19 +1064,17 @@ end;
 
 procedure TfrmCrmRotaPlan.saMukerrerDismiss(Sender: TObject; const Reason: TDismissType);
 begin
-  if FMukerrerMod = 0 then
-    EkleSecimListesi(FPendSecim, False);
   FMukerrerMod := -1;
   FPendSecim := nil;
 end;
 
 procedure TfrmCrmRotaPlan.btnEkleBolgeClick(Sender: TObject);
 begin
+  UniMainModule.CrmRotaBolgeSecimHazirla(RotaDurakSecildi);
   frmCrmRotaDurakSec.BaslangicLat := BasLat;
   frmCrmRotaDurakSec.BaslangicLng := BasLng;
-  frmCrmRotaDurakSec.OnSecimTamam := RotaDurakSecildi;
+  frmCrmRotaDurakSec.OnSecimTamam := UniMainModule.CrmRotaBridgeBolgeSecildi;
   frmCrmRotaDurakSec.ShowModal;
-  frmCrmRotaDurakSec.OnSecimTamam := nil;
 end;
 
 procedure TfrmCrmRotaPlan.PersistDuraklar;
@@ -1474,40 +1561,32 @@ end;
 
 procedure TfrmCrmRotaPlan.btnEkleCariClick(Sender: TObject);
 begin
+  UniMainModule.CrmRotaCariSecimHazirla(CariSecildi, CariSecildiCoklu);
   frmCrmCariSec.HedefCariEdit := nil;
-  frmCrmCariSec.OnCariSecildi := CariSecildi;
+  frmCrmCariSec.HedefCariAdLabel := nil;
+  frmCrmCariSec.OnCariSecildi := UniMainModule.CrmRotaBridgeCariSecildi;
+  frmCrmCariSec.OnCariSecildiCoklu := UniMainModule.CrmRotaBridgeCariSecildiCoklu;
+  frmCrmCariSec.CokluSecimModu := True;
+  frmCrmCariSec.SecimToolbarYenile;
   frmCrmCariSec.edArama.Text := '';
   frmCrmCariSec.ShowModal;
 end;
 
 procedure TfrmCrmRotaPlan.btnEklePotClick(Sender: TObject);
-//var
-//  PotForm: TfrmCrmPotansiyelListe;
 begin
-  { frmCrmCariSec.OnCariSecildi ile ayni: olay bu modal liste orneginde; UniMainModule + Self
-    eslesmesi menudeki xFormShow(Create) ile GetFormInstance farki yuzunden kiriliyordu. }
-//  PotForm := frmCrmPotansiyelListe;
-//  PotForm.HedefPotansiyelIdEdit := nil;
-//  PotForm.OnPotansiyelSecildi := PotSecildi;
-//  PotForm.SecimToolbarYenile;
-//  PotForm.BorderStyle := bsDialog;
-//  PotForm.BorderIcons := [biSystemMenu];
-//  try
-//    PotForm.btnListeleClick(nil);
-//    PotForm.ShowModal;
-//  finally
-//    PotForm.OnPotansiyelSecildi := nil;
-//    PotForm.BorderStyle := bsNone;
-//    PotForm.BorderIcons := [];
-//    PotForm.SecimToolbarYenile;
-//  end;
-
+  UniMainModule.CrmRotaPotSecimHazirla(PotSecildi, PotSecildiCoklu);
   frmCrmPotansiyelListe.HedefPotansiyelIdEdit := nil;
-  frmCrmPotansiyelListe.OnPotansiyelSecildi := PotSecildi;
-  frmCrmPotansiyelListe.edFiltUnvan.Text;
+  frmCrmPotansiyelListe.OnPotansiyelSecildi := UniMainModule.CrmRotaBridgePotSecildi;
+  frmCrmPotansiyelListe.OnPotansiyelSecildiCoklu := UniMainModule.CrmRotaBridgePotSecildiCoklu;
+  frmCrmPotansiyelListe.CokluSecimModu := True;
+  frmCrmPotansiyelListe.SecimToolbarYenile;
+  frmCrmPotansiyelListe.BorderStyle := bsDialog;
+  frmCrmPotansiyelListe.BorderIcons := [biSystemMenu];
+  frmCrmPotansiyelListe.btnListeleClick(nil);
   frmCrmPotansiyelListe.ShowModal;
-
-
+  frmCrmPotansiyelListe.BorderStyle := bsNone;
+  frmCrmPotansiyelListe.BorderIcons := [];
+  frmCrmPotansiyelListe.SecimToolbarYenile;
 end;
 
 procedure TfrmCrmRotaPlan.btnDurakSilClick(Sender: TObject);

@@ -10,22 +10,9 @@ uses
   Data.DB, MemDS, DBAccess, Uni, uniMultiItem, uniComboBox, uniDBComboBox,
   uniBasicGrid, uniDBGrid, uniFileUpload, uniCheckBox, uniPageControl,
   uniSweetAlert,
-  System.Generics.Collections;
+  CrmAktiviteKontrolU;
 
 type
-  TSoruKontrol = class
-  public
-    SoruId: Int64;
-    SetId: Int64;
-    Tipi: string;
-    Zorunlu: Boolean;
-    SetZorunlu: Boolean;
-    Metni: string;
-    Ana: TControl;
-    SecenekIds: array of Int64;
-    Checkler: array of TUniCheckBox;
-  end;
-
   TfrmCrmAktivite = class(TUniForm)
     rootPanel: TUniPanel;
     panMain: TUniPanel;
@@ -112,15 +99,10 @@ type
   private
     FAktiviteId: Int64;
     FPendingDurumId: Int64;
-    FKontroller: TObjectList<TSoruKontrol>;
-    FDinamik: TObjectList<TComponent>;
-    procedure KontrolControlsTemizle;
+    FCrmKontrol: TCrmAktiviteKontrolYonetici;
+    procedure KontrolSekmesiGoster(Sender: TObject);
     procedure KontrolListesiYukle;
-    procedure SoruOlustur(var AY: Integer);
-    procedure CevaplariYukle;
-    function DurumKapanisMi: Boolean;
-    function KontrolDogrula: Boolean;
-    procedure KontrolCevaplariKaydet;
+    procedure EnsureCrmKontrol;
     procedure EnsureEkUpload;
     function AktiviteKaydet: Boolean;
     procedure EkListele;
@@ -728,8 +710,12 @@ begin
     qLoad.Close;
   end;
 
-  if DurumKapanisMi and not KontrolDogrula then
-    Exit;
+  if CrmKontrolTamamlamaGerekli(qLoad, lkDurum.KeyValue, Dkod, False) then
+  begin
+    EnsureCrmKontrol;
+    if not FCrmKontrol.Dogrula then
+      Exit;
+  end;
 
   qExec.Close;
   qExec.SQL.Clear;
@@ -789,7 +775,10 @@ begin
   end;
 
   if FAktiviteId > 0 then
-    KontrolCevaplariKaydet;
+  begin
+    EnsureCrmKontrol;
+    FCrmKontrol.CevaplariKaydet(FAktiviteId);
+  end;
 
   if FAktiviteId > 0 then
     AktiviteLogKaydet(IsNew, OldKonu, OldAcik, OldTarStr, OldDurAd);
@@ -928,520 +917,35 @@ begin
     EkIndir;
 end;
 
-{ ----- Aktivite Kontrol Listesi (soru setleri) ----- }
-
-destructor TfrmCrmAktivite.Destroy;
+procedure TfrmCrmAktivite.EnsureCrmKontrol;
 begin
-  KontrolControlsTemizle;
-  FDinamik.Free;
-  FKontroller.Free;
-  inherited;
+  if FCrmKontrol <> nil then
+    Exit;
+  FCrmKontrol := TCrmAktiviteKontrolYonetici.Create(Self, panKontrol, qKontrol, qSecenek, qCevap,
+    qKontrolExec);
+  FCrmKontrol.OnSekmeGoster := KontrolSekmesiGoster;
 end;
 
-procedure TfrmCrmAktivite.KontrolControlsTemizle;
-var
-  I: Integer;
+procedure TfrmCrmAktivite.KontrolSekmesiGoster(Sender: TObject);
 begin
-  if Assigned(FKontroller) then
-    FKontroller.Clear;
-  if Assigned(FDinamik) then
-  begin
-    for I := FDinamik.Count - 1 downto 0 do
-      FDinamik[I].Free;
-    FDinamik.Clear;
-  end;
-end;
-
-procedure TfrmCrmAktivite.SoruOlustur(var AY: Integer);
-var
-  K: TSoruKontrol;
-  lbl: TUniLabel;
-  cb: TUniComboBox;
-  ed: TUniEdit;
-  mm: TUniMemo;
-  dt: TUniDateTimePicker;
-  chk: TUniCheckBox;
-  Tipi: string;
-  N: Integer;
-begin
-  K := TSoruKontrol.Create;
-  K.SoruId := qKontrol.FieldByName('SORU_ID').AsLargeInt;
-  K.SetId := qKontrol.FieldByName('SET_ID').AsLargeInt;
-  K.Tipi := qKontrol.FieldByName('CEVAP_TIPI').AsString;
-  K.Zorunlu := qKontrol.FieldByName('ZORUNLU').AsBoolean;
-  K.SetZorunlu := qKontrol.FieldByName('ZORUNLU_MU').AsBoolean;
-  K.Metni := qKontrol.FieldByName('SORU_METNI').AsString;
-  Tipi := K.Tipi;
-
-  lbl := TUniLabel.Create(Self);
-  lbl.Parent := panKontrol;
-  lbl.Left := 16;
-  lbl.Top := AY;
-  lbl.Width := 600;
-  if K.Zorunlu then
-    lbl.Caption := '(*) ' + K.Metni
-  else
-    lbl.Caption := K.Metni;
-  FDinamik.Add(lbl);
-  AY := AY + 20;
-
-  if SameText(Tipi, 'EVET_HAYIR') then
-  begin
-    cb := TUniComboBox.Create(Self);
-    cb.Parent := panKontrol;
-    cb.Left := 24; cb.Top := AY; cb.Width := 200;
-    cb.Items.Add('Evet');
-    cb.Items.Add('Hay' + #$0131 + 'r');
-    cb.ItemIndex := -1;
-    K.Ana := cb;
-    FDinamik.Add(cb);
-    AY := AY + 34;
-  end
-  else if SameText(Tipi, 'PUAN') then
-  begin
-    cb := TUniComboBox.Create(Self);
-    cb.Parent := panKontrol;
-    cb.Left := 24; cb.Top := AY; cb.Width := 120;
-    cb.Items.Add('1'); cb.Items.Add('2'); cb.Items.Add('3');
-    cb.Items.Add('4'); cb.Items.Add('5');
-    cb.ItemIndex := -1;
-    K.Ana := cb;
-    FDinamik.Add(cb);
-    AY := AY + 34;
-  end
-  else if SameText(Tipi, 'TEK_SECIM') then
-  begin
-    qSecenek.Close;
-    qSecenek.SQL.Text :=
-      'SELECT SECENEK_ID, METIN FROM dbo.CRM_SORU_SECENEK ' +
-      'WHERE SORU_ID = :S AND AKTIF = 1 ORDER BY SIRA, SECENEK_ID';
-    qSecenek.ParamByName('S').AsLargeInt := K.SoruId;
-    qSecenek.Open;
-    cb := TUniComboBox.Create(Self);
-    cb.Parent := panKontrol;
-    cb.Left := 24; cb.Top := AY; cb.Width := 400;
-    N := 0;
-    while not qSecenek.Eof do
-    begin
-      cb.Items.Add(qSecenek.FieldByName('METIN').AsString);
-      SetLength(K.SecenekIds, N + 1);
-      K.SecenekIds[N] := qSecenek.FieldByName('SECENEK_ID').AsLargeInt;
-      Inc(N);
-      qSecenek.Next;
-    end;
-    qSecenek.Close;
-    cb.ItemIndex := -1;
-    K.Ana := cb;
-    FDinamik.Add(cb);
-    AY := AY + 34;
-  end
-  else if SameText(Tipi, 'COK_SECIM') then
-  begin
-    qSecenek.Close;
-    qSecenek.SQL.Text :=
-      'SELECT SECENEK_ID, METIN FROM dbo.CRM_SORU_SECENEK ' +
-      'WHERE SORU_ID = :S AND AKTIF = 1 ORDER BY SIRA, SECENEK_ID';
-    qSecenek.ParamByName('S').AsLargeInt := K.SoruId;
-    qSecenek.Open;
-    N := 0;
-    while not qSecenek.Eof do
-    begin
-      chk := TUniCheckBox.Create(Self);
-      chk.Parent := panKontrol;
-      chk.Left := 24; chk.Top := AY; chk.Width := 560;
-      chk.Caption := qSecenek.FieldByName('METIN').AsString;
-      SetLength(K.SecenekIds, N + 1);
-      SetLength(K.Checkler, N + 1);
-      K.SecenekIds[N] := qSecenek.FieldByName('SECENEK_ID').AsLargeInt;
-      K.Checkler[N] := chk;
-      FDinamik.Add(chk);
-      AY := AY + 24;
-      Inc(N);
-      qSecenek.Next;
-    end;
-    qSecenek.Close;
-    AY := AY + 8;
-  end
-  else if SameText(Tipi, 'SAYI') then
-  begin
-    ed := TUniEdit.Create(Self);
-    ed.Parent := panKontrol;
-    ed.Left := 24; ed.Top := AY; ed.Width := 200;
-    K.Ana := ed;
-    FDinamik.Add(ed);
-    AY := AY + 34;
-  end
-  else if SameText(Tipi, 'TARIH') then
-  begin
-    dt := TUniDateTimePicker.Create(Self);
-    dt.Parent := panKontrol;
-    dt.Left := 24; dt.Top := AY; dt.Width := 200;
-    dt.DateFormat := 'dd/MM/yyyy';
-    dt.DateTime := Now;
-    K.Ana := dt;
-    FDinamik.Add(dt);
-    AY := AY + 34;
-  end
-  else
-  begin
-    mm := TUniMemo.Create(Self);
-    mm.Parent := panKontrol;
-    mm.Left := 24; mm.Top := AY; mm.Width := 560; mm.Height := 50;
-    K.Ana := mm;
-    FDinamik.Add(mm);
-    AY := AY + 58;
-  end;
-
-  FKontroller.Add(K);
+  pgc.ActivePage := tsKontrol;
 end;
 
 procedure TfrmCrmAktivite.KontrolListesiYukle;
-var
-  AY: Integer;
-  LastSet: Int64;
-  lbl: TUniLabel;
 begin
-  if FDinamik = nil then
-    FDinamik := TObjectList<TComponent>.Create(False);
-  if FKontroller = nil then
-    FKontroller := TObjectList<TSoruKontrol>.Create(True);
-  KontrolControlsTemizle;
-
+  EnsureCrmKontrol;
   if VarIsNull(lkTip.KeyValue) or VarIsEmpty(lkTip.KeyValue) then
-    Exit;
-
-  qKontrol.Close;
-  qKontrol.SQL.Text :=
-    'SELECT S.SET_ID, S.BASLIK, A.ZORUNLU_MU, Q.SORU_ID, Q.SORU_METNI, Q.CEVAP_TIPI, Q.ZORUNLU ' +
-    'FROM dbo.CRM_TIP_SORU_SETI A ' +
-    'INNER JOIN dbo.CRM_SORU_SETI S ON S.SET_ID = A.SET_ID AND S.AKTIF = 1 ' +
-    'INNER JOIN dbo.CRM_SORU Q ON Q.SET_ID = S.SET_ID AND Q.AKTIF = 1 ' +
-    'WHERE A.AKTIVITE_TIP_ID = :TID AND A.AKTIF = 1 ' +
-    'ORDER BY S.SIRA, S.SET_ID, Q.SIRA, Q.SORU_ID';
-  qKontrol.ParamByName('TID').AsLargeInt := lkTip.KeyValue;
-  qKontrol.Open;
-
-  AY := 10;
-  LastSet := -1;
-  while not qKontrol.Eof do
-  begin
-    if qKontrol.FieldByName('SET_ID').AsLargeInt <> LastSet then
-    begin
-      LastSet := qKontrol.FieldByName('SET_ID').AsLargeInt;
-      lbl := TUniLabel.Create(Self);
-      lbl.Parent := panKontrol;
-      lbl.Left := 8; lbl.Top := AY; lbl.Width := 610;
-      lbl.ParentFont := False;
-      lbl.Font.Style := [fsBold];
-      lbl.Font.Height := -14;
-      lbl.Caption := qKontrol.FieldByName('BASLIK').AsString;
-      FDinamik.Add(lbl);
-      AY := AY + 28;
-    end;
-    SoruOlustur(AY);
-    qKontrol.Next;
-  end;
-  qKontrol.Close;
-
-  if FKontroller.Count = 0 then
-  begin
-    lbl := TUniLabel.Create(Self);
-    lbl.Parent := panKontrol;
-    lbl.Left := 12; lbl.Top := 12; lbl.Width := 600;
-    lbl.Caption := 'Bu aktivite tipi i' + #$00E7 + 'in tan' + #$0131 + 'ml' + #$0131 + ' soru seti yok.';
-    FDinamik.Add(lbl);
-  end
-  else if FAktiviteId > 0 then
-    CevaplariYukle;
+    FCrmKontrol.Yukle(0, FAktiviteId,
+      'Bu aktivite tipi i' + #$00E7 + 'in tan' + #$0131 + 'ml' + #$0131 + ' soru seti yok.')
+  else
+    FCrmKontrol.Yukle(lkTip.KeyValue, FAktiviteId,
+      'Bu aktivite tipi i' + #$00E7 + 'in tan' + #$0131 + 'ml' + #$0131 + ' soru seti yok.');
 end;
 
-procedure TfrmCrmAktivite.CevaplariYukle;
-var
-  I, J: Integer;
-  K: TSoruKontrol;
-  CevapId, SecId: Int64;
+destructor TfrmCrmAktivite.Destroy;
 begin
-  for I := 0 to FKontroller.Count - 1 do
-  begin
-    K := FKontroller[I];
-    qCevap.Close;
-    qCevap.SQL.Text :=
-      'SELECT CEVAP_ID, CEVAP_METIN, CEVAP_SAYI, CEVAP_TARIH, CEVAP_BIT ' +
-      'FROM dbo.CRM_AKTIVITE_CEVAP WHERE AKTIVITE_ID = :A AND SORU_ID = :S';
-    qCevap.ParamByName('A').AsLargeInt := FAktiviteId;
-    qCevap.ParamByName('S').AsLargeInt := K.SoruId;
-    qCevap.Open;
-    if qCevap.IsEmpty then
-    begin
-      qCevap.Close;
-      Continue;
-    end;
-    CevapId := qCevap.FieldByName('CEVAP_ID').AsLargeInt;
-
-    if SameText(K.Tipi, 'EVET_HAYIR') then
-    begin
-      if not qCevap.FieldByName('CEVAP_BIT').IsNull then
-      begin
-        if qCevap.FieldByName('CEVAP_BIT').AsBoolean then
-          TUniComboBox(K.Ana).ItemIndex := 0
-        else
-          TUniComboBox(K.Ana).ItemIndex := 1;
-      end;
-    end
-    else if SameText(K.Tipi, 'PUAN') then
-    begin
-      if not qCevap.FieldByName('CEVAP_SAYI').IsNull then
-        TUniComboBox(K.Ana).ItemIndex := Trunc(qCevap.FieldByName('CEVAP_SAYI').AsFloat) - 1;
-    end
-    else if SameText(K.Tipi, 'SAYI') then
-    begin
-      if not qCevap.FieldByName('CEVAP_SAYI').IsNull then
-        TUniEdit(K.Ana).Text := FloatToStr(qCevap.FieldByName('CEVAP_SAYI').AsFloat);
-    end
-    else if SameText(K.Tipi, 'TARIH') then
-    begin
-      if not qCevap.FieldByName('CEVAP_TARIH').IsNull then
-        TUniDateTimePicker(K.Ana).DateTime := qCevap.FieldByName('CEVAP_TARIH').AsDateTime;
-    end
-    else if SameText(K.Tipi, 'METIN') then
-    begin
-      TUniMemo(K.Ana).Text := qCevap.FieldByName('CEVAP_METIN').AsString;
-    end
-    else if SameText(K.Tipi, 'TEK_SECIM') then
-    begin
-      qCevap.Close;
-      qCevap.SQL.Text :=
-        'SELECT TOP 1 SECENEK_ID FROM dbo.CRM_AKTIVITE_CEVAP_SECENEK WHERE CEVAP_ID = :C';
-      qCevap.ParamByName('C').AsLargeInt := CevapId;
-      qCevap.Open;
-      if not qCevap.IsEmpty and not qCevap.FieldByName('SECENEK_ID').IsNull then
-      begin
-        SecId := qCevap.FieldByName('SECENEK_ID').AsLargeInt;
-        for J := 0 to High(K.SecenekIds) do
-          if K.SecenekIds[J] = SecId then
-          begin
-            TUniComboBox(K.Ana).ItemIndex := J;
-            Break;
-          end;
-      end;
-    end
-    else if SameText(K.Tipi, 'COK_SECIM') then
-    begin
-      qCevap.Close;
-      qCevap.SQL.Text :=
-        'SELECT SECENEK_ID FROM dbo.CRM_AKTIVITE_CEVAP_SECENEK WHERE CEVAP_ID = :C';
-      qCevap.ParamByName('C').AsLargeInt := CevapId;
-      qCevap.Open;
-      while not qCevap.Eof do
-      begin
-        if not qCevap.FieldByName('SECENEK_ID').IsNull then
-        begin
-          SecId := qCevap.FieldByName('SECENEK_ID').AsLargeInt;
-          for J := 0 to High(K.SecenekIds) do
-            if K.SecenekIds[J] = SecId then
-            begin
-              K.Checkler[J].Checked := True;
-              Break;
-            end;
-        end;
-        qCevap.Next;
-      end;
-    end;
-    qCevap.Close;
-  end;
-end;
-
-function TfrmCrmAktivite.DurumKapanisMi: Boolean;
-begin
-  Result := False;
-  if VarIsNull(lkDurum.KeyValue) or VarIsEmpty(lkDurum.KeyValue) then
-    Exit;
-  qLoad.Close;
-  qLoad.SQL.Text := 'SELECT KAPANIS_MI FROM dbo.CRM_AKTIVITE_DURUM WHERE DURUM_ID = :D';
-  qLoad.ParamByName('D').AsLargeInt := lkDurum.KeyValue;
-  qLoad.Open;
-  if not qLoad.IsEmpty and not qLoad.FieldByName('KAPANIS_MI').IsNull then
-    Result := qLoad.FieldByName('KAPANIS_MI').AsBoolean;
-  qLoad.Close;
-end;
-
-function TfrmCrmAktivite.KontrolDogrula: Boolean;
-var
-  I, J: Integer;
-  K: TSoruKontrol;
-  Cevaplandi: Boolean;
-begin
-  Result := True;
-  if FKontroller = nil then
-    Exit;
-  for I := 0 to FKontroller.Count - 1 do
-  begin
-    K := FKontroller[I];
-    if not (K.Zorunlu and K.SetZorunlu) then
-      Continue;
-    Cevaplandi := False;
-    if SameText(K.Tipi, 'EVET_HAYIR') or SameText(K.Tipi, 'PUAN') or
-       SameText(K.Tipi, 'TEK_SECIM') then
-      Cevaplandi := TUniComboBox(K.Ana).ItemIndex >= 0
-    else if SameText(K.Tipi, 'COK_SECIM') then
-    begin
-      for J := 0 to High(K.Checkler) do
-        if K.Checkler[J].Checked then
-        begin
-          Cevaplandi := True;
-          Break;
-        end;
-    end
-    else if SameText(K.Tipi, 'SAYI') then
-      Cevaplandi := Trim(TUniEdit(K.Ana).Text) <> ''
-    else if SameText(K.Tipi, 'TARIH') then
-      Cevaplandi := True
-    else
-      Cevaplandi := Trim(TUniMemo(K.Ana).Text) <> '';
-    if not Cevaplandi then
-    begin
-      Result := False;
-      pgc.ActivePage := tsKontrol;
-      UniMainModule.saHata.Show('Zorunlu kontrol sorusu cevaplanmal' + #$0131 + ': ' + K.Metni);
-      Exit;
-    end;
-  end;
-end;
-
-procedure TfrmCrmAktivite.KontrolCevaplariKaydet;
-var
-  I, J, Cod: Integer;
-  K: TSoruKontrol;
-  Cevaplandi: Boolean;
-  CevapId: Int64;
-begin
-  if (FKontroller = nil) or (FAktiviteId <= 0) then
-    Exit;
-  for I := 0 to FKontroller.Count - 1 do
-  begin
-    K := FKontroller[I];
-
-    qKontrolExec.Close;
-    qKontrolExec.SQL.Text :=
-      'DELETE FROM dbo.CRM_AKTIVITE_CEVAP WHERE AKTIVITE_ID = :A AND SORU_ID = :S';
-    qKontrolExec.ParamByName('A').AsLargeInt := FAktiviteId;
-    qKontrolExec.ParamByName('S').AsLargeInt := K.SoruId;
-    qKontrolExec.Execute;
-
-    Cevaplandi := False;
-    qKontrolExec.Close;
-    qKontrolExec.SQL.Text :=
-      'INSERT INTO dbo.CRM_AKTIVITE_CEVAP (AKTIVITE_ID, SET_ID, SORU_ID, SORU_METNI_KOPYA, ' +
-      'CEVAP_TIPI, CEVAP_METIN, CEVAP_SAYI, CEVAP_TARIH, CEVAP_BIT, CEVAPLAYAN_KULLANICI_ID) ' +
-      'OUTPUT INSERTED.CEVAP_ID ' +
-      'VALUES (:A, :SETID, :S, :MK, :CT, :CM, :CS, :CD, :CB, :KUL)';
-    qKontrolExec.ParamByName('A').AsLargeInt := FAktiviteId;
-    qKontrolExec.ParamByName('SETID').AsLargeInt := K.SetId;
-    qKontrolExec.ParamByName('S').AsLargeInt := K.SoruId;
-    qKontrolExec.ParamByName('MK').AsString := K.Metni;
-    qKontrolExec.ParamByName('CT').AsString := K.Tipi;
-    qKontrolExec.ParamByName('CM').Clear;
-    qKontrolExec.ParamByName('CS').Clear;
-    qKontrolExec.ParamByName('CD').Clear;
-    qKontrolExec.ParamByName('CB').Clear;
-    qKontrolExec.ParamByName('KUL').AsInteger := Tmp.xKullaniciID;
-
-    Cod := -1;
-    if SameText(K.Tipi, 'EVET_HAYIR') then
-    begin
-      if TUniComboBox(K.Ana).ItemIndex >= 0 then
-      begin
-        Cevaplandi := True;
-        qKontrolExec.ParamByName('CB').AsBoolean := (TUniComboBox(K.Ana).ItemIndex = 0);
-      end;
-    end
-    else if SameText(K.Tipi, 'PUAN') then
-    begin
-      if TUniComboBox(K.Ana).ItemIndex >= 0 then
-      begin
-        Cevaplandi := True;
-        qKontrolExec.ParamByName('CS').AsFloat := TUniComboBox(K.Ana).ItemIndex + 1;
-      end;
-    end
-    else if SameText(K.Tipi, 'SAYI') then
-    begin
-      if Trim(TUniEdit(K.Ana).Text) <> '' then
-      begin
-        Cevaplandi := True;
-        qKontrolExec.ParamByName('CS').AsFloat := StrToFloatDef(Trim(TUniEdit(K.Ana).Text), 0);
-      end;
-    end
-    else if SameText(K.Tipi, 'TARIH') then
-    begin
-      Cevaplandi := True;
-      qKontrolExec.ParamByName('CD').AsDateTime := TUniDateTimePicker(K.Ana).DateTime;
-    end
-    else if SameText(K.Tipi, 'TEK_SECIM') then
-    begin
-      Cod := TUniComboBox(K.Ana).ItemIndex;
-      if Cod >= 0 then
-      begin
-        Cevaplandi := True;
-        qKontrolExec.ParamByName('CM').AsString := TUniComboBox(K.Ana).Items[Cod];
-      end;
-    end
-    else if SameText(K.Tipi, 'COK_SECIM') then
-    begin
-      for J := 0 to High(K.Checkler) do
-        if K.Checkler[J].Checked then
-        begin
-          Cevaplandi := True;
-          Break;
-        end;
-    end
-    else
-    begin
-      if Trim(TUniMemo(K.Ana).Text) <> '' then
-      begin
-        Cevaplandi := True;
-        qKontrolExec.ParamByName('CM').AsString := TUniMemo(K.Ana).Text;
-      end;
-    end;
-
-    if not Cevaplandi then
-      Continue;
-
-    qKontrolExec.Open;
-    if qKontrolExec.Fields[0].IsNull then
-      CevapId := 0
-    else
-      CevapId := qKontrolExec.Fields[0].AsLargeInt;
-    qKontrolExec.Close;
-    if CevapId <= 0 then
-      Continue;
-
-    if SameText(K.Tipi, 'TEK_SECIM') and (Cod >= 0) and (Cod <= High(K.SecenekIds)) then
-    begin
-      qKontrolExec.Close;
-      qKontrolExec.SQL.Text :=
-        'INSERT INTO dbo.CRM_AKTIVITE_CEVAP_SECENEK (CEVAP_ID, SECENEK_ID, SECENEK_METNI_KOPYA) ' +
-        'VALUES (:C, :SEC, :MK)';
-      qKontrolExec.ParamByName('C').AsLargeInt := CevapId;
-      qKontrolExec.ParamByName('SEC').AsLargeInt := K.SecenekIds[Cod];
-      qKontrolExec.ParamByName('MK').AsString := TUniComboBox(K.Ana).Items[Cod];
-      qKontrolExec.Execute;
-    end
-    else if SameText(K.Tipi, 'COK_SECIM') then
-    begin
-      for J := 0 to High(K.Checkler) do
-        if K.Checkler[J].Checked then
-        begin
-          qKontrolExec.Close;
-          qKontrolExec.SQL.Text :=
-            'INSERT INTO dbo.CRM_AKTIVITE_CEVAP_SECENEK (CEVAP_ID, SECENEK_ID, SECENEK_METNI_KOPYA) ' +
-            'VALUES (:C, :SEC, :MK)';
-          qKontrolExec.ParamByName('C').AsLargeInt := CevapId;
-          qKontrolExec.ParamByName('SEC').AsLargeInt := K.SecenekIds[J];
-          qKontrolExec.ParamByName('MK').AsString := K.Checkler[J].Caption;
-          qKontrolExec.Execute;
-        end;
-    end;
-  end;
+  FCrmKontrol.Free;
+  inherited;
 end;
 
 procedure TfrmCrmAktivite.lkTipCloseUp(Sender: TObject);

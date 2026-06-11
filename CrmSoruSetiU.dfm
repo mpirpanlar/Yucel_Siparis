@@ -416,7 +416,7 @@ object frmCrmSoruSeti: TfrmCrmSoruSeti
           Width = 59
           Height = 13
           Hint = ''
-          Caption = 'Aktivite Tipi'
+          Caption = 'Aktivite / G'#246'rev Tipi'
           TabOrder = 0
         end
         object lkTip: TUniDBLookupComboBox

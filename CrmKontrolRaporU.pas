@@ -85,7 +85,7 @@ begin
   qTipLkp.Close;
   qTipLkp.SQL.Text :=
     'SELECT TIP_ID, (KOD + N'' - '' + ISNULL(ACIKLAMA, N'''')) AS AD ' +
-    'FROM dbo.CRM_AKTIVITE_TIP WHERE AKTIF = 1 AND KOD <> ''TASK'' ORDER BY SIRA, TIP_ID';
+    'FROM dbo.CRM_AKTIVITE_TIP WHERE AKTIF = 1 ORDER BY SIRA, TIP_ID';
   qTipLkp.Open;
 
   qSetLkp.Close;
@@ -109,7 +109,8 @@ begin
 
   qDetay.Close;
   qDetay.SQL.Text :=
-    'SELECT A.AKTIVITE_ID, CONVERT(varchar(16), A.AKTIVITE_TARIHI, 120) AS TARIH, A.KONU, ' +
+    'SELECT A.AKTIVITE_ID, CASE WHEN A.TIP = ''TASK'' THEN N''G' + #$00F6 + 'rev'' ELSE N''Aktivite'' END AS KAYNAK, ' +
+    'CONVERT(varchar(16), A.AKTIVITE_TARIHI, 120) AS TARIH, A.KONU, ' +
     'ISNULL(KU.KullaniciAd, CONVERT(varchar(20), CV.CEVAPLAYAN_KULLANICI_ID)) AS PERSONEL, ' +
     'S.BASLIK AS SET_BASLIK, CV.SORU_METNI_KOPYA AS SORU, ' +
     'CASE CV.CEVAP_TIPI ' +

@@ -48,6 +48,20 @@ object frmCrmPotansiyelListe: TfrmCrmPotansiyelListe
         Font.Height = -12
         TabOrder = 0
       end
+      object lblSecili: TUniLabel
+        Left = 12
+        Top = 28
+        Width = 60
+        Height = 13
+        Hint = ''
+        Visible = False
+        Caption = 'Se'#231'ili: 0'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clGray
+        Font.Height = -12
+        TabOrder = 6
+      end
       object btnListele: TUniButton
         Left = 12
         Top = 8
@@ -248,6 +262,7 @@ object frmCrmPotansiyelListe: TfrmCrmPotansiyelListe
       TabOrder = 2
       OnAjaxEvent = grdAjaxEvent
       OnCellClick = grdCellClick
+      OnSelectionChange = grdSelectionChange
       Columns = <
         item
           FieldName = 'POTANSIYEL_ID'

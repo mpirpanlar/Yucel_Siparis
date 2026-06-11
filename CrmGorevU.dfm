@@ -515,6 +515,68 @@ object frmCrmGorev: TfrmCrmGorev
             end>
         end
       end
+      object tsKontrol: TUniTabSheet
+        Hint = ''
+        Caption = 'Kontrol Listesi'
+        Layout = 'vbox'
+        object panKontrolTb: TUniPanel
+          Left = 0
+          Top = 0
+          Width = 712
+          Height = 40
+          Hint = ''
+          TabOrder = 0
+          BorderStyle = ubsNone
+          Caption = ''
+          LayoutConfig.Width = '100%'
+          object lblKontrolBilgi: TUniLabel
+            Left = 12
+            Top = 12
+            Width = 200
+            Height = 13
+            Hint = ''
+            Caption = 'G'#246'rev tipine ba'#287'l'#305' soru setleri'
+            TabOrder = 0
+          end
+          object btnKontrolKaydet: TUniButton
+            Left = 550
+            Top = 6
+            Width = 150
+            Height = 28
+            Hint = ''
+            Caption = 'Cevaplar'#305' Kaydet'
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Color = clWhite
+            Font.Height = -12
+            Font.Name = 'Segoe UI Semibold'
+            Font.Style = [fsBold]
+            TabOrder = 1
+            ClientEvents.UniEvents.Strings = (
+              
+                'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+            OnClick = btnKontrolKaydetClick
+          end
+        end
+        object panKontrol: TUniPanel
+          Left = 0
+          Top = 40
+          Width = 712
+          Height = 660
+          Hint = ''
+          TabOrder = 1
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      config.' +
+              'autoScroll = true;'#13#10'      config.scrollable = true;'#13#10'}')
+          BorderStyle = ubsNone
+          Caption = ''
+          LayoutConfig.Flex = 1
+          LayoutConfig.Width = '100%'
+          LayoutConfig.Height = '100%'
+        end
+      end
       object tsTarihce: TUniTabSheet
         Hint = ''
         Caption = 'Tarih'#231'e'
@@ -660,6 +722,26 @@ object frmCrmGorev: TfrmCrmGorev
     Connection = frmDM.conAsya
     Left = 624
     Top = 472
+  end
+  object qKontrol: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 560
+    Top = 520
+  end
+  object qSecenek: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 592
+    Top = 520
+  end
+  object qCevap: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 624
+    Top = 520
+  end
+  object qKontrolExec: TUniQuery
+    Connection = frmDM.conAsya
+    Left = 656
+    Top = 520
   end
   object saBaglantiDurum: TUniSweetAlert
     Title = 'Durum g'#252'ncelle'

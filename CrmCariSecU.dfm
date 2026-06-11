@@ -29,13 +29,27 @@
       Height = 13
       Hint = ''
       Caption = 
-        'Cari adi/kodu yazip Listele; satir secip Se'#351' veya satira cift ti' +
+        'Cari adi/kodu yazip Listele; satir secip Se'#231' veya satira cift ti' +
         'klayin.'
       ParentFont = False
       Font.Charset = TURKISH_CHARSET
       Font.Color = clGray
       Font.Height = -12
       TabOrder = 0
+    end
+    object lblSecili: TUniLabel
+      Left = 12
+      Top = 28
+      Width = 60
+      Height = 13
+      Hint = ''
+      Visible = False
+      Caption = 'Secili: 0'
+      ParentFont = False
+      Font.Charset = TURKISH_CHARSET
+      Font.Color = clGray
+      Font.Height = -12
+      TabOrder = 5
     end
     object edArama: TUniEdit
       Left = 12
@@ -130,6 +144,7 @@
     Align = alClient
     TabOrder = 1
     OnAjaxEvent = grdCariAjaxEvent
+    OnSelectionChange = grdCariSelectionChange
   end
   object qCari: TUniQuery
     Connection = frmDM.conNetsis

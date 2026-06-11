@@ -166,7 +166,7 @@ begin
       'ISNULL(C.CARI_IL, N'''') AS IL, ISNULL(C.CARI_ILCE, N'''') AS ILCE, ISNULL(C.CARI_ADRES, N'''') AS ADRES, ' +
       'COALESCE(NULLIF(T.KULL1N, 0), L.GPS_ENLEM) AS ENLEM, COALESCE(NULLIF(T.KULL2N, 0), L.GPS_BOYLAM) AS BOYLAM ' +
       'FROM YUCEL..HV_CARI_LISTESI C WITH(NOLOCK) ' +
-      'LEFT JOIN TBLCASABITEK T WITH(NOLOCK) ON T.CARI_KOD = C.CARI_KOD ' +
+      'LEFT JOIN YUCEL..TBLCASABITEK T WITH(NOLOCK) ON T.CARI_KOD = C.CARI_KOD ' +
       'LEFT JOIN dbo.CRM_CARI_LOKASYON L WITH(NOLOCK) ON L.CARI_KOD = C.CARI_KOD ' +
       'WHERE 1 = 1';
 
@@ -228,18 +228,11 @@ begin
 end;
 
 function TfrmCrmRotaDurakSec.SeciliKayitListesi: TObjectList;
-var
-  I: Integer;
-  It: TRotaSecimKayit;
-  Bm: TBookmark;
-begin
-  Result := TObjectList.Create(True);
-  if not qList.Active or qList.IsEmpty or (grd.SelectedRows.Count = 0) then
-    Exit;
-  for I := 0 to grd.SelectedRows.Count - 1 do
+
+  procedure KayitEkle;
+  var
+    It: TRotaSecimKayit;
   begin
-    Bm := grd.SelectedRows[I];
-    qList.Bookmark := Bm;
     It := TRotaSecimKayit.Create;
     It.Tip := qList.FieldByName('TIP').AsString[1];
     if qList.FieldByName('KOD').IsNull then
@@ -264,6 +257,26 @@ begin
       It.GpsB := qList.FieldByName('BOYLAM').AsFloat;
     Result.Add(It);
   end;
+
+var
+  I: Integer;
+  Bm: TBookmark;
+begin
+  Result := TObjectList.Create(True);
+  if not qList.Active or qList.IsEmpty then
+    Exit;
+  qList.CheckBrowseMode;
+  if grd.SelectedRows.Count > 0 then
+  begin
+    for I := 0 to grd.SelectedRows.Count - 1 do
+    begin
+      Bm := grd.SelectedRows[I];
+      qList.Bookmark := Bm;
+      KayitEkle;
+    end;
+  end
+  else
+    KayitEkle;
 end;
 
 function TfrmCrmRotaDurakSec.HaritaJsonSecili: string;
@@ -360,7 +373,9 @@ begin
       Exit;
     end;
     if Assigned(FOnSecimTamam) then
-      FOnSecimTamam(Self, Liste);
+      FOnSecimTamam(Self, Liste)
+    else
+      UniMainModule.saHata.Show('Rota secim baglantisi bulunamadi. Listeyi kapatip tekrar deneyin.');
     ModalResult := mrOk;
   finally
     Liste.Free;
@@ -369,6 +384,9 @@ end;
 
 procedure TfrmCrmRotaDurakSec.btnKapatClick(Sender: TObject);
 begin
+  FOnSecimTamam := nil;
+  if UniMainModule.CrmRotaDurakSecimAktif then
+    UniMainModule.CrmRotaDurakSecimBitir;
   ModalResult := mrCancel;
 end;
 

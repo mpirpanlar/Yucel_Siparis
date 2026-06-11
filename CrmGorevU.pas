@@ -9,7 +9,8 @@ uses
   uniEdit, uniMemo, uniComboBox, uniDateTimePicker, uniButton,
   uniDBLookupComboBox, Data.DB, MemDS, DBAccess, Uni, uniDBComboBox,
   uniMultiItem, uniPageControl, uniBasicGrid, uniDBGrid, uniSweetAlert,
-  uniFileUpload;
+  uniFileUpload,
+  CrmAktiviteKontrolU;
 
 type
   TfrmCrmGorev = class(TUniForm)
@@ -53,6 +54,11 @@ type
     btnEkIndir: TUniButton;
     btnEkSil: TUniButton;
     grdEk: TUniDBGrid;
+    tsKontrol: TUniTabSheet;
+    panKontrolTb: TUniPanel;
+    lblKontrolBilgi: TUniLabel;
+    btnKontrolKaydet: TUniButton;
+    panKontrol: TUniPanel;
     tsTarihce: TUniTabSheet;
     grdTarihce: TUniDBGrid;
     panFooter: TUniPanel;
@@ -73,6 +79,10 @@ type
     qEk: TUniQuery;
     dsEk: TUniDataSource;
     qEkExec: TUniQuery;
+    qKontrol: TUniQuery;
+    qSecenek: TUniQuery;
+    qCevap: TUniQuery;
+    qKontrolExec: TUniQuery;
     saBaglantiDurum: TUniSweetAlert;
     procedure UniFormCreate(Sender: TObject);
     procedure UniFormShow(Sender: TObject);
@@ -89,11 +99,16 @@ type
     procedure lkDurumCloseUp(Sender: TObject);
     procedure saBaglantiDurumConfirm(Sender: TObject);
     procedure grdEkAjaxEvent(Sender: TComponent; EventName: string; Params: TUniStrings);
+    procedure btnKontrolKaydetClick(Sender: TObject);
   private
     FAktiviteId: Int64;
     FBaslangicTeklifId: Int64;
     FPendingDurumId: Int64;
+    FCrmKontrol: TCrmAktiviteKontrolYonetici;
     fuEk: TUniFileUpload;
+    procedure KontrolSekmesiGoster(Sender: TObject);
+    procedure KontrolListesiYukle;
+    procedure EnsureCrmKontrol;
     procedure YukleOncelik;
     procedure SetComboByText(ACombo: TUniComboBox; const AText: string);
     procedure KullanicilariAc;
@@ -122,6 +137,7 @@ type
     procedure EkIndir;
     procedure EkSil;
     procedure fuEkCompleted(Sender: TObject; AStream: TFileStream);
+    destructor Destroy; override;
   public
   end;
 
@@ -461,6 +477,7 @@ begin
   VarsayilanDurum;
   lkAtanan.KeyValue := Tmp.xKullaniciID;
   EkListele;
+  KontrolListesiYukle;
 end;
 
 procedure TfrmCrmGorev.YukleGorev;
@@ -567,6 +584,7 @@ begin
   Caption := 'G' + #$00F6 + 'rev';
   EkListele;
   TarihceYukle;
+  KontrolListesiYukle;
 end;
 
 procedure TfrmCrmGorev.TarihceYukle;
@@ -868,6 +886,13 @@ begin
     qLoad.Close;
   end;
 
+  if CrmKontrolTamamlamaGerekli(qLoad, lkDurum.KeyValue, Dkod, True) then
+  begin
+    EnsureCrmKontrol;
+    if not FCrmKontrol.Dogrula then
+      Exit;
+  end;
+
   if FAktiviteId > 0 then
   begin
     Aid := FAktiviteId;
@@ -996,6 +1021,12 @@ begin
 
   if FAktiviteId > 0 then
   begin
+    EnsureCrmKontrol;
+    FCrmKontrol.CevaplariKaydet(FAktiviteId);
+  end;
+
+  if FAktiviteId > 0 then
+  begin
     GorevLogKaydet(IsNew, OldKonu, OldAcik, OldDurAd, OldAktTarStr, OldBitisStr, OldAtananAd, OldTamam);
     TarihceYukle;
   end;
@@ -1013,6 +1044,45 @@ end;
 procedure TfrmCrmGorev.btnKapatClick(Sender: TObject);
 begin
   MainForm.NavPage.ActivePage.Close;
+end;
+
+procedure TfrmCrmGorev.EnsureCrmKontrol;
+begin
+  if FCrmKontrol <> nil then
+    Exit;
+  FCrmKontrol := TCrmAktiviteKontrolYonetici.Create(Self, panKontrol, qKontrol, qSecenek, qCevap,
+    qKontrolExec);
+  FCrmKontrol.OnSekmeGoster := KontrolSekmesiGoster;
+end;
+
+procedure TfrmCrmGorev.KontrolSekmesiGoster(Sender: TObject);
+begin
+  pgc.ActivePage := tsKontrol;
+end;
+
+procedure TfrmCrmGorev.KontrolListesiYukle;
+var
+  Tid: Int64;
+begin
+  EnsureCrmKontrol;
+  Tid := GorevTipId;
+  if Tid <= 0 then
+    FCrmKontrol.Yukle(0, FAktiviteId,
+      'G' + #$00F6 + 'rev tipi i' + #$00E7 + 'in tan' + #$0131 + 'ml' + #$0131 + ' soru seti yok.')
+  else
+    FCrmKontrol.Yukle(Tid, FAktiviteId,
+      'Bu g' + #$00F6 + 'rev tipi i' + #$00E7 + 'in tan' + #$0131 + 'ml' + #$0131 + ' soru seti yok.');
+end;
+
+procedure TfrmCrmGorev.btnKontrolKaydetClick(Sender: TObject);
+begin
+  GorevKaydet;
+end;
+
+destructor TfrmCrmGorev.Destroy;
+begin
+  FCrmKontrol.Free;
+  inherited;
 end;
 
 end.

@@ -602,8 +602,10 @@ procedure TfrmCrmSoruSeti.TipLookupAc;
 begin
   qTipLkp.Close;
   qTipLkp.SQL.Text :=
-    'SELECT TIP_ID, KOD, (KOD + N'' - '' + ISNULL(ACIKLAMA, N'''')) AS AD ' +
-    'FROM dbo.CRM_AKTIVITE_TIP WHERE AKTIF = 1 AND KOD <> ''TASK'' ORDER BY SIRA, TIP_ID';
+    'SELECT TIP_ID, KOD, ' +
+    'CASE WHEN KOD = ''TASK'' THEN N''G' + #$00F6 + 'rev'' ' +
+    'ELSE KOD + N'' - '' + ISNULL(ACIKLAMA, N'''') END AS AD ' +
+    'FROM dbo.CRM_AKTIVITE_TIP WHERE AKTIF = 1 ORDER BY SIRA, TIP_ID';
   qTipLkp.Open;
 end;
 
