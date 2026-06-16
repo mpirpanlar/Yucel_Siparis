@@ -82,13 +82,13 @@ object frmCrmGorev: TfrmCrmGorev
             Left = 120
             Top = 44
             Width = 560
-            Height = 72
+            Height = 120
             Hint = ''
             TabOrder = 3
           end
           object lblCari: TUniLabel
             Left = 16
-            Top = 128
+            Top = 176
             Width = 60
             Height = 13
             Hint = ''
@@ -97,7 +97,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object edCariKod: TUniEdit
             Left = 120
-            Top = 124
+            Top = 172
             Width = 340
             Height = 27
             Hint = ''
@@ -106,7 +106,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object btnCariBul: TUniButton
             Left = 470
-            Top = 122
+            Top = 170
             Width = 130
             Height = 30
             Hint = 'Netsis cari listesi'
@@ -126,7 +126,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object lblCariAd: TUniLabel
             Left = 120
-            Top = 152
+            Top = 200
             Width = 560
             Height = 15
             Hint = ''
@@ -140,7 +140,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object lblPot: TUniLabel
             Left = 16
-            Top = 172
+            Top = 220
             Width = 55
             Height = 13
             Hint = ''
@@ -149,7 +149,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object edPotId: TUniEdit
             Left = 120
-            Top = 168
+            Top = 216
             Width = 340
             Height = 27
             Hint = ''
@@ -159,7 +159,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object btnPotBul: TUniButton
             Left = 470
-            Top = 166
+            Top = 214
             Width = 130
             Height = 30
             Hint = 'Potansiyel m'#252#351'teri listesi'
@@ -179,7 +179,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object lblPotUnvan: TUniLabel
             Left = 120
-            Top = 196
+            Top = 244
             Width = 560
             Height = 15
             Hint = ''
@@ -193,7 +193,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object lblTeklif: TUniLabel
             Left = 16
-            Top = 220
+            Top = 268
             Width = 55
             Height = 13
             Hint = ''
@@ -202,7 +202,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object lkTeklif: TUniDBLookupComboBox
             Left = 120
-            Top = 216
+            Top = 264
             Width = 340
             Height = 27
             Hint = ''
@@ -216,7 +216,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object btnTeklifYenile: TUniButton
             Left = 470
-            Top = 214
+            Top = 262
             Width = 130
             Height = 30
             Hint = 'Teklif listesini cariye gore yeniler'
@@ -232,7 +232,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object lblSiparis: TUniLabel
             Left = 16
-            Top = 256
+            Top = 304
             Width = 95
             Height = 13
             Hint = ''
@@ -241,7 +241,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object edSiparis: TUniEdit
             Left = 120
-            Top = 252
+            Top = 300
             Width = 340
             Height = 27
             Hint = ''
@@ -251,7 +251,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object btnSiparisBul: TUniButton
             Left = 470
-            Top = 250
+            Top = 298
             Width = 130
             Height = 30
             Hint = 'Netsis siparis listesi'
@@ -267,7 +267,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object lblSiparisTar: TUniLabel
             Left = 120
-            Top = 280
+            Top = 328
             Width = 100
             Height = 15
             Hint = ''
@@ -280,7 +280,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object lblSiparisAcik: TUniLabel
             Left = 220
-            Top = 280
+            Top = 328
             Width = 460
             Height = 15
             Hint = ''
@@ -293,7 +293,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object lblGorevTar: TUniLabel
             Left = 16
-            Top = 304
+            Top = 352
             Width = 58
             Height = 13
             Hint = ''
@@ -302,7 +302,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object dtAktivite: TUniDateTimePicker
             Left = 120
-            Top = 300
+            Top = 348
             Width = 200
             Height = 27
             Hint = ''
@@ -314,7 +314,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object lblBitis: TUniLabel
             Left = 16
-            Top = 340
+            Top = 388
             Width = 63
             Height = 13
             Hint = ''
@@ -323,7 +323,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object dtBitis: TUniDateTimePicker
             Left = 120
-            Top = 336
+            Top = 384
             Width = 200
             Height = 27
             Hint = ''
@@ -335,7 +335,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object lblOncelik: TUniLabel
             Left = 16
-            Top = 376
+            Top = 424
             Width = 39
             Height = 13
             Hint = ''
@@ -344,7 +344,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object cbOncelik: TUniComboBox
             Left = 120
-            Top = 372
+            Top = 420
             Width = 200
             Height = 27
             Hint = ''
@@ -355,7 +355,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object lblAtanan: TUniLabel
             Left = 16
-            Top = 412
+            Top = 460
             Width = 37
             Height = 13
             Hint = ''
@@ -364,7 +364,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object lkAtanan: TUniDBLookupComboBox
             Left = 120
-            Top = 408
+            Top = 456
             Width = 560
             Height = 27
             Hint = ''
@@ -377,7 +377,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object lblDurum: TUniLabel
             Left = 16
-            Top = 448
+            Top = 496
             Width = 35
             Height = 13
             Hint = ''
@@ -386,7 +386,7 @@ object frmCrmGorev: TfrmCrmGorev
           end
           object lkDurum: TUniDBLookupComboBox
             Left = 120
-            Top = 444
+            Top = 492
             Width = 560
             Height = 27
             Hint = ''

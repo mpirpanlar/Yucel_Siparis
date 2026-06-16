@@ -172,7 +172,6 @@ object frmCrmAktivite: TfrmCrmAktivite
             Hint = ''
             Text = ''
             TabOrder = 31
-            ReadOnly = True
           end
           object btnPotBul: TUniButton
             Left = 470

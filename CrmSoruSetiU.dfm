@@ -410,6 +410,7 @@ object frmCrmSoruSeti: TfrmCrmSoruSeti
       object tsAtama: TUniTabSheet
         Hint = ''
         Caption = 'Tip - Set Atama'
+        Layout = 'vbox'
         object lblAtamaTip: TUniLabel
           Left = 8
           Top = 16
@@ -497,6 +498,8 @@ object frmCrmSoruSeti: TfrmCrmSoruSeti
           WebOptions.Paged = False
           WebOptions.FetchAll = True
           LoadMask.Message = 'Loading data...'
+          LayoutConfig.Flex = 1
+          LayoutConfig.Width = '100%'
           TabOrder = 7
         end
       end

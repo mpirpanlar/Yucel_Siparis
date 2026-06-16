@@ -10,6 +10,7 @@ uses
 
      procedure xFormShow(AFormType: TuniFormClass; YetkiForm:String; Tip:Integer;FisNo:String);
      procedure xFormShowModal(AFormType: TuniFormClass; YetkiForm:String; Tip:Integer;FisNo:String);
+     procedure xNavListeKapat(AOwnerForm: TUniForm = nil);
 //     Procedure xAcilisTablolar;
      Procedure xTabloAc(Tablo : Tuniquery;Sorgu:String);
      Procedure xLogKaydet (Qry : Tuniquery);
@@ -17,8 +18,8 @@ uses
 //     Function xFisNoAl(TabloAd:String):String;
 //     Procedure xKayitYenile;
      Procedure xUpdateTablo (Sorgu : String);
-     Procedure xUnidacBaglanNetsis;  //Netsis Server Balan
-     Procedure xUnidacBaglanAsya;  //Asya Server Balan
+     Procedure xUnidacBaglanNetsis;  //Netsis Server Baùlan
+     Procedure xUnidacBaglanAsya;  //Asya Server Baùlan
 //     procedure xMesaj(MsgID : Integer);
 //     Procedure xKapamaFis (FaturaGC:String ;FisGC:String ;CariKod:String ;ParaBirimi:String);
 //     Function xFaturaNo(Fatura:Integer):String;
@@ -38,9 +39,10 @@ uses
 
 implementation
 
-uses PDFGosterU, TmpU;
+uses PDFGosterU, TmpU, CrmPotansiyelListeU;
 
-Procedure xUnidacBaglanNetsis;  //Local Server Balan
+
+Procedure xUnidacBaglanNetsis;  //Local Server Baùlan
 begin
    frmDM.ConNetsis.Connected:=False;
    frmDM.ConNetsis.ProviderName:='SQL Server';
@@ -59,7 +61,7 @@ begin
         end;
 end;
 
-Procedure xUnidacBaglanAsya;  //Local Server Balan
+Procedure xUnidacBaglanAsya;  //Local Server Baùlan
 begin
    frmDM.conAsya.Connected:=False;
    frmDM.conAsya.ProviderName:='SQL Server';
@@ -278,13 +280,13 @@ var
   MyGuid: TGuid;
 begin
  if CreateGuid(MyGuid) <> 0 then begin
-    ShowMessage('Guid olu˛turulamad˝');
+    ShowMessage('Guid oluùturulamadù');
     Exit;
  end;
   Result:=xXMLAyir(GuidToString(MyGuid),'{','}');
 end;
 
-procedure xFormShowModal(AFormType: TuniFormClass; YetkiForm:String; Tip:Integer;FisNo:String); //Tip : 0 Yeni Tip : 1 Mevcut Kart ve Fi˛ Tipi
+procedure xFormShowModal(AFormType: TuniFormClass; YetkiForm:String; Tip:Integer;FisNo:String); //Tip : 0 Yeni Tip : 1 Mevcut Kart ve Fiù Tipi
   var
    F : TUniForm;
     Qry,QryCaption:Tuniquery;
@@ -318,7 +320,7 @@ begin
   F.Hint:=FisNo;
   F.Caption:=QryCaption.FieldByName('FormCaption').AsString;
   F.Show;
-          //////Yetkiler   D¸zenle ve Sil
+          //////Yetkiler   Dùzenle ve Sil
           if Qry.FieldByName('Sil').AsInteger = 0 then begin
               for Z:= 0 to pred (TuniForm(F).componentcount) do begin
                 if (TuniForm(F).components[Z] is TuniButton) then
@@ -337,7 +339,7 @@ begin
           /////////////////
 end;
 
-procedure xFormShow(AFormType: TuniFormClass; YetkiForm:String; Tip:Integer;FisNo:String); //Tip : 0 Yeni Tip : 1 Mevcut Kart ve Fi˛ Tipi
+procedure xFormShow(AFormType: TuniFormClass; YetkiForm:String; Tip:Integer;FisNo:String); //Tip : 0 Yeni Tip : 1 Mevcut Kart ve Fiù Tipi
 var
     TabSheetNew: TUniTabSheet; I,Z: Integer;
     PanelTabSheetNew: TUniPanel;
@@ -406,7 +408,7 @@ begin
   F.Hint:=FisNo;
   F.Show;
 
-          //////Yetkiler   D¸zenle ve Sil
+          //////Yetkiler   Dùzenle ve Sil
           if Qry.FieldByName('Sil').AsInteger = 0 then begin
               for Z:= 0 to pred (TuniForm(F).componentcount) do begin
                 if (TuniForm(F).components[Z] is TuniButton) then
@@ -553,7 +555,7 @@ Procedure xUpdateTablo (Sorgu : String);
 //          FaturaOdenen := frmDM.spKapamaFatura.FieldByName('OdenenTutar').AsFloat;;
 //
 //        if FaturaTutar <= FisTutar then begin
-//          //Fatura ÷de
+//          //Fatura ùde
 //            Qry.Close;
 //            Qry.SQL.Clear;
 //            Qry.SQL.Text:='Update FisBaslik set OdenenTutar=:Tutar where FisNo='''+FaturaNo+'''';
@@ -567,7 +569,7 @@ Procedure xUpdateTablo (Sorgu : String);
 //          QryInsert.ParamByName('FaturaNo').AsString:=FaturaNo;
 //          QryInsert.ParamByName('Tutar').AsFloat:=FaturaTutar;
 //          QryInsert.Execute;
-//        //Fi˛ ÷de
+//        //Fiù ùde
 //
 //          Qry.Close;
 //          Qry.SQL.Clear;
@@ -579,15 +581,15 @@ Procedure xUpdateTablo (Sorgu : String);
 //          FisTutar:=FisTutar-FaturaTutar;
 //
 //        end else
-//        ///Fatura Tutar˝ Fi˛den Fazla ise sadece Bir tane ˆdenebilir.
+//        ///Fatura Tutarù Fiùden Fazla ise sadece Bir tane ùdenebilir.
 //        if (FaturaTutar > FisTutar) then begin
-//          //Fatura ÷de
+//          //Fatura ùde
 //            Qry.Close;
 //            Qry.SQL.Clear;
 //            Qry.SQL.Text:='Update FisBaslik set OdenenTutar=:Tutar where FisNo='''+FaturaNo+'''';
 //            Qry.ParamByName('Tutar').Value:=FisTutar + FaturaOdenen;
 //            Qry.Execute;
-//          //Fi˛ ÷de
+//          //Fiù ùde
 //          Qry.Close;
 //          Qry.SQL.Clear;
 //          Qry.SQL.Text:='Update FisBaslik set OdenenTutar=:Tutar where FisNo='''+FisFisNo+'''';
@@ -664,7 +666,7 @@ begin
   Qry.Free;
 end;
 
-//Procedure xUnidacBaglan;  //Local Server Balan
+//Procedure xUnidacBaglan;  //Local Server Baùlan
 //begin
 //   frmDM.UC.Connected:=False;
 //   frmDM.UC.ProviderName:='MySQL';
@@ -681,4 +683,59 @@ end;
 //        Application.Terminate;
 //        end;
 //end;
+
+procedure NavPageMenuSec;
+var
+  MF: TMainForm;
+  I: Integer;
+begin
+  MF := MainForm;
+  if (MF = nil) or (MF.NavPage = nil) then
+    Exit;
+  for I := 0 to MF.NavPage.PageCount - 1 do
+    if SameText(MF.NavPage.Pages[I].Name, 'tabMenu') then
+    begin
+      MF.NavPage.ActivePageIndex := I;
+      Exit;
+    end;
+end;
+
+procedure xNavListeKapat(AOwnerForm: TUniForm);
+var
+  TabToClose: TUniTabSheet;
+  C: TWinControl;
+begin
+  if MainForm = nil then
+    Exit;
+  if MainForm.NavPage = nil then
+    Exit;
+  TabToClose := nil;
+  if AOwnerForm <> nil then
+  begin
+    C := AOwnerForm.Parent;
+    while C <> nil do
+    begin
+      if (C is TUniTabSheet) and (TUniTabSheet(C).PageControl = MainForm.NavPage) then
+      begin
+        TabToClose := TUniTabSheet(C);
+        Break;
+      end;
+      C := C.Parent;
+    end;
+  end;
+  if TabToClose = nil then
+    TabToClose := MainForm.NavPage.ActivePage;
+  if (TabToClose = nil) or (TabToClose = MainForm.tabMenu) then
+    Exit;
+  NavPageMenuSec;
+  TabToClose.Close;
+  NavPageMenuSec;
+  try
+    frmCrmPotansiyelListe.ListeSekmesineGeriAl(True);
+  except
+  end;
+  if UniSession <> nil then
+    UniSession.Synchronize;
+end;
+
 end.

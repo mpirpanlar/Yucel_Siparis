@@ -48,6 +48,7 @@ type
     function SecimModuAktif: Boolean;
     function CokluSecimYolu: Boolean;
     procedure SecimModuToolbarGuncelle;
+    procedure GridCheckSecimAyar(ACoklu: Boolean);
     procedure GuncelleSeciliSayisi;
     function SeciliPotIdListesi: TStringList;
     procedure FiltreDurumlariDoldur;
@@ -56,16 +57,18 @@ type
     function PotSeciliPotansiyelId(out APotId: Int64): Boolean;
     procedure AcKayit;
     function GomuluNavSekmesiMi: Boolean;
-    { NavPage sekmesindeki liste (bsNone); rota modalùnda bsDialog -> sekme kapatùlmaz, yalnùzca form Close. }
+    { NavPage sekmesindeki liste (bsNone); rota modalÔøΩnda bsDialog -> sekme kapatÔøΩlmaz, yalnÔøΩzca form Close. }
     function KapatirkenSekmeKaldir: Boolean;
+    procedure GomuluDurumaGetir;
   public
-    { CrmCariSecU.HedefCariEdit benzeri: ShowModal ùncesi atanùr, Satùr seù ile POTANSIYEL_ID yazùlùr. }
+    { CrmCariSecU.HedefCariEdit benzeri: ShowModal ÔøΩncesi atanÔøΩr, SatÔøΩr seÔøΩ ile POTANSIYEL_ID yazÔøΩlÔøΩr. }
     HedefPotansiyelIdEdit: TUniEdit;
-    { CrmCariSecU.OnCariSecildi ile aynù: method pointer doùrudan atanùr. }
+    { CrmCariSecU.OnCariSecildi ile aynÔøΩ: method pointer doÔøΩrudan atanÔøΩr. }
     OnPotansiyelSecildi: TCrmPotListeSecildiEvent;
     OnPotansiyelSecildiCoklu: TCrmPotListeSecildiCokluEvent;
     property CokluSecimModu: Boolean read FCokluSecimModu write FCokluSecimModu;
     procedure SecimToolbarYenile;
+    procedure ListeSekmesineGeriAl(const AGizle: Boolean = True);
   end;
 
 function frmCrmPotansiyelListe: TfrmCrmPotansiyelListe;
@@ -107,6 +110,16 @@ begin
   Result := FCokluSecimModu or Assigned(OnPotansiyelSecildiCoklu);
 end;
 
+procedure TfrmCrmPotansiyelListe.GridCheckSecimAyar(ACoklu: Boolean);
+begin
+  grd.Options := grd.Options + [dgAlwaysShowSelection, dgRowSelect];
+  grd.Options := grd.Options - [dgMultiSelect];
+  if ACoklu then
+    grd.Options := grd.Options + [dgCheckSelect, dgCheckSelectCheckOnly, dgMultiSelect]
+  else
+    grd.Options := grd.Options - [dgCheckSelect, dgCheckSelectCheckOnly];
+end;
+
 procedure TfrmCrmPotansiyelListe.GuncelleSeciliSayisi;
 begin
   if not lblSecili.Visible then
@@ -126,10 +139,12 @@ function TfrmCrmPotansiyelListe.SeciliPotIdListesi: TStringList;
 var
   I: Integer;
   Bm: TBookmark;
+  F: TField;
   PotId: Int64;
+  IdStr: string;
 begin
   Result := TStringList.Create;
-  Result.Sorted := False;
+  Result.Sorted := True;
   Result.Duplicates := dupIgnore;
   if not qList.Active or qList.IsEmpty then
     Exit;
@@ -140,8 +155,18 @@ begin
     begin
       Bm := grd.SelectedRows[I];
       qList.Bookmark := Bm;
-      if PotSeciliPotansiyelId(PotId) then
-        Result.Add(IntToStr(PotId));
+      F := qList.FindField('POTANSIYEL_ID');
+      if (F = nil) or F.IsNull then
+        Continue;
+      PotId := F.AsLargeInt;
+      if PotId <= 0 then
+        PotId := F.AsInteger;
+      if PotId > 0 then
+      begin
+        IdStr := IntToStr(PotId);
+        if Result.IndexOf(IdStr) < 0 then
+          Result.Add(IdStr);
+      end;
     end;
   end
   else if PotSeciliPotansiyelId(PotId) then
@@ -159,25 +184,23 @@ begin
     if FCokluSecimModu or Assigned(OnPotansiyelSecildiCoklu) then
     begin
       FCokluSecimModu := True;
-      if grd.Options * [dgMultiSelect] = [] then
-        grd.Options := grd.Options + [dgMultiSelect];
-      grd.Options := grd.Options + [dgAlwaysShowSelection];
+      GridCheckSecimAyar(True);
       pnlToolbar.Height := 88;
       lblSecili.Visible := True;
       lblSecili.Top := 28;
       lblSecili.Left := 12;
       lblSecimBilgi.Caption :=
-        'Filtre + Listele; Ctrl veya tiklayarak birden fazla satir secin, ardindan Secilenleri ekle.';
+        'Filtre + Listele; satir basindaki kutulari isaretleyin, ardindan Secilenleri ekle.';
       btnSatirSec.Caption := 'Se'#231'ilenleri ekle';
       btnSatirSec.Hint := 'Isaretli potansiyelleri rotaya eklemek uzere dondurur';
     end
     else
     begin
-      grd.Options := grd.Options - [dgMultiSelect];
+      GridCheckSecimAyar(False);
       pnlToolbar.Height := 76;
       lblSecili.Visible := False;
       lblSecimBilgi.Caption :=
-        'Filtre + Listele; istenen satira tiklayin, ardindan asagidaki Satir sec ile onaylayin. Cift tik da ayni sekilde secer ve kapatir.';
+        'Filtre + Listele; satir basindaki kutuyu isaretleyin ve Satir sec ile onaylayin. Cift tik da secer.';
       btnSatirSec.Caption := 'Sat'#305'r Se'#231;
       btnSatirSec.Hint :=
         'Se'#231'ili sat'#305'r'#305'n POTANSIYEL_ID de'#287'erini '#231'a'#287#305'ran forma aktar'#305'r ve listeyi kapat'#305'r';
@@ -207,19 +230,19 @@ begin
     btnKapat.BringToFront;
     btnSatirSec.BringToFront;
     btnListele.BringToFront;
-    Caption := 'CRM - Potansiyel Seùimi (Rota)';
+    Caption := 'CRM - Potansiyel SeÔøΩimi (Rota)';
   end
   else
   begin
     FCokluSecimModu := False;
-    grd.Options := grd.Options - [dgMultiSelect];
+    GridCheckSecimAyar(False);
     lblSecili.Visible := False;
     pnlToolbar.Height := 48;
     lblSecimBilgi.Visible := False;
     btnSatirSec.Visible := True;
     btnSatirSec.Enabled := True;
     btnSatirSec.Hint :=
-      'Seùim modunda: POTANSIYEL_ID yi ùaùùran forma aktarùp listeyi kapatùr. Kayùt detayù iùin Kaydù aù veya ùift tùk.';
+      'SeÔøΩim modunda: POTANSIYEL_ID yi ÔøΩaÔøΩÔøΩran forma aktarÔøΩp listeyi kapatÔøΩr. KayÔøΩt detayÔøΩ iÔøΩin KaydÔøΩ aÔøΩ veya ÔøΩift tÔøΩk.';
     btnSatirSec.Left := 246;
     btnSatirSec.Width := 140;
     btnSatirSec.Height := 32;
@@ -238,14 +261,14 @@ begin
     btnKapat.Height := 32;
     btnKapat.Width := 100;
     btnKapat.Left := Max(380, pnlToolbar.ClientWidth - btnKapat.Width - 12);
-    Caption := 'CRM - Potansiyel Mùùteri Listesi';
+    Caption := 'CRM - Potansiyel MÔøΩÔøΩteri Listesi';
   end;
 end;
 
 procedure TfrmCrmPotansiyelListe.FiltreDurumlariDoldur;
 begin
   cbFiltDurum.Items.Clear;
-  cbFiltDurum.Items.Add('(Tùmù)');
+  cbFiltDurum.Items.Add('(TÔøΩmÔøΩ)');
   try
     qFilt.Close;
     qFilt.SQL.Text :=
@@ -272,6 +295,8 @@ begin
     qList.CheckBrowseMode;
   if not qList.Active or qList.IsEmpty then
     Exit;
+  if CokluSecimYolu and (grd.SelectedRows.Count > 0) then
+    qList.Bookmark := grd.SelectedRows[0];
   F := qList.FindField('POTANSIYEL_ID');
   if (F = nil) or F.IsNull then
     Exit;
@@ -289,7 +314,7 @@ begin
   if Liste.Count = 0 then
   begin
     Liste.Free;
-    UniMainModule.saHata.Show('ùnce listele yap?n ve en az bir sat?r seùin.');
+    UniMainModule.saHata.Show('ÔøΩnce listele yap?n ve en az bir sat?r seÔøΩin.');
     Exit;
   end;
   if Assigned(OnPotansiyelSecildiCoklu) then
@@ -315,7 +340,7 @@ var
 begin
   if not PotSeciliPotansiyelId(PotId) then
   begin
-    UniMainModule.saHata.Show('ùnce listele yapùn ve bir satùr seùin.');
+    UniMainModule.saHata.Show('ÔøΩnce listele yapÔøΩn ve bir satÔøΩr seÔøΩin.');
     Exit;
   end;
 //  if not SecimModuAktif then
@@ -357,7 +382,7 @@ var
 begin
   if not PotSeciliPotansiyelId(PotId) then
   begin
-    UniMainModule.saHata.Show('ùnce listele yapùn ve bir satùr seùin.');
+    UniMainModule.saHata.Show('ÔøΩnce listele yapÔøΩn ve bir satÔøΩr seÔøΩin.');
     Exit;
   end;
   xFormShow(TfrmCrmPotansiyel, 'CrmYeniPotansiyel', 1, IntToStr(PotId));
@@ -432,7 +457,7 @@ begin
     UniMainModule.CrmPotListeSecimCallback := nil;
     UniMainModule.CrmPotListeSecimKaynakListe := nil;
   end;
-  { Sadece CRM NavPage sekmesine gùmùlù liste (modal deùil): sekmeyi kaldùr. }
+  { Sadece CRM NavPage sekmesine gÔøΩmÔøΩlÔøΩ liste (modal deÔøΩil): sekmeyi kaldÔøΩr. }
   if KapatirkenSekmeKaldir then
   begin
     MF := MainForm;
@@ -502,9 +527,57 @@ begin
   end;
 end;
 
+procedure TfrmCrmPotansiyelListe.ListeSekmesineGeriAl(const AGizle: Boolean);
+var
+  I, J: Integer;
+  Tab: TUniTabSheet;
+  Pnl: TUniPanel;
+  MF: TMainForm;
+begin
+  MF := MainForm;
+  if (MF = nil) or (MF.NavPage = nil) then
+    Exit;
+  for I := 0 to MF.NavPage.PageCount - 1 do
+    if SameText(MF.NavPage.Pages[I].Name, 'CrmPotansiyelListesi') then
+    begin
+      Tab := TUniTabSheet(MF.NavPage.Pages[I]);
+      Pnl := nil;
+      for J := 0 to Tab.ControlCount - 1 do
+        if Tab.Controls[J] is TUniPanel then
+        begin
+          Pnl := TUniPanel(Tab.Controls[J]);
+          Break;
+        end;
+      if Pnl = nil then
+        Exit;
+      BorderStyle := bsNone;
+      BorderIcons := [];
+      Parent := Pnl;
+      Align := alClient;
+      if AGizle or (MF.NavPage.ActivePage <> Tab) then
+        Visible := False
+      else
+        Visible := True;
+      Exit;
+    end;
+end;
+
+procedure TfrmCrmPotansiyelListe.GomuluDurumaGetir;
+begin
+  ListeSekmesineGeriAl(not GomuluNavSekmesiMi);
+  HedefPotansiyelIdEdit := nil;
+  OnPotansiyelSecildi := nil;
+  OnPotansiyelSecildiCoklu := nil;
+  FCokluSecimModu := False;
+  SecimModuToolbarGuncelle;
+end;
+
 procedure TfrmCrmPotansiyelListe.UniFormShow(Sender: TObject);
 begin
+  GomuluDurumaGetir;
+  Visible := True;
   FiltreDurumlariDoldur;
+  GridCheckSecimAyar(False);
   btnListeleClick(Sender);
   SecimModuToolbarGuncelle;
 end;

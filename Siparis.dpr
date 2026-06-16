@@ -75,7 +75,8 @@ uses
   CrmAktiviteKontrolU in 'CrmAktiviteKontrolU.pas',
   CrmAktiviteRaporU in 'CrmAktiviteRaporU.pas' {frmCrmAktiviteRapor: TUniForm},
   CrmAktiviteTarihceU in 'CrmAktiviteTarihceU.pas' {frmCrmAktiviteTarihce: TUniForm},
-  CrmRotaKmRaporU in 'CrmRotaKmRaporU.pas' {frmCrmRotaKmRapor: TUniForm};
+  CrmRotaKmRaporU in 'CrmRotaKmRaporU.pas' {frmCrmRotaKmRapor: TUniForm},
+  CrmPotSecU in 'CrmPotSecU.pas' {frmCrmPotSec: TUniForm};
 
 {$R *.res}
 

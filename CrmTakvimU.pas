@@ -230,7 +230,7 @@ end;
 
 procedure TfrmCrmTakvim.btnKapatClick(Sender: TObject);
 begin
-  MainForm.NavPage.ActivePage.Close;
+  xNavListeKapat(Self);
 end;
 
 procedure TfrmCrmTakvim.btnCalHookAjaxEvent(Sender: TComponent; EventName: string;
@@ -297,10 +297,10 @@ begin
     'AND ((:KM <> 2) OR (A.OLUSTURAN_KULLANICI_ID = :KUL)) ' +
     'AND ((:IT = 1) OR (A.DURUM NOT IN (''TAMAMLANDI'',''IPTAL'',''BITTI''))) ' +
     'UNION ALL ' +
-    'SELECT A.AKTIVITE_ID, A.KONU, G.BITIS_TARIHI, N''GOREV'', N''TASK'', A.DURUM, G.TAMAMLANDI ' +
+    'SELECT A.AKTIVITE_ID, A.KONU, A.AKTIVITE_TARIHI AS ETKINLIK_TARIHI, N''GOREV'', N''TASK'', A.DURUM, G.TAMAMLANDI ' +
     'FROM dbo.CRM_GOREV G ' +
     'INNER JOIN dbo.CRM_AKTIVITE A ON A.AKTIVITE_ID = G.AKTIVITE_ID ' +
-    'WHERE G.BITIS_TARIHI IS NOT NULL AND G.BITIS_TARIHI >= :BAS AND G.BITIS_TARIHI < :BIT ' +
+    'WHERE A.AKTIVITE_TARIHI IS NOT NULL AND A.AKTIVITE_TARIHI >= :BAS AND A.AKTIVITE_TARIHI < :BIT ' +
     'AND (:IG = 1) ' +
     'AND ((:KM <> 1) OR (G.ATANAN_KULLANICI_ID = :KUL)) ' +
     'AND ((:KM <> 2) OR (A.OLUSTURAN_KULLANICI_ID = :KUL OR G.ATANAN_KULLANICI_ID = :KUL)) ' +

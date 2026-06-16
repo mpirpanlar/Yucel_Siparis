@@ -140,7 +140,7 @@ implementation
 
 uses
   uniGUIApplication, MainModule, DMU, TmpU, CrmCariSecU, CrmSiparisSecU, CrmBaglantiDurumU,
-  CrmPotansiyelListeU, ServerModule, CrmAktiviteLogU;
+  CrmPotSecU, ServerModule, CrmAktiviteLogU;
 
 procedure TfrmCrmAktivite.btnCariBulClick(Sender: TObject);
 var
@@ -188,10 +188,16 @@ procedure TfrmCrmAktivite.PotSecildi(Sender: TObject; APotId: Int64);
 var
   Ck, CariAd: string;
 begin
+  if APotId <= 0 then
+    Exit;
   edPotId.Text := IntToStr(APotId);
   PotansiyelUnvanYukle(APotId);
-  if (APotId <= 0) or (Trim(edCariKod.Text) <> '') then
+  if Trim(edCariKod.Text) <> '' then
+  begin
+    if UniSession <> nil then
+      UniSession.Synchronize;
     Exit;
+  end;
   qLoad.Close;
   qLoad.SQL.Text :=
     'SELECT P.NETSIS_CARI_KOD, C.CARI_ISIM FROM dbo.CRM_POTANSIYEL_MUSTERI P ' +
@@ -217,25 +223,18 @@ begin
     end;
   end;
   qLoad.Close;
+  if UniSession <> nil then
+    UniSession.Synchronize;
 end;
 
 procedure TfrmCrmAktivite.btnPotBulClick(Sender: TObject);
 begin
-  frmCrmPotansiyelListe.HedefPotansiyelIdEdit := edPotId;
-  frmCrmPotansiyelListe.OnPotansiyelSecildi := PotSecildi;
-  frmCrmPotansiyelListe.SecimToolbarYenile;
-  frmCrmPotansiyelListe.BorderStyle := bsDialog;
-  frmCrmPotansiyelListe.BorderIcons := [biSystemMenu];
-  try
-    frmCrmPotansiyelListe.btnListeleClick(nil);
-    frmCrmPotansiyelListe.ShowModal;
-  finally
-    frmCrmPotansiyelListe.OnPotansiyelSecildi := nil;
-    frmCrmPotansiyelListe.HedefPotansiyelIdEdit := nil;
-    frmCrmPotansiyelListe.BorderStyle := bsNone;
-    frmCrmPotansiyelListe.BorderIcons := [];
-    frmCrmPotansiyelListe.SecimToolbarYenile;
-  end;
+  frmCrmPotSec.HedefPotansiyelIdEdit := edPotId;
+  frmCrmPotSec.HedefPotansiyelUnvanLabel := lblPotUnvan;
+  frmCrmPotSec.OnPotansiyelSecildi := PotSecildi;
+  frmCrmPotSec.SecimModuHazirla(False);
+  frmCrmPotSec.edArama.Text := Trim(lblPotUnvan.Caption);
+  frmCrmPotSec.ShowModal;
 end;
 
 procedure TfrmCrmAktivite.UygulaBaslangicPotansiyel(APotId: Int64);
@@ -670,6 +669,11 @@ begin
   if Trim(edKonu.Text) = '' then
   begin
     UniMainModule.saHata.Show('Konu zorunludur.');
+    Exit;
+  end;
+  if (Trim(edCariKod.Text) = '') and (PotansiyelIdOku <= 0) then
+  begin
+    UniMainModule.saHata.Show('Cari veya potansiyel se'#231'imi zorunludur.');
     Exit;
   end;
   if VarIsNull(lkTip.KeyValue) or VarIsEmpty(lkTip.KeyValue) then

@@ -102,6 +102,8 @@ type
     procedure btnKontrolKaydetClick(Sender: TObject);
   private
     FAktiviteId: Int64;
+    FRotaId: Int64;
+    FSoruSetId: Int64;
     FBaslangicTeklifId: Int64;
     FPendingDurumId: Int64;
     FCrmKontrol: TCrmAktiviteKontrolYonetici;
@@ -126,6 +128,7 @@ type
     procedure BaglantiDurumDegerlendir(const AKaynakTip: string);
     procedure SiparisSecildi(Sender: TObject; const ASiparisKod: string);
     procedure YukleGorev;
+    procedure UygulaRotaKilit;
     function DurumKodFromLookup: string;
     function GorevTipId: Int64;
     procedure TarihceYukle;
@@ -149,12 +152,14 @@ implementation
 
 uses
   uniGUIApplication, MainModule, DMU, TmpU, CrmCariSecU, CrmSiparisSecU, CrmBaglantiDurumU,
-  CrmAktiviteLogU, CrmPotansiyelListeU, ServerModule, Main;
+  CrmAktiviteLogU, CrmPotSecU, CrmRotaGorevU, ServerModule, Main;
 
 procedure TfrmCrmGorev.btnCariBulClick(Sender: TObject);
 var
   PrevTkl: Int64;
 begin
+  if FRotaId > 0 then
+    Exit;
   PrevTkl := TeklifIdFromLookup;
   frmCrmCariSec.HedefCariEdit := edCariKod;
   frmCrmCariSec.HedefCariAdLabel := lblCariAd;
@@ -232,21 +237,14 @@ end;
 
 procedure TfrmCrmGorev.btnPotBulClick(Sender: TObject);
 begin
-  frmCrmPotansiyelListe.HedefPotansiyelIdEdit := edPotId;
-  frmCrmPotansiyelListe.OnPotansiyelSecildi := PotSecildi;
-  frmCrmPotansiyelListe.SecimToolbarYenile;
-  frmCrmPotansiyelListe.BorderStyle := bsDialog;
-  frmCrmPotansiyelListe.BorderIcons := [biSystemMenu];
-  try
-    frmCrmPotansiyelListe.btnListeleClick(nil);
-    frmCrmPotansiyelListe.ShowModal;
-  finally
-    frmCrmPotansiyelListe.OnPotansiyelSecildi := nil;
-    frmCrmPotansiyelListe.HedefPotansiyelIdEdit := nil;
-    frmCrmPotansiyelListe.BorderStyle := bsNone;
-    frmCrmPotansiyelListe.BorderIcons := [];
-    frmCrmPotansiyelListe.SecimToolbarYenile;
-  end;
+  if FRotaId > 0 then
+    Exit;
+  frmCrmPotSec.HedefPotansiyelIdEdit := edPotId;
+  frmCrmPotSec.HedefPotansiyelUnvanLabel := lblPotUnvan;
+  frmCrmPotSec.OnPotansiyelSecildi := PotSecildi;
+  frmCrmPotSec.SecimModuHazirla(False);
+  frmCrmPotSec.edArama.Text := Trim(lblPotUnvan.Caption);
+  frmCrmPotSec.ShowModal;
 end;
 
 procedure TfrmCrmGorev.UygulaBaslangicPotansiyel(APotId: Int64);
@@ -457,6 +455,8 @@ end;
 procedure TfrmCrmGorev.YeniGorevState;
 begin
   FAktiviteId := 0;
+  FRotaId := 0;
+  FSoruSetId := 0;
   FBaslangicTeklifId := 0;
   Caption := 'Yeni G' + #$00F6 + 'rev';
   edKonu.Text := '';
@@ -477,7 +477,19 @@ begin
   VarsayilanDurum;
   lkAtanan.KeyValue := Tmp.xKullaniciID;
   EkListele;
+  UygulaRotaKilit;
   KontrolListesiYukle;
+end;
+
+procedure TfrmCrmGorev.UygulaRotaKilit;
+var
+  Bagli: Boolean;
+begin
+  Bagli := FRotaId > 0;
+  btnCariBul.Enabled := not Bagli;
+  btnPotBul.Enabled := not Bagli;
+  edCariKod.ReadOnly := Bagli;
+  edPotId.ReadOnly := Bagli;
 end;
 
 procedure TfrmCrmGorev.YukleGorev;
@@ -488,7 +500,7 @@ begin
   qLoad.Close;
   qLoad.SQL.Text :=
     'SELECT A.KONU, A.ACIKLAMA, A.CARI_KOD, A.POTANSIYEL_ID, A.AKTIVITE_TARIHI, A.AKTIVITE_DURUM_ID, ' +
-    'A.TEKLIF_ID, A.SIPARIS_NO, C.CARI_ISIM, P.FIRMA_UNVAN AS POT_UNVAN, ' +
+    'A.TEKLIF_ID, A.SIPARIS_NO, A.ROTA_ID, C.CARI_ISIM, P.FIRMA_UNVAN AS POT_UNVAN, ' +
     'G.BITIS_TARIHI, G.ONCELIK, G.TAMAMLANDI, G.ATANAN_KULLANICI_ID ' +
     'FROM dbo.CRM_AKTIVITE A ' +
     'INNER JOIN dbo.CRM_GOREV G ON G.AKTIVITE_ID = A.AKTIVITE_ID ' +
@@ -572,6 +584,14 @@ begin
     lkAtanan.KeyValue := Null
   else
     lkAtanan.KeyValue := qLoad.FieldByName('ATANAN_KULLANICI_ID').AsInteger;
+  if (qLoad.FindField('ROTA_ID') <> nil) and not qLoad.FieldByName('ROTA_ID').IsNull then
+    FRotaId := qLoad.FieldByName('ROTA_ID').AsLargeInt
+  else
+    FRotaId := 0;
+  if FRotaId > 0 then
+    FSoruSetId := CrmRotaGorevSoruSetIdOku(frmDM.conAsya, FRotaId, Tmp.xSubeKodu)
+  else
+    FSoruSetId := 0;
   qLoad.Close;
 
   if TamB and qDurLkp.Locate('KOD', 'TAMAMLANDI', [loCaseInsensitive]) then
@@ -584,6 +604,7 @@ begin
   Caption := 'G' + #$00F6 + 'rev';
   EkListele;
   TarihceYukle;
+  UygulaRotaKilit;
   KontrolListesiYukle;
 end;
 
@@ -1065,6 +1086,12 @@ var
   Tid: Int64;
 begin
   EnsureCrmKontrol;
+  if FSoruSetId > 0 then
+  begin
+    FCrmKontrol.YukleSet(FSoruSetId, FAktiviteId,
+      'Bu rotaya bagli g' + #$00F6 + 'rev i' + #$00E7 + 'in tan' + #$0131 + 'ml' + #$0131 + ' soru seti yok.');
+    Exit;
+  end;
   Tid := GorevTipId;
   if Tid <= 0 then
     FCrmKontrol.Yukle(0, FAktiviteId,

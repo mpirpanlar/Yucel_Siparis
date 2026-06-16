@@ -7,7 +7,8 @@ uses
   Controls, Forms, uniGUITypes, uniGUIAbstractClasses,
   uniGUIClasses, uniGUIForm, uniGUIBaseClasses, uniPanel, uniButton,
   uniLabel, uniEdit, uniCheckBox, uniComboBox, uniDateTimePicker,
-  uniBasicGrid, uniDBGrid, Data.DB, MemDS, DBAccess, Uni, MainModule;
+  uniBasicGrid, uniDBGrid, Data.DB, MemDS, DBAccess, Uni, MainModule,
+  uniMultiItem;
 
 type
   TfrmCrmAktiviteListe = class(TUniForm)
@@ -67,7 +68,7 @@ implementation
 
 uses
   System.DateUtils,
-  uniGUIApplication, DMU, Main, Genel, CrmAktiviteU, CrmCariSecU, CrmPotansiyelListeU;
+  uniGUIApplication, DMU, Main, Genel, CrmAktiviteU, CrmCariSecU, CrmPotSecU;
 
 function frmCrmAktiviteListe: TfrmCrmAktiviteListe;
 begin
@@ -245,26 +246,17 @@ end;
 
 procedure TfrmCrmAktiviteListe.btnPotBulClick(Sender: TObject);
 begin
-  frmCrmPotansiyelListe.HedefPotansiyelIdEdit := edFiltPotId;
-  frmCrmPotansiyelListe.OnPotansiyelSecildi := PotSecildi;
-  frmCrmPotansiyelListe.SecimToolbarYenile;
-  frmCrmPotansiyelListe.BorderStyle := bsDialog;
-  frmCrmPotansiyelListe.BorderIcons := [biSystemMenu];
-  try
-    frmCrmPotansiyelListe.btnListeleClick(nil);
-    frmCrmPotansiyelListe.ShowModal;
-  finally
-    frmCrmPotansiyelListe.OnPotansiyelSecildi := nil;
-    frmCrmPotansiyelListe.HedefPotansiyelIdEdit := nil;
-    frmCrmPotansiyelListe.BorderStyle := bsNone;
-    frmCrmPotansiyelListe.BorderIcons := [];
-    frmCrmPotansiyelListe.SecimToolbarYenile;
-  end;
+  frmCrmPotSec.HedefPotansiyelIdEdit := edFiltPotId;
+  frmCrmPotSec.HedefPotansiyelUnvanLabel := lblFiltPotUnvan;
+  frmCrmPotSec.OnPotansiyelSecildi := nil;
+  frmCrmPotSec.SecimModuHazirla(False);
+  frmCrmPotSec.edArama.Text := Trim(lblFiltPotUnvan.Caption);
+  frmCrmPotSec.ShowModal;
 end;
 
 procedure TfrmCrmAktiviteListe.btnKapatClick(Sender: TObject);
 begin
-  MainForm.NavPage.ActivePage.Close;
+  xNavListeKapat(Self);
 end;
 
 procedure TfrmCrmAktiviteListe.btnListeleClick(Sender: TObject);
@@ -353,8 +345,6 @@ end;
 
 procedure TfrmCrmAktiviteListe.UniFormDestroy(Sender: TObject);
 begin
-  frmCrmPotansiyelListe.OnPotansiyelSecildi := nil;
-  frmCrmPotansiyelListe.HedefPotansiyelIdEdit := nil;
 end;
 
 procedure TfrmCrmAktiviteListe.UniFormShow(Sender: TObject);

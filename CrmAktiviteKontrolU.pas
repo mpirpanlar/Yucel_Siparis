@@ -45,6 +45,7 @@ type
       AqKontrol, AqSecenek, AqCevap, AqExec: TUniQuery);
     destructor Destroy; override;
     procedure Yukle(AktiviteTipId: Int64; AktiviteId: Int64; const ABosMesaj: string = '');
+    procedure YukleSet(ASetId: Int64; AktiviteId: Int64; const ABosMesaj: string = '');
     procedure Temizle;
     function Dogrula: Boolean;
     procedure CevaplariKaydet(AktiviteId: Int64);
@@ -308,6 +309,70 @@ begin
     'WHERE A.AKTIVITE_TIP_ID = :TID AND A.AKTIF = 1 ' +
     'ORDER BY S.SIRA, S.SET_ID, Q.SIRA, Q.SORU_ID';
   FqKontrol.ParamByName('TID').AsLargeInt := AktiviteTipId;
+  FqKontrol.Open;
+
+  AY := 10;
+  LastSet := -1;
+  while not FqKontrol.Eof do
+  begin
+    if FqKontrol.FieldByName('SET_ID').AsLargeInt <> LastSet then
+    begin
+      LastSet := FqKontrol.FieldByName('SET_ID').AsLargeInt;
+      lbl := TUniLabel.Create(FOwner);
+      lbl.Parent := FPanel;
+      lbl.Left := 8;
+      lbl.Top := AY;
+      lbl.Width := 610;
+      lbl.ParentFont := False;
+      lbl.Font.Style := [fsBold];
+      lbl.Font.Height := -14;
+      lbl.Caption := FqKontrol.FieldByName('BASLIK').AsString;
+      FDinamik.Add(lbl);
+      AY := AY + 28;
+    end;
+    SoruOlustur(AY);
+    FqKontrol.Next;
+  end;
+  FqKontrol.Close;
+
+  if FKontroller.Count = 0 then
+  begin
+    Mesaj := FBosMesaj;
+    if Mesaj = '' then
+      Mesaj := 'Bu kayit tipi icin tanimli soru seti yok.';
+    BosMesajGoster(Mesaj);
+  end
+  else if FAktiviteId > 0 then
+    CevaplariYukle;
+end;
+
+procedure TCrmAktiviteKontrolYonetici.YukleSet(ASetId: Int64; AktiviteId: Int64;
+  const ABosMesaj: string);
+var
+  AY: Integer;
+  LastSet: Int64;
+  lbl: TUniLabel;
+  Mesaj: string;
+begin
+  FAktiviteId := AktiviteId;
+  if ABosMesaj <> '' then
+    FBosMesaj := ABosMesaj;
+  ControlsTemizle;
+
+  if ASetId <= 0 then
+  begin
+    BosMesajGoster(FBosMesaj);
+    Exit;
+  end;
+
+  FqKontrol.Close;
+  FqKontrol.SQL.Text :=
+    'SELECT S.SET_ID, S.BASLIK, CAST(1 AS BIT) AS ZORUNLU_MU, Q.SORU_ID, Q.SORU_METNI, Q.CEVAP_TIPI, Q.ZORUNLU ' +
+    'FROM dbo.CRM_SORU_SETI S ' +
+    'INNER JOIN dbo.CRM_SORU Q ON Q.SET_ID = S.SET_ID AND Q.AKTIF = 1 ' +
+    'WHERE S.SET_ID = :SID AND S.AKTIF = 1 ' +
+    'ORDER BY Q.SIRA, Q.SORU_ID';
+  FqKontrol.ParamByName('SID').AsLargeInt := ASetId;
   FqKontrol.Open;
 
   AY := 10;

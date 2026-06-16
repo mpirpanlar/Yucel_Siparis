@@ -1,9 +1,9 @@
-﻿object frmCrmCariSec: TfrmCrmCariSec
+object frmCrmPotSec: TfrmCrmPotSec
   Left = 0
   Top = 0
   ClientHeight = 520
   ClientWidth = 900
-  Caption = 'Netsis Cari Secimi'
+  Caption = 'CRM - Potansiyel Secimi'
   OnShow = UniFormShow
   BorderStyle = bsDialog
   OldCreateOrder = False
@@ -29,8 +29,8 @@
       Height = 13
       Hint = ''
       Caption = 
-        'Cari adi/kodu yazip Listele; satir secip Se'#231' veya satira cift ti' +
-        'klayin.'
+        'Firma unvani / Netsis kodu yazip Listele; satir secip Sec veya sa' +
+        'tira cift tiklayin.'
       ParentFont = False
       Font.Charset = TURKISH_CHARSET
       Font.Color = clGray
@@ -62,7 +62,7 @@
       Font.Charset = TURKISH_CHARSET
       Font.Height = -13
       TabOrder = 1
-      EmptyText = 'Cari ad / kod'
+      EmptyText = 'Firma unvan / Netsis kod'
       ClearButton = True
       OnKeyPress = edAramaKeyPress
     end
@@ -129,13 +129,13 @@
       OnClick = btnKapatClick
     end
   end
-  object grdCari: TUniDBGrid
+  object grdPot: TUniDBGrid
     Left = 0
     Top = 92
     Width = 900
     Height = 428
     Hint = ''
-    DataSource = dsCari
+    DataSource = dsPot
     Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgCheckSelect, dgCheckSelectCheckOnly, dgAlwaysShowSelection, dgConfirmDelete, dgTabs, dgCancelOnExit, dgAutoRefreshRow]
     ReadOnly = True
     WebOptions.Paged = False
@@ -143,16 +143,16 @@
     LoadMask.Message = 'Loading data...'
     Align = alClient
     TabOrder = 1
-    OnAjaxEvent = grdCariAjaxEvent
-    OnSelectionChange = grdCariSelectionChange
+    OnAjaxEvent = grdPotAjaxEvent
+    OnSelectionChange = grdPotSelectionChange
   end
-  object qCari: TUniQuery
-    Connection = frmDM.conNetsis
+  object qPot: TUniQuery
+    Connection = frmDM.conAsya
     Left = 800
     Top = 400
   end
-  object dsCari: TUniDataSource
-    DataSet = qCari
+  object dsPot: TUniDataSource
+    DataSet = qPot
     Left = 832
     Top = 400
   end

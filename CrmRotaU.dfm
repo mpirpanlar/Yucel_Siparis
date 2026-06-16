@@ -332,6 +332,17 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         TabOrder = 7
         OnClick = btnGorevOlusturClick
       end
+      object lblDurakAcik: TUniLabel
+        Left = 180
+        Top = 44
+        Width = 820
+        Height = 26
+        Hint = ''
+        AutoSize = False
+        Caption = 
+          'Uyar'#305': rota ekseninden sapma. Bacak km: onceki noktadan duraga mesafe (GPS eksikse 0).'
+        TabOrder = 9
+      end
     end
     object panPersonel: TUniPanel
       Left = 0

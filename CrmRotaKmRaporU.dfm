@@ -26,7 +26,7 @@ object frmCrmRotaKmRapor: TfrmCrmRotaKmRapor
       Left = 0
       Top = 0
       Width = 1100
-      Height = 112
+      Height = 136
       Hint = ''
       TabOrder = 0
       BorderStyle = ubsNone
@@ -187,19 +187,30 @@ object frmCrmRotaKmRapor: TfrmCrmRotaKmRapor
         Left = 990
         Top = 0
         Width = 110
-        Height = 112
+        Height = 136
         Hint = ''
         Caption = 'Kapat'
         Align = alRight
         TabOrder = 15
         OnClick = btnKapatClick
       end
+      object lblBilgi: TUniLabel
+        Left = 12
+        Top = 104
+        Width = 900
+        Height = 26
+        Hint = ''
+        AutoSize = False
+        Caption = 
+          'Toplam km: baslangic + duraklar + bitis (kus ucusu). Bacak km: her duraga onceki noktadan mesafe. GPS eksik bacaklar 0 km sayilir veya toplamdan haric tutulur (parametre).'
+        TabOrder = 16
+      end
     end
     object pgc: TUniPageControl
       Left = 0
-      Top = 112
+      Top = 136
       Width = 1100
-      Height = 528
+      Height = 504
       Hint = ''
       ActivePage = tsRota
       TabOrder = 1

@@ -35,7 +35,7 @@ implementation
 {$R *.dfm}
 
 uses
-  uniGUIApplication, MainModule, DMU, Main, Genel, CrmGorevU;
+  uniGUIApplication, MainModule, DMU, Main, Genel, CrmGorevU, TmpU;
 
 function frmCrmGorevListe: TfrmCrmGorevListe;
 begin
@@ -46,7 +46,7 @@ procedure TfrmCrmGorevListe.AcKayit;
 begin
   if not qList.Active or qList.IsEmpty then
   begin
-    UniMainModule.saHata.Show('÷nce listele yap˝n ve bir sat˝r seÁin.');
+    UniMainModule.saHata.Show('ùnce listele yapùn ve bir satùr seùin.');
     Exit;
   end;
   if qList.FieldByName('AKTIVITE_ID').IsNull then
@@ -61,7 +61,7 @@ end;
 
 procedure TfrmCrmGorevListe.btnKapatClick(Sender: TObject);
 begin
-  MainForm.NavPage.ActivePage.Close;
+  xNavListeKapat(Self);
 end;
 
 procedure TfrmCrmGorevListe.btnListeleClick(Sender: TObject);
@@ -73,7 +73,10 @@ begin
     'INNER JOIN dbo.CRM_AKTIVITE A ON A.AKTIVITE_ID = G.AKTIVITE_ID ' +
     'LEFT JOIN dbo.CRM_TEKLIF T ON T.TEKLIF_ID = A.TEKLIF_ID ' +
     'WHERE A.TIP = ''TASK'' ' +
+    'AND ((:ADM = 1) OR (G.ATANAN_KULLANICI_ID = :KUL)) ' +
     'ORDER BY G.GOREV_ID DESC';
+  qList.ParamByName('ADM').AsInteger := Tmp.xKullaniciAdmin;
+  qList.ParamByName('KUL').AsInteger := Tmp.xKullaniciID;
   qList.Open;
 end;
 

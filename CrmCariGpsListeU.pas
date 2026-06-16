@@ -73,7 +73,7 @@ end;
 
 procedure TfrmCrmCariGpsListe.btnKapatClick(Sender: TObject);
 begin
-  MainForm.NavPage.ActivePage.Close;
+  xNavListeKapat(Self);
 end;
 
 procedure TfrmCrmCariGpsListe.btnListeleClick(Sender: TObject);

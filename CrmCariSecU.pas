@@ -38,6 +38,7 @@ type
     function SeciliCariKodlari: TStringList;
     function SqlQuote(const S: string): string;
     procedure SecimModuArayuz;
+    procedure GridCheckSecimAyar(ACoklu: Boolean);
     function CokluSecimYolu: Boolean;
     procedure SecimYapVeKapat;
   public
@@ -77,6 +78,15 @@ begin
   Result := FCokluSecimModu or Assigned(OnCariSecildiCoklu);
 end;
 
+procedure TfrmCrmCariSec.GridCheckSecimAyar(ACoklu: Boolean);
+begin
+  grdCari.Options := grdCari.Options + [dgCheckSelect, dgCheckSelectCheckOnly, dgAlwaysShowSelection, dgRowSelect];
+  if ACoklu then
+    grdCari.Options := grdCari.Options + [dgMultiSelect]
+  else
+    grdCari.Options := grdCari.Options - [dgMultiSelect];
+end;
+
 procedure TfrmCrmCariSec.SecimToolbarYenile;
 begin
   SecimModuArayuz;
@@ -87,22 +97,21 @@ begin
   if CokluSecimYolu then
   begin
     FCokluSecimModu := True;
-    grdCari.Options := grdCari.Options + [dgMultiSelect, dgAlwaysShowSelection];
+    GridCheckSecimAyar(True);
     btnSec.Caption := 'Se'#231'ilenleri ekle';
     btnSec.Hint := 'Isaretli satirlari rotaya eklemek uzere dondurur';
     lblBilgi.Caption :=
-      'Cari adi/kodu yazip Listele; Ctrl veya tiklayarak birden fazla satir secin, ardindan Secilenleri ekle.';
+      'Cari adi/kodu yazip Listele; satir basindaki kutuyu isaretleyin, ardindan Secilenleri ekle.';
     lblSecili.Visible := True;
     GuncelleSeciliSayisi;
   end
   else
   begin
-    grdCari.Options := grdCari.Options - [dgMultiSelect];
-    grdCari.Options := grdCari.Options + [dgAlwaysShowSelection];
+    GridCheckSecimAyar(False);
     btnSec.Caption := 'Se'#231;
-    btnSec.Hint := 'Secili satiri aktarir';
+    btnSec.Hint := 'Isaretli satiri aktarir';
     lblBilgi.Caption :=
-      'Cari adi/kodu yazip Listele; satir secip Sec veya satira cift tiklayin.';
+      'Cari adi/kodu yazip Listele; satir basindaki kutuyu isaretleyin veya satira cift tiklayin.';
     lblSecili.Visible := False;
   end;
 end;
@@ -135,7 +144,7 @@ var
   Ck: string;
 begin
   Result := TStringList.Create;
-  Result.Sorted := False;
+  Result.Sorted := True;
   Result.Duplicates := dupIgnore;
   if not qCari.Active or qCari.IsEmpty then
     Exit;
@@ -147,7 +156,7 @@ begin
       Bm := grdCari.SelectedRows[I];
       qCari.Bookmark := Bm;
       Ck := Trim(qCari.FieldByName('CARI_KOD').AsString);
-      if Ck <> '' then
+      if (Ck <> '') and (Result.IndexOf(Ck) < 0) then
         Result.Add(Ck);
     end;
   end
@@ -217,6 +226,9 @@ begin
     UniMainModule.saHata.Show('Once listele yapin ve bir satir secin.');
     Exit;
   end;
+  qCari.CheckBrowseMode;
+  if grdCari.SelectedRows.Count > 0 then
+    qCari.Bookmark := grdCari.SelectedRows[0];
   Ck := Trim(qCari.FieldByName('CARI_KOD').AsString);
   Ci := '';
   if (qCari.FindField('CARI_ISIM') <> nil) and not qCari.FieldByName('CARI_ISIM').IsNull then

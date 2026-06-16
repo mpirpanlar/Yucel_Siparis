@@ -9,7 +9,7 @@ uses
   DBAccess, Uni;
 
 const
-  CRM_SCHEMA_TARGET_VERSION = 26;
+  CRM_SCHEMA_TARGET_VERSION = 27;
 
 procedure CrmEnsureDatabase(AConn: TUniConnection);
 
@@ -1442,6 +1442,46 @@ begin
     'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (26, ''PARAMETRE rota onay gorev otomasyon ve zaman plani'')');
 end;
 
+procedure CrmSchemaApplyMigration27(AConn: TUniConnection);
+begin
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.CRM_ROTA_PLAN'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN'', ''GOREV_SORU_SET_ID'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN ADD GOREV_SORU_SET_ID BIGINT NULL');
+  end;
+
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.PARAMETRE'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.PARAMETRE'', ''ROTA_BITIS_ENLEM'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.PARAMETRE ADD ROTA_BITIS_ENLEM DECIMAL(18,8) NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.PARAMETRE'', ''ROTA_BITIS_BOYLAM'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.PARAMETRE ADD ROTA_BITIS_BOYLAM DECIMAL(18,8) NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.PARAMETRE'', ''ROTA_GOREV_MESAI_DK'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn,
+        'ALTER TABLE dbo.PARAMETRE ADD ROTA_GOREV_MESAI_DK INT NOT NULL CONSTRAINT DF_PARAM_ROTA_GOREV_MESAI DEFAULT (480)');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.PARAMETRE'', ''ROTA_GOREV_HIZ_KMH'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn,
+        'ALTER TABLE dbo.PARAMETRE ADD ROTA_GOREV_HIZ_KMH INT NOT NULL CONSTRAINT DF_PARAM_ROTA_GOREV_HIZ DEFAULT (50)');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.PARAMETRE'', ''ROTA_GOREV_SORU_SET_ID'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.PARAMETRE ADD ROTA_GOREV_SORU_SET_ID BIGINT NULL');
+    CrmExec(AConn,
+      'UPDATE dbo.PARAMETRE SET ROTA_BITIS_ENLEM = 38.6249, ROTA_BITIS_BOYLAM = 27.4294 ' +
+      'WHERE ROTA_BITIS_ENLEM IS NULL OR ROTA_BITIS_BOYLAM IS NULL');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 27) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (27, ''Rota gorev soru seti, bitis GPS, AI zamanlama parametreleri'')');
+end;
+
 procedure CrmSchemaApplyMigration(const AConn: TUniConnection; AVersion: Integer);
 begin
   case AVersion of
@@ -1471,6 +1511,7 @@ begin
     24: CrmSchemaApplyMigration24(AConn);
     25: CrmSchemaApplyMigration25(AConn);
     26: CrmSchemaApplyMigration26(AConn);
+    27: CrmSchemaApplyMigration27(AConn);
   else
     raise Exception.CreateFmt('CRM sema: bilinmeyen migrasyon surumu %d', [AVersion]);
   end;

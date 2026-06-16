@@ -140,7 +140,7 @@ end;
 
 procedure TfrmCrmRotaListe.btnKapatClick(Sender: TObject);
 begin
-  MainForm.NavPage.ActivePage.Close;
+  xNavListeKapat(Self);
 end;
 
 procedure TfrmCrmRotaListe.btnListeleClick(Sender: TObject);
@@ -149,9 +149,9 @@ begin
   qList.SQL.Text :=
     'SELECT R.ROTA_ID, R.BASLIK, R.DURUM, R.PLANLAMA_TARIHI, R.OLUSTURMA_UTC, ' +
     'ISNULL(KO.KullaniciAd, '''') AS OLUSTURAN, ' +
-    'ISNULL((SELECT STUFF((SELECT N'', '' + K.KullaniciAd FROM dbo.CRM_ROTA_PLAN_PERSONEL RP ' +
+    'CAST(ISNULL((SELECT STUFF((SELECT '', '' + RTRIM(K.KullaniciAd) FROM dbo.CRM_ROTA_PLAN_PERSONEL RP ' +
     'INNER JOIN dbo.Kullanici K ON K.KullaniciID = RP.KULLANICI_ID WHERE RP.ROTA_ID = R.ROTA_ID ' +
-    'ORDER BY K.KullaniciAd FOR XML PATH(''''), TYPE).value(''.'',''nvarchar(max)''), 1, 2, N'''')), '''') AS ATANAN, ' +
+    'ORDER BY K.KullaniciAd FOR XML PATH('''')), 1, 2, '''')), '''') AS NVARCHAR(500)) AS ATANAN, ' +
     '(SELECT COUNT(*) FROM dbo.CRM_ROTA_PLAN_DURAK D WHERE D.ROTA_ID = R.ROTA_ID) AS DURAK_SAY, ' +
     'ISNULL(R.TOPLAM_YOL_KM, 0) AS TOPLAM_KM, ' +
     'R.BASLANGIC_ENLEM, R.BASLANGIC_BOYLAM, R.BITIS_ENLEM, R.BITIS_BOYLAM ' +

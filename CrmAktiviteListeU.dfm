@@ -5,12 +5,12 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
   ClientWidth = 980
   Caption = 'CRM - Aktivite Listesi'
   OnShow = UniFormShow
-  OnDestroy = UniFormDestroy
   BorderStyle = bsNone
   OldCreateOrder = False
   MonitoredKeys.Keys = <>
   AlignmentControl = uniAlignmentClient
   Layout = 'fit'
+  OnDestroy = UniFormDestroy
   TextHeight = 15
   object rootPanel: TUniPanel
     Left = 0
@@ -49,8 +49,9 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
         Font.Style = [fsBold]
         TabOrder = 0
         ClientEvents.UniEvents.Strings = (
-          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
-          'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
         OnClick = btnListeleClick
       end
       object btnAc: TUniButton
@@ -68,8 +69,9 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
         Font.Style = [fsBold]
         TabOrder = 1
         ClientEvents.UniEvents.Strings = (
-          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
-          'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
         OnClick = btnAcClick
       end
       object btnKapat: TUniButton
@@ -88,8 +90,9 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
         Font.Style = [fsBold]
         TabOrder = 2
         ClientEvents.UniEvents.Strings = (
-          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
-          'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
         OnClick = btnKapatClick
       end
     end
@@ -107,8 +110,8 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
       object lblFiltTip: TUniLabel
         Left = 8
         Top = 10
-        Width = 18
-        Height = 17
+        Width = 15
+        Height = 13
         Hint = ''
         Caption = 'Tip'
         TabOrder = 0
@@ -123,15 +126,17 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
         Text = ''
         TabOrder = 1
         ClientEvents.UniEvents.Strings = (
-          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.multi' +
-          'Select = true;'#13#10'  config.queryMode = '#39'local'#39';'#13#10'  config.forceSelect' +
-          'ion = true;'#13#10'}')
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.mult' +
+            'iSelect = true;'#13#10'  config.queryMode = '#39'local'#39';'#13#10'  config.forceSe' +
+            'lection = true;'#13#10'}')
+        IconItems = <>
       end
       object lblFiltDurum: TUniLabel
         Left = 196
         Top = 10
-        Width = 38
-        Height = 17
+        Width = 35
+        Height = 13
         Hint = ''
         Caption = 'Durum'
         TabOrder = 2
@@ -146,15 +151,17 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
         Text = ''
         TabOrder = 3
         ClientEvents.UniEvents.Strings = (
-          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.multi' +
-          'Select = true;'#13#10'  config.queryMode = '#39'local'#39';'#13#10'  config.forceSelect' +
-          'ion = true;'#13#10'}')
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.mult' +
+            'iSelect = true;'#13#10'  config.queryMode = '#39'local'#39';'#13#10'  config.forceSe' +
+            'lection = true;'#13#10'}')
+        IconItems = <>
       end
       object lblFiltOnc: TUniLabel
         Left = 400
         Top = 10
-        Width = 42
-        Height = 17
+        Width = 39
+        Height = 13
         Hint = ''
         Caption = #214'ncelik'
         TabOrder = 4
@@ -169,9 +176,11 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
         Text = ''
         TabOrder = 5
         ClientEvents.UniEvents.Strings = (
-          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.multi' +
-          'Select = true;'#13#10'  config.queryMode = '#39'local'#39';'#13#10'  config.forceSelect' +
-          'ion = true;'#13#10'}')
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.mult' +
+            'iSelect = true;'#13#10'  config.queryMode = '#39'local'#39';'#13#10'  config.forceSe' +
+            'lection = true;'#13#10'}')
+        IconItems = <>
       end
       object chkTarih: TUniCheckBox
         Left = 8
@@ -179,15 +188,15 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
         Width = 100
         Height = 22
         Hint = ''
-        Caption = 'Tarih Filtresi'
         Checked = True
+        Caption = 'Tarih Filtresi'
         TabOrder = 6
       end
       object lblFiltTarBas: TUniLabel
         Left = 112
         Top = 48
-        Width = 58
-        Height = 17
+        Width = 49
+        Height = 13
         Hint = ''
         Caption = 'Ba'#351'lang'#305#231
         TabOrder = 7
@@ -202,12 +211,13 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
         DateFormat = 'dd/MM/yyyy'
         TimeFormat = 'HH:mm:ss'
         TabOrder = 8
+        DisabledDates = <>
       end
       object lblFiltTarBit: TUniLabel
         Left = 294
         Top = 48
-        Width = 24
-        Height = 17
+        Width = 22
+        Height = 13
         Hint = ''
         Caption = 'Biti'#351
         TabOrder = 9
@@ -222,12 +232,13 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
         DateFormat = 'dd/MM/yyyy'
         TimeFormat = 'HH:mm:ss'
         TabOrder = 10
+        DisabledDates = <>
       end
       object lblFiltCari: TUniLabel
         Left = 448
         Top = 48
-        Width = 28
-        Height = 17
+        Width = 20
+        Height = 13
         Hint = ''
         Caption = 'Cari'
         TabOrder = 11
@@ -244,8 +255,8 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
       object lblFiltCariUnvan: TUniLabel
         Left = 556
         Top = 48
-        Width = 120
-        Height = 17
+        Width = 3
+        Height = 13
         Hint = ''
         Caption = ''
         TabOrder = 13
@@ -263,8 +274,8 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
       object lblFiltPot: TUniLabel
         Left = 724
         Top = 48
-        Width = 58
-        Height = 17
+        Width = 52
+        Height = 13
         Hint = ''
         Caption = 'Potansiyel'
         TabOrder = 15
@@ -275,15 +286,15 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
         Width = 48
         Height = 27
         Hint = ''
+        Visible = False
         Text = ''
         TabOrder = 16
-        Visible = False
       end
       object lblFiltPotUnvan: TUniLabel
         Left = 788
         Top = 48
-        Width = 160
-        Height = 17
+        Width = 3
+        Height = 13
         Hint = ''
         Caption = ''
         TabOrder = 17

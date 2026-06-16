@@ -317,6 +317,8 @@
         <DCCReference Include="CrmSchemaU.pas"/>
         <DCCReference Include="CrmMapsConfigU.pas"/>
         <DCCReference Include="CrmRotaGeoU.pas"/>
+        <DCCReference Include="CrmRotaGorevU.pas"/>
+        <DCCReference Include="CrmRotaMesafeU.pas"/>
         <DCCReference Include="CrmHaritaSecU.pas">
             <Form>frmCrmHaritaSec</Form>
             <FormType>dfm</FormType>
@@ -330,6 +332,10 @@
         <DCCReference Include="CrmRotaU.pas">
             <Form>frmCrmRotaPlan</Form>
             <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmRotaDurakSecU.pas">
+            <Form>frmCrmRotaDurakSec</Form>
             <DesignClass>TUniForm</DesignClass>
         </DCCReference>
         <DCCReference Include="CrmRotaListeU.pas">
@@ -355,6 +361,15 @@
         <DCCReference Include="CrmCariSecU.pas">
             <Form>frmCrmCariSec</Form>
             <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmSiparisSecU.pas">
+            <Form>frmCrmSiparisSec</Form>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmBaglantiDurumU.pas"/>
+        <DCCReference Include="CrmParamBaglantiDurumU.pas">
+            <Form>frmCrmParamBaglantiDurum</Form>
             <DesignClass>TUniForm</DesignClass>
         </DCCReference>
         <DCCReference Include="CrmStokSecU.pas">
@@ -427,6 +442,37 @@
             <FormType>dfm</FormType>
             <DesignClass>TUniForm</DesignClass>
         </DCCReference>
+        <DCCReference Include="CrmSoruSetiU.pas">
+            <Form>frmCrmSoruSeti</Form>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmKontrolRaporU.pas">
+            <Form>frmCrmKontrolRapor</Form>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmTakvimU.pas">
+            <Form>frmCrmTakvim</Form>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmAktiviteLogU.pas"/>
+        <DCCReference Include="CrmAktiviteKontrolU.pas"/>
+        <DCCReference Include="CrmAktiviteRaporU.pas">
+            <Form>frmCrmAktiviteRapor</Form>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmAktiviteTarihceU.pas">
+            <Form>frmCrmAktiviteTarihce</Form>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmRotaKmRaporU.pas">
+            <Form>frmCrmRotaKmRapor</Form>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmPotSecU.pas">
+            <Form>frmCrmPotSec</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -454,6 +500,12 @@
             </Delphi.Personality>
             <Deployment Version="5">
                 <DeployFile LocalName="C:\SourceOut\Fibrosan\Siparis.exe" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName="C:\SourceOut\YUCEL_KOMPOZIT\Siparis.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>Siparis.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="iOSSimulator">
                         <Operation>1</Operation>
