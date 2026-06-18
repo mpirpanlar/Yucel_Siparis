@@ -46,7 +46,7 @@ procedure TfrmCrmGorevListe.AcKayit;
 begin
   if not qList.Active or qList.IsEmpty then
   begin
-    UniMainModule.saHata.Show('nce listele yapn ve bir satr sein.');
+    UniMainModule.saHata.Show('ï¿½nce listele yapï¿½n ve bir satï¿½r seï¿½in.');
     Exit;
   end;
   if qList.FieldByName('AKTIVITE_ID').IsNull then

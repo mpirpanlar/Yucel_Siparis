@@ -63,7 +63,7 @@ end;
 procedure TfrmCrmTeklifListe.FiltreDurumlariDoldur;
 begin
   cbFiltDurum.Items.Clear;
-  cbFiltDurum.Items.Add('(Tm)');
+  cbFiltDurum.Items.Add('(Tï¿½mï¿½)');
   try
     qFilt.Close;
     qFilt.SQL.Text :=
@@ -84,7 +84,7 @@ procedure TfrmCrmTeklifListe.AcKayit;
 begin
   if not qList.Active or qList.IsEmpty then
   begin
-    UniMainModule.saHata.Show('nce listele yapn ve bir satr sein.');
+    UniMainModule.saHata.Show('ï¿½nce listele yapï¿½n ve bir satï¿½r seï¿½in.');
     Exit;
   end;
   if qList.FieldByName('TEKLIF_ID').IsNull then
@@ -110,7 +110,7 @@ begin
   begin
     if DateOf(dtFiltBas.DateTime) > DateOf(dtFiltBit.DateTime) then
     begin
-      UniMainModule.saHata.Show('Tarih balang bititen byk olamaz.');
+      UniMainModule.saHata.Show('Tarih baï¿½langï¿½ï¿½ bitiï¿½ten bï¿½yï¿½k olamaz.');
       Exit;
     end;
   end;
