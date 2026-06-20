@@ -375,6 +375,18 @@ object frmSiparisListesi: TfrmSiparisListesi
             Width = 120
           end
           item
+            FieldName = 'DURUM_DETAY'
+            Title.Caption = 'Durum'
+            Width = 110
+            ReadOnly = True
+          end
+          item
+            FieldName = 'AcikKapaliTarih'
+            Title.Caption = 'Kapan'#305#351' Tarihi'
+            Width = 130
+            ReadOnly = True
+          end
+          item
             FieldName = 'FisBaslikID'
             Title.Caption = 'FisBaslikID'
             Width = 100
@@ -888,6 +900,15 @@ object frmSiparisListesi: TfrmSiparisListesi
     object qSiparisListesiNetsisSiparisNo: TStringField
       FieldName = 'NetsisSiparisNo'
       Size = 50
+    end
+    object qSiparisListesiDURUM_DETAY: TWideStringField
+      FieldName = 'DURUM_DETAY'
+      ReadOnly = True
+      Size = 30
+    end
+    object qSiparisListesiAcikKapaliTarih: TDateTimeField
+      FieldName = 'AcikKapaliTarih'
+      DisplayFormat = 'dd.mm.yyyy HH:mm'
     end
     object qSiparisListesiCARI_ISIM: TStringField
       FieldName = 'CARI_ISIM'

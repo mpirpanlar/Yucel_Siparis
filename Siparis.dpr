@@ -52,6 +52,7 @@ uses
   CrmGorevU in 'CrmGorevU.pas' {frmCrmGorev: TUniForm},
   CrmCariSecU in 'CrmCariSecU.pas' {frmCrmCariSec: TUniForm},
   CrmSiparisSecU in 'CrmSiparisSecU.pas' {frmCrmSiparisSec: TUniForm},
+  CrmTeklifBaslikSecU in 'CrmTeklifBaslikSecU.pas' {frmCrmTeklifBaslikSec: TUniForm},
   CrmBaglantiDurumU in 'CrmBaglantiDurumU.pas',
   CrmParamBaglantiDurumU in 'CrmParamBaglantiDurumU.pas' {frmCrmParamBaglantiDurum: TUniForm},
   CrmStokSecU in 'CrmStokSecU.pas' {frmCrmStokSec: TUniForm},

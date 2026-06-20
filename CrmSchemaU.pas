@@ -9,7 +9,7 @@ uses
   DBAccess, Uni;
 
 const
-  CRM_SCHEMA_TARGET_VERSION = 27;
+  CRM_SCHEMA_TARGET_VERSION = 30;
 
 procedure CrmEnsureDatabase(AConn: TUniConnection);
 
@@ -1482,6 +1482,57 @@ begin
     'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (27, ''Rota gorev soru seti, bitis GPS, AI zamanlama parametreleri'')');
 end;
 
+procedure CrmSchemaApplyMigration28(AConn: TUniConnection);
+begin
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.CRM_AKTIVITE'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_AKTIVITE'', ''AKTIVITE_BITIS_TARIHI'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_AKTIVITE ADD AKTIVITE_BITIS_TARIHI DATETIME2(3) NULL');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 28) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (28, ''CRM_AKTIVITE aktivite bitis tarihi (tarih/saat)'')');
+end;
+
+procedure CrmSchemaApplyMigration29(AConn: TUniConnection);
+begin
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.CRM_AKTIVITE'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_AKTIVITE'', ''TEKLIF_FISNO'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn,
+        'ALTER TABLE dbo.CRM_AKTIVITE ADD TEKLIF_FISNO VARCHAR(50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL');
+    if CrmScalarInt(AConn,
+      'SELECT COUNT(*) FROM sys.indexes WHERE name = ''IX_CRM_AKT_TEKLIF_FISNO'' AND object_id = OBJECT_ID(''dbo.CRM_AKTIVITE'')') = 0 then
+      CrmExec(AConn,
+        'CREATE INDEX IX_CRM_AKT_TEKLIF_FISNO ON dbo.CRM_AKTIVITE (TEKLIF_FISNO) WHERE TEKLIF_FISNO IS NOT NULL');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 29) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (29, ''CRM_AKTIVITE SIPARIS_BASLIK teklif fis no (TEKLIF_FISNO)'')');
+end;
+
+procedure CrmSchemaApplyMigration30(AConn: TUniConnection);
+begin
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.SIPARIS_BASLIK'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.SIPARIS_BASLIK'', ''AcikKapaliTarih'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn,
+        'ALTER TABLE dbo.SIPARIS_BASLIK ADD AcikKapaliTarih DATETIME NULL');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 30) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (30, ''SIPARIS_BASLIK acik/kapali kapanis tarihi (AcikKapaliTarih)'')');
+end;
+
 procedure CrmSchemaApplyMigration(const AConn: TUniConnection; AVersion: Integer);
 begin
   case AVersion of
@@ -1512,6 +1563,9 @@ begin
     25: CrmSchemaApplyMigration25(AConn);
     26: CrmSchemaApplyMigration26(AConn);
     27: CrmSchemaApplyMigration27(AConn);
+    28: CrmSchemaApplyMigration28(AConn);
+    29: CrmSchemaApplyMigration29(AConn);
+    30: CrmSchemaApplyMigration30(AConn);
   else
     raise Exception.CreateFmt('CRM sema: bilinmeyen migrasyon surumu %d', [AVersion]);
   end;

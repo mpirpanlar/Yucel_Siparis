@@ -103,6 +103,7 @@ object frmCrmMenu: TfrmCrmMenu
         Height = 38
         Hint = ''
         Caption = 'Yeni Teklif'
+        Visible = False
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite
@@ -269,6 +270,7 @@ object frmCrmMenu: TfrmCrmMenu
         Height = 38
         Hint = ''
         Caption = 'Teklif Listesi'
+        Visible = False
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite

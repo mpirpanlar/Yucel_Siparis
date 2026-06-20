@@ -265,6 +265,7 @@ object frmParametreMenu: TfrmParametreMenu
         Height = 30
         Hint = ''
         Caption = 'CRM - Teklif Durumlar'#305
+        Visible = False
         ParentFont = False
         Font.Charset = TURKISH_CHARSET
         Font.Color = clWhite

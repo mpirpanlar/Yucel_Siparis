@@ -31,8 +31,8 @@ type
     btnPotBul: TUniButton;
     lblPotUnvan: TUniLabel;
     lblTeklif: TUniLabel;
-    lkTeklif: TUniDBLookupComboBox;
-    btnTeklifYenile: TUniButton;
+    edTeklifNo: TUniEdit;
+    btnTeklifSec: TUniButton;
     lblSiparis: TUniLabel;
     edSiparis: TUniEdit;
     btnSiparisBul: TUniButton;
@@ -41,11 +41,17 @@ type
     saBaglantiDurum: TUniSweetAlert;
     lblTarih: TUniLabel;
     dtAktivite: TUniDateTimePicker;
+    lblSureDakika: TUniLabel;
+    edSureDakika: TUniEdit;
+    lblBitis: TUniLabel;
+    dtAktiviteBitis: TUniDateTimePicker;
     lblDurum: TUniLabel;
     lkDurum: TUniDBLookupComboBox;
     lblOncelik: TUniLabel;
     cbOncelik: TUniComboBox;
+    panEkler: TUniPanel;
     lblEkler: TUniLabel;
+    panEkBar: TUniPanel;
     fuEk: TUniFileUpload;
     btnEkEkle: TUniButton;
     btnEkIndir: TUniButton;
@@ -59,8 +65,6 @@ type
     dsTipLkp: TUniDataSource;
     qDurLkp: TUniQuery;
     dsDurLkp: TUniDataSource;
-    qTekLkp: TUniQuery;
-    dsTekLkp: TUniDataSource;
     qEk: TUniQuery;
     dsEk: TUniDataSource;
     qEkExec: TUniQuery;
@@ -85,8 +89,9 @@ type
     procedure btnCariBulClick(Sender: TObject);
     procedure btnPotBulClick(Sender: TObject);
     procedure btnSiparisBulClick(Sender: TObject);
-    procedure btnTeklifYenileClick(Sender: TObject);
-    procedure lkTeklifCloseUp(Sender: TObject);
+    procedure btnTeklifSecClick(Sender: TObject);
+    procedure edCariKodChange(Sender: TObject);
+    procedure edPotIdExit(Sender: TObject);
     procedure lkDurumCloseUp(Sender: TObject);
     procedure saBaglantiDurumConfirm(Sender: TObject);
     procedure fuEkCompleted(Sender: TObject; AStream: TFileStream);
@@ -96,10 +101,19 @@ type
     procedure grdEkAjaxEvent(Sender: TComponent; EventName: string; Params: TUniStrings);
     procedure lkTipCloseUp(Sender: TObject);
     procedure btnKontrolKaydetClick(Sender: TObject);
+    procedure dtAktiviteChange(Sender: TObject);
+    procedure dtAktiviteBitisChange(Sender: TObject);
+    procedure edSureDakikaExit(Sender: TObject);
   private
     FAktiviteId: Int64;
     FPendingDurumId: Int64;
+    FBitisTarihiAktif: Boolean;
+    FSureGuncelleniyor: Boolean;
     FCrmKontrol: TCrmAktiviteKontrolYonetici;
+    function SureDakikaDegeri: Integer;
+    procedure AktiviteTarihPickerFormat;
+    procedure SuredenBitisHesapla;
+    procedure BitisTarihindenSureHesapla;
     procedure KontrolSekmesiGoster(Sender: TObject);
     procedure KontrolListesiYukle;
     procedure EnsureCrmKontrol;
@@ -107,17 +121,16 @@ type
     function AktiviteKaydet: Boolean;
     procedure EkListele;
     procedure TarihceYukle;
-    procedure AktiviteLogKaydet(const IsNew: Boolean; const OldKonu, OldAcik, OldTarStr, OldDurAd: string);
+    procedure AktiviteLogKaydet(const IsNew: Boolean; const OldKonu, OldAcik, OldTarStr, OldBitisStr, OldDurAd: string);
     procedure EkIndir;
     procedure EkSil;
     procedure AcLookupSorgulari;
     procedure VarsayilanSecimler;
-    procedure TeklifLookupYenile(AForceTid: Int64);
-    procedure UygulaBaslangicTeklif(ATeklifId: Int64);
     procedure UygulaBaslangicPotansiyel(APotId: Int64);
     procedure PotSecildi(Sender: TObject; APotId: Int64);
     procedure PotansiyelUnvanYukle(APotId: Int64);
     function PotansiyelIdOku: Int64;
+    procedure TeklifSecildi(Sender: TObject; const AFisNo: string);
     procedure YeniKayit;
     procedure YukleKayit;
     function TipKodFromLookup: string;
@@ -139,28 +152,19 @@ implementation
 {$R *.dfm}
 
 uses
-  uniGUIApplication, MainModule, DMU, TmpU, CrmCariSecU, CrmSiparisSecU, CrmBaglantiDurumU,
-  CrmPotSecU, ServerModule, CrmAktiviteLogU;
+  uniGUIApplication, MainModule, DMU, TmpU, CrmCariSecU, CrmBaglantiDurumU,
+  CrmPotSecU, CrmTeklifBaslikSecU, ServerModule, CrmAktiviteLogU, DateUtils;
 
 procedure TfrmCrmAktivite.btnCariBulClick(Sender: TObject);
-var
-  PrevTkl: Int64;
 begin
-  PrevTkl := 0;
-  if not VarIsNull(lkTeklif.KeyValue) and not VarIsEmpty(lkTeklif.KeyValue) then
-    PrevTkl := lkTeklif.KeyValue;
   frmCrmCariSec.HedefCariEdit := edCariKod;
   frmCrmCariSec.HedefCariAdLabel := lblCariAd;
   frmCrmCariSec.edArama.Text := Trim(edCariKod.Text);
   frmCrmCariSec.ShowModal;
-  //frmCrmCariSec.HedefCariAdLabel := nil;
-  TeklifLookupYenile(0);
-  if PrevTkl > 0 then
+  if Trim(edCariKod.Text) <> '' then
   begin
-    if qTekLkp.Active and qTekLkp.Locate('TEKLIF_ID', PrevTkl, []) then
-      lkTeklif.KeyValue := PrevTkl
-    else
-      lkTeklif.KeyValue := Null;
+    edPotId.Text := '';
+    lblPotUnvan.Caption := '';
   end;
 end;
 
@@ -185,44 +189,14 @@ begin
 end;
 
 procedure TfrmCrmAktivite.PotSecildi(Sender: TObject; APotId: Int64);
-var
-  Ck, CariAd: string;
 begin
   if APotId <= 0 then
     Exit;
   edPotId.Text := IntToStr(APotId);
   PotansiyelUnvanYukle(APotId);
-  if Trim(edCariKod.Text) <> '' then
-  begin
-    if UniSession <> nil then
-      UniSession.Synchronize;
-    Exit;
-  end;
-  qLoad.Close;
-  qLoad.SQL.Text :=
-    'SELECT P.NETSIS_CARI_KOD, C.CARI_ISIM FROM dbo.CRM_POTANSIYEL_MUSTERI P ' +
-    'LEFT JOIN YUCEL..HV_CARI_LISTESI C WITH(NOLOCK) ON C.CARI_KOD = P.NETSIS_CARI_KOD ' +
-    'WHERE P.POTANSIYEL_ID = :ID';
-  qLoad.ParamByName('ID').AsLargeInt := APotId;
-  qLoad.Open;
-  if not qLoad.IsEmpty then
-  begin
-    if not qLoad.FieldByName('NETSIS_CARI_KOD').IsNull then
-      Ck := Trim(qLoad.FieldByName('NETSIS_CARI_KOD').AsString)
-    else
-      Ck := '';
-    if Ck <> '' then
-    begin
-      edCariKod.Text := Ck;
-      if (qLoad.FindField('CARI_ISIM') <> nil) and not qLoad.FieldByName('CARI_ISIM').IsNull then
-        CariAd := Trim(qLoad.FieldByName('CARI_ISIM').AsString)
-      else
-        CariAd := '';
-      lblCariAd.Caption := CariAd;
-      TeklifLookupYenile(0);
-    end;
-  end;
-  qLoad.Close;
+  edCariKod.Text := '';
+  lblCariAd.Caption := '';
+  edTeklifNo.Text := '';
   if UniSession <> nil then
     UniSession.Synchronize;
 end;
@@ -244,20 +218,44 @@ begin
   PotSecildi(Self, APotId);
 end;
 
-procedure TfrmCrmAktivite.btnTeklifYenileClick(Sender: TObject);
-var
-  PrevTkl: Int64;
+procedure TfrmCrmAktivite.btnTeklifSecClick(Sender: TObject);
 begin
-  PrevTkl := 0;
-  if not VarIsNull(lkTeklif.KeyValue) and not VarIsEmpty(lkTeklif.KeyValue) then
-    PrevTkl := lkTeklif.KeyValue;
-  TeklifLookupYenile(PrevTkl);
-  if PrevTkl > 0 then
+  frmCrmTeklifBaslikSec.SecimModu := cbsTeklifAcik;
+  frmCrmTeklifBaslikSec.FiltreCariKod := Trim(edCariKod.Text);
+  frmCrmTeklifBaslikSec.HedefTeklifEdit := edTeklifNo;
+  frmCrmTeklifBaslikSec.HedefSiparisEdit := nil;
+  frmCrmTeklifBaslikSec.HedefSiparisTarLabel := nil;
+  frmCrmTeklifBaslikSec.OnTeklifSecildi := TeklifSecildi;
+  frmCrmTeklifBaslikSec.OnSiparisSecildi := nil;
+  frmCrmTeklifBaslikSec.edArama.Text := Trim(edTeklifNo.Text);
+  frmCrmTeklifBaslikSec.ShowModal;
+end;
+
+procedure TfrmCrmAktivite.TeklifSecildi(Sender: TObject; const AFisNo: string);
+begin
+  BaglantiDurumDegerlendir(CRM_KAYNAK_TEKLIF);
+end;
+
+procedure TfrmCrmAktivite.edCariKodChange(Sender: TObject);
+begin
+  if Trim(edCariKod.Text) = '' then
   begin
-    if qTekLkp.Active and qTekLkp.Locate('TEKLIF_ID', PrevTkl, []) then
-      lkTeklif.KeyValue := PrevTkl
-    else
-      lkTeklif.KeyValue := Null;
+    lblCariAd.Caption := '';
+    edTeklifNo.Text := '';
+  end;
+end;
+
+procedure TfrmCrmAktivite.edPotIdExit(Sender: TObject);
+begin
+  if Trim(edPotId.Text) = '' then
+  begin
+    lblPotUnvan.Caption := '';
+    Exit;
+  end;
+  if PotansiyelIdOku <= 0 then
+  begin
+    edPotId.Text := '';
+    lblPotUnvan.Caption := '';
   end;
 end;
 
@@ -303,19 +301,20 @@ end;
 
 procedure TfrmCrmAktivite.btnSiparisBulClick(Sender: TObject);
 begin
-  frmCrmSiparisSec.HedefSiparisEdit := edSiparis;
-  frmCrmSiparisSec.HedefSiparisTarLabel := lblSiparisTar;
-  frmCrmSiparisSec.HedefSiparisAcikLabel := lblSiparisAcik;
-  frmCrmSiparisSec.FiltreCariKod := Trim(edCariKod.Text);
-  frmCrmSiparisSec.OnSiparisSecildi := SiparisSecildi;
-  frmCrmSiparisSec.edArama.Text := Trim(edSiparis.Text);
-  frmCrmSiparisSec.ShowModal;
-  frmCrmSiparisSec.OnSiparisSecildi := nil;
-end;
-
-procedure TfrmCrmAktivite.lkTeklifCloseUp(Sender: TObject);
-begin
-  BaglantiDurumDegerlendir(CRM_KAYNAK_TEKLIF);
+  if Trim(edCariKod.Text) = '' then
+  begin
+    UniMainModule.saHata.Show('Siparis baglantisi icin once cari secin.');
+    Exit;
+  end;
+  frmCrmTeklifBaslikSec.SecimModu := cbsSiparisNetsis;
+  frmCrmTeklifBaslikSec.FiltreCariKod := Trim(edCariKod.Text);
+  frmCrmTeklifBaslikSec.HedefTeklifEdit := nil;
+  frmCrmTeklifBaslikSec.HedefSiparisEdit := edSiparis;
+  frmCrmTeklifBaslikSec.HedefSiparisTarLabel := lblSiparisTar;
+  frmCrmTeklifBaslikSec.OnTeklifSecildi := nil;
+  frmCrmTeklifBaslikSec.OnSiparisSecildi := SiparisSecildi;
+  frmCrmTeklifBaslikSec.edArama.Text := Trim(edSiparis.Text);
+  frmCrmTeklifBaslikSec.ShowModal;
 end;
 
 procedure TfrmCrmAktivite.lkDurumCloseUp(Sender: TObject);
@@ -345,50 +344,6 @@ begin
     'SELECT DURUM_ID, KOD, (KOD + N'' - '' + ISNULL(ACIKLAMA, N'''')) AS AD ' +
     'FROM dbo.CRM_AKTIVITE_DURUM WHERE AKTIF = 1 ORDER BY SIRA, DURUM_ID';
   qDurLkp.Open;
-end;
-
-procedure TfrmCrmAktivite.UygulaBaslangicTeklif(ATeklifId: Int64);
-begin
-  if ATeklifId <= 0 then
-    Exit;
-  qLoad.Close;
-  qLoad.SQL.Text :=
-    'SELECT T.CARI_KOD, C.CARI_ISIM FROM dbo.CRM_TEKLIF T ' +
-    'LEFT JOIN YUCEL..HV_CARI_LISTESI C WITH(NOLOCK) ON C.CARI_KOD = T.CARI_KOD ' +
-    'WHERE T.TEKLIF_ID = :T';
-  qLoad.ParamByName('T').AsLargeInt := ATeklifId;
-  qLoad.Open;
-  if not qLoad.IsEmpty then
-  begin
-    if not qLoad.FieldByName('CARI_KOD').IsNull then
-      edCariKod.Text := Trim(qLoad.FieldByName('CARI_KOD').AsString);
-    if (qLoad.FindField('CARI_ISIM') <> nil) and not qLoad.FieldByName('CARI_ISIM').IsNull then
-      lblCariAd.Caption := Trim(qLoad.FieldByName('CARI_ISIM').AsString)
-    else
-      lblCariAd.Caption := '';
-  end;
-  qLoad.Close;
-  TeklifLookupYenile(ATeklifId);
-  if qTekLkp.Active and qTekLkp.Locate('TEKLIF_ID', ATeklifId, []) then
-    lkTeklif.KeyValue := ATeklifId
-  else
-    lkTeklif.KeyValue := Null;
-  BaglantiDurumDegerlendir(CRM_KAYNAK_TEKLIF);
-end;
-
-procedure TfrmCrmAktivite.TeklifLookupYenile(AForceTid: Int64);
-var
-  Ck: string;
-begin
-  Ck := Trim(edCariKod.Text);
-  qTekLkp.Close;
-  qTekLkp.SQL.Text :=
-    'SELECT TOP 200 T.TEKLIF_ID, (ISNULL(T.TEKLIF_NO, N'''') + N'' - '' + T.BASLIK) AS AD ' +
-    'FROM dbo.CRM_TEKLIF T WHERE ((:CK = '''') OR (T.CARI_KOD = :CK)) ' +
-    'OR ((:FID > 0) AND (T.TEKLIF_ID = :FID)) ORDER BY T.TEKLIF_ID DESC';
-  qTekLkp.ParamByName('CK').AsString := Ck;
-  qTekLkp.ParamByName('FID').AsLargeInt := AForceTid;
-  qTekLkp.Open;
 end;
 
 procedure TfrmCrmAktivite.VarsayilanSecimler;
@@ -462,10 +417,12 @@ begin
   edPotId.Text := '';
   lblPotUnvan.Caption := '';
   dtAktivite.DateTime := Now;
+  FBitisTarihiAktif := False;
+  dtAktiviteBitis.DateTime := Now;
+  edSureDakika.Text := '';
   AcLookupSorgulari;
   VarsayilanSecimler;
-  TeklifLookupYenile(0);
-  lkTeklif.KeyValue := Null;
+  edTeklifNo.Text := '';
   edSiparis.Text := '';
   lblSiparisTar.Caption := '';
   lblSiparisAcik.Caption := '';
@@ -482,11 +439,13 @@ begin
   qLoad.Close;
   qLoad.SQL.Text :=
     'SELECT A.AKTIVITE_TIP_ID, A.AKTIVITE_DURUM_ID, A.KONU, A.ACIKLAMA, A.CARI_KOD, A.POTANSIYEL_ID, ' +
-    'A.AKTIVITE_TARIHI, A.DURUM, A.ONCELIK, A.TEKLIF_ID, A.SIPARIS_NO, TK.KOD AS TIP_KOD, C.CARI_ISIM, P.FIRMA_UNVAN AS POT_UNVAN ' +
+    'A.AKTIVITE_TARIHI, A.AKTIVITE_BITIS_TARIHI, A.DURUM, A.ONCELIK, A.TEKLIF_FISNO, A.TEKLIF_ID, A.SIPARIS_NO, ' +
+    'TK.KOD AS TIP_KOD, C.CARI_ISIM, P.FIRMA_UNVAN AS POT_UNVAN, T.TEKLIF_NO AS ESKI_TEKLIF_NO ' +
     'FROM dbo.CRM_AKTIVITE A ' +
     'LEFT JOIN dbo.CRM_AKTIVITE_TIP TK ON TK.TIP_ID = A.AKTIVITE_TIP_ID ' +
     'LEFT JOIN YUCEL..HV_CARI_LISTESI C WITH(NOLOCK) ON C.CARI_KOD = A.CARI_KOD ' +
     'LEFT JOIN dbo.CRM_POTANSIYEL_MUSTERI P ON P.POTANSIYEL_ID = A.POTANSIYEL_ID ' +
+    'LEFT JOIN dbo.CRM_TEKLIF T ON T.TEKLIF_ID = A.TEKLIF_ID ' +
     'WHERE A.AKTIVITE_ID = :ID';
   qLoad.ParamByName('ID').AsLargeInt := FAktiviteId;
   qLoad.Open;
@@ -511,13 +470,14 @@ begin
     Tid := qLoad.FieldByName('TEKLIF_ID').AsLargeInt;
 
   AcLookupSorgulari;
-  TeklifLookupYenile(Tid);
   lkTip.KeyValue := qLoad.FieldByName('AKTIVITE_TIP_ID').AsLargeInt;
   lkDurum.KeyValue := qLoad.FieldByName('AKTIVITE_DURUM_ID').AsLargeInt;
-  if Tid > 0 then
-    lkTeklif.KeyValue := Tid
-  else
-    lkTeklif.KeyValue := Null;
+  edTeklifNo.Text := '';
+  if (qLoad.FindField('TEKLIF_FISNO') <> nil) and not qLoad.FieldByName('TEKLIF_FISNO').IsNull then
+    edTeklifNo.Text := Trim(qLoad.FieldByName('TEKLIF_FISNO').AsString)
+  else if (Tid > 0) and (qLoad.FindField('ESKI_TEKLIF_NO') <> nil) and
+    not qLoad.FieldByName('ESKI_TEKLIF_NO').IsNull then
+    edTeklifNo.Text := Trim(qLoad.FieldByName('ESKI_TEKLIF_NO').AsString);
 
   edKonu.Text := qLoad.FieldByName('KONU').AsString;
   mmAciklama.Text := qLoad.FieldByName('ACIKLAMA').AsString;
@@ -551,6 +511,18 @@ begin
     dtAktivite.DateTime := Now
   else
     dtAktivite.DateTime := qLoad.FieldByName('AKTIVITE_TARIHI').AsDateTime;
+  if (qLoad.FindField('AKTIVITE_BITIS_TARIHI') <> nil) and
+    not qLoad.FieldByName('AKTIVITE_BITIS_TARIHI').IsNull then
+  begin
+    dtAktiviteBitis.DateTime := qLoad.FieldByName('AKTIVITE_BITIS_TARIHI').AsDateTime;
+    FBitisTarihiAktif := True;
+  end
+  else
+    FBitisTarihiAktif := False;
+  if FBitisTarihiAktif then
+    BitisTarihindenSureHesapla
+  else
+    edSureDakika.Text := '';
   if (qLoad.FindField('SIPARIS_NO') <> nil) and not qLoad.FieldByName('SIPARIS_NO').IsNull then
     edSiparis.Text := Trim(qLoad.FieldByName('SIPARIS_NO').AsString)
   else
@@ -574,9 +546,10 @@ begin
   CrmTarihceYukle(qLog, FAktiviteId);
 end;
 
-procedure TfrmCrmAktivite.AktiviteLogKaydet(const IsNew: Boolean; const OldKonu, OldAcik, OldTarStr, OldDurAd: string);
+procedure TfrmCrmAktivite.AktiviteLogKaydet(const IsNew: Boolean; const OldKonu, OldAcik, OldTarStr, OldBitisStr, OldDurAd: string);
 var
   KulId: Integer;
+  YeniBitisStr: string;
 begin
   if FAktiviteId <= 0 then
     Exit;
@@ -586,10 +559,15 @@ begin
     CrmLogEkle(qLogExec, FAktiviteId, 'AKTIVITE', 'OLUSTUR', '', '', edKonu.Text, 'Yeni aktivite', KulId);
     Exit;
   end;
+  if not FBitisTarihiAktif then
+    YeniBitisStr := ''
+  else
+    YeniBitisStr := CrmTarihMetin(dtAktiviteBitis.DateTime);
   CrmLogAlanDegisti(qLogExec, FAktiviteId, 'AKTIVITE', 'KONU_DEGIS', 'Konu', OldKonu, edKonu.Text, KulId);
   CrmLogAlanDegisti(qLogExec, FAktiviteId, 'AKTIVITE', 'ACIKLAMA_DEGIS', 'Aciklama', OldAcik, mmAciklama.Text, KulId);
-  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'AKTIVITE', 'TARIH_DEGIS', 'Aktivite Tarihi', OldTarStr,
+  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'AKTIVITE', 'TARIH_DEGIS', 'Baslangic Tarihi', OldTarStr,
     CrmTarihMetin(dtAktivite.DateTime), KulId);
+  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'AKTIVITE', 'TARIH_DEGIS', 'Bitis Tarihi', OldBitisStr, YeniBitisStr, KulId);
   CrmLogAlanDegisti(qLogExec, FAktiviteId, 'AKTIVITE', 'DURUM_DEGIS', 'Durum', OldDurAd, Trim(lkDurum.Text), KulId);
 end;
 
@@ -613,11 +591,11 @@ end;
 
 procedure TfrmCrmAktivite.UniFormShow(Sender: TObject);
 var
-  PrefTeklif, PrefPot: Int64;
+  PrefPot: Int64;
 begin
+  AktiviteTarihPickerFormat;
   EnsureEkUpload;
   FAktiviteId := StrToInt64Def(Trim(Hint), 0);
-  PrefTeklif := Tmp.xCrmYeniAktiviteTeklifId;
   PrefPot := Tmp.xCrmYeniAktivitePotId;
   Tmp.xCrmYeniAktiviteTeklifId := 0;
   Tmp.xCrmYeniAktivitePotId := 0;
@@ -627,9 +605,7 @@ begin
   begin
     YeniKayit;
     if PrefPot > 0 then
-      UygulaBaslangicPotansiyel(PrefPot)
-    else if PrefTeklif > 0 then
-      UygulaBaslangicTeklif(PrefTeklif);
+      UygulaBaslangicPotansiyel(PrefPot);
   end;
 end;
 
@@ -638,7 +614,7 @@ var
   NewId: Int64;
   Tkod, Dkod: string;
   IsNew: Boolean;
-  OldKonu, OldAcik, OldDurAd, OldTarStr: string;
+  OldKonu, OldAcik, OldDurAd, OldTarStr, OldBitisStr: string;
   OldDurId: Int64;
 begin
   Result := False;
@@ -647,12 +623,13 @@ begin
   OldAcik := '';
   OldDurAd := '';
   OldTarStr := '';
+  OldBitisStr := '';
   OldDurId := 0;
   if FAktiviteId > 0 then
   begin
     qLoad.Close;
     qLoad.SQL.Text :=
-      'SELECT KONU, ACIKLAMA, AKTIVITE_TARIHI, AKTIVITE_DURUM_ID FROM dbo.CRM_AKTIVITE WHERE AKTIVITE_ID = :ID';
+      'SELECT KONU, ACIKLAMA, AKTIVITE_TARIHI, AKTIVITE_BITIS_TARIHI, AKTIVITE_DURUM_ID FROM dbo.CRM_AKTIVITE WHERE AKTIVITE_ID = :ID';
     qLoad.ParamByName('ID').AsLargeInt := FAktiviteId;
     qLoad.Open;
     if not qLoad.IsEmpty then
@@ -660,6 +637,9 @@ begin
       OldKonu := qLoad.FieldByName('KONU').AsString;
       OldAcik := qLoad.FieldByName('ACIKLAMA').AsString;
       OldTarStr := CrmTarihMetin(qLoad.FieldByName('AKTIVITE_TARIHI').AsDateTime);
+      if (qLoad.FindField('AKTIVITE_BITIS_TARIHI') <> nil) and
+        not qLoad.FieldByName('AKTIVITE_BITIS_TARIHI').IsNull then
+        OldBitisStr := CrmTarihMetin(qLoad.FieldByName('AKTIVITE_BITIS_TARIHI').AsDateTime);
       if not qLoad.FieldByName('AKTIVITE_DURUM_ID').IsNull then
         OldDurId := qLoad.FieldByName('AKTIVITE_DURUM_ID').AsLargeInt;
     end;
@@ -674,6 +654,11 @@ begin
   if (Trim(edCariKod.Text) = '') and (PotansiyelIdOku <= 0) then
   begin
     UniMainModule.saHata.Show('Cari veya potansiyel se'#231'imi zorunludur.');
+    Exit;
+  end;
+  if (Trim(edCariKod.Text) <> '') and (PotansiyelIdOku > 0) then
+  begin
+    UniMainModule.saHata.Show('Cari ve potansiyel ayni anda secilemez. Yalnizca birini doldurun.');
     Exit;
   end;
   if VarIsNull(lkTip.KeyValue) or VarIsEmpty(lkTip.KeyValue) then
@@ -691,27 +676,8 @@ begin
   Dkod := DurumKodFromLookup;
   if SameText(Tkod, 'TASK') then
   begin
-    UniMainModule.saHata.Show('TASK tipi yaln�zca g�rev formundan kullan�l�r.');
+    UniMainModule.saHata.Show('TASK tipi yalnizca gorev formundan kullanilir.');
     Exit;
-  end;
-
-  if not VarIsNull(lkTeklif.KeyValue) and not VarIsEmpty(lkTeklif.KeyValue) then
-  begin
-    qLoad.Close;
-    qLoad.SQL.Text := 'SELECT CARI_KOD FROM dbo.CRM_TEKLIF WHERE TEKLIF_ID = :T';
-    qLoad.ParamByName('T').AsLargeInt := lkTeklif.KeyValue;
-    qLoad.Open;
-    if not qLoad.IsEmpty and not qLoad.FieldByName('CARI_KOD').IsNull then
-    begin
-      if (Trim(edCariKod.Text) <> '') and
-        not SameText(Trim(edCariKod.Text), Trim(qLoad.FieldByName('CARI_KOD').AsString)) then
-      begin
-        qLoad.Close;
-        UniMainModule.saHata.Show('Se�ilen teklifin cari kodu ile aktivite carisi uyu�muyor.');
-        Exit;
-      end;
-    end;
-    qLoad.Close;
   end;
 
   if CrmKontrolTamamlamaGerekli(qLoad, lkDurum.KeyValue, Dkod, False) then
@@ -726,16 +692,16 @@ begin
   if FAktiviteId > 0 then
   begin
     qExec.SQL.Add('UPDATE dbo.CRM_AKTIVITE SET TIP = :TIP, KONU = :KONU, ACIKLAMA = :ACIKLAMA, CARI_KOD = :CARI_KOD,');
-    qExec.SQL.Add('POTANSIYEL_ID = :PID, AKTIVITE_TARIHI = :AKTIVITE_TARIHI, DURUM = :DURUM, ONCELIK = :ONCELIK,');
-    qExec.SQL.Add('AKTIVITE_TIP_ID = :TID_REF, AKTIVITE_DURUM_ID = :DID_REF, TEKLIF_ID = :TID_TEK, SIPARIS_NO = :SIPNO, GUNCELLEME_UTC = SYSUTCDATETIME()');
+    qExec.SQL.Add('POTANSIYEL_ID = :PID, AKTIVITE_TARIHI = :AKTIVITE_TARIHI, AKTIVITE_BITIS_TARIHI = :ABITIS, DURUM = :DURUM, ONCELIK = :ONCELIK,');
+    qExec.SQL.Add('AKTIVITE_TIP_ID = :TID_REF, AKTIVITE_DURUM_ID = :DID_REF, TEKLIF_ID = :TID_TEK, TEKLIF_FISNO = :TFISNO, SIPARIS_NO = :SIPNO, GUNCELLEME_UTC = SYSUTCDATETIME()');
     qExec.SQL.Add('WHERE AKTIVITE_ID = :ID');
     qExec.ParamByName('ID').AsLargeInt := FAktiviteId;
   end
   else
   begin
-    qExec.SQL.Add('INSERT INTO dbo.CRM_AKTIVITE (TIP, KONU, ACIKLAMA, CARI_KOD, POTANSIYEL_ID, AKTIVITE_TARIHI, DURUM, ONCELIK, OLUSTURAN_KULLANICI_ID, AKTIVITE_TIP_ID, AKTIVITE_DURUM_ID, TEKLIF_ID, SIPARIS_NO)');
+    qExec.SQL.Add('INSERT INTO dbo.CRM_AKTIVITE (TIP, KONU, ACIKLAMA, CARI_KOD, POTANSIYEL_ID, AKTIVITE_TARIHI, AKTIVITE_BITIS_TARIHI, DURUM, ONCELIK, OLUSTURAN_KULLANICI_ID, AKTIVITE_TIP_ID, AKTIVITE_DURUM_ID, TEKLIF_ID, TEKLIF_FISNO, SIPARIS_NO)');
     qExec.SQL.Add('OUTPUT INSERTED.AKTIVITE_ID');
-    qExec.SQL.Add('VALUES (:TIP, :KONU, :ACIKLAMA, :CARI_KOD, :PID, :AKTIVITE_TARIHI, :DURUM, :ONCELIK, :KUL, :TID_REF, :DID_REF, :TID_TEK, :SIPNO)');
+    qExec.SQL.Add('VALUES (:TIP, :KONU, :ACIKLAMA, :CARI_KOD, :PID, :AKTIVITE_TARIHI, :ABITIS, :DURUM, :ONCELIK, :KUL, :TID_REF, :DID_REF, :TID_TEK, :TFISNO, :SIPNO)');
   end;
 
   qExec.ParamByName('TIP').AsString := Tkod;
@@ -751,13 +717,18 @@ begin
   else
     qExec.ParamByName('PID').Clear;
   qExec.ParamByName('AKTIVITE_TARIHI').AsDateTime := dtAktivite.DateTime;
+  if not FBitisTarihiAktif then
+    qExec.ParamByName('ABITIS').Clear
+  else
+    qExec.ParamByName('ABITIS').AsDateTime := dtAktiviteBitis.DateTime;
   qExec.ParamByName('DURUM').AsString := Dkod;
   qExec.ParamByName('TID_REF').AsLargeInt := lkTip.KeyValue;
   qExec.ParamByName('DID_REF').AsLargeInt := lkDurum.KeyValue;
-  if VarIsNull(lkTeklif.KeyValue) or VarIsEmpty(lkTeklif.KeyValue) then
-    qExec.ParamByName('TID_TEK').Clear
+  qExec.ParamByName('TID_TEK').Clear;
+  if Trim(edTeklifNo.Text) <> '' then
+    qExec.ParamByName('TFISNO').AsString := Trim(edTeklifNo.Text)
   else
-    qExec.ParamByName('TID_TEK').AsLargeInt := lkTeklif.KeyValue;
+    qExec.ParamByName('TFISNO').Clear;
   if Trim(edSiparis.Text) <> '' then
     qExec.ParamByName('SIPNO').AsString := Trim(edSiparis.Text)
   else
@@ -785,7 +756,7 @@ begin
   end;
 
   if FAktiviteId > 0 then
-    AktiviteLogKaydet(IsNew, OldKonu, OldAcik, OldTarStr, OldDurAd);
+    AktiviteLogKaydet(IsNew, OldKonu, OldAcik, OldTarStr, OldBitisStr, OldDurAd);
 
   UniMainModule.saKaydet.Show('Aktivite kaydedildi.');
   if FAktiviteId > 0 then
@@ -955,6 +926,96 @@ end;
 procedure TfrmCrmAktivite.lkTipCloseUp(Sender: TObject);
 begin
   KontrolListesiYukle;
+end;
+
+procedure TfrmCrmAktivite.AktiviteTarihPickerFormat;
+begin
+  CrmDateTimePickerFormat(dtAktivite);
+  CrmDateTimePickerFormat(dtAktiviteBitis);
+end;
+
+function TfrmCrmAktivite.SureDakikaDegeri: Integer;
+begin
+  Result := -1;
+  if Trim(edSureDakika.Text) = '' then
+    Exit;
+  if not TryStrToInt(Trim(edSureDakika.Text), Result) then
+    Result := -1;
+end;
+
+procedure TfrmCrmAktivite.SuredenBitisHesapla;
+var
+  Dak: Integer;
+begin
+  if FSureGuncelleniyor then
+    Exit;
+  Dak := SureDakikaDegeri;
+  if Dak < 0 then
+  begin
+    FBitisTarihiAktif := False;
+    Exit;
+  end;
+  FSureGuncelleniyor := True;
+  try
+    dtAktiviteBitis.DateTime := IncMinute(dtAktivite.DateTime, Dak);
+    FBitisTarihiAktif := True;
+  finally
+    FSureGuncelleniyor := False;
+  end;
+end;
+
+procedure TfrmCrmAktivite.BitisTarihindenSureHesapla;
+var
+  Dak: Int64;
+begin
+  if FSureGuncelleniyor then
+    Exit;
+  FSureGuncelleniyor := True;
+  try
+    if not FBitisTarihiAktif then
+      edSureDakika.Text := ''
+    else
+    begin
+      Dak := Round((dtAktiviteBitis.DateTime - dtAktivite.DateTime) * 24 * 60);
+      edSureDakika.Text := IntToStr(Dak);
+    end;
+  finally
+    FSureGuncelleniyor := False;
+  end;
+end;
+
+procedure TfrmCrmAktivite.dtAktiviteChange(Sender: TObject);
+begin
+  if FSureGuncelleniyor then
+    Exit;
+  if SureDakikaDegeri >= 0 then
+    SuredenBitisHesapla
+  else if FBitisTarihiAktif then
+    BitisTarihindenSureHesapla;
+end;
+
+procedure TfrmCrmAktivite.dtAktiviteBitisChange(Sender: TObject);
+begin
+  if FSureGuncelleniyor then
+    Exit;
+  FBitisTarihiAktif := True;
+  BitisTarihindenSureHesapla;
+end;
+
+procedure TfrmCrmAktivite.edSureDakikaExit(Sender: TObject);
+begin
+  if Trim(edSureDakika.Text) = '' then
+  begin
+    FBitisTarihiAktif := False;
+    Exit;
+  end;
+  if SureDakikaDegeri < 0 then
+  begin
+    ShowMessage('Sure alanina gecerli bir dakika degeri girin.');
+    edSureDakika.SetFocus;
+    Exit;
+  end;
+  SuredenBitisHesapla;
 end;
 
 procedure TfrmCrmAktivite.btnKontrolKaydetClick(Sender: TObject);

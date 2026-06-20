@@ -98,6 +98,8 @@ type
     qSiparisListesiNetsisFaturaNo: TStringField;
     qSiparisListesiDovizTarih: TDateTimeField;
     qSiparisListesiNetsisSiparisNo: TStringField;
+    qSiparisListesiDURUM_DETAY: TWideStringField;
+    qSiparisListesiAcikKapaliTarih: TDateTimeField;
     qSiparisListesiCARI_ISIM: TStringField;
     qSiparisListesiKullaniciAd: TStringField;
     btnGuncelle: TUniButton;
@@ -140,6 +142,12 @@ begin
   qSiparisListesi.Close;
   qSiparisListesi.SQL.Clear;
   SQL:='SELECT B.* '
+        +', CASE '
+        +' WHEN ISNULL(B.AcikKapali,0)=0 AND ISNULL(B.NetsisSiparisNo,'''')='''' THEN N''Acik Teklif'' '
+        +' WHEN ISNULL(B.AcikKapali,0)=0 AND ISNULL(B.NetsisSiparisNo,'''')<>'''' THEN N''Acik Siparis'' '
+        +' WHEN ISNULL(B.AcikKapali,0)=1 AND ISNULL(B.NetsisSiparisNo,'''')='''' THEN N''Kapali Teklif'' '
+        +' ELSE N''Kapali Siparis'' '
+        +' END AS DURUM_DETAY '
         +' , C.CARI_ISIM, K.KullaniciAd '
         +' FROM SIPARIS_BASLIK B '
         +'	LEFT JOIN ' + Tmp.xNetsisSirketKodu + '.DBO.TBLCASABIT C WITH(NOLOCK) ON (C.CARI_KOD = B.CariKod) '
@@ -155,7 +163,7 @@ begin
 
 
   SL := TStringList.Create;
-  SL.Delimiter := ' ';//Bo˛luk
+  SL.Delimiter := ' ';//Boùluk
   SL.DelimitedText := edCariKod.Text;
 
    if edCariKod.Text <> '' then begin
@@ -196,13 +204,13 @@ procedure TfrmSiparisListesi.btnGuncelleClick(Sender: TObject);
 begin
   if qSiparisListesi.FieldByName('NetsisSiparisNo').AsString <> '' then
     begin
-      UniMainModule.saHata.Show('Netsis e gˆnderilen sipari˛ g¸ncellenemez. Sadece izleme yapabilirsiniz.');
+      UniMainModule.saHata.Show('Netsis e gùnderilen sipariù gùncellenemez. Sadece izleme yapabilirsiniz.');
 //      Abort;
     end;
 
   if UniDBGrid1.SelectedRows.Count = 0 then
     begin
-      UniMainModule.saHata.Show('Bir sat˝r seÁiniz...');
+      UniMainModule.saHata.Show('Bir satùr seùiniz...');
       Abort;
     end;
 

@@ -121,6 +121,27 @@ object frmSiparis: TfrmSiparis
         LayoutConfig.Margin = '3 5 3 3'
         OnClick = btnNetsisGonderClick
       end
+      object btnAcikKapali: TUniButton
+        Left = 537
+        Top = 4
+        Width = 120
+        Height = 28
+        Hint = ''
+        Caption = 'Teklifi Kapat'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -13
+        Font.Name = 'Segoe UI Semibold'
+        Font.Style = [fsBold]
+        TabOrder = 8
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+            'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'default'#39';'#13#10'}')
+        LayoutConfig.Margin = '3 5 3 3'
+        OnClick = btnAcikKapaliClick
+      end
       object btnYazdir: TUniButton
         Left = 558
         Top = 4
@@ -1102,6 +1123,70 @@ object frmSiparis: TfrmSiparis
             Font.Name = 'Trebuchet MS'
             Font.Style = [fsBold, fsItalic]
             TabOrder = 2
+            LayoutConfig.Margin = '5 2 2 20'
+          end
+          object lblDurumEtiket: TUniLabel
+            Left = 320
+            Top = 3
+            Width = 38
+            Height = 16
+            Hint = ''
+            Caption = 'Durum'
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Height = 17
+            Font.Name = 'Trebuchet MS'
+            Font.Style = [fsBold, fsItalic]
+            TabOrder = 4
+            LayoutConfig.Margin = '5 2 2 5'
+          end
+          object lblDurumAcikKapali: TUniLabel
+            Left = 365
+            Top = 3
+            Width = 80
+            Height = 16
+            Hint = ''
+            AutoSize = False
+            Caption = '-'
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Color = clNavy
+            Font.Height = 17
+            Font.Name = 'Trebuchet MS'
+            Font.Style = [fsBold]
+            TabOrder = 5
+            LayoutConfig.Margin = '5 2 2 15'
+          end
+          object lblKapanisEtiket: TUniLabel
+            Left = 460
+            Top = 3
+            Width = 90
+            Height = 16
+            Hint = ''
+            Caption = 'Kapan'#305#351' Tarihi'
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Height = 17
+            Font.Name = 'Trebuchet MS'
+            Font.Style = [fsBold, fsItalic]
+            TabOrder = 6
+            LayoutConfig.Margin = '5 2 2 5'
+          end
+          object lblKapanisTarihi: TUniLabel
+            Left = 555
+            Top = 3
+            Width = 120
+            Height = 16
+            Hint = ''
+            AutoSize = False
+            Caption = '-'
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Color = clMaroon
+            Font.Height = 17
+            Font.Name = 'Trebuchet MS'
+            Font.Style = [fsBold]
+            TabOrder = 7
             LayoutConfig.Margin = '5 2 2 20'
           end
         end
@@ -2317,6 +2402,18 @@ object frmSiparis: TfrmSiparis
     OnConfirm = saSatirSorConfirm
     Left = 984
     Top = 128
+  end
+  object saAcikKapaliSor: TUniSweetAlert
+    Title = 'Onay'
+    TitleText = 'Onay'
+    Text = 'Devam edilsin mi?'
+    ConfirmButtonText = 'Tamam'
+    CancelButtonText = #304'ptal'
+    AlertType = atQuestion
+    Padding = 20
+    OnConfirm = saAcikKapaliSorConfirm
+    Left = 984
+    Top = 176
   end
   object qKosulKodu: TUniQuery
     Connection = frmDM.conNetsis

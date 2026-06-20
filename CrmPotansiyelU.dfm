@@ -28,11 +28,11 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
       Width = 920
       Height = 588
       Hint = ''
-      ActivePage = tabFirma
-      TabOrder = 0
+      ActivePage = tabKonum
       LayoutConfig.Flex = 1
       LayoutConfig.Height = '100%'
       LayoutConfig.Width = '100%'
+      TabOrder = 0
       object tabFirma: TUniTabSheet
         Hint = ''
         Caption = 'Firma / Ticari'
@@ -41,20 +41,20 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Left = 0
           Top = 0
           Width = 912
-          Height = 552
+          Height = 560
           Hint = ''
           Align = alClient
           TabOrder = 0
-          BorderStyle = ubsNone
-          Caption = ''
           ClientEvents.UniEvents.Strings = (
             
               'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      config.' +
               'autoScroll = true;'#13#10'      config.scrollable = true;'#13#10'}')
+          BorderStyle = ubsNone
+          Caption = ''
           object lblUnvan: TUniLabel
             Left = 16
             Top = 16
-            Width = 71
+            Width = 72
             Height = 13
             Hint = ''
             Caption = 'Firma Unvan *'
@@ -72,7 +72,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           object lblKisa: TUniLabel
             Left = 16
             Top = 52
-            Width = 36
+            Width = 37
             Height = 13
             Hint = ''
             Caption = 'K'#305'sa Ad'
@@ -90,7 +90,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           object lblMustTip: TUniLabel
             Left = 512
             Top = 52
-            Width = 59
+            Width = 60
             Height = 13
             Hint = ''
             Caption = 'M'#252#351'teri Tipi'
@@ -110,7 +110,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           object lblVdaire: TUniLabel
             Left = 16
             Top = 88
-            Width = 63
+            Width = 64
             Height = 13
             Hint = ''
             Caption = 'Vergi Dairesi'
@@ -128,7 +128,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           object lblVno: TUniLabel
             Left = 512
             Top = 88
-            Width = 43
+            Width = 44
             Height = 13
             Hint = ''
             Caption = 'Vergi No'
@@ -146,7 +146,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           object lblTc: TUniLabel
             Left = 16
             Top = 124
-            Width = 61
+            Width = 62
             Height = 13
             Hint = ''
             Caption = 'TC Kimlik No'
@@ -218,7 +218,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           object lblCalisan: TUniLabel
             Left = 16
             Top = 232
-            Width = 67
+            Width = 68
             Height = 13
             Hint = ''
             Caption = #199'al'#305#351'an Say'#305's'#305
@@ -236,7 +236,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           object lblCiro: TUniLabel
             Left = 256
             Top = 232
-            Width = 87
+            Width = 89
             Height = 13
             Hint = ''
             Caption = 'Tahmini Y'#305'll'#305'k Ciro'
@@ -274,7 +274,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           object lblKaynak: TUniLabel
             Left = 16
             Top = 268
-            Width = 87
+            Width = 90
             Height = 13
             Hint = ''
             Caption = 'Kaynak (Referans)'
@@ -299,16 +299,16 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Left = 0
           Top = 0
           Width = 912
-          Height = 552
+          Height = 560
           Hint = ''
           Align = alClient
           TabOrder = 0
-          BorderStyle = ubsNone
-          Caption = ''
           ClientEvents.UniEvents.Strings = (
             
               'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      config.' +
               'autoScroll = true;'#13#10'      config.scrollable = true;'#13#10'}')
+          BorderStyle = ubsNone
+          Caption = ''
           object lblUlke: TUniLabel
             Left = 16
             Top = 16
@@ -408,16 +408,16 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Left = 0
           Top = 0
           Width = 912
-          Height = 552
+          Height = 560
           Hint = ''
           Align = alClient
           TabOrder = 0
-          BorderStyle = ubsNone
-          Caption = ''
           ClientEvents.UniEvents.Strings = (
             
               'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      config.' +
               'autoScroll = true;'#13#10'      config.scrollable = true;'#13#10'}')
+          BorderStyle = ubsNone
+          Caption = ''
           object lblGpsE: TUniLabel
             Left = 16
             Top = 16
@@ -460,14 +460,14 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
             Width = 200
             Height = 32
             Hint = ''
-            Caption = 'Haritadan Konum Se'#231' (Google)'
+            Caption = 'Haritadan Konum Se'#231
             TabOrder = 2
             OnClick = btnHaritaKonumClick
           end
           object lblHarFmt: TUniLabel
             Left = 16
             Top = 56
-            Width = 149
+            Width = 152
             Height = 13
             Hint = ''
             Caption = 'Harita / Geocoder Adres Sat'#305'r'#305
@@ -484,10 +484,12 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           object lblKonumBilgi: TUniLabel
             Left = 16
             Top = 204
-            Width = 471
+            Width = 459
             Height = 13
             Hint = ''
-            Caption = 'Haritada t'#305'klay'#305'n, Yans'#305't ile forma al'#305'n, Tamam ile karta aktar'#305'n. Anahtar: CrmMapsConfigU.'
+            Caption = 
+              'Haritada t'#305'klay'#305'n, Yans'#305't ile forma al'#305'n, Tamam ile karta aktar'#305 +
+              'n. Anahtar: CrmMapsConfigU.'
             TabOrder = 7
           end
         end
@@ -500,20 +502,20 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           Left = 0
           Top = 0
           Width = 912
-          Height = 552
+          Height = 560
           Hint = ''
           Align = alClient
           TabOrder = 0
-          BorderStyle = ubsNone
-          Caption = ''
           ClientEvents.UniEvents.Strings = (
             
               'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      config.' +
               'autoScroll = true;'#13#10'      config.scrollable = true;'#13#10'}')
+          BorderStyle = ubsNone
+          Caption = ''
           object lblTel: TUniLabel
             Left = 16
             Top = 16
-            Width = 47
+            Width = 48
             Height = 13
             Hint = ''
             Caption = 'Tel (Sabit)'
@@ -603,7 +605,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           object lblWeb: TUniLabel
             Left = 16
             Top = 88
-            Width = 53
+            Width = 54
             Height = 13
             Hint = ''
             Caption = 'Web Sitesi'
@@ -621,7 +623,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           object lblYetAd: TUniLabel
             Left = 16
             Top = 132
-            Width = 78
+            Width = 80
             Height = 13
             Hint = ''
             Caption = 'Yetkili Ad Soyad'
@@ -693,7 +695,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           object lblMuhAd: TUniLabel
             Left = 16
             Top = 204
-            Width = 95
+            Width = 94
             Height = 13
             Hint = ''
             Caption = 'Muhasebe Yetkilisi'
@@ -749,22 +751,21 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
       object tabTakip: TUniTabSheet
         Hint = ''
         Caption = 'Durum / Netsis / Notlar'
-        Visible = False
         Layout = 'fit'
         object panTakip: TUniPanel
           Left = 0
           Top = 0
           Width = 912
-          Height = 552
+          Height = 560
           Hint = ''
           Align = alClient
           TabOrder = 0
-          BorderStyle = ubsNone
-          Caption = ''
           ClientEvents.UniEvents.Strings = (
             
               'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      config.' +
               'autoScroll = true;'#13#10'      config.scrollable = true;'#13#10'}')
+          BorderStyle = ubsNone
+          Caption = ''
           object lblDurum: TUniLabel
             Left = 16
             Top = 16
@@ -870,7 +871,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
           object lblNetsis: TUniLabel
             Left = 16
             Top = 296
-            Width = 134
+            Width = 136
             Height = 13
             Hint = ''
             Caption = 'Netsis Cari Kodu (Ba'#287'lant'#305')'

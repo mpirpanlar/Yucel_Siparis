@@ -367,6 +367,10 @@
             <Form>frmCrmSiparisSec</Form>
             <DesignClass>TUniForm</DesignClass>
         </DCCReference>
+        <DCCReference Include="CrmTeklifBaslikSecU.pas">
+            <Form>frmCrmTeklifBaslikSec</Form>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
         <DCCReference Include="CrmBaglantiDurumU.pas"/>
         <DCCReference Include="CrmParamBaglantiDurumU.pas">
             <Form>frmCrmParamBaglantiDurum</Form>

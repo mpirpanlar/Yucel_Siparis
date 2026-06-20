@@ -91,6 +91,10 @@ type
     lblSiparisNo: TUniLabel;
     lblCariKod: TUniLabel;
     lblCariAd: TUniLabel;
+    lblDurumEtiket: TUniLabel;
+    lblDurumAcikKapali: TUniLabel;
+    lblKapanisEtiket: TUniLabel;
+    lblKapanisTarihi: TUniLabel;
     qCariKAYNAK: TStringField;
     qCariVERGI_NUMARASI: TStringField;
     qCariCARI_KOD: TStringField;
@@ -109,6 +113,7 @@ type
     qCariISKONTO_ORANI: TFloatField;
     qCariRISKLIMITI: TFloatField;
     btnNetsisGonder: TUniButton;
+    btnAcikKapali: TUniButton;
     ediskonto: TUniNumberEdit;
     iskSecCombo: TUniComboBox;
     UniSimplePanel1: TUniSimplePanel;
@@ -123,6 +128,7 @@ type
     frxPDFExport1: TfrxPDFExport;
     btnYazdir: TUniButton;
     saSor: TUniSweetAlert;
+    saAcikKapaliSor: TUniSweetAlert;
     saSatirSor: TUniSweetAlert;
     dTerminTarihi: TUniDBDateTimePicker;
     edVadeGunu: TUniDBEdit;
@@ -179,6 +185,7 @@ type
     procedure Kod2ComboCloseUp(Sender: TObject);
     procedure projeComboCloseUp(Sender: TObject);
     procedure btnNetsisGonderClick(Sender: TObject);
+    procedure btnAcikKapaliClick(Sender: TObject);
     procedure btnSatirFiyatUpdateClick(Sender: TObject);
     procedure btnUygulaClick(Sender: TObject);
     procedure edCariKodKeyPress(Sender: TObject; var Key: Char);
@@ -186,6 +193,7 @@ type
     procedure btnYazdirClick(Sender: TObject);
     procedure btnSilClick(Sender: TObject);
     procedure saSorConfirm(Sender: TObject);
+    procedure saAcikKapaliSorConfirm(Sender: TObject);
     procedure saSatirSorConfirm(Sender: TObject);
     procedure edVadeGunuClick(Sender: TObject);
     procedure ediskontoClick(Sender: TObject);
@@ -200,6 +208,10 @@ type
 
   private
     { Private declarations }
+    FAcikKapaliKapat: Boolean;
+    function SiparisAcikMi: Boolean;
+    procedure GuncelleAcikKapaliDurum;
+    procedure UygulaKayitKilidi;
     procedure KurOku();
     var
     KdvYuzdeToplam : Real;
@@ -285,25 +297,25 @@ begin
 
   if Kod1Combo.ItemIndex = -1 then
     begin
-      UniMainModule.saHata.Show('Kod 1 SeÁilmelidir.');
+      UniMainModule.saHata.Show('Kod 1 Seùilmelidir.');
       Abort;
     end;
 
 //  if Kod2Combo.ItemIndex = -1 then
 //    begin
-//      UniMainModule.saHata.Show('Kod 2 SeÁilmelidir.');
+//      UniMainModule.saHata.Show('Kod 2 Seùilmelidir.');
 //      Abort;
 //    end;
 
   if projeCombo.Text = '' then
     begin
-      UniMainModule.saHata.Show('Proje Kodu SeÁilmelidir.');
+      UniMainModule.saHata.Show('Proje Kodu Seùilmelidir.');
       Abort;
     end;
 
   if kosulCombo.Text = '' then
     begin
-      UniMainModule.saHata.Show('Ko˛ul Kodu SeÁilmelidir.');
+      UniMainModule.saHata.Show('Koùul Kodu Seùilmelidir.');
       Abort;
     end;
 
@@ -320,7 +332,7 @@ begin
 
   if qx.RecordCount = 1 then
     begin
-      // Dei˛mi˛
+      // Deùiùmiù
       frmSiparisDM.KosulGuncelle(frmSiparisDM.qFisBaslik.FieldByName('FisNo').AsString,kosulCombo.KeyValue);
 
       qx.Close;
@@ -377,7 +389,7 @@ begin
             begin
 //              q.Close;
 //              FreeAndNil(q);
-//              ShowMessage('Birim Fiyat G¸ncelleme Hata : ' + E.Message);
+//              ShowMessage('Birim Fiyat Gùncelleme Hata : ' + E.Message);
   //            LogMemo.Lines.Add('Hata : ');
   //            LogMemo.Lines.Add(E.Message);
               Abort;
@@ -409,7 +421,7 @@ begin
 
   if edNetsisSipNo.Text <> '' then
     begin
-      UniMainModule.saHata.Show('Netsis e gˆnderilen sipari˛in sat˝r˝ silinemez.');
+      UniMainModule.saHata.Show('Netsis e gùnderilen sipariùin satùrù silinemez.');
       Abort;
     end else
     begin
@@ -432,7 +444,7 @@ begin
 
 //  if frmSiparisDM.qFisDetay.RecordCount>0 then begin
 //
-//    if iskSecCombo.ItemIndex=0 then begin  // Oran iskontosu, direk isk3 e yaz˝lacak.
+//    if iskSecCombo.ItemIndex=0 then begin  // Oran iskontosu, direk isk3 e yazùlacak.
 //      frmSiparisDM.qFisDetay.First;
 //        while not frmSiparisDM.qFisDetay.Eof do begin
 //          frmSiparisDM.qFisDetay.Edit;
@@ -442,7 +454,7 @@ begin
 //        end;
 //    end;
 //
-//    if iskSecCombo.ItemIndex=1 then begin  // Tutar iskontosu - oran hesaplanarak isk3 e yaz˝lacak.
+//    if iskSecCombo.ItemIndex=1 then begin  // Tutar iskontosu - oran hesaplanarak isk3 e yazùlacak.
 ////      YuzdeIskonto:= (edIskonto.Value / edToplamMatrah.Value) * 100;
 //      YuzdeIskonto:= (edIskonto.Value / edToplamGenel.Value) * 100;
 //       frmSiparisDM.qFisDetay.First;
@@ -457,7 +469,7 @@ begin
 //  end;
 
 
-  // s˝f˝rlama hareketi
+  // sùfùrlama hareketi
 //  Satir:=frmSiparisDM.qFisDetay.RecordCount;
 //  if Satir > 0 then begin
 //    IskontoYuzde:= 0;
@@ -473,7 +485,7 @@ begin
 //  frmSiparisDM.qFisBaslik.RefreshRecord;
 //  frmSiparisDM.qFisDetay.RefreshRecord;
 
-// «al˝˛an K˝s˝md˝r. - 2023-10-17 - Ali
+// ùalùùan Kùsùmdùr. - 2023-10-17 - Ali
 //------------------------------------------------------------------
   Satir:=frmSiparisDM.qFisDetay.RecordCount;
   if Satir > 0 then begin
@@ -504,10 +516,10 @@ begin
         end;
   end;
 
-//    LogMemo.Lines.Add('Ba˛l˝k kaydediliyor.');
+//    LogMemo.Lines.Add('Baùlùk kaydediliyor.');
       if frmSiparisDM.qFisBaslik.State IN [dsEdit,dsInsert] then frmSiparisDM.qFisBaslik.Post;
 //      frmSiparisDM.qFisBaslik.ApplyUpdates;
-//    LogMemo.Lines.Add('Ba˛l˝k kaydediliyor.');
+//    LogMemo.Lines.Add('Baùlùk kaydediliyor.');
       if frmSiparisDM.qFisDetay.State IN [dsEdit,dsInsert] then frmSiparisDM.qFisDetay.Post;
       frmSiparisDM.qFisDetay.ApplyUpdates;
 
@@ -544,7 +556,7 @@ begin
           begin
 //            q.Close;
 //            FreeAndNil(q);
-            ShowMessage('Birim Fiyat G¸ncelleme Hata : ' + E.Message);
+            ShowMessage('Birim Fiyat Gùncelleme Hata : ' + E.Message);
 //            LogMemo.Lines.Add('Hata : ');
 //            LogMemo.Lines.Add(E.Message);
             Abort;
@@ -553,10 +565,10 @@ begin
       end;
 
 
-//    LogMemo.Lines.Add('Ba˛l˝k kaydediliyor.');
+//    LogMemo.Lines.Add('Baùlùk kaydediliyor.');
       if frmSiparisDM.qFisBaslik.State IN [dsEdit,dsInsert] then frmSiparisDM.qFisBaslik.Post;
 //      frmSiparisDM.qFisBaslik.ApplyUpdates;
-//    LogMemo.Lines.Add('Ba˛l˝k kaydediliyor.');
+//    LogMemo.Lines.Add('Baùlùk kaydediliyor.');
       if frmSiparisDM.qFisDetay.State IN [dsEdit,dsInsert] then frmSiparisDM.qFisDetay.Post;
       frmSiparisDM.qFisDetay.ApplyUpdates;
 
@@ -619,7 +631,7 @@ procedure TfrmSiparis.btnSilClick(Sender: TObject);
 begin
   if edNetsisSipNo.Text <> '' then
     begin
-      UniMainModule.saHata.Show('Netsis e gˆnderilen sipari˛ g¸ncellenemez.');
+      UniMainModule.saHata.Show('Netsis e gùnderilen sipariù gùncellenemez.');
       Abort;
     end else
     begin
@@ -812,8 +824,8 @@ end;
 
 procedure TfrmSiparis.saFiyat1Confirm(Sender: TObject);
 begin
-  UniMainModule.saFiyat.Text:='F›YAT BUL';
-  UniMainModule.saFiyat.Show('Sat˝˛ Fiyat˝ GENEL grubundan bulunmu˛tur.');
+  UniMainModule.saFiyat.Text:='FùYAT BUL';
+  UniMainModule.saFiyat.Show('Satùù Fiyatù GENEL grubundan bulunmuùtur.');
 end;
 
 procedure TfrmSiparis.saSatirSorConfirm(Sender: TObject);
@@ -821,8 +833,8 @@ begin
   frmSiparisDM.qFisDetay.Delete;
 //  frmSiparisDM.qFisBaslik2.Refresh;
 
-  UniMainModule.saKaydet.Text:='SATIR S›L';
-  UniMainModule.saKaydet.Show('Sat˝r Silme ›˛lemi tamamland˝.');
+  UniMainModule.saKaydet.Text:='SATIR SùL';
+  UniMainModule.saKaydet.Show('Satùr Silme ùùlemi tamamlandù.');
 
 end;
 
@@ -843,19 +855,19 @@ begin
 //    if (acikKapaliCombo.Text = 'KAPALI') AND ((txtFark.EditValue <> 0) OR (txtFark.EditValue <> 0.00) OR (FloatToStr(txtFark.EditValue) <> '0,00')) then
 //    if (acikKapaliCombo.Text = 'KAPALI') AND (Fark <> '0') then
 //      begin
-//        HataVar2('÷deme bilgileri kayd˝ tamamlanmam˝˛...','Kritik Hata');
+//        HataVar2('ùdeme bilgileri kaydù tamamlanmamùù...','Kritik Hata');
 //        Abort;
 //      end;
 
       if frmSiparisDM.qFisDetay.RecordCount = 0 then
         begin
-          UniMainModule.saHata.Show('Detay girilmemi˛. Kay˝t yap˝lamaz. !!!');
+          UniMainModule.saHata.Show('Detay girilmemiù. Kayùt yapùlamaz. !!!');
           Abort;
         end;
 
       if frmSiparisDM.qFisDetay.RecordCount = 0 then
         begin
-          UniMainModule.saHata.Show('Sat˝rlar olu˛mam˝˛. Konrol ediniz...');
+          UniMainModule.saHata.Show('Satùrlar oluùmamùù. Konrol ediniz...');
           Abort;
         end;
 
@@ -889,7 +901,7 @@ begin
           begin
 //            q.Close;
 //            FreeAndNil(q);
-            ShowMessage('Birim Fiyat G¸ncelleme Hata : ' + E.Message);
+            ShowMessage('Birim Fiyat Gùncelleme Hata : ' + E.Message);
 //            LogMemo.Lines.Add('Hata : ');
 //            LogMemo.Lines.Add(E.Message);
             Abort;
@@ -898,10 +910,10 @@ begin
       end;
 
 
-//    LogMemo.Lines.Add('Ba˛l˝k kaydediliyor.');
+//    LogMemo.Lines.Add('Baùlùk kaydediliyor.');
       if frmSiparisDM.qFisBaslik.State IN [dsEdit,dsInsert] then frmSiparisDM.qFisBaslik.Post;
 //      frmSiparisDM.qFisBaslik.ApplyUpdates;
-//    LogMemo.Lines.Add('Ba˛l˝k kaydediliyor.');
+//    LogMemo.Lines.Add('Baùlùk kaydediliyor.');
       if frmSiparisDM.qFisDetay.State IN [dsEdit,dsInsert] then frmSiparisDM.qFisDetay.Post;
       frmSiparisDM.qFisDetay.ApplyUpdates;
 
@@ -959,7 +971,7 @@ begin
   except
     On E:Exception do
       begin
-        UniMainModule.saHata.Show('Kay˝t s˝ras˝nda hata olu˛tu.');
+        UniMainModule.saHata.Show('Kayùt sùrasùnda hata oluùtu.');
       end;
 
   end;
@@ -986,7 +998,7 @@ procedure TfrmSiparis.KurOku();
 var
   tar : string;
 begin
-  // Dˆviz Kurlar˝ bulunmas˝
+  // Dùviz Kurlarù bulunmasù
 
   tar := FormatDateTime('yyyy-mm-dd',dovizTarih.DateTime);
 
@@ -1013,8 +1025,8 @@ procedure TfrmSiparis.saSorConfirm(Sender: TObject);
 begin
   xUpdateTablo('DELETE FROM SIPARIS_DETAY WHERE FISNO =''' + edFisNo.Text + '''');
   xUpdateTablo('DELETE FROM SIPARIS_BASLIK WHERE FISNO =''' + edFisNo.Text + '''');
-  UniMainModule.saKaydet.Text:='S›L';
-  UniMainModule.saKaydet.Show('Silme ›˛lemi tamamland˝.');
+  UniMainModule.saKaydet.Text:='SùL';
+  UniMainModule.saKaydet.Show('Silme ùùlemi tamamlandù.');
   MainForm.NavPage.ActivePage.Close;
 end;
 
@@ -1082,7 +1094,7 @@ begin
 //        On E:Exception do
 //          begin
 //            Screen.Cursor := crDefault;
-//            UniMainModule.saKaydet.Show('Balant˝ Hatas˝ -> ' + E.Message);
+//            UniMainModule.saKaydet.Show('Baùlantù Hatasù -> ' + E.Message);
 //            Abort;
 //          end;
 //      end;
@@ -1129,7 +1141,7 @@ Begin
           On E:Exception do
             begin
               Screen.Cursor := crDefault;
-              UniMainModule.saKaydet.Show('Balant˝ Hatas˝ -> ' + E.Message);
+              UniMainModule.saKaydet.Show('Baùlantù Hatasù -> ' + E.Message);
               Abort;
             end;
         end;
@@ -1151,7 +1163,7 @@ Begin
         On E:Exception do
           begin
             Screen.Cursor := crDefault;
-            UniMainModule.saKaydet.Show('Netsis Sipari˛ No al˝namad˝ ! ' + E.Message);
+            UniMainModule.saKaydet.Show('Netsis Sipariù No alùnamadù ! ' + E.Message);
             Abort;
           end;
       end;
@@ -1178,8 +1190,8 @@ Begin
 //    SipUst.KOSULKODU := frmSiparisDM.qFisBaslik.FieldByName('OzelKod5').AsString; //04.10.2023 eklentisi.
 //    SipUst.KOSULTARIHI := frmSiparisDM.qFisBaslik.FieldByName('Tarih').AsDateTime;
 
-    SipUst.EKACK1 := frmSiparisDM.qFisBaslik.FieldByName('FisNo').AsString; // Fi˛in Hangi Netsis Sipari˛ine Gittii ???  -  16.05 Musa.
-//    SipUst.EKACK3 := frmSiparisDM.qFisBaslik.FieldByName('FisNo').AsString; // Fi˛in Hangi Netsis Sipari˛ine Gittii ???
+    SipUst.EKACK1 := frmSiparisDM.qFisBaslik.FieldByName('FisNo').AsString; // Fiùin Hangi Netsis Sipariùine Gittiùi ???  -  16.05 Musa.
+//    SipUst.EKACK3 := frmSiparisDM.qFisBaslik.FieldByName('FisNo').AsString; // Fiùin Hangi Netsis Sipariùine Gittiùi ???
     SipUst.EKACK4 := frmSiparisDM.qEk.FieldByName('ACIK4').AsString;
     SipUst.EKACK5 := frmSiparisDM.qEk.FieldByName('ACIK5').AsString;
     SipUst.EKACK6 := frmSiparisDM.qEk.FieldByName('ACIK6').AsString;
@@ -1200,16 +1212,16 @@ Begin
         SipKalem := Siparis.kalemYeni(frmSiparisDM.qFisDetay.FieldByName('StokKod').AsString);
         SipKalem.STra_GCMIK := frmSiparisDM.qFisDetay.FieldByName('Miktar').AsFloat;
         SipKalem.Olcubr := 1;
-        SipKalem.CEVRIM := 0; // ›kinci Birim Netsis e getirilmeyecek.  //frmSiparisDM.qFisDetay.FieldByName('Carpan').AsFloat;
+        SipKalem.CEVRIM := 0; // ùkinci Birim Netsis e getirilmeyecek.  //frmSiparisDM.qFisDetay.FieldByName('Carpan').AsFloat;
         SipKalem.STra_DOVTIP := StrToInt(frmSiparisDM.qFisDetay.FieldByName('ParaBirimi').AsString);
 
         if frmSiparisDM.qFisDetay.FieldByName('IskYuzde_3').AsFloat <> 0 then
           begin
-            // ›skonto gririlmi˛ ise hesaplama yap˝lacak. DˆvizFiyat=BirimFiyat/Kur
+            // ùskonto gririlmiù ise hesaplama yapùlacak. DùvizFiyat=BirimFiyat/Kur
             SipKalem.STra_DOVFIAT := (frmSiparisDM.qFisDetay.FieldByName('NetBirimFiyat').AsFloat / frmSiparisDM.qFisDetay.FieldByName('SatisKur').AsFloat);
           end else
           begin
-            // ›skonto girilmemi˛ ise aynen at˝lacak.
+            // ùskonto girilmemiù ise aynen atùlacak.
 //            SipKalem.STra_DOVFIAT := frmSiparisDM.qFisDetay.FieldByName('BirimFiyat').AsFloat;
             SipKalem.STra_DOVFIAT := (frmSiparisDM.qFisDetay.FieldByName('NetBirimFiyat').AsFloat / frmSiparisDM.qFisDetay.FieldByName('SatisKur').AsFloat);
 
@@ -1218,10 +1230,10 @@ Begin
         SipKalem.STra_KDV := frmSiparisDM.qFisDetay.FieldByName('Kdv').AsFloat;
         SipKalem.STra_BF := frmSiparisDM.qFisDetay.FieldByName('NetBirimFiyat').AsFloat;
         SipKalem.STra_SatIsk := 0;  //  frmSiparisDM.qFisDetay.FieldByName('IskYuzde_1').AsFloat;
-        SipKalem.STra_SatIsk3 := 0; //  frmSiparisDM.qFisDetay.FieldByName('IskYuzde_3').AsFloat;  // Musa Test etsin. Faturadaki gibi mi yap˝yor. 100.000 e bˆlecekmiyiz.
+        SipKalem.STra_SatIsk3 := 0; //  frmSiparisDM.qFisDetay.FieldByName('IskYuzde_3').AsFloat;  // Musa Test etsin. Faturadaki gibi mi yapùyor. 100.000 e bùlecekmiyiz.
         SipKalem.STra_NF := frmSiparisDM.qFisDetay.FieldByName('NetBirimFiyat').AsFloat;  //frmSiparisDM.qFisDetay.FieldByName('NetBirimFiyat').AsFloat;
 
-//        SipKalem.STra_IAF := frmSiparisDM.qFisDetay.FieldByName('NetBirimFiyat').AsFloat; // DOLDUR BOﬁALT
+//        SipKalem.STra_IAF := frmSiparisDM.qFisDetay.FieldByName('NetBirimFiyat').AsFloat; // DOLDUR BOùALT
 
         SipKalem.DEPO_KODU :=  Tmp.xKullaniciDepo;
 
@@ -1249,10 +1261,10 @@ Begin
         frmSiparisDM.qFisDetay.Next;
       end;
 
-    //Kay˝tlar˝ saklama
+    //Kayùtlarù saklama
     Siparis.kayitYeni;
 
-    // Fi˛Ba˛l˝k Update
+    // FiùBaùlùk Update
     frmSiparisDM.qFisBaslik.Edit;
     frmSiparisDM.qFisBaslik.FieldByName('NetsisSiparisNo').AsString := NetsisSipNo;
     frmSiparisDM.qFisBaslik.Post;
@@ -1275,7 +1287,7 @@ Begin
         On E:Exception do
           begin
             Screen.Cursor := crDefault;
-            UniMainModule.saKaydet.Show('STHARNF = STHAR_BF e˛itlemesi s˝ras˝nda hata olu˛tu. ! ' + E.Message);
+            UniMainModule.saKaydet.Show('STHARNF = STHAR_BF eùitlemesi sùrasùnda hata oluùtu. ! ' + E.Message);
             Abort;
           end;
       end;
@@ -1318,7 +1330,7 @@ procedure TfrmSiparis.btnNetsisGonderClick(Sender: TObject);
 var
   q:TUniQuery;
 Begin
-  // BURADAK› NETSIS ﬁ›RKET KODU «ALIﬁILAN YILAN A›T OLAN DATABASE OLARAK PARAMETRELERDEN GELECEK...
+  // BURADAKù NETSIS ùùRKET KODU ùALIùILAN YILAN AùT OLAN DATABASE OLARAK PARAMETRELERDEN GELECEK...
   q := TUniQuery.Create(Self);
   q.Connection := frmDM.conNetsis;
   q.Close;
@@ -1330,7 +1342,7 @@ Begin
 
   if q.RecordCount > 0 then
     begin
-      UniMainModule.saHata.Show('Bu fi˛ daha ˆnce Netsis e gˆnderilmi˛. Tekrar gˆnderilemez. Netsis Sipari˛ No : ' + q.FieldByName('FATIRSNO').AsString);
+      UniMainModule.saHata.Show('Bu fiù daha ùnce Netsis e gùnderilmiù. Tekrar gùnderilemez. Netsis Sipariù No : ' + q.FieldByName('FATIRSNO').AsString);
       q.Close;
       FreeAndNil(q);
       Abort;
@@ -1424,18 +1436,8 @@ begin
 
     btnBaslikGeri.Visible := False;
 
-    pnlBaslik.Enabled := False;
-    pnlDetayButon.Enabled := False;
-    UniPanel9.Enabled := False;
-    UniDBGrid2.Enabled := False;
-
-    if frmSiparisDM.qFisBaslik.FieldByName('NetsisSiparisNo').AsString <> '' then
-      begin
-        bntKaydet.Enabled := False;
-        btnDuzenle.Enabled := False;
-        btnSil.Enabled := False;
-        btnNetsisGonder.Enabled := false;
-      end;
+    GuncelleAcikKapaliDurum;
+    UygulaKayitKilidi;
 
     uniPageControl1.ActivePage:=tabBaslik;
 
@@ -1453,8 +1455,8 @@ begin
 
   if lblCariKod0.Caption = '' then
     begin
-//      saHata.Show('Cari Hesap seÁilmemi˛ !!!');
-      UniMainModule.saHata.Show('Cari Hesap seÁilmemi˛ !!!');
+//      saHata.Show('Cari Hesap seùilmemiù !!!');
+      UniMainModule.saHata.Show('Cari Hesap seùilmemiù !!!');
       Abort;
     end;
 
@@ -1475,16 +1477,16 @@ begin
   frmSiparisDM.qFisBaslik.FieldByName('VadeGunu').AsInteger := qCariVADE_GUNU.AsInteger;
 
 
-  // Belge numaras˝ al.
-  // A˛a˝daki ˆrnekler kullan˝larak Teklif ve Sipari˛ numaralar˝ Netsis kaynakl˝ olarak al˝nabilir.
+  // Belge numarasù al.
+  // Aùaùùdaki ùrnekler kullanùlarak Teklif ve Sipariù numaralarù Netsis kaynaklù olarak alùnabilir.
   //
-  // Teklif yani Fi˛ No Netsis TEKLIFMAS ve TEKLIFTRa dan al˝nacak olursa bu ko kullan˝labilir.
+  // Teklif yani Fiù No Netsis TEKLIFMAS ve TEKLIFTRa dan alùnacak olursa bu ko kullanùlabilir.
   //SELECT FISNO ='T2022'+RIGHT('0000000000'+CONVERT(VARCHAR,((SELECT COUNT(FATIRS_NO) FROM YUCEL2022.DBO.TBLTEKLIFMAS WHERE SUBE_KODU = 0 AND FATIRS_NO LIKE 'M2022%')+1)),10)
-  // Sipari˛ Yani Netsis Sipari˛ No
+  // Sipariù Yani Netsis Sipariù No
   //SELECT FISNO ='M2022'+RIGHT('0000000000'+CONVERT(VARCHAR,((SELECT COUNT(FATIRS_NO) FROM YUCEL2022.DBO.TBLSIPAMAS WHERE SUBE_KODU = 0 AND FATIRS_NO LIKE 'M2022%')+1)),10)
 
 
-  // Teklif No Yani Sipari˛_Ba˛l˝k tablosuna al˝nan kay˝tlar˝n Fi˛No lar˝ buradan al˝nacak. Bu TFisNo tablosundan Áal˝˛˝yor.
+  // Teklif No Yani Sipariù_Baùlùk tablosuna alùnan kayùtlarùn FiùNo larù buradan alùnacak. Bu TFisNo tablosundan ùalùùùyor.
 //  q := TUniQuery.Create(Self);
 //  q.Connection:= frmDM.conNetsis;
 //  q.Close;
@@ -1509,9 +1511,9 @@ begin
   dTerminTarihi.DateTime := Date;
 
 
-//  LogMemo.Lines.Add('dTarih - Date E˛leme - ' + DateToStr(Date) + ' - ' + dTarih.Text);
+//  LogMemo.Lines.Add('dTarih - Date Eùleme - ' + DateToStr(Date) + ' - ' + dTarih.Text);
 
-  // Yeni Fatura Olu˛tur.
+  // Yeni Fatura Oluùtur.
   frmSiparisDM.qFisDetay.Open;
   frmSiparisDM.qEk.Open;
 
@@ -1528,7 +1530,7 @@ begin
   qKosulKodu.Close;
   qKosulKodu.Open;
 
-  // Netsis ﬁube Parametreleri
+  // Netsis ùube Parametreleri
   frmSiparisDM.qNetsisSubeParametre.Close;
   frmSiparisDM.qNetsisSubeParametre.ParamByName('Sube').AsInteger := Tmp.xSubeKodu;
   frmSiparisDM.qNetsisSubeParametre.Open;
@@ -1551,6 +1553,7 @@ begin
   btnNetsisGonder.Enabled := False;
   btnYazdir.Enabled := False;
   btnSil.Enabled := False;
+  btnAcikKapali.Enabled := False;
 
   if frmSiparisDM.qFisDetay.RecordCount > 0 then
     begin
@@ -1567,7 +1570,7 @@ end;
 
 procedure TfrmSiparis.btnSatirGuncelleClick(Sender: TObject);
 begin
-// Sat˝r G¸ncelle
+// Satùr Gùncelle
   frmSiparisSatirGuncelle.FisDetayID := frmSiparisDM.qFisDetay.FieldByName('FisDetayID').AsInteger;
   frmSiparisSatirGuncelle.StokKodu := frmSiparisDM.qFisDetay.FieldByName('StokKod').AsString;
   frmSiparisSatirGuncelle.Birim := frmSiparisDM.qFisDetay.FieldByName('StokBirim').AsString;
@@ -1632,7 +1635,7 @@ procedure TfrmSiparis.btnYazdirClick(Sender: TObject);
 var
   dosya : String;
 begin
-  // Yazd˝r - TL
+  // Yazdùr - TL
   dosya := FormatDateTime('yymmdd_hhmmsszzz',now);
   frmSiparisDM.qCariDizayn.Close;
   frmSiparisDM.qCariDizayn.ParamByName('Cari').AsString := frmSiparisDM.qFisBaslik.FieldByName('CariKod').AsString;
@@ -1653,7 +1656,7 @@ procedure TfrmSiparis.btnYazdirDovizClick(Sender: TObject);
 var
   dosya : String;
 begin
-  // Yazd˝r - Dˆviz
+  // Yazdùr - Dùviz
   dosya := FormatDateTime('yymmdd_hhmmsszzz',now);
   frmSiparisDM.qCariDizayn.Close;
   frmSiparisDM.qCariDizayn.ParamByName('Cari').AsString := frmSiparisDM.qFisBaslik.FieldByName('CariKod').AsString;
@@ -1667,8 +1670,162 @@ begin
   uniPageControl1.ActivePage:=tabCari;
 end;
 
+function TfrmSiparis.SiparisAcikMi: Boolean;
+begin
+  Result := True;
+  if not frmSiparisDM.qFisBaslik.Active or frmSiparisDM.qFisBaslik.IsEmpty then
+    Exit;
+  if frmSiparisDM.qFisBaslik.FieldByName('AcikKapali').IsNull then
+    Exit;
+  Result := frmSiparisDM.qFisBaslik.FieldByName('AcikKapali').AsInteger = 0;
+end;
+
+procedure TfrmSiparis.GuncelleAcikKapaliDurum;
+var
+  Kapali, NetsisDolu: Boolean;
+  Tar: TDateTime;
+begin
+  if not frmSiparisDM.qFisBaslik.Active or frmSiparisDM.qFisBaslik.IsEmpty then
+  begin
+    lblDurumAcikKapali.Caption := '';
+    lblKapanisTarihi.Caption := '-';
+    btnAcikKapali.Caption := 'Kapat';
+    btnAcikKapali.Enabled := False;
+    Exit;
+  end;
+
+  btnAcikKapali.Enabled := True;
+  Kapali := not SiparisAcikMi;
+  NetsisDolu := Trim(frmSiparisDM.qFisBaslik.FieldByName('NetsisSiparisNo').AsString) <> '';
+
+  if not Kapali then
+  begin
+    if NetsisDolu then
+      lblDurumAcikKapali.Caption := 'Acik (Siparis)'
+    else
+      lblDurumAcikKapali.Caption := 'Acik (Teklif)';
+    lblKapanisTarihi.Caption := '-';
+    if NetsisDolu then
+      btnAcikKapali.Caption := 'Siparisi Kapat'
+    else
+      btnAcikKapali.Caption := 'Teklifi Kapat';
+  end
+  else
+  begin
+    if NetsisDolu then
+      lblDurumAcikKapali.Caption := 'Kapali Siparis'
+    else
+      lblDurumAcikKapali.Caption := 'Kapali Teklif';
+    if (frmSiparisDM.qFisBaslik.FindField('AcikKapaliTarih') <> nil) and
+       (not frmSiparisDM.qFisBaslik.FieldByName('AcikKapaliTarih').IsNull) then
+    begin
+      Tar := frmSiparisDM.qFisBaslik.FieldByName('AcikKapaliTarih').AsDateTime;
+      lblKapanisTarihi.Caption := FormatDateTime('dd.mm.yyyy HH:mm', Tar);
+    end
+    else
+      lblKapanisTarihi.Caption := '-';
+    btnAcikKapali.Caption := 'Tekrar Ac';
+  end;
+end;
+
+procedure TfrmSiparis.UygulaKayitKilidi;
+var
+  NetsisKilit, KapaliKilit: Boolean;
+begin
+  if not frmSiparisDM.qFisBaslik.Active or frmSiparisDM.qFisBaslik.IsEmpty then
+    Exit;
+
+  NetsisKilit := Trim(frmSiparisDM.qFisBaslik.FieldByName('NetsisSiparisNo').AsString) <> '';
+  KapaliKilit := not SiparisAcikMi;
+
+  pnlBaslik.Enabled := False;
+  pnlDetayButon.Enabled := False;
+  UniPanel9.Enabled := False;
+  UniDBGrid2.Enabled := False;
+
+  if NetsisKilit or KapaliKilit then
+  begin
+    bntKaydet.Enabled := False;
+    btnDuzenle.Enabled := False;
+    btnSil.Enabled := False;
+    if NetsisKilit then
+      btnNetsisGonder.Enabled := False;
+  end
+  else
+  begin
+    btnDuzenle.Enabled := True;
+    btnSil.Enabled := True;
+    btnNetsisGonder.Enabled := True;
+  end;
+end;
+
+procedure TfrmSiparis.btnAcikKapaliClick(Sender: TObject);
+begin
+  if not frmSiparisDM.qFisBaslik.Active or frmSiparisDM.qFisBaslik.IsEmpty then
+  begin
+    UniMainModule.saHata.Show('Kayit bulunamadi.');
+    Exit;
+  end;
+
+  if Trim(frmSiparisDM.qFisBaslik.FieldByName('FisNo').AsString) = '' then
+  begin
+    UniMainModule.saHata.Show('Fis numarasi yok.');
+    Exit;
+  end;
+
+  FAcikKapaliKapat := SiparisAcikMi;
+  if FAcikKapaliKapat then
+  begin
+    if Trim(frmSiparisDM.qFisBaslik.FieldByName('NetsisSiparisNo').AsString) <> '' then
+      saAcikKapaliSor.Text := 'Siparis kapatilacak. Devam edilsin mi?'
+    else
+      saAcikKapaliSor.Text := 'Teklif kapatilacak. Devam edilsin mi?';
+  end
+  else
+    saAcikKapaliSor.Text := 'Kayit tekrar acilacak. Devam edilsin mi?';
+  saAcikKapaliSor.Show;
+end;
+
+procedure TfrmSiparis.saAcikKapaliSorConfirm(Sender: TObject);
+var
+  q: TUniQuery;
+  FisNo: string;
+begin
+  FisNo := Trim(frmSiparisDM.qFisBaslik.FieldByName('FisNo').AsString);
+  q := TUniQuery.Create(Self);
+  try
+    q.Connection := frmDM.conAsya;
+    q.SQL.Clear;
+    if FAcikKapaliKapat then
+      q.SQL.Add('UPDATE SIPARIS_BASLIK SET AcikKapali = 1, AcikKapaliTarih = GETDATE() WHERE FisNo = :Fis')
+    else
+      q.SQL.Add('UPDATE SIPARIS_BASLIK SET AcikKapali = NULL, AcikKapaliTarih = NULL WHERE FisNo = :Fis');
+    q.ParamByName('Fis').AsString := FisNo;
+    q.ExecSQL;
+  finally
+    q.Free;
+  end;
+
+  frmSiparisDM.qFisBaslik.RefreshRecord;
+  GuncelleAcikKapaliDurum;
+  UygulaKayitKilidi;
+  UniMainModule.saKaydet.Show('Islem tamamlandi.');
+end;
+
 procedure TfrmSiparis.btnDuzenleClick(Sender: TObject);
 begin
+  if not SiparisAcikMi then
+    begin
+      UniMainModule.saHata.Show('Kapali kayit duzenlenemez. Once Tekrar Ac yapin.');
+      Exit;
+    end;
+
+  if frmSiparisDM.qFisBaslik.FieldByName('NetsisSiparisNo').AsString <> '' then
+    begin
+      UniMainModule.saHata.Show('Netsis e gonderilen siparis guncellenemez.');
+      Exit;
+    end;
+
     pnlBaslik.Enabled := True;
     pnlDetayButon.Enabled := True;
     UniPanel9.Enabled := True;

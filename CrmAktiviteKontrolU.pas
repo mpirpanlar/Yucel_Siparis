@@ -6,7 +6,7 @@ interface
 
 uses
   SysUtils, Classes, Controls, Forms, System.Generics.Collections,
-  uniGUIBaseClasses, uniGUIClasses, uniPanel, uniLabel, uniEdit, uniMemo,
+  uniGUIBaseClasses, uniGUIClasses, uniGUITypes, uniPanel, uniLabel, uniEdit, uniMemo,
   uniDateTimePicker, uniComboBox, uniCheckBox, DBAccess, Uni;
 
 type
@@ -54,11 +54,45 @@ type
 
 function CrmKontrolTamamlamaGerekli(AQ: TUniQuery; ADurumId: Int64; const ADurumKod: string;
   AGorevModu: Boolean): Boolean;
+procedure CrmDateTimePickerFormat(ADt: TUniDateTimePicker);
 
 implementation
 
 uses
-  Graphics, TmpU, MainModule, CrmBaglantiDurumU;
+  Graphics, System.Math, TmpU, MainModule, CrmBaglantiDurumU;
+
+const
+  CRM_KONTROL_KENAR = 16;
+  CRM_KONTROL_GIRIS = 24;
+  CRM_KONTROL_GENISLIK = 580;
+  CRM_KONTROL_ETIKET_GEN = 580;
+  CRM_KONTROL_ETIKET_MIN = 22;
+  CRM_KONTROL_ARALIK = 12;
+  CRM_KONTROL_MEMO_YUK = 72;
+  CRM_KONTROL_CHK_YUK = 26;
+
+function CrmSoruEtiketYukseklik(const AMetin: string; AGenislik: Integer): Integer;
+var
+  CharsPerLine, Satir: Integer;
+begin
+  CharsPerLine := Max(24, AGenislik div 8);
+  if Trim(AMetin) = '' then
+    Exit(CRM_KONTROL_ETIKET_MIN);
+  Satir := (Length(Trim(AMetin)) + CharsPerLine - 1) div CharsPerLine;
+  if Satir < 1 then
+    Satir := 1;
+  Result := Satir * 18 + 8;
+  if Result < CRM_KONTROL_ETIKET_MIN then
+    Result := CRM_KONTROL_ETIKET_MIN;
+end;
+
+procedure CrmDateTimePickerFormat(ADt: TUniDateTimePicker);
+begin
+  ADt.Kind := tUniDateTime;
+  ADt.UseSystemFormats := False;
+  ADt.DateFormat := 'dd.mm.yyyy';
+  ADt.TimeFormat := 'HH:mm';
+end;
 
 function CrmKontrolTamamlamaGerekli(AQ: TUniQuery; ADurumId: Int64; const ADurumKod: string;
   AGorevModu: Boolean): Boolean;
@@ -129,8 +163,8 @@ var
   mm: TUniMemo;
   dt: TUniDateTimePicker;
   chk: TUniCheckBox;
-  Tipi: string;
-  N: Integer;
+  Tipi, Cap: string;
+  N, LblH: Integer;
 begin
   K := TCrmSoruKontrol.Create;
   K.SoruId := FqKontrol.FieldByName('SORU_ID').AsLargeInt;
@@ -141,37 +175,42 @@ begin
   K.Metni := FqKontrol.FieldByName('SORU_METNI').AsString;
   Tipi := K.Tipi;
 
+  if K.Zorunlu then
+    Cap := '(*) ' + K.Metni
+  else
+    Cap := K.Metni;
+  LblH := CrmSoruEtiketYukseklik(Cap, CRM_KONTROL_ETIKET_GEN);
+
   lbl := TUniLabel.Create(FOwner);
   lbl.Parent := FPanel;
-  lbl.Left := 16;
+  lbl.Left := CRM_KONTROL_KENAR;
   lbl.Top := AY;
-  lbl.Width := 600;
-  if K.Zorunlu then
-    lbl.Caption := '(*) ' + K.Metni
-  else
-    lbl.Caption := K.Metni;
+  lbl.Width := CRM_KONTROL_ETIKET_GEN;
+  lbl.Height := LblH;
+  lbl.AutoSize := False;
+  lbl.Caption := Cap;
   FDinamik.Add(lbl);
-  AY := AY + 20;
+  AY := AY + LblH + 6;
 
   if SameText(Tipi, 'EVET_HAYIR') then
   begin
     cb := TUniComboBox.Create(FOwner);
     cb.Parent := FPanel;
-    cb.Left := 24;
+    cb.Left := CRM_KONTROL_GIRIS;
     cb.Top := AY;
-    cb.Width := 200;
+    cb.Width := 220;
     cb.Items.Add('Evet');
     cb.Items.Add('Hay' + #$0131 + 'r');
     cb.ItemIndex := -1;
     K.Ana := cb;
     FDinamik.Add(cb);
-    AY := AY + 34;
+    AY := AY + 34 + CRM_KONTROL_ARALIK;
   end
   else if SameText(Tipi, 'PUAN') then
   begin
     cb := TUniComboBox.Create(FOwner);
     cb.Parent := FPanel;
-    cb.Left := 24;
+    cb.Left := CRM_KONTROL_GIRIS;
     cb.Top := AY;
     cb.Width := 120;
     cb.Items.Add('1');
@@ -182,7 +221,7 @@ begin
     cb.ItemIndex := -1;
     K.Ana := cb;
     FDinamik.Add(cb);
-    AY := AY + 34;
+    AY := AY + 34 + CRM_KONTROL_ARALIK;
   end
   else if SameText(Tipi, 'TEK_SECIM') then
   begin
@@ -194,9 +233,9 @@ begin
     FqSecenek.Open;
     cb := TUniComboBox.Create(FOwner);
     cb.Parent := FPanel;
-    cb.Left := 24;
+    cb.Left := CRM_KONTROL_GIRIS;
     cb.Top := AY;
-    cb.Width := 400;
+    cb.Width := CRM_KONTROL_GENISLIK;
     N := 0;
     while not FqSecenek.Eof do
     begin
@@ -210,7 +249,7 @@ begin
     cb.ItemIndex := -1;
     K.Ana := cb;
     FDinamik.Add(cb);
-    AY := AY + 34;
+    AY := AY + 34 + CRM_KONTROL_ARALIK;
   end
   else if SameText(Tipi, 'COK_SECIM') then
   begin
@@ -225,57 +264,58 @@ begin
     begin
       chk := TUniCheckBox.Create(FOwner);
       chk.Parent := FPanel;
-      chk.Left := 24;
+      chk.Left := CRM_KONTROL_GIRIS;
       chk.Top := AY;
-      chk.Width := 560;
+      chk.Width := CRM_KONTROL_GENISLIK;
+      chk.Height := CRM_KONTROL_CHK_YUK;
       chk.Caption := FqSecenek.FieldByName('METIN').AsString;
       SetLength(K.SecenekIds, N + 1);
       SetLength(K.Checkler, N + 1);
       K.SecenekIds[N] := FqSecenek.FieldByName('SECENEK_ID').AsLargeInt;
       K.Checkler[N] := chk;
       FDinamik.Add(chk);
-      AY := AY + 24;
+      AY := AY + CRM_KONTROL_CHK_YUK;
       Inc(N);
       FqSecenek.Next;
     end;
     FqSecenek.Close;
-    AY := AY + 8;
+    AY := AY + CRM_KONTROL_ARALIK;
   end
   else if SameText(Tipi, 'SAYI') then
   begin
     ed := TUniEdit.Create(FOwner);
     ed.Parent := FPanel;
-    ed.Left := 24;
+    ed.Left := CRM_KONTROL_GIRIS;
     ed.Top := AY;
-    ed.Width := 200;
+    ed.Width := 220;
     K.Ana := ed;
     FDinamik.Add(ed);
-    AY := AY + 34;
+    AY := AY + 34 + CRM_KONTROL_ARALIK;
   end
   else if SameText(Tipi, 'TARIH') then
   begin
     dt := TUniDateTimePicker.Create(FOwner);
     dt.Parent := FPanel;
-    dt.Left := 24;
+    dt.Left := CRM_KONTROL_GIRIS;
     dt.Top := AY;
-    dt.Width := 200;
-    dt.DateFormat := 'dd/MM/yyyy';
+    dt.Width := 220;
+    CrmDateTimePickerFormat(dt);
     dt.DateTime := Now;
     K.Ana := dt;
     FDinamik.Add(dt);
-    AY := AY + 34;
+    AY := AY + 34 + CRM_KONTROL_ARALIK;
   end
   else
   begin
     mm := TUniMemo.Create(FOwner);
     mm.Parent := FPanel;
-    mm.Left := 24;
+    mm.Left := CRM_KONTROL_GIRIS;
     mm.Top := AY;
-    mm.Width := 560;
-    mm.Height := 50;
+    mm.Width := CRM_KONTROL_GENISLIK;
+    mm.Height := CRM_KONTROL_MEMO_YUK;
     K.Ana := mm;
     FDinamik.Add(mm);
-    AY := AY + 58;
+    AY := AY + CRM_KONTROL_MEMO_YUK + CRM_KONTROL_ARALIK;
   end;
 
   FKontroller.Add(K);
@@ -328,7 +368,7 @@ begin
       lbl.Font.Height := -14;
       lbl.Caption := FqKontrol.FieldByName('BASLIK').AsString;
       FDinamik.Add(lbl);
-      AY := AY + 28;
+      AY := AY + 32;
     end;
     SoruOlustur(AY);
     FqKontrol.Next;
@@ -392,7 +432,7 @@ begin
       lbl.Font.Height := -14;
       lbl.Caption := FqKontrol.FieldByName('BASLIK').AsString;
       FDinamik.Add(lbl);
-      AY := AY + 28;
+      AY := AY + 32;
     end;
     SoruOlustur(AY);
     FqKontrol.Next;

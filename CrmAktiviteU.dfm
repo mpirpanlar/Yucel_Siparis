@@ -5,6 +5,7 @@ object frmCrmAktivite: TfrmCrmAktivite
   ClientWidth = 640
   Caption = 'Yeni Aktivite'
   OnShow = UniFormShow
+  BorderStyle = bsNone
   OldCreateOrder = False
   MonitoredKeys.Keys = <>
   AlignmentControl = uniAlignmentClient
@@ -20,6 +21,7 @@ object frmCrmAktivite: TfrmCrmAktivite
     TabOrder = 0
     BorderStyle = ubsNone
     Caption = ''
+    Layout = 'vbox'
     object pgc: TUniPageControl
       Left = 0
       Top = 0
@@ -27,21 +29,31 @@ object frmCrmAktivite: TfrmCrmAktivite
       Height = 728
       Hint = ''
       ActivePage = tsGenel
-      Align = alClient
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
       TabOrder = 0
       object tsGenel: TUniTabSheet
         Hint = ''
         Caption = 'Genel'
+        Layout = 'vbox'
         object panMain: TUniPanel
           Left = 0
           Top = 0
           Width = 632
-          Height = 700
+          Height = 520
           Hint = ''
           Align = alClient
           TabOrder = 0
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      config.' +
+              'autoScroll = true;'#13#10'      config.scrollable = true;'#13#10'}')
           BorderStyle = ubsNone
           Caption = ''
+          LayoutConfig.Flex = 1
+          LayoutConfig.Width = '100%'
+          ExplicitTop = -2
           object lblTip: TUniLabel
             Left = 16
             Top = 16
@@ -49,7 +61,7 @@ object frmCrmAktivite: TfrmCrmAktivite
             Height = 13
             Hint = ''
             Caption = 'Tip'
-            TabOrder = 0
+            TabOrder = 16
           end
           object lkTip: TUniDBLookupComboBox
             Left = 120
@@ -72,7 +84,7 @@ object frmCrmAktivite: TfrmCrmAktivite
             Height = 13
             Hint = ''
             Caption = 'Konu'
-            TabOrder = 2
+            TabOrder = 17
           end
           object edKonu: TUniEdit
             Left = 120
@@ -81,7 +93,7 @@ object frmCrmAktivite: TfrmCrmAktivite
             Height = 27
             Hint = ''
             Text = ''
-            TabOrder = 3
+            TabOrder = 2
           end
           object lblAciklama: TUniLabel
             Left = 16
@@ -93,7 +105,7 @@ object frmCrmAktivite: TfrmCrmAktivite
             ParentFont = False
             Font.Charset = TURKISH_CHARSET
             Font.Height = -12
-            TabOrder = 4
+            TabOrder = 18
           end
           object mmAciklama: TUniMemo
             Left = 120
@@ -101,7 +113,7 @@ object frmCrmAktivite: TfrmCrmAktivite
             Width = 480
             Height = 88
             Hint = ''
-            TabOrder = 5
+            TabOrder = 3
           end
           object lblCari: TUniLabel
             Left = 16
@@ -110,16 +122,17 @@ object frmCrmAktivite: TfrmCrmAktivite
             Height = 13
             Hint = ''
             Caption = 'Cari (Netsis)'
-            TabOrder = 6
+            TabOrder = 19
           end
           object edCariKod: TUniEdit
             Left = 120
-            Top = 180
+            Top = 178
             Width = 340
             Height = 27
             Hint = ''
             Text = ''
-            TabOrder = 7
+            TabOrder = 4
+            OnChange = edCariKodChange
           end
           object btnCariBul: TUniButton
             Left = 470
@@ -134,7 +147,7 @@ object frmCrmAktivite: TfrmCrmAktivite
             Font.Height = -12
             Font.Name = 'Segoe UI Semibold'
             Font.Style = [fsBold]
-            TabOrder = 8
+            TabOrder = 5
             ClientEvents.UniEvents.Strings = (
               
                 'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
@@ -153,16 +166,16 @@ object frmCrmAktivite: TfrmCrmAktivite
             Font.Charset = TURKISH_CHARSET
             Font.Color = clGray
             Font.Height = -12
-            TabOrder = 18
+            TabOrder = 20
           end
           object lblPot: TUniLabel
             Left = 16
             Top = 228
-            Width = 55
+            Width = 52
             Height = 13
             Hint = ''
             Caption = 'Potansiyel'
-            TabOrder = 30
+            TabOrder = 21
           end
           object edPotId: TUniEdit
             Left = 120
@@ -171,7 +184,8 @@ object frmCrmAktivite: TfrmCrmAktivite
             Height = 27
             Hint = ''
             Text = ''
-            TabOrder = 31
+            TabOrder = 6
+            OnExit = edPotIdExit
           end
           object btnPotBul: TUniButton
             Left = 470
@@ -186,7 +200,7 @@ object frmCrmAktivite: TfrmCrmAktivite
             Font.Height = -12
             Font.Name = 'Segoe UI Semibold'
             Font.Style = [fsBold]
-            TabOrder = 32
+            TabOrder = 7
             ClientEvents.UniEvents.Strings = (
               
                 'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
@@ -205,7 +219,7 @@ object frmCrmAktivite: TfrmCrmAktivite
             Font.Charset = TURKISH_CHARSET
             Font.Color = clGray
             Font.Height = -12
-            TabOrder = 33
+            TabOrder = 22
           end
           object lblTeklif: TUniLabel
             Left = 16
@@ -213,30 +227,65 @@ object frmCrmAktivite: TfrmCrmAktivite
             Width = 55
             Height = 13
             Hint = ''
-            Caption = 'Ba'#287'l'#305' Teklif'
-            TabOrder = 9
+            Caption = 'Teklif No'
+            TabOrder = 23
           end
-          object lkTeklif: TUniDBLookupComboBox
+          object edTeklifNo: TUniEdit
             Left = 120
             Top = 272
             Width = 340
             Height = 27
-            Hint = ''
-            ListField = 'AD'
-            ListSource = dsTekLkp
-            KeyField = 'TEKLIF_ID'
-            ListFieldIndex = 0
-            TabOrder = 10
-            Color = clWindow
-            OnCloseUp = lkTeklifCloseUp
+            Hint = 'SIPARIS_BASLIK fis numarasi'
+            Text = ''
+            TabOrder = 8
+            ReadOnly = True
           end
-          object btnTeklifYenile: TUniButton
+          object btnTeklifSec: TUniButton
             Left = 470
             Top = 270
             Width = 130
             Height = 30
-            Hint = 'Teklif listesini cariye gore yeniler'
-            Caption = 'Teklif Y'#252'kle'
+            Hint = 'Netsis''e gonderilmemis siparis basligi sec'
+            Caption = 'Teklif Se'#231
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Color = clWhite
+            Font.Height = -12
+            Font.Name = 'Segoe UI Semibold'
+            Font.Style = [fsBold]
+            TabOrder = 9
+            ClientEvents.UniEvents.Strings = (
+              
+                'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
+            OnClick = btnTeklifSecClick
+          end
+          object lblSiparis: TUniLabel
+            Left = 16
+            Top = 311
+            Width = 77
+            Height = 13
+            Hint = ''
+            Caption = 'Sip.No (NETS'#304'S)'
+            TabOrder = 24
+          end
+          object edSiparis: TUniEdit
+            Left = 120
+            Top = 307
+            Width = 340
+            Height = 27
+            Hint = 'Netsis siparis referansi (secim ile)'
+            Text = ''
+            TabOrder = 10
+            ReadOnly = True
+          end
+          object btnSiparisBul: TUniButton
+            Left = 470
+            Top = 305
+            Width = 130
+            Height = 30
+            Hint = 'Netsis siparis listesi'
+            Caption = 'Sipari'#351' Se'#231
             ParentFont = False
             Font.Charset = TURKISH_CHARSET
             Font.Color = clWhite
@@ -248,51 +297,12 @@ object frmCrmAktivite: TfrmCrmAktivite
               
                 'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
                 'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
-            OnClick = btnTeklifYenileClick
-          end
-          object lblSiparis: TUniLabel
-            Left = 16
-            Top = 312
-            Width = 95
-            Height = 13
-            Hint = ''
-            Caption = 'Sipari'#351' No (NETS'#304'S)'
-            TabOrder = 12
-          end
-          object edSiparis: TUniEdit
-            Left = 120
-            Top = 308
-            Width = 280
-            Height = 27
-            Hint = 'Netsis siparis referansi (secim ile)'
-            Text = ''
-            TabOrder = 13
-            ReadOnly = True
-          end
-          object btnSiparisBul: TUniButton
-            Left = 408
-            Top = 306
-            Width = 192
-            Height = 30
-            Hint = 'Netsis siparis listesi'
-            Caption = 'Sipari'#351' Se'#231
-            ParentFont = False
-            Font.Charset = TURKISH_CHARSET
-            Font.Color = clWhite
-            Font.Height = -12
-            Font.Name = 'Segoe UI Semibold'
-            Font.Style = [fsBold]
-            TabOrder = 27
-            ClientEvents.UniEvents.Strings = (
-              
-                'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
-                'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'secondary'#39';'#13#10'}')
             OnClick = btnSiparisBulClick
           end
           object lblSiparisTar: TUniLabel
             Left = 120
             Top = 336
-            Width = 100
+            Width = 480
             Height = 15
             Hint = ''
             AutoSize = False
@@ -301,11 +311,11 @@ object frmCrmAktivite: TfrmCrmAktivite
             Font.Charset = TURKISH_CHARSET
             Font.Color = clGray
             Font.Height = -12
-            TabOrder = 28
+            TabOrder = 25
           end
           object lblSiparisAcik: TUniLabel
-            Left = 220
-            Top = 336
+            Left = 120
+            Top = 340
             Width = 380
             Height = 15
             Hint = ''
@@ -315,41 +325,87 @@ object frmCrmAktivite: TfrmCrmAktivite
             Font.Charset = TURKISH_CHARSET
             Font.Color = clGray
             Font.Height = -12
-            TabOrder = 29
+            TabOrder = 26
           end
           object lblTarih: TUniLabel
             Left = 16
-            Top = 360
-            Width = 24
+            Top = 379
+            Width = 78
             Height = 13
             Hint = ''
-            Caption = 'Tarih'
-            TabOrder = 14
+            Caption = 'Ba'#351'lang'#305#231' Tarihi'
+            TabOrder = 27
           end
           object dtAktivite: TUniDateTimePicker
             Left = 120
-            Top = 356
-            Width = 200
+            Top = 375
+            Width = 280
             Height = 27
             Hint = ''
             DateTime = 46109.000000000000000000
-            DateFormat = 'dd/MM/yyyy'
-            TimeFormat = 'HH:mm:ss'
-            TabOrder = 15
+            Kind = tUniDateTime
+            DateFormat = 'dd.mm.yyyy'
+            TimeFormat = 'HH:mm'
+            TabOrder = 12
+            UseSystemFormats = False
+            OnChange = dtAktiviteChange
+            DisabledDates = <>
+          end
+          object lblSureDakika: TUniLabel
+            Left = 410
+            Top = 379
+            Width = 58
+            Height = 13
+            Hint = ''
+            Caption = 'S'#252're (dk)'
+            TabOrder = 30
+          end
+          object edSureDakika: TUniEdit
+            Left = 480
+            Top = 375
+            Width = 80
+            Height = 27
+            Hint = 'Sure dakika; bitis tarihi otomatik hesaplanir'
+            Text = ''
+            TabOrder = 31
+            OnExit = edSureDakikaExit
+          end
+          object lblBitis: TUniLabel
+            Left = 16
+            Top = 415
+            Width = 82
+            Height = 13
+            Hint = ''
+            Caption = 'Biti'#351' Tarihi'
+            TabOrder = 28
+          end
+          object dtAktiviteBitis: TUniDateTimePicker
+            Left = 120
+            Top = 411
+            Width = 280
+            Height = 27
+            Hint = ''
+            DateTime = 46109.000000000000000000
+            Kind = tUniDateTime
+            DateFormat = 'dd.mm.yyyy'
+            TimeFormat = 'HH:mm'
+            TabOrder = 13
+            UseSystemFormats = False
+            OnChange = dtAktiviteBitisChange
             DisabledDates = <>
           end
           object lblDurum: TUniLabel
             Left = 16
-            Top = 396
+            Top = 451
             Width = 35
             Height = 13
             Hint = ''
             Caption = 'Durum'
-            TabOrder = 16
+            TabOrder = 29
           end
           object lkDurum: TUniDBLookupComboBox
             Left = 120
-            Top = 392
+            Top = 447
             Width = 460
             Height = 27
             Hint = ''
@@ -357,33 +413,48 @@ object frmCrmAktivite: TfrmCrmAktivite
             ListSource = dsDurLkp
             KeyField = 'DURUM_ID'
             ListFieldIndex = 0
-            TabOrder = 17
+            TabOrder = 14
             Color = clWindow
             OnCloseUp = lkDurumCloseUp
           end
           object lblOncelik: TUniLabel
             Left = 16
-            Top = 432
+            Top = 487
             Width = 39
             Height = 13
             Hint = ''
             Caption = #214'ncelik'
-            TabOrder = 19
+            TabOrder = 0
           end
           object cbOncelik: TUniComboBox
             Left = 120
-            Top = 428
+            Top = 483
             Width = 200
             Height = 27
             Hint = ''
             Style = csDropDownList
             Text = ''
-            TabOrder = 20
+            TabOrder = 15
             IconItems = <>
           end
+        end
+        object panEkler: TUniPanel
+          Left = 0
+          Top = 520
+          Width = 632
+          Height = 180
+          Hint = ''
+          Align = alBottom
+          TabOrder = 1
+          BorderStyle = ubsNone
+          Caption = ''
+          Layout = 'vbox'
+          LayoutConfig.Flex = 1
+          LayoutConfig.Height = '100%'
+          LayoutConfig.Width = '100%'
           object lblEkler: TUniLabel
             Left = 16
-            Top = 472
+            Top = 4
             Width = 68
             Height = 13
             Hint = ''
@@ -393,63 +464,74 @@ object frmCrmAktivite: TfrmCrmAktivite
             Font.Color = clNavy
             Font.Height = -12
             Font.Style = [fsBold]
-            TabOrder = 21
+            TabOrder = 0
           end
-          object btnEkEkle: TUniButton
-            Left = 120
-            Top = 490
-            Width = 150
-            Height = 30
-            Hint = 'PDF, PNG, JPG, Excel, Word vb. dosya ekleyin'
-            Caption = 'Dosya Ekle'
-            ParentFont = False
-            Font.Charset = TURKISH_CHARSET
-            Font.Color = clWhite
-            Font.Height = -12
-            Font.Name = 'Segoe UI Semibold'
-            Font.Style = [fsBold]
-            TabOrder = 22
-            ClientEvents.UniEvents.Strings = (
-              
-                'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
-                'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
-            OnClick = btnEkEkleClick
-          end
-          object btnEkIndir: TUniButton
-            Left = 300
-            Top = 478
-            Width = 130
-            Height = 30
-            Hint = 'Se'#231'ili eki indir'
-            Caption = #304'ndir'
-            ParentFont = False
-            Font.Charset = TURKISH_CHARSET
-            Font.Height = -12
-            Font.Name = 'Segoe UI Semibold'
-            Font.Style = [fsBold]
-            TabOrder = 23
-            OnClick = btnEkIndirClick
-          end
-          object btnEkSil: TUniButton
-            Left = 440
-            Top = 478
-            Width = 130
-            Height = 30
-            Hint = 'Se'#231'ili eki sil'
-            Caption = 'Sil'
-            ParentFont = False
-            Font.Charset = TURKISH_CHARSET
-            Font.Height = -12
-            Font.Name = 'Segoe UI Semibold'
-            Font.Style = [fsBold]
-            TabOrder = 24
-            OnClick = btnEkSilClick
+          object panEkBar: TUniPanel
+            Left = 0
+            Top = 20
+            Width = 632
+            Height = 40
+            Hint = ''
+            TabOrder = 1
+            BorderStyle = ubsNone
+            Caption = ''
+            LayoutConfig.Width = '100%'
+            object btnEkEkle: TUniButton
+              Left = 12
+              Top = 4
+              Width = 150
+              Height = 30
+              Hint = 'PDF, PNG, JPG, Excel, Word vb. dosya ekleyin'
+              Caption = 'Dosya Ekle'
+              ParentFont = False
+              Font.Charset = TURKISH_CHARSET
+              Font.Color = clWhite
+              Font.Height = -12
+              Font.Name = 'Segoe UI Semibold'
+              Font.Style = [fsBold]
+              TabOrder = 1
+              ClientEvents.UniEvents.Strings = (
+                
+                  'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
+                  'xtype = '#39'button'#39';'#13#10'      sender.ui = '#39'primary'#39';'#13#10'}')
+              OnClick = btnEkEkleClick
+            end
+            object btnEkIndir: TUniButton
+              Left = 172
+              Top = 4
+              Width = 130
+              Height = 30
+              Hint = 'Se'#231'ili eki indir'
+              Caption = #304'ndir'
+              ParentFont = False
+              Font.Charset = TURKISH_CHARSET
+              Font.Height = -12
+              Font.Name = 'Segoe UI Semibold'
+              Font.Style = [fsBold]
+              TabOrder = 2
+              OnClick = btnEkIndirClick
+            end
+            object btnEkSil: TUniButton
+              Left = 312
+              Top = 4
+              Width = 130
+              Height = 30
+              Hint = 'Se'#231'ili eki sil'
+              Caption = 'Sil'
+              ParentFont = False
+              Font.Charset = TURKISH_CHARSET
+              Font.Height = -12
+              Font.Name = 'Segoe UI Semibold'
+              Font.Style = [fsBold]
+              TabOrder = 3
+              OnClick = btnEkSilClick
+            end
           end
           object grdEk: TUniDBGrid
-            Left = 16
-            Top = 520
-            Width = 600
-            Height = 228
+            Left = 0
+            Top = 60
+            Width = 632
+            Height = 260
             Hint = ''
             DataSource = dsEk
             Options = [dgTitles, dgIndicator, dgColumnResize, dgColLines, dgRowLines, dgRowSelect, dgAlwaysShowSelection, dgTabs, dgAutoRefreshRow]
@@ -457,7 +539,10 @@ object frmCrmAktivite: TfrmCrmAktivite
             WebOptions.Paged = False
             WebOptions.FetchAll = True
             LoadMask.Message = 'Loading data...'
-            TabOrder = 25
+            LayoutConfig.Flex = 1
+            LayoutConfig.Height = '100%'
+            LayoutConfig.Width = '100%'
+            TabOrder = 3
             OnAjaxEvent = grdEkAjaxEvent
             Columns = <
               item
@@ -496,17 +581,18 @@ object frmCrmAktivite: TfrmCrmAktivite
       object tsKontrol: TUniTabSheet
         Hint = ''
         Caption = 'Kontrol Listesi'
+        Layout = 'vbox'
         object panKontrolTb: TUniPanel
           Left = 0
           Top = 0
           Width = 632
           Height = 40
           Hint = ''
-          Align = alTop
           TabOrder = 0
           BorderStyle = ubsNone
           Caption = ''
           Color = 15790320
+          LayoutConfig.Width = '100%'
           object lblKontrolBilgi: TUniLabel
             Left = 12
             Top = 12
@@ -514,7 +600,7 @@ object frmCrmAktivite: TfrmCrmAktivite
             Height = 13
             Hint = ''
             Caption = 'Aktivite tipine ba'#287'l'#305' soru setleri'
-            TabOrder = 0
+            TabOrder = 2
           end
           object btnKontrolKaydet: TUniButton
             Left = 470
@@ -529,7 +615,7 @@ object frmCrmAktivite: TfrmCrmAktivite
             Font.Height = -12
             Font.Name = 'Segoe UI Semibold'
             Font.Style = [fsBold]
-            TabOrder = 1
+            TabOrder = 0
             ClientEvents.UniEvents.Strings = (
               
                 'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'      sender.' +
@@ -543,7 +629,6 @@ object frmCrmAktivite: TfrmCrmAktivite
           Width = 632
           Height = 660
           Hint = ''
-          Align = alClient
           TabOrder = 1
           ClientEvents.UniEvents.Strings = (
             
@@ -551,11 +636,15 @@ object frmCrmAktivite: TfrmCrmAktivite
               'autoScroll = true;'#13#10'      config.scrollable = true;'#13#10'}')
           BorderStyle = ubsNone
           Caption = ''
+          LayoutConfig.Flex = 1
+          LayoutConfig.Height = '100%'
+          LayoutConfig.Width = '100%'
         end
       end
       object tsTarihce: TUniTabSheet
         Hint = ''
         Caption = 'Tarih'#231'e'
+        Layout = 'fit'
         object grdTarihce: TUniDBGrid
           Left = 0
           Top = 0
@@ -568,7 +657,9 @@ object frmCrmAktivite: TfrmCrmAktivite
           WebOptions.Paged = False
           WebOptions.FetchAll = True
           LoadMask.Message = 'Loading data...'
-          Align = alClient
+          LayoutConfig.Flex = 1
+          LayoutConfig.Height = '100%'
+          LayoutConfig.Width = '100%'
           TabOrder = 0
         end
       end
@@ -579,11 +670,11 @@ object frmCrmAktivite: TfrmCrmAktivite
       Width = 640
       Height = 52
       Hint = ''
-      Align = alBottom
       TabOrder = 1
       BorderStyle = ubsNone
       Caption = ''
       Color = 15790320
+      LayoutConfig.Width = '100%'
       object btnKaydet: TUniButton
         Left = 120
         Top = 10
@@ -656,16 +747,6 @@ object frmCrmAktivite: TfrmCrmAktivite
     DataSet = qDurLkp
     Left = 568
     Top = 592
-  end
-  object qTekLkp: TUniQuery
-    Connection = frmDM.conAsya
-    Left = 560
-    Top = 520
-  end
-  object dsTekLkp: TUniDataSource
-    DataSet = qTekLkp
-    Left = 592
-    Top = 520
   end
   object qEk: TUniQuery
     Connection = frmDM.conAsya
