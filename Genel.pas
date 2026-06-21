@@ -302,7 +302,7 @@ begin
     Qry.ParamByName('KullaniciGrupID').AsInteger:=Tmp.xKullaniciGrupID;
     Qry.ParamByName('FormAdi').AsString:=YetkiForm;
     Qry.Open;
-    if Qry.FieldByName('Gor').AsInteger =0 then begin
+    if (Tmp.xKullaniciAdmin <> 1) and (Qry.IsEmpty or (Qry.FieldByName('Gor').AsInteger = 0)) then begin
        UniMainModule.saYetki.Show;
        Qry.Free;
        Abort;
@@ -321,14 +321,14 @@ begin
   F.Caption:=QryCaption.FieldByName('FormCaption').AsString;
   F.Show;
           //////Yetkiler   D�zenle ve Sil
-          if Qry.FieldByName('Sil').AsInteger = 0 then begin
+          if (Tmp.xKullaniciAdmin <> 1) and (not Qry.IsEmpty) and (Qry.FieldByName('Sil').AsInteger = 0) then begin
               for Z:= 0 to pred (TuniForm(F).componentcount) do begin
                 if (TuniForm(F).components[Z] is TuniButton) then
                   if TuniButton(TuniForm(F).Components[Z]).Name='btnSil' then
                     TuniButton(TuniForm(F).Components[Z]).Visible:= false;
               end;
           end;
-          if Qry.FieldByName('Degistir').AsInteger = 0 then begin
+          if (Tmp.xKullaniciAdmin <> 1) and (not Qry.IsEmpty) and (Qry.FieldByName('Degistir').AsInteger = 0) then begin
               for Z:= 0 to pred (TuniForm(F).componentcount) do begin
                 if (TuniForm(F).components[Z] is TuniButton) then
                   if TuniButton(TuniForm(F).Components[Z]).Name='btnDuzenle' then
@@ -361,9 +361,10 @@ begin
     Qry.ParamByName('KullaniciGrupID').AsInteger:=Tmp.xKullaniciGrupID;
     Qry.ParamByName('FormAdi').AsString:=YetkiForm;
     Qry.Open;
-    if Qry.FieldByName('Gor').AsInteger =0 then begin
+    if (Tmp.xKullaniciAdmin <> 1) and (Qry.IsEmpty or (Qry.FieldByName('Gor').AsInteger = 0)) then begin
        UniMainModule.saYetki.Show;
        Qry.Free;
+       QryCaption.Free;
        MainForm.HideMask;
        Abort;
     end;
@@ -409,14 +410,14 @@ begin
   F.Show;
 
           //////Yetkiler   D�zenle ve Sil
-          if Qry.FieldByName('Sil').AsInteger = 0 then begin
+          if (Tmp.xKullaniciAdmin <> 1) and (not Qry.IsEmpty) and (Qry.FieldByName('Sil').AsInteger = 0) then begin
               for Z:= 0 to pred (TuniForm(F).componentcount) do begin
                 if (TuniForm(F).components[Z] is TuniButton) then
                   if TuniButton(TuniForm(F).Components[Z]).Name='btnSil' then
                     TuniButton(TuniForm(F).Components[Z]).Visible:= false;
               end;
           end;
-          if Qry.FieldByName('Degistir').AsInteger = 0 then begin
+          if (Tmp.xKullaniciAdmin <> 1) and (not Qry.IsEmpty) and (Qry.FieldByName('Degistir').AsInteger = 0) then begin
               for Z:= 0 to pred (TuniForm(F).componentcount) do begin
                 if (TuniForm(F).components[Z] is TuniButton) then
                   if TuniButton(TuniForm(F).Components[Z]).Name='btnDuzenle' then

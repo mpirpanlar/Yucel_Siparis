@@ -9,7 +9,7 @@ uses
   DBAccess, Uni;
 
 const
-  CRM_SCHEMA_TARGET_VERSION = 30;
+  CRM_SCHEMA_TARGET_VERSION = 32;
 
 procedure CrmEnsureDatabase(AConn: TUniConnection);
 
@@ -1533,6 +1533,106 @@ begin
     'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (30, ''SIPARIS_BASLIK acik/kapali kapanis tarihi (AcikKapaliTarih)'')');
 end;
 
+procedure CrmSchemaApplyMigration31(AConn: TUniConnection);
+begin
+  if CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''FormName'' AND schema_id = SCHEMA_ID(''dbo'')') > 0 then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.FormName (FormName, FormCaption) SELECT v.FN, v.FC FROM (VALUES ' +
+      '(''CrmParamRotaGps'', ''CRM - Rota GPS tanimlari'')) AS v(FN, FC) ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.FormName f WHERE f.FormName = v.FN)');
+  end;
+
+  if (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''YETKI'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) and
+     (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''KULLANICIGRUP'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmParamRotaGps'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmParamRotaGps'')');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 31) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (31, ''Rota GPS sube tanimi ekrani (CrmParamRotaGps, FormName, YETKI)'')');
+end;
+
+procedure CrmSchemaApplyMigration32(AConn: TUniConnection);
+begin
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.CRM_ROTA_PLAN'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN'', ''GOREV_ZIYARET_DK'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN ADD GOREV_ZIYARET_DK INT NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN'', ''GOREV_MESAI_BAS_SAAT'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN ADD GOREV_MESAI_BAS_SAAT VARCHAR(5) NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN'', ''GOREV_MESAI_BIT_SAAT'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN ADD GOREV_MESAI_BIT_SAAT VARCHAR(5) NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN'', ''GOREV_HIZ_KMH'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN ADD GOREV_HIZ_KMH INT NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN'', ''ZAMAN_PLAN_UTC'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN ADD ZAMAN_PLAN_UTC DATETIME2(3) NULL');
+  end;
+
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.CRM_ROTA_PLAN_DURAK'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN_DURAK'', ''PLAN_BAS_ZAMAN'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN_DURAK ADD PLAN_BAS_ZAMAN DATETIME2(3) NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN_DURAK'', ''PLAN_BIT_ZAMAN'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN_DURAK ADD PLAN_BIT_ZAMAN DATETIME2(3) NULL');
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.CRM_ROTA_PLAN_DURAK'', ''PLAN_YOL_DK'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn, 'ALTER TABLE dbo.CRM_ROTA_PLAN_DURAK ADD PLAN_YOL_DK INT NULL');
+  end;
+
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.PARAMETRE'',''U'') IS NULL THEN 0 ELSE 1 END') > 0 then
+  begin
+    if CrmScalarInt(AConn,
+      'SELECT CASE WHEN COL_LENGTH(''dbo.PARAMETRE'', ''ROTA_GOREV_BIT_SAAT'') IS NULL THEN 0 ELSE 1 END') = 0 then
+      CrmExec(AConn,
+        'ALTER TABLE dbo.PARAMETRE ADD ROTA_GOREV_BIT_SAAT VARCHAR(5) NULL CONSTRAINT DF_PARAM_ROTA_GOREV_BS2 DEFAULT (''18:00'')');
+    CrmExec(AConn,
+      'UPDATE dbo.PARAMETRE SET ROTA_GOREV_BIT_SAAT = ''18:00'' ' +
+      'WHERE ROTA_GOREV_BIT_SAAT IS NULL OR LTRIM(RTRIM(ROTA_GOREV_BIT_SAAT)) = ''''');
+  end;
+
+  if CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''FormName'' AND schema_id = SCHEMA_ID(''dbo'')') > 0 then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.FormName (FormName, FormCaption) SELECT v.FN, v.FC FROM (VALUES ' +
+      '(''CrmRotaZamanPlan'', ''CRM - Rota zaman plani onizleme'')) AS v(FN, FC) ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.FormName f WHERE f.FormName = v.FN)');
+  end;
+
+  if (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''YETKI'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) and
+     (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''KULLANICIGRUP'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmRotaZamanPlan'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmRotaZamanPlan'')');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 32) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (32, ''Rota zaman plani kolonlari ve onizleme formu (CrmRotaZamanPlan)'')');
+end;
+
 procedure CrmSchemaApplyMigration(const AConn: TUniConnection; AVersion: Integer);
 begin
   case AVersion of
@@ -1566,6 +1666,8 @@ begin
     28: CrmSchemaApplyMigration28(AConn);
     29: CrmSchemaApplyMigration29(AConn);
     30: CrmSchemaApplyMigration30(AConn);
+    31: CrmSchemaApplyMigration31(AConn);
+    32: CrmSchemaApplyMigration32(AConn);
   else
     raise Exception.CreateFmt('CRM sema: bilinmeyen migrasyon surumu %d', [AVersion]);
   end;

@@ -31,6 +31,7 @@ type
     UniButton13: TUniButton;
     UniButton14: TUniButton;
     UniButton15: TUniButton;
+    UniButton16: TUniButton;
     procedure UniButton4Click(Sender: TObject);
     procedure UniButton2Click(Sender: TObject);
     procedure UniButton1Click(Sender: TObject);
@@ -43,6 +44,7 @@ type
     procedure UniButton13Click(Sender: TObject);
     procedure UniButton14Click(Sender: TObject);
     procedure UniButton15Click(Sender: TObject);
+    procedure UniButton16Click(Sender: TObject);
   private
     { Private declarations }
   public
@@ -58,7 +60,7 @@ implementation
 uses
   MainModule, uniGUIApplication,   Genel, ParametrelerU, KullaniciGrupU,
   KullanicilarU, CrmParamAktiviteTipU, CrmParamAktiviteDurumU, CrmParamTeklifDurumU,
-  CrmParamPotansiyelDurumU, CrmParamBaglantiDurumU;
+  CrmParamPotansiyelDurumU, CrmParamBaglantiDurumU, CrmParamRotaGpsU;
 
 //  EFaturaTanimU, SiparisBayiU, BayiTanimU, KurlarU;
 
@@ -120,6 +122,11 @@ end;
 procedure TfrmParametreMenu.UniButton14Click(Sender: TObject);
 begin
   xFormShow(TfrmCrmParamPotansiyelDurum, 'CrmParamPotansiyelDurum', 0, '');
+end;
+
+procedure TfrmParametreMenu.UniButton16Click(Sender: TObject);
+begin
+  xFormShow(TfrmCrmParamRotaGps, 'CrmParamRotaGps', 0, '');
 end;
 
 procedure TfrmParametreMenu.UniButton15Click(Sender: TObject);

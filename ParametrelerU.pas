@@ -66,6 +66,8 @@ type
     cbParamGorevZaman: TUniComboBox;
     edParamGorevBasSaat: TUniEdit;
     edParamGorevDurakDk: TUniEdit;
+    edParamGorevMesaiBitSaat: TUniEdit;
+    edParamGorevHizKmh: TUniEdit;
     qExec: TUniQuery;
     procedure UniFormShow(Sender: TObject);
     procedure btnGenelClick(Sender: TObject);
@@ -210,12 +212,15 @@ begin
   else
     cbParamGorevZaman.ItemIndex := 0;
   edParamGorevBasSaat.Text := Ayar.BasSaat;
+  edParamGorevMesaiBitSaat.Text := Ayar.BitSaat;
   edParamGorevDurakDk.Text := IntToStr(Ayar.DurakDakika);
+  edParamGorevHizKmh.Text := IntToStr(Ayar.HizKmh);
 end;
 
 procedure TfrmParametreler.RotaGorevKaydet;
 var
-  Oto, Zaman, Dk: Integer;
+  Oto, Zaman, Dk, Hiz, MesaiDk: Integer;
+  BasSaat, BitSaat: string;
 begin
   Oto := cbParamOnayGorev.ItemIndex;
   if (Oto < 0) or (Oto > 2) then
@@ -228,18 +233,29 @@ begin
   Dk := StrToIntDef(Trim(edParamGorevDurakDk.Text), 45);
   if Dk <= 0 then
     Dk := 45;
+  Hiz := StrToIntDef(Trim(edParamGorevHizKmh.Text), 50);
+  if Hiz <= 0 then
+    Hiz := 50;
+  BasSaat := Trim(edParamGorevBasSaat.Text);
+  if BasSaat = '' then
+    BasSaat := '09:00';
+  BitSaat := Trim(edParamGorevMesaiBitSaat.Text);
+  if BitSaat = '' then
+    BitSaat := '18:00';
+  MesaiDk := CrmMesaiDakikaHesapla(BasSaat, BitSaat, 480);
   qExec.Close;
   qExec.SQL.Text :=
     'UPDATE dbo.PARAMETRE SET ROTA_ONAYDA_GOREV_OTO = :OTO, ROTA_GOREV_ZAMAN_MOD = :ZM, ' +
-    'ROTA_GOREV_BAS_SAAT = :BS, ROTA_GOREV_DURAK_DK = :DK WHERE SUBE_KODU = :SUBE';
+    'ROTA_GOREV_BAS_SAAT = :BS, ROTA_GOREV_BIT_SAAT = :BIT, ROTA_GOREV_DURAK_DK = :DK, ' +
+    'ROTA_GOREV_MESAI_DK = :MDK, ROTA_GOREV_HIZ_KMH = :HZ WHERE SUBE_KODU = :SUBE';
   qExec.ParamByName('SUBE').AsInteger := Tmp.xSubeKodu;
   qExec.ParamByName('OTO').AsInteger := Oto;
   qExec.ParamByName('ZM').AsInteger := Zaman;
-  if Trim(edParamGorevBasSaat.Text) = '' then
-    qExec.ParamByName('BS').AsString := '09:00'
-  else
-    qExec.ParamByName('BS').AsString := Trim(edParamGorevBasSaat.Text);
+  qExec.ParamByName('BS').AsString := BasSaat;
+  qExec.ParamByName('BIT').AsString := BitSaat;
   qExec.ParamByName('DK').AsInteger := Dk;
+  qExec.ParamByName('MDK').AsInteger := MesaiDk;
+  qExec.ParamByName('HZ').AsInteger := Hiz;
   qExec.Execute;
 end;
 

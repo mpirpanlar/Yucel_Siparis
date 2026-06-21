@@ -327,6 +327,28 @@ object frmParametreMenu: TfrmParametreMenu
         LayoutConfig.Margin = '2 2 2 2'
         OnClick = UniButton15Click
       end
+      object UniButton16: TUniButton
+        Left = 16
+        Top = 531
+        Width = 193
+        Height = 30
+        Hint = ''
+        Caption = 'CRM - Rota GPS Tan'#305'mlar'#305
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Name = 'Segoe UI'
+        Font.Style = [fsItalic]
+        TabOrder = 14
+        ClientEvents.UniEvents.Strings = (
+          'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
+          's="btnAltMenu";'#13#10'}')
+        ScreenMask.Enabled = True
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '2 2 2 2'
+        OnClick = UniButton16Click
+      end
     end
     object UniSimplePanel2: TUniSimplePanel
       Left = 296

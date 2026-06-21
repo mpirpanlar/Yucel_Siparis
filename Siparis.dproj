@@ -376,6 +376,10 @@
             <Form>frmCrmParamBaglantiDurum</Form>
             <DesignClass>TUniForm</DesignClass>
         </DCCReference>
+        <DCCReference Include="CrmParamRotaGpsU.pas">
+            <Form>frmCrmParamRotaGps</Form>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
         <DCCReference Include="CrmStokSecU.pas">
             <Form>frmCrmStokSec</Form>
             <FormType>dfm</FormType>
@@ -456,6 +460,11 @@
         </DCCReference>
         <DCCReference Include="CrmTakvimU.pas">
             <Form>frmCrmTakvim</Form>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
+        <DCCReference Include="CrmRotaZamanPlanU.pas">
+            <Form>frmCrmRotaZamanPlan</Form>
+            <FormType>dfm</FormType>
             <DesignClass>TUniForm</DesignClass>
         </DCCReference>
         <DCCReference Include="CrmAktiviteLogU.pas"/>

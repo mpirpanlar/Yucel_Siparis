@@ -452,6 +452,32 @@ object frmParametreler: TfrmParametreler
               LayoutConfig.Width = '100%'
               LayoutConfig.Margin = '3 3 3 3'
             end
+            object edParamGorevMesaiBitSaat: TUniEdit
+              Left = 12
+              Top = 332
+              Width = 220
+              Height = 22
+              Hint = ''
+              Text = '18:00'
+              TabOrder = 9
+              FieldLabel = 'Mesai biti'#351' saati'
+              FieldLabelWidth = 120
+              LayoutConfig.Width = '100%'
+              LayoutConfig.Margin = '3 3 3 3'
+            end
+            object edParamGorevHizKmh: TUniEdit
+              Left = 12
+              Top = 372
+              Width = 220
+              Height = 22
+              Hint = ''
+              Text = '50'
+              TabOrder = 10
+              FieldLabel = 'H'#305'z (km/h)'
+              FieldLabelWidth = 120
+              LayoutConfig.Width = '100%'
+              LayoutConfig.Margin = '3 3 3 3'
+            end
           end
         end
         object TabFatura: TUniTabSheet

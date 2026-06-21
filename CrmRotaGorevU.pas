@@ -18,23 +18,38 @@ type
     OnayGorevOto: Integer;
     ZamanMod: Integer;
     BasSaat: string;
+    BitSaat: string;
     DurakDakika: Integer;
     MesaiDakika: Integer;
     HizKmh: Integer;
     SoruSetId: Int64;
   end;
 
+  TRotaZamanSlot = record
+    Sira: Integer;
+    BasZaman: TDateTime;
+    BitZaman: TDateTime;
+    YolDk: Integer;
+    ZiyaretDk: Integer;
+  end;
+
 function CrmAktiviteDurumIdByKod(AConn: TUniConnection; const AKod: string): Int64;
 procedure CrmGorevIptalById(AQ: TUniQuery; AGorevId: Int64);
 procedure CrmRotaGorevleriniIptal(AQ: TUniQuery; ARotaId: Int64; AClearDurakLink: Boolean);
 function CrmRotaGorevAyarOku(AConn: TUniConnection; ASubeKodu: Integer): TRotaGorevAyar;
+function CrmRotaGorevAyarRotaBirlestir(const AParam: TRotaGorevAyar;
+  AZiyaretDk, AHizKmh: Integer; const AMesaiBas, AMesaiBit: string): TRotaGorevAyar;
 function CrmRotaGorevSoruSetIdOku(AConn: TUniConnection; ARotaId: Int64; ASubeKodu: Integer): Int64;
+function CrmSaatDakikaParse(const ASaat: string; out ASa, ADk: Integer): Boolean;
+function CrmMesaiDakikaHesapla(const ABasSaat, ABitSaat: string; AFallbackDk: Integer): Integer;
 function CrmRotaGorevZamanHesapla(const AAyar: TRotaGorevAyar; APlanTarihi: TDateTime;
   ADurakSira: Integer): TDateTime;
 function CrmRotaGorevZamanlariHesapla(const AAyar: TRotaGorevAyar; APlanTarihi: TDateTime;
   const ABacakKm: array of Double): TArray<TDateTime>;
+function CrmRotaZamanSlotlariHesapla(const AAyar: TRotaGorevAyar; APlanTarihi: TDateTime;
+  const ABacakKm: array of Double): TArray<TRotaZamanSlot>;
 function CrmRotaPersonelAtananId(const APersonelIds: array of Integer; ADurakSira: Integer): Integer;
-function CrmRotaGorevBitisTarihi(AAktiviteTarihi: TDateTime): TDateTime;
+function CrmRotaGorevBitisTarihi(AAktiviteTarihi: TDateTime; APlanBitis: TDateTime = 0): TDateTime;
 
 implementation
 
@@ -133,8 +148,9 @@ var
   Q: TUniQuery;
 begin
   Result.OnayGorevOto := ROTA_GOREV_OTO_SOR;
-  Result.ZamanMod := ROTA_GOREV_ZAMAN_GUN;
+  Result.ZamanMod := ROTA_GOREV_ZAMAN_GUN_SAAT;
   Result.BasSaat := '09:00';
+  Result.BitSaat := '18:00';
   Result.DurakDakika := 45;
   Result.MesaiDakika := 480;
   Result.HizKmh := 50;
@@ -145,8 +161,8 @@ begin
   try
     Q.Connection := AConn;
     Q.SQL.Text :=
-      'SELECT ROTA_ONAYDA_GOREV_OTO, ROTA_GOREV_ZAMAN_MOD, ROTA_GOREV_BAS_SAAT, ROTA_GOREV_DURAK_DK, ' +
-      'ROTA_GOREV_MESAI_DK, ROTA_GOREV_HIZ_KMH, ROTA_GOREV_SORU_SET_ID ' +
+      'SELECT ROTA_ONAYDA_GOREV_OTO, ROTA_GOREV_ZAMAN_MOD, ROTA_GOREV_BAS_SAAT, ROTA_GOREV_BIT_SAAT, ' +
+      'ROTA_GOREV_DURAK_DK, ROTA_GOREV_MESAI_DK, ROTA_GOREV_HIZ_KMH, ROTA_GOREV_SORU_SET_ID ' +
       'FROM dbo.PARAMETRE WITH(NOLOCK) WHERE SUBE_KODU = :SUBE';
     Q.ParamByName('SUBE').AsInteger := ASubeKodu;
     Q.Open;
@@ -158,6 +174,8 @@ begin
       Result.ZamanMod := Q.FieldByName('ROTA_GOREV_ZAMAN_MOD').AsInteger;
     if (Q.FindField('ROTA_GOREV_BAS_SAAT') <> nil) and not Q.FieldByName('ROTA_GOREV_BAS_SAAT').IsNull then
       Result.BasSaat := Trim(Q.FieldByName('ROTA_GOREV_BAS_SAAT').AsString);
+    if (Q.FindField('ROTA_GOREV_BIT_SAAT') <> nil) and not Q.FieldByName('ROTA_GOREV_BIT_SAAT').IsNull then
+      Result.BitSaat := Trim(Q.FieldByName('ROTA_GOREV_BIT_SAAT').AsString);
     if (Q.FindField('ROTA_GOREV_DURAK_DK') <> nil) and not Q.FieldByName('ROTA_GOREV_DURAK_DK').IsNull then
       Result.DurakDakika := Q.FieldByName('ROTA_GOREV_DURAK_DK').AsInteger;
     if (Q.FindField('ROTA_GOREV_MESAI_DK') <> nil) and not Q.FieldByName('ROTA_GOREV_MESAI_DK').IsNull then
@@ -169,17 +187,34 @@ begin
     Q.Close;
     if Result.DurakDakika <= 0 then
       Result.DurakDakika := 45;
-    if Result.MesaiDakika <= 0 then
-      Result.MesaiDakika := 480;
     if Result.HizKmh <= 0 then
       Result.HizKmh := 50;
     if Result.BasSaat = '' then
       Result.BasSaat := '09:00';
+    if Result.BitSaat = '' then
+      Result.BitSaat := '18:00';
+    Result.MesaiDakika := CrmMesaiDakikaHesapla(Result.BasSaat, Result.BitSaat, Result.MesaiDakika);
     if (Result.OnayGorevOto < ROTA_GOREV_OTO_KAPALI) or (Result.OnayGorevOto > ROTA_GOREV_OTO_HER) then
       Result.OnayGorevOto := ROTA_GOREV_OTO_SOR;
   finally
     Q.Free;
   end;
+end;
+
+function CrmRotaGorevAyarRotaBirlestir(const AParam: TRotaGorevAyar;
+  AZiyaretDk, AHizKmh: Integer; const AMesaiBas, AMesaiBit: string): TRotaGorevAyar;
+begin
+  Result := AParam;
+  Result.ZamanMod := ROTA_GOREV_ZAMAN_GUN_SAAT;
+  if AZiyaretDk > 0 then
+    Result.DurakDakika := AZiyaretDk;
+  if AHizKmh > 0 then
+    Result.HizKmh := AHizKmh;
+  if Trim(AMesaiBas) <> '' then
+    Result.BasSaat := Trim(AMesaiBas);
+  if Trim(AMesaiBit) <> '' then
+    Result.BitSaat := Trim(AMesaiBit);
+  Result.MesaiDakika := CrmMesaiDakikaHesapla(Result.BasSaat, Result.BitSaat, Result.MesaiDakika);
 end;
 
 function CrmRotaGorevSoruSetIdOku(AConn: TUniConnection; ARotaId: Int64; ASubeKodu: Integer): Int64;
@@ -213,13 +248,12 @@ end;
 
 function CrmSaatDakikaParse(const ASaat: string; out ASa, ADk: Integer): Boolean;
 var
-  T, P: string;
+  T: string;
 begin
   Result := False;
   ASa := 9;
   ADk := 0;
   T := Trim(StringReplace(ASaat, '.', ':', [rfReplaceAll]));
-  P := T;
   if Pos(':', T) > 0 then
   begin
     ASa := StrToIntDef(Copy(T, 1, Pos(':', T) - 1), 9);
@@ -234,28 +268,88 @@ begin
   Result := True;
 end;
 
+function CrmMesaiDakikaHesapla(const ABasSaat, ABitSaat: string; AFallbackDk: Integer): Integer;
+var
+  BasSa, BasDk, BitSa, BitDk, BasTop, BitTop: Integer;
+begin
+  Result := AFallbackDk;
+  if (Trim(ABasSaat) = '') or (Trim(ABitSaat) = '') then
+    Exit;
+  CrmSaatDakikaParse(ABasSaat, BasSa, BasDk);
+  CrmSaatDakikaParse(ABitSaat, BitSa, BitDk);
+  BasTop := BasSa * 60 + BasDk;
+  BitTop := BitSa * 60 + BitDk;
+  if BitTop > BasTop then
+    Result := BitTop - BasTop
+  else if AFallbackDk > 0 then
+    Result := AFallbackDk
+  else
+    Result := 480;
+end;
+
+function CrmRotaZamanSlotlariHesapla(const AAyar: TRotaGorevAyar; APlanTarihi: TDateTime;
+  const ABacakKm: array of Double): TArray<TRotaZamanSlot>;
+var
+  I, N, Gun, Sa, Dk, TravelMin, NeedMin, UsedMin, MesaiDk: Integer;
+  GunBas, PlanBas, PlanBit: TDateTime;
+begin
+  N := Length(ABacakKm);
+  SetLength(Result, N);
+  if N = 0 then
+    Exit;
+  MesaiDk := AAyar.MesaiDakika;
+  if MesaiDk <= 0 then
+    MesaiDk := CrmMesaiDakikaHesapla(AAyar.BasSaat, AAyar.BitSaat, 480);
+  CrmSaatDakikaParse(AAyar.BasSaat, Sa, Dk);
+  Gun := 0;
+  UsedMin := 0;
+  for I := 0 to N - 1 do
+  begin
+    if ABacakKm[I] > 0 then
+      TravelMin := Round(ABacakKm[I] / Max(AAyar.HizKmh, 1) * 60)
+    else
+      TravelMin := 15;
+    NeedMin := TravelMin + AAyar.DurakDakika;
+    if (MesaiDk > 0) and (UsedMin > 0) and (UsedMin + NeedMin > MesaiDk) then
+    begin
+      Inc(Gun);
+      UsedMin := 0;
+    end;
+    GunBas := DateOf(APlanTarihi) + Gun;
+    PlanBas := IncMinute(GunBas + EncodeTime(Sa, Dk, 0, 0), UsedMin);
+    PlanBit := IncMinute(PlanBas, AAyar.DurakDakika);
+    Result[I].Sira := I + 1;
+    Result[I].BasZaman := PlanBas;
+    Result[I].BitZaman := PlanBit;
+    Result[I].YolDk := TravelMin;
+    Result[I].ZiyaretDk := AAyar.DurakDakika;
+    UsedMin := UsedMin + NeedMin;
+  end;
+end;
+
 function CrmRotaGorevZamanHesapla(const AAyar: TRotaGorevAyar; APlanTarihi: TDateTime;
   ADurakSira: Integer): TDateTime;
 var
-  Sa, Dk, TopDk, Sira: Integer;
+  Slots: TArray<TRotaZamanSlot>;
+  Bacak: array of Double;
+  I: Integer;
 begin
   Result := DateOf(APlanTarihi);
   if AAyar.ZamanMod <> ROTA_GOREV_ZAMAN_GUN_SAAT then
     Exit;
-  CrmSaatDakikaParse(AAyar.BasSaat, Sa, Dk);
-  Sira := ADurakSira;
-  if Sira < 1 then
-    Sira := 1;
-  TopDk := (Sira - 1) * AAyar.DurakDakika;
-  Result := IncMinute(EncodeTime(Sa, Dk, 0, 0), TopDk);
-  Result := DateOf(APlanTarihi) + (Result - DateOf(Result));
+  SetLength(Bacak, ADurakSira);
+  for I := 0 to ADurakSira - 1 do
+    Bacak[I] := 0;
+  Slots := CrmRotaZamanSlotlariHesapla(AAyar, APlanTarihi, Bacak);
+  if (ADurakSira >= 1) and (ADurakSira <= Length(Slots)) then
+    Result := Slots[ADurakSira - 1].BasZaman;
 end;
 
 function CrmRotaGorevZamanlariHesapla(const AAyar: TRotaGorevAyar; APlanTarihi: TDateTime;
   const ABacakKm: array of Double): TArray<TDateTime>;
 var
-  I, N, Gun, Sa, Dk, TravelMin, NeedMin, UsedMin: Integer;
-  GunBas: TDateTime;
+  Slots: TArray<TRotaZamanSlot>;
+  I, N: Integer;
 begin
   N := Length(ABacakKm);
   SetLength(Result, N);
@@ -267,25 +361,9 @@ begin
       Result[I] := DateOf(APlanTarihi);
     Exit;
   end;
-  CrmSaatDakikaParse(AAyar.BasSaat, Sa, Dk);
-  Gun := 0;
-  UsedMin := 0;
+  Slots := CrmRotaZamanSlotlariHesapla(AAyar, APlanTarihi, ABacakKm);
   for I := 0 to N - 1 do
-  begin
-    if ABacakKm[I] > 0 then
-      TravelMin := Round(ABacakKm[I] / Max(AAyar.HizKmh, 1) * 60)
-    else
-      TravelMin := 15;
-    NeedMin := TravelMin + AAyar.DurakDakika;
-    if (AAyar.MesaiDakika > 0) and (UsedMin > 0) and (UsedMin + NeedMin > AAyar.MesaiDakika) then
-    begin
-      Inc(Gun);
-      UsedMin := 0;
-    end;
-    GunBas := DateOf(APlanTarihi) + Gun;
-    Result[I] := IncMinute(GunBas + EncodeTime(Sa, Dk, 0, 0), UsedMin);
-    UsedMin := UsedMin + NeedMin;
-  end;
+    Result[I] := Slots[I].BasZaman;
 end;
 
 function CrmRotaPersonelAtananId(const APersonelIds: array of Integer; ADurakSira: Integer): Integer;
@@ -303,9 +381,12 @@ begin
   Result := APersonelIds[Idx];
 end;
 
-function CrmRotaGorevBitisTarihi(AAktiviteTarihi: TDateTime): TDateTime;
+function CrmRotaGorevBitisTarihi(AAktiviteTarihi: TDateTime; APlanBitis: TDateTime): TDateTime;
 begin
-  Result := DateOf(AAktiviteTarihi) + 7;
+  if APlanBitis > 0 then
+    Result := APlanBitis
+  else
+    Result := DateOf(AAktiviteTarihi) + 7;
 end;
 
 end.

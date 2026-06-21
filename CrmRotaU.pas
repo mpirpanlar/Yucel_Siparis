@@ -26,7 +26,15 @@ type
     Uyari: string;
     BacakKm: Double;
     BacakGpsEksik: Boolean;
+    PlanBasZaman: TDateTime;
+    PlanBitZaman: TDateTime;
+    PlanYolDk: Integer;
     constructor Create;
+  end;
+
+  TRotaSubeSablonRec = record
+    SubeKodu: Integer;
+    BasLa, BasLn, BitLa, BitLn: Double;
   end;
 
   TfrmCrmRotaPlan = class(TUniForm)
@@ -68,6 +76,8 @@ type
     lblEsik: TUniLabel;
     edEsikKm: TUniEdit;
     lblEsikAcik: TUniLabel;
+    lblRotaSablon: TUniLabel;
+    cbRotaSubeSablon: TUniComboBox;
     panDurakBar: TUniPanel;
     btnEkleCari: TUniButton;
     btnEklePot: TUniButton;
@@ -77,6 +87,15 @@ type
     btnDurakAsagi: TUniButton;
     btnOtomatikSirala: TUniButton;
     btnGorevOlustur: TUniButton;
+    btnZamanPlani: TUniButton;
+    edGorevZiyaretDk: TUniEdit;
+    edMesaiBasSaat: TUniEdit;
+    edMesaiBitSaat: TUniEdit;
+    edGorevHizKmh: TUniEdit;
+    lblGorevZiyaret: TUniLabel;
+    lblMesaiBas: TUniLabel;
+    lblMesaiBit: TUniLabel;
+    lblGorevHiz: TUniLabel;
     btnUyariYenile: TUniButton;
     grdDurak: TUniDBGrid;
     qGrid: TUniQuery;
@@ -102,6 +121,8 @@ type
     procedure btnDurakAsagiClick(Sender: TObject);
     procedure btnOtomatikSiralaClick(Sender: TObject);
     procedure btnGorevOlusturClick(Sender: TObject);
+    procedure btnZamanPlaniClick(Sender: TObject);
+    procedure ZamanParamDegisti(Sender: TObject);
     procedure btnUyariYenileClick(Sender: TObject);
     procedure btnRotaHaritaClick(Sender: TObject);
     procedure btnMesafeHesaplaClick(Sender: TObject);
@@ -110,16 +131,20 @@ type
     procedure saMukerrerConfirm(Sender: TObject);
     procedure saMukerrerDismiss(Sender: TObject; const Reason: TDismissType);
     procedure saOnayGorevConfirm(Sender: TObject);
+    procedure cbRotaSubeSablonSelect(Sender: TObject);
   private
     FPersonelIds: TStringList;
     FDuraklar: TObjectList;
     FRotaId: Int64;
     FKayitDurum: string;
     FGorevAyar: TRotaGorevAyar;
+    FZamanPlanOnaylandi: Boolean;
     FPendSecim: TObjectList;
     FMukerrerMod: Integer;
     FPendCariKod: string;
     FPendPotId: Int64;
+    FSubeSablonlar: TArray<TRotaSubeSablonRec>;
+    FSablonComboDegisiyor: Boolean;
     function ParseDec(const S: string): Double;
     function SqlNv(const S: string): string;
     function EsikKm: Integer;
@@ -157,6 +182,12 @@ type
     procedure EnsureDuraklarList;
     procedure ParametreBaslangicGpsOku(out ALa, ALn: Double);
     procedure ParametreBitisGpsOku(out ALa, ALn: Double);
+    procedure RotaSablonlariYukle;
+    procedure RotaSablonGpsYaz(const ARec: TRotaSubeSablonRec);
+    procedure RotaSablonComboSec(ASubeKodu: Integer; AParametreYedek: Boolean);
+    procedure RotaSablonEslestir;
+    function GpsCoordEsit(const A, B: Double): Boolean;
+    function GpsRecEsit(const ARec: TRotaSubeSablonRec; ABasLa, ABasLn, ABitLa, ABitLn: Double): Boolean;
     procedure DurumYetkiUygula;
     procedure DurakSiraIslemBasla;
     procedure DurakSiraIslemBitir;
@@ -170,7 +201,20 @@ type
     function GorevDurumIdAcik: Int64;
     procedure GorevSilById(AGorevId: Int64);
     procedure RotaGorevleriniIptal;
-    function GorevOlusturVeyaGuncelle(AIt: TRotaDurakItem; AAktTar: TDateTime): Int64;
+    function ZiyaretDk: Integer;
+    function HizKmh: Integer;
+    procedure ZamanParamVarsayilan;
+    procedure ZamanParamYukleKayit(const AQ: TUniQuery);
+    function GorevAyarBirlestir: TRotaGorevAyar;
+    function ZamanSlotlariHesapla: TArray<TRotaZamanSlot>;
+    procedure PlanSlotlariDuraklaraUygula(const ASlots: TArray<TRotaZamanSlot>);
+    procedure ZamanPlaniPersist;
+    function PersonelAdBySira(ASira: Integer): string;
+    function ZamanPlaniOzet(const ASlots: TArray<TRotaZamanSlot>): string;
+    procedure ZamanPlaniOnizleGoster;
+    procedure ZamanPlaniOnaylandi(Sender: TObject);
+    function GorevOlusturVeyaGuncelle(AIt: TRotaDurakItem; AAktTar: TDateTime;
+      APlanBit: TDateTime = 0): Int64;
     function PersonelIdDizisi: TArray<Integer>;
     function TumDuraklarIcinGorevOlustur(AShowMesaj: Boolean): Integer;
     procedure OnaySonrasiGorevKontrol(const YeniDurum, OncekiDurum: string);
@@ -196,7 +240,8 @@ uses
   System.Math, System.IOUtils, System.DateUtils, StrUtils,
   ServerModule,
   uniGUIApplication, MainModule, DMU, TmpU, Main, Genel,
-  CrmCariSecU, CrmPotSecU, CrmHaritaSecU, CrmRotaHaritaU, CrmRotaGeoU, CrmMapsConfigU;
+  CrmCariSecU, CrmPotSecU, CrmHaritaSecU, CrmRotaHaritaU, CrmRotaGeoU, CrmMapsConfigU,
+  CrmRotaZamanPlanU;
 
 const
   CRM_DEF_PINAR_ENLEM = 38.6249;
@@ -211,6 +256,9 @@ begin
   PotId := 0;
   BacakKm := 0;
   BacakGpsEksik := False;
+  PlanBasZaman := 0;
+  PlanBitZaman := 0;
+  PlanYolDk := 0;
 end;
 
 constructor TfrmCrmRotaPlan.Create(AOwner: TComponent);
@@ -221,6 +269,9 @@ begin
   FPersonelIds.Sorted := True;
   FPersonelIds.Duplicates := dupIgnore;
   FMukerrerMod := -1;
+  FZamanPlanOnaylandi := False;
+  FSablonComboDegisiyor := False;
+  SetLength(FSubeSablonlar, 0);
 end;
 
 destructor TfrmCrmRotaPlan.Destroy;
@@ -346,7 +397,7 @@ procedure TfrmCrmRotaPlan.DurakSatiriniListeyeEkle;
 var
   It: TRotaDurakItem;
   TipStr: string;
-  FDurak: TField;
+  FDurak, F: TField;
 begin
   if (qTmp = nil) or (not qTmp.Active) then
     raise Exception.Create('Durak sorgusu a'#231#305'k de'#287'il; sat'#305'r okunamad'#305'.');
@@ -387,6 +438,20 @@ begin
         It.BacakKm := QFloat('BACAK_KM', 0);
       if QF('GPS_EKSIK') <> nil then
         It.BacakGpsEksik := QBool('GPS_EKSIK', False);
+      if QF('PLAN_BAS_ZAMAN') <> nil then
+      begin
+        F := QF('PLAN_BAS_ZAMAN');
+        if not F.IsNull then
+          It.PlanBasZaman := F.AsDateTime;
+      end;
+      if QF('PLAN_BIT_ZAMAN') <> nil then
+      begin
+        F := QF('PLAN_BIT_ZAMAN');
+        if not F.IsNull then
+          It.PlanBitZaman := F.AsDateTime;
+      end;
+      if QF('PLAN_YOL_DK') <> nil then
+        It.PlanYolDk := QInt('PLAN_YOL_DK', 0);
       FDuraklar.Add(It);
     except
       on E: Exception do
@@ -408,7 +473,8 @@ const
   SQL_DURAK_FULL =
     'SELECT DURAK_ID, SIRA, DURAK_TIP, NETSIS_CARI_KOD, POTANSIYEL_ID, UNVAN_SNAPSHOT, ' +
     'IL_SNAPSHOT, ILCE_SNAPSHOT, ADRES_SNAPSHOT, GPS_ENLEM, GPS_BOYLAM, GPSX, GPSY, UYARI_METNI, GOREV_ID, ' +
-    'BACAK_KM, GPS_EKSIK FROM dbo.CRM_ROTA_PLAN_DURAK WHERE ROTA_ID = :R ORDER BY SIRA, DURAK_ID';
+    'BACAK_KM, GPS_EKSIK, PLAN_BAS_ZAMAN, PLAN_BIT_ZAMAN, PLAN_YOL_DK ' +
+    'FROM dbo.CRM_ROTA_PLAN_DURAK WHERE ROTA_ID = :R ORDER BY SIRA, DURAK_ID';
 begin
   EnsureDuraklarList;
   FDuraklar.Clear;
@@ -509,9 +575,166 @@ begin
   qTmp.Close;
 end;
 
-procedure TfrmCrmRotaPlan.YeniKayit;
+function TfrmCrmRotaPlan.GpsCoordEsit(const A, B: Double): Boolean;
+begin
+  Result := Abs(A - B) < 1E-5;
+end;
+
+function TfrmCrmRotaPlan.GpsRecEsit(const ARec: TRotaSubeSablonRec; ABasLa, ABasLn, ABitLa, ABitLn: Double): Boolean;
+begin
+  Result := GpsCoordEsit(ARec.BasLa, ABasLa) and GpsCoordEsit(ARec.BasLn, ABasLn) and
+    GpsCoordEsit(ARec.BitLa, ABitLa) and GpsCoordEsit(ARec.BitLn, ABitLn);
+end;
+
+procedure TfrmCrmRotaPlan.RotaSablonGpsYaz(const ARec: TRotaSubeSablonRec);
+begin
+  if Abs(ARec.BasLa) > 1E-9 then
+    edBasEnlem.Text := FormatFloat('0.######', ARec.BasLa, TFormatSettings.Invariant)
+  else
+    edBasEnlem.Text := '';
+  if Abs(ARec.BasLn) > 1E-9 then
+    edBasBoylam.Text := FormatFloat('0.######', ARec.BasLn, TFormatSettings.Invariant)
+  else
+    edBasBoylam.Text := '';
+  if Abs(ARec.BitLa) > 1E-9 then
+    edBitEnlem.Text := FormatFloat('0.######', ARec.BitLa, TFormatSettings.Invariant)
+  else
+    edBitEnlem.Text := '';
+  if Abs(ARec.BitLn) > 1E-9 then
+    edBitBoylam.Text := FormatFloat('0.######', ARec.BitLn, TFormatSettings.Invariant)
+  else
+    edBitBoylam.Text := '';
+end;
+
+procedure TfrmCrmRotaPlan.RotaSablonlariYukle;
 var
+  I, N: Integer;
+  Rec: TRotaSubeSablonRec;
+begin
+  SetLength(FSubeSablonlar, 0);
+  cbRotaSubeSablon.Items.Clear;
+  cbRotaSubeSablon.Items.Add('('#214'zel / Manuel)');
+  qTmp.Close;
+  qTmp.SQL.Text :=
+    'SELECT SUBE_KODU, GPSX, GPSY, ROTA_BITIS_ENLEM, ROTA_BITIS_BOYLAM ' +
+    'FROM dbo.PARAMETRE WITH (NOLOCK) ' +
+    'WHERE (GPSX IS NOT NULL AND GPSY IS NOT NULL) ' +
+    'OR (ROTA_BITIS_ENLEM IS NOT NULL AND ROTA_BITIS_BOYLAM IS NOT NULL) ' +
+    'ORDER BY SUBE_KODU';
+  qTmp.Open;
+  N := 0;
+  while not qTmp.Eof do
+  begin
+    Rec.SubeKodu := qTmp.FieldByName('SUBE_KODU').AsInteger;
+    if qTmp.FieldByName('GPSX').IsNull then
+      Rec.BasLa := 0
+    else
+      Rec.BasLa := qTmp.FieldByName('GPSX').AsFloat;
+    if qTmp.FieldByName('GPSY').IsNull then
+      Rec.BasLn := 0
+    else
+      Rec.BasLn := qTmp.FieldByName('GPSY').AsFloat;
+    if qTmp.FieldByName('ROTA_BITIS_ENLEM').IsNull then
+      Rec.BitLa := 0
+    else
+      Rec.BitLa := qTmp.FieldByName('ROTA_BITIS_ENLEM').AsFloat;
+    if qTmp.FieldByName('ROTA_BITIS_BOYLAM').IsNull then
+      Rec.BitLn := 0
+    else
+      Rec.BitLn := qTmp.FieldByName('ROTA_BITIS_BOYLAM').AsFloat;
+    SetLength(FSubeSablonlar, N + 1);
+    FSubeSablonlar[N] := Rec;
+    cbRotaSubeSablon.Items.Add(Format(#350'ube %d', [Rec.SubeKodu]));
+    Inc(N);
+    qTmp.Next;
+  end;
+  qTmp.Close;
+end;
+
+procedure TfrmCrmRotaPlan.RotaSablonComboSec(ASubeKodu: Integer; AParametreYedek: Boolean);
+var
+  I, Idx: Integer;
   La, Ln, BLa, BLn: Double;
+  Rec: TRotaSubeSablonRec;
+begin
+  Idx := 0;
+  for I := 0 to High(FSubeSablonlar) do
+    if FSubeSablonlar[I].SubeKodu = ASubeKodu then
+    begin
+      Idx := I + 1;
+      Break;
+    end;
+  FSablonComboDegisiyor := True;
+  try
+    if (Idx > 0) and (Idx < cbRotaSubeSablon.Items.Count) then
+    begin
+      cbRotaSubeSablon.ItemIndex := Idx;
+      RotaSablonGpsYaz(FSubeSablonlar[Idx - 1]);
+    end
+    else
+    begin
+      cbRotaSubeSablon.ItemIndex := 0;
+      if AParametreYedek then
+      begin
+        ParametreBaslangicGpsOku(La, Ln);
+        ParametreBitisGpsOku(BLa, BLn);
+        Rec.SubeKodu := ASubeKodu;
+        Rec.BasLa := La;
+        Rec.BasLn := Ln;
+        Rec.BitLa := BLa;
+        Rec.BitLn := BLn;
+        RotaSablonGpsYaz(Rec);
+      end;
+    end;
+  finally
+    FSablonComboDegisiyor := False;
+  end;
+end;
+
+procedure TfrmCrmRotaPlan.RotaSablonEslestir;
+var
+  I, Idx: Integer;
+  BasLa, BasLn, BitLa, BitLn: Double;
+begin
+  BasLa := BasLat;
+  BasLn := BasLng;
+  BitLa := BitLat;
+  BitLn := BitLng;
+  Idx := 0;
+  for I := 0 to High(FSubeSablonlar) do
+    if GpsRecEsit(FSubeSablonlar[I], BasLa, BasLn, BitLa, BitLn) then
+    begin
+      Idx := I + 1;
+      Break;
+    end;
+  FSablonComboDegisiyor := True;
+  try
+    if (Idx >= 0) and (Idx < cbRotaSubeSablon.Items.Count) then
+      cbRotaSubeSablon.ItemIndex := Idx
+    else
+      cbRotaSubeSablon.ItemIndex := 0;
+  finally
+    FSablonComboDegisiyor := False;
+  end;
+end;
+
+procedure TfrmCrmRotaPlan.cbRotaSubeSablonSelect(Sender: TObject);
+var
+  Idx: Integer;
+begin
+  if FSablonComboDegisiyor then
+    Exit;
+  Idx := cbRotaSubeSablon.ItemIndex;
+  if Idx <= 0 then
+    Exit;
+  if Idx - 1 > High(FSubeSablonlar) then
+    Exit;
+  RotaSablonGpsYaz(FSubeSablonlar[Idx - 1]);
+  HesaplaTumUyari;
+  GridYenile;
+end;
+
+procedure TfrmCrmRotaPlan.YeniKayit;
 begin
   EnsureDuraklarList;
   FRotaId := 0;
@@ -520,22 +743,14 @@ begin
   mmDetay.Clear;
   dtPlan.DateTime := Date;
   cbDurum.ItemIndex := 0;
-  ParametreBaslangicGpsOku(La, Ln);
-  if Abs(La) > 1E-9 then
-    edBasEnlem.Text := FormatFloat('0.######', La, TFormatSettings.Invariant)
-  else
-    edBasEnlem.Text := '';
-  if Abs(Ln) > 1E-9 then
-    edBasBoylam.Text := FormatFloat('0.######', Ln, TFormatSettings.Invariant)
-  else
-    edBasBoylam.Text := '';
-  ParametreBitisGpsOku(BLa, BLn);
-  edBitEnlem.Text := FormatFloat('0.######', BLa, TFormatSettings.Invariant);
-  edBitBoylam.Text := FormatFloat('0.######', BLn, TFormatSettings.Invariant);
   edEsikKm.Text := '80';
+  RotaSablonlariYukle;
+  RotaSablonComboSec(Tmp.xSubeKodu, True);
   FPersonelIds.Clear;
   lbPersonel.Items.Clear;
   lblToplamKm.Caption := 'Toplam yol: - km';
+  ZamanParamVarsayilan;
+  FZamanPlanOnaylandi := False;
   FDuraklar.Clear;
   FKayitDurum := '';
   DurumYetkiUygula;
@@ -595,6 +810,8 @@ begin
   else
     edBitBoylam.Text := FormatFloat('0.######', qLoad.FieldByName('BITIS_BOYLAM').AsFloat, TFormatSettings.Invariant);
   edEsikKm.Text := IntToStr(qLoad.FieldByName('ESIK_KM').AsInteger);
+  RotaSablonlariYukle;
+  RotaSablonEslestir;
   if (qLoad.FindField('GPS_EKSIK_MOD') <> nil) and not qLoad.FieldByName('GPS_EKSIK_MOD').IsNull then
     cbGpsMod.ItemIndex := qLoad.FieldByName('GPS_EKSIK_MOD').AsInteger
   else
@@ -603,6 +820,7 @@ begin
     lblToplamKm.Caption := Format('Toplam yol: %.1f km', [qLoad.FieldByName('TOPLAM_YOL_KM').AsFloat])
   else
     lblToplamKm.Caption := 'Toplam yol: - km';
+  ZamanParamYukleKayit(qLoad);
   qLoad.Close;
   PersonelListYukle;
 
@@ -647,6 +865,14 @@ var
       Result := FormatFloat('0.######', D, FS);
   end;
 
+  function FnvPlan(const Dt: TDateTime): string;
+  begin
+    if (Dt <= 0) or (YearOf(Dt) < 2000) then
+      Result := 'CAST(NULL AS NVARCHAR(20))'
+    else
+      Result := 'N''' + FormatDateTime('dd.mm.yyyy hh:nn', Dt) + '''';
+  end;
+
 begin
   FS := TFormatSettings.Invariant;
   qGrid.Close;
@@ -671,9 +897,10 @@ begin
       ''', N''' + SqlNv(It.Adres) + ''', CAST(' + Fnv(It.GpsE) + ' AS DECIMAL(18,6)), CAST(' +
       Fnv(It.GpsB) + ' AS DECIMAL(18,6)), N''' + SqlNv(It.Uyari) + ''', ' +
       IntToStr(It.GorevId) + ', CAST(' + Fnv(It.BacakKm) + ' AS DECIMAL(10,2)), ' +
-      IntToStr(Ord(It.BacakGpsEksik)) + ')';
+      IntToStr(Ord(It.BacakGpsEksik)) + ', ' + FnvPlan(It.PlanBasZaman) + ', ' +
+      FnvPlan(It.PlanBitZaman) + ')';
   end;
-  Sql := Sql + ') AS T(SIRA, TIP, CARI_KOD, POTID, UNVAN, IL, ILCE, ADRES, ENLEM, BOYLAM, UYARI, GOREV_ID, BACAK_KM, GPS_EKSIK) ORDER BY SIRA';
+  Sql := Sql + ') AS T(SIRA, TIP, CARI_KOD, POTID, UNVAN, IL, ILCE, ADRES, ENLEM, BOYLAM, UYARI, GOREV_ID, BACAK_KM, GPS_EKSIK, PLAN_BAS, PLAN_BIT) ORDER BY SIRA';
   qGrid.SQL.Text := Sql;
   try
     qGrid.Open;
@@ -827,6 +1054,7 @@ begin
   begin
     HesaplaTumUyari;
     GridYenile;
+    FZamanPlanOnaylandi := False;
   end;
 end;
 
@@ -887,6 +1115,7 @@ begin
   begin
     HesaplaTumUyari;
     GridYenile;
+    FZamanPlanOnaylandi := False;
   end;
 end;
 
@@ -1174,6 +1403,18 @@ var
       qExec.ParamByName('GEK').AsInteger := 1
     else
       qExec.ParamByName('GEK').AsInteger := 0;
+    if It.PlanBasZaman > 0 then
+      qExec.ParamByName('PBAS').AsDateTime := It.PlanBasZaman
+    else
+      qExec.ParamByName('PBAS').Clear;
+    if It.PlanBitZaman > 0 then
+      qExec.ParamByName('PBIT').AsDateTime := It.PlanBitZaman
+    else
+      qExec.ParamByName('PBIT').Clear;
+    if It.PlanYolDk > 0 then
+      qExec.ParamByName('PYOL').AsInteger := It.PlanYolDk
+    else
+      qExec.ParamByName('PYOL').Clear;
   end;
 
 begin
@@ -1204,7 +1445,8 @@ begin
         'UPDATE dbo.CRM_ROTA_PLAN_DURAK SET SIRA = :S, DURAK_TIP = :T, NETSIS_CARI_KOD = :CK, POTANSIYEL_ID = :PID, ' +
         'UNVAN_SNAPSHOT = :U, IL_SNAPSHOT = :IL, ILCE_SNAPSHOT = :ILC, ADRES_SNAPSHOT = :AD, ' +
         'GPS_ENLEM = :GE, GPS_BOYLAM = :GB, GPSX = :GX, GPSY = :GY, UYARI_METNI = :UY, GOREV_ID = :GID, ' +
-        'BACAK_KM = :BK, GPS_EKSIK = :GEK WHERE DURAK_ID = :DID AND ROTA_ID = :R';
+        'BACAK_KM = :BK, GPS_EKSIK = :GEK, PLAN_BAS_ZAMAN = :PBAS, PLAN_BIT_ZAMAN = :PBIT, PLAN_YOL_DK = :PYOL ' +
+        'WHERE DURAK_ID = :DID AND ROTA_ID = :R';
       qExec.ParamByName('DID').AsLargeInt := It.DurakId;
       BindDurakParams;
       qExec.Execute;
@@ -1214,8 +1456,9 @@ begin
       qExec.Close;
       qExec.SQL.Text :=
         'INSERT INTO dbo.CRM_ROTA_PLAN_DURAK (ROTA_ID, SIRA, DURAK_TIP, NETSIS_CARI_KOD, POTANSIYEL_ID, ' +
-        'UNVAN_SNAPSHOT, IL_SNAPSHOT, ILCE_SNAPSHOT, ADRES_SNAPSHOT, GPS_ENLEM, GPS_BOYLAM, GPSX, GPSY, UYARI_METNI, GOREV_ID, BACAK_KM, GPS_EKSIK) ' +
-        'OUTPUT INSERTED.DURAK_ID VALUES (:R, :S, :T, :CK, :PID, :U, :IL, :ILC, :AD, :GE, :GB, :GX, :GY, :UY, :GID, :BK, :GEK)';
+        'UNVAN_SNAPSHOT, IL_SNAPSHOT, ILCE_SNAPSHOT, ADRES_SNAPSHOT, GPS_ENLEM, GPS_BOYLAM, GPSX, GPSY, UYARI_METNI, GOREV_ID, BACAK_KM, GPS_EKSIK, ' +
+        'PLAN_BAS_ZAMAN, PLAN_BIT_ZAMAN, PLAN_YOL_DK) ' +
+        'OUTPUT INSERTED.DURAK_ID VALUES (:R, :S, :T, :CK, :PID, :U, :IL, :ILC, :AD, :GE, :GB, :GX, :GY, :UY, :GID, :BK, :GEK, :PBAS, :PBIT, :PYOL)';
       BindDurakParams;
       qExec.Open;
       if qExec.Fields[0].IsNull then
@@ -1365,6 +1608,7 @@ begin
   btnDurakYukari.Enabled := True;
   btnDurakAsagi.Enabled := True;
   btnOtomatikSirala.Enabled := True;
+  FZamanPlanOnaylandi := False;
   if UniSession <> nil then
     UniSession.AddJS('if (typeof Ext !== "undefined" && Ext.getBody) Ext.getBody().unmask();');
 end;
@@ -1454,13 +1698,19 @@ begin
     qExec.SQL.Text :=
       'UPDATE dbo.CRM_ROTA_PLAN SET BASLIK = :BAS, DETAY = :DET, PLANLAMA_TARIHI = :PT, DURUM = :DUR, ' +
       'BASLANGIC_ENLEM = :LA1, BASLANGIC_BOYLAM = :LN1, GPSX = :LA1, GPSY = :LN1, ' +
-      'BITIS_ENLEM = :LA2, BITIS_BOYLAM = :LN2, ESIK_KM = :ESK, GUNCELLEME_UTC = SYSUTCDATETIME() WHERE ROTA_ID = :ID';
+      'BITIS_ENLEM = :LA2, BITIS_BOYLAM = :LN2, ESIK_KM = :ESK, ' +
+      'GOREV_ZIYARET_DK = :ZDK, GOREV_MESAI_BAS_SAAT = :MBAS, GOREV_MESAI_BIT_SAAT = :MBIT, GOREV_HIZ_KMH = :HZ, ' +
+      'GUNCELLEME_UTC = SYSUTCDATETIME() WHERE ROTA_ID = :ID';
     qExec.ParamByName('ID').AsLargeInt := FRotaId;
     qExec.ParamByName('BAS').AsString := Trim(edBaslik.Text);
     qExec.ParamByName('DET').AsString := mmDetay.Text;
     qExec.ParamByName('PT').AsDate := DateOf(dtPlan.DateTime);
     qExec.ParamByName('DUR').AsString := Durum;
     qExec.ParamByName('ESK').AsInteger := EsikKm;
+    qExec.ParamByName('ZDK').AsInteger := ZiyaretDk;
+    qExec.ParamByName('MBAS').AsString := Trim(edMesaiBasSaat.Text);
+    qExec.ParamByName('MBIT').AsString := Trim(edMesaiBitSaat.Text);
+    qExec.ParamByName('HZ').AsInteger := HizKmh;
     BindGeo;
     qExec.Execute;
     PersistDuraklar;
@@ -1472,8 +1722,9 @@ begin
     qExec.Close;
     qExec.SQL.Text :=
       'INSERT INTO dbo.CRM_ROTA_PLAN (BASLIK, DETAY, PLANLAMA_TARIHI, DURUM, BASLANGIC_ENLEM, BASLANGIC_BOYLAM, GPSX, GPSY, ' +
-      'BITIS_ENLEM, BITIS_BOYLAM, ESIK_KM, OLUSTURAN_KULLANICI_ID, GOREV_SORU_SET_ID) OUTPUT INSERTED.ROTA_ID AS RID VALUES (' +
-      ':BAS, :DET, :PT, :DUR, :LA1, :LN1, :LA1, :LN1, :LA2, :LN2, :ESK, :KUL, :SSID)';
+      'BITIS_ENLEM, BITIS_BOYLAM, ESIK_KM, OLUSTURAN_KULLANICI_ID, GOREV_SORU_SET_ID, ' +
+      'GOREV_ZIYARET_DK, GOREV_MESAI_BAS_SAAT, GOREV_MESAI_BIT_SAAT, GOREV_HIZ_KMH) OUTPUT INSERTED.ROTA_ID AS RID VALUES (' +
+      ':BAS, :DET, :PT, :DUR, :LA1, :LN1, :LA1, :LN1, :LA2, :LN2, :ESK, :KUL, :SSID, :ZDK, :MBAS, :MBIT, :HZ)';
     qExec.ParamByName('BAS').AsString := Trim(edBaslik.Text);
     qExec.ParamByName('DET').AsString := mmDetay.Text;
     qExec.ParamByName('PT').AsDate := DateOf(dtPlan.DateTime);
@@ -1484,6 +1735,10 @@ begin
       qExec.ParamByName('SSID').AsLargeInt := CrmRotaGorevAyarOku(frmDM.conAsya, Tmp.xSubeKodu).SoruSetId
     else
       qExec.ParamByName('SSID').Clear;
+    qExec.ParamByName('ZDK').AsInteger := ZiyaretDk;
+    qExec.ParamByName('MBAS').AsString := Trim(edMesaiBasSaat.Text);
+    qExec.ParamByName('MBIT').AsString := Trim(edMesaiBitSaat.Text);
+    qExec.ParamByName('HZ').AsInteger := HizKmh;
     BindGeo;
     qExec.Open;
     if qExec.Fields[0].IsNull then
@@ -1502,7 +1757,216 @@ begin
   end;
   OnaySonrasiGorevKontrol(Durum, OncekiDurum);
   FKayitDurum := Durum;
+  FZamanPlanOnaylandi := False;
   UniMainModule.saKaydet.Show('Kaydedildi.');
+end;
+
+function TfrmCrmRotaPlan.ZiyaretDk: Integer;
+begin
+  Result := StrToIntDef(Trim(edGorevZiyaretDk.Text), 45);
+  if Result <= 0 then
+    Result := 45;
+end;
+
+function TfrmCrmRotaPlan.HizKmh: Integer;
+begin
+  Result := StrToIntDef(Trim(edGorevHizKmh.Text), 50);
+  if Result <= 0 then
+    Result := 50;
+end;
+
+procedure TfrmCrmRotaPlan.ZamanParamVarsayilan;
+var
+  Ayar: TRotaGorevAyar;
+begin
+  Ayar := CrmRotaGorevAyarOku(frmDM.conAsya, Tmp.xSubeKodu);
+  edGorevZiyaretDk.Text := IntToStr(Ayar.DurakDakika);
+  edMesaiBasSaat.Text := Ayar.BasSaat;
+  edMesaiBitSaat.Text := Ayar.BitSaat;
+  edGorevHizKmh.Text := IntToStr(Ayar.HizKmh);
+end;
+
+procedure TfrmCrmRotaPlan.ZamanParamYukleKayit(const AQ: TUniQuery);
+var
+  Ayar: TRotaGorevAyar;
+begin
+  Ayar := CrmRotaGorevAyarOku(frmDM.conAsya, Tmp.xSubeKodu);
+  if (AQ.FindField('GOREV_ZIYARET_DK') <> nil) and not AQ.FieldByName('GOREV_ZIYARET_DK').IsNull then
+    edGorevZiyaretDk.Text := IntToStr(AQ.FieldByName('GOREV_ZIYARET_DK').AsInteger)
+  else
+    edGorevZiyaretDk.Text := IntToStr(Ayar.DurakDakika);
+  if (AQ.FindField('GOREV_MESAI_BAS_SAAT') <> nil) and not AQ.FieldByName('GOREV_MESAI_BAS_SAAT').IsNull then
+    edMesaiBasSaat.Text := Trim(AQ.FieldByName('GOREV_MESAI_BAS_SAAT').AsString)
+  else
+    edMesaiBasSaat.Text := Ayar.BasSaat;
+  if (AQ.FindField('GOREV_MESAI_BIT_SAAT') <> nil) and not AQ.FieldByName('GOREV_MESAI_BIT_SAAT').IsNull then
+    edMesaiBitSaat.Text := Trim(AQ.FieldByName('GOREV_MESAI_BIT_SAAT').AsString)
+  else
+    edMesaiBitSaat.Text := Ayar.BitSaat;
+  if (AQ.FindField('GOREV_HIZ_KMH') <> nil) and not AQ.FieldByName('GOREV_HIZ_KMH').IsNull then
+    edGorevHizKmh.Text := IntToStr(AQ.FieldByName('GOREV_HIZ_KMH').AsInteger)
+  else
+    edGorevHizKmh.Text := IntToStr(Ayar.HizKmh);
+end;
+
+function TfrmCrmRotaPlan.GorevAyarBirlestir: TRotaGorevAyar;
+var
+  Param: TRotaGorevAyar;
+begin
+  Param := CrmRotaGorevAyarOku(frmDM.conAsya, Tmp.xSubeKodu);
+  Result := CrmRotaGorevAyarRotaBirlestir(Param, ZiyaretDk, HizKmh,
+    Trim(edMesaiBasSaat.Text), Trim(edMesaiBitSaat.Text));
+end;
+
+function TfrmCrmRotaPlan.ZamanSlotlariHesapla: TArray<TRotaZamanSlot>;
+var
+  I, N: Integer;
+  BacakKms: TArray<Double>;
+begin
+  N := FDuraklar.Count;
+  SetLength(BacakKms, N);
+  for I := 0 to N - 1 do
+    BacakKms[I] := TRotaDurakItem(FDuraklar[I]).BacakKm;
+  Result := CrmRotaZamanSlotlariHesapla(GorevAyarBirlestir, dtPlan.DateTime, BacakKms);
+end;
+
+procedure TfrmCrmRotaPlan.PlanSlotlariDuraklaraUygula(const ASlots: TArray<TRotaZamanSlot>);
+var
+  I: Integer;
+  It: TRotaDurakItem;
+begin
+  for I := 0 to FDuraklar.Count - 1 do
+  begin
+    It := TRotaDurakItem(FDuraklar[I]);
+    if I < Length(ASlots) then
+    begin
+      It.PlanBasZaman := ASlots[I].BasZaman;
+      It.PlanBitZaman := ASlots[I].BitZaman;
+      It.PlanYolDk := ASlots[I].YolDk;
+    end
+    else
+    begin
+      It.PlanBasZaman := 0;
+      It.PlanBitZaman := 0;
+      It.PlanYolDk := 0;
+    end;
+  end;
+end;
+
+procedure TfrmCrmRotaPlan.ZamanPlaniPersist;
+begin
+  if FRotaId <= 0 then
+    Exit;
+  qExec.Close;
+  qExec.SQL.Text :=
+    'UPDATE dbo.CRM_ROTA_PLAN SET ZAMAN_PLAN_UTC = SYSUTCDATETIME() WHERE ROTA_ID = :R';
+  qExec.ParamByName('R').AsLargeInt := FRotaId;
+  qExec.Execute;
+  PersistDuraklar;
+end;
+
+function TfrmCrmRotaPlan.PersonelAdBySira(ASira: Integer): string;
+var
+  Pids: TArray<Integer>;
+  I, Kid: Integer;
+begin
+  Result := '';
+  Pids := PersonelIdDizisi;
+  Kid := CrmRotaPersonelAtananId(Pids, ASira);
+  if Kid <= 0 then
+    Exit;
+  for I := 0 to lbPersonel.Items.Count - 1 do
+    if Integer(lbPersonel.Items.Objects[I]) = Kid then
+      Exit(lbPersonel.Items[I]);
+end;
+
+function TfrmCrmRotaPlan.ZamanPlaniOzet(const ASlots: TArray<TRotaZamanSlot>): string;
+var
+  I, GunSay: Integer;
+  GunSet: TStringList;
+  SonTar: TDateTime;
+  GunKey: string;
+begin
+  Result := '';
+  if Length(ASlots) = 0 then
+    Exit('Durak yok.');
+  GunSet := TStringList.Create;
+  try
+    GunSet.Sorted := True;
+    GunSet.Duplicates := dupIgnore;
+    for I := 0 to High(ASlots) do
+    begin
+      GunKey := FormatDateTime('yyyy-mm-dd', DateOf(ASlots[I].BasZaman));
+      GunSet.Add(GunKey);
+    end;
+    GunSay := GunSet.Count;
+    SonTar := ASlots[High(ASlots)].BasZaman;
+    Result := Format('Toplam %d durak, %d g'#252'ne yay'#305'l'#305'yor. Son ziyaret: %s %s',
+      [Length(ASlots), GunSay, FormatDateTime('dd.mm.yyyy', SonTar), FormatDateTime('hh:nn', SonTar)]);
+  finally
+    GunSet.Free;
+  end;
+end;
+
+procedure TfrmCrmRotaPlan.ZamanPlaniOnizleGoster;
+var
+  Slots: TArray<TRotaZamanSlot>;
+  Items: TArray<TRotaZamanOnizlemeItem>;
+  I: Integer;
+begin
+  if FDuraklar.Count = 0 then
+  begin
+    UniMainModule.saHata.Show('Zaman plan'#305' i'#231'in en az bir durak ekleyin.');
+    Exit;
+  end;
+  FGorevAyar := GorevAyarBirlestir;
+  Slots := ZamanSlotlariHesapla;
+  PlanSlotlariDuraklaraUygula(Slots);
+  SetLength(Items, Length(Slots));
+  for I := 0 to High(Slots) do
+  begin
+    Items[I].Sira := Slots[I].Sira;
+    if (Slots[I].Sira >= 1) and (Slots[I].Sira <= FDuraklar.Count) then
+      Items[I].Unvan := TRotaDurakItem(FDuraklar[Slots[I].Sira - 1]).Unvan
+    else
+      Items[I].Unvan := '';
+    Items[I].BasZaman := Slots[I].BasZaman;
+    Items[I].BitZaman := Slots[I].BitZaman;
+    Items[I].YolDk := Slots[I].YolDk;
+    Items[I].PersonelAd := PersonelAdBySira(Slots[I].Sira);
+  end;
+  frmCrmRotaZamanPlan.OnGorevOlusturOnay := ZamanPlaniOnaylandi;
+  frmCrmRotaZamanPlan.Hazirla(Items, ZamanPlaniOzet(Slots));
+  GridYenile;
+  frmCrmRotaZamanPlan.ShowModal;
+end;
+
+procedure TfrmCrmRotaPlan.ZamanPlaniOnaylandi(Sender: TObject);
+begin
+  FZamanPlanOnaylandi := True;
+  try
+    if FRotaId > 0 then
+      ZamanPlaniPersist;
+    TumDuraklarIcinGorevOlustur(True);
+  except
+    on E: Exception do
+      UniMainModule.saHata.Show('G'#246'rev olu'#351'turma hatas'#305': ' + E.Message);
+  end;
+end;
+
+procedure TfrmCrmRotaPlan.ZamanParamDegisti(Sender: TObject);
+begin
+  FZamanPlanOnaylandi := False;
+end;
+
+procedure TfrmCrmRotaPlan.btnZamanPlaniClick(Sender: TObject);
+begin
+  if FRotaId <= 0 then
+  begin
+    UniMainModule.saHata.Show(#214'nce rotay'#305' kaydedin.');
+    Exit;
+  end;
+  ZamanPlaniOnizleGoster;
 end;
 
 procedure TfrmCrmRotaPlan.KullanicilariAc;
@@ -1624,6 +2088,7 @@ begin
   end;
   if Trim(Sonuc.Hata) <> '' then
     UniMainModule.saHata.Show(Sonuc.Hata);
+  FZamanPlanOnaylandi := False;
 end;
 
 procedure TfrmCrmRotaPlan.btnMesafeHesaplaClick(Sender: TObject);
@@ -1740,6 +2205,7 @@ begin
   end;
   HesaplaTumUyari;
   GridYenile;
+  FZamanPlanOnaylandi := False;
 end;
 
 procedure TfrmCrmRotaPlan.btnUyariYenileClick(Sender: TObject);
@@ -1779,8 +2245,7 @@ begin
     Idx := SeciliDurakIndeks;
     if Idx <= 0 then
       Exit;
-    It := TRotaDurakItem(FDuraklar[Idx]);
-    FDuraklar.Delete(Idx);
+    It := TRotaDurakItem(FDuraklar.Extract(FDuraklar[Idx]));
     FDuraklar.Insert(Idx - 1, It);
     SiralariYenidenNumarala;
     HesaplaTumUyari;
@@ -1800,8 +2265,7 @@ begin
     Idx := SeciliDurakIndeks;
     if (Idx < 0) or (Idx >= FDuraklar.Count - 1) then
       Exit;
-    It := TRotaDurakItem(FDuraklar[Idx]);
-    FDuraklar.Delete(Idx);
+    It := TRotaDurakItem(FDuraklar.Extract(FDuraklar[Idx]));
     FDuraklar.Insert(Idx + 1, It);
     SiralariYenidenNumarala;
     HesaplaTumUyari;
@@ -1903,7 +2367,8 @@ begin
     TRotaDurakItem(FDuraklar[I]).GorevId := 0;
 end;
 
-function TfrmCrmRotaPlan.GorevOlusturVeyaGuncelle(AIt: TRotaDurakItem; AAktTar: TDateTime): Int64;
+function TfrmCrmRotaPlan.GorevOlusturVeyaGuncelle(AIt: TRotaDurakItem; AAktTar: TDateTime;
+  APlanBit: TDateTime): Int64;
 var
   TaskTid, DurId, Aid, Gid: Int64;
   Konu, Acik: string;
@@ -1955,7 +2420,7 @@ begin
   AktTar := AAktTar;
   if YearOf(AktTar) < 2000 then
     AktTar := CrmRotaGorevZamanHesapla(FGorevAyar, dtPlan.DateTime, AIt.Sira);
-  Bitis := CrmRotaGorevBitisTarihi(AktTar);
+  Bitis := CrmRotaGorevBitisTarihi(AktTar, APlanBit);
   AtananId := CrmRotaPersonelAtananId(PersonelIds, AIt.Sira);
 
   Konu := Format('Rota: %s - Durak %d: %s', [Trim(edBaslik.Text), AIt.Sira, Trim(AIt.Unvan)]);
@@ -2066,28 +2531,45 @@ var
   I, N: Integer;
   It: TRotaDurakItem;
   BacakKms: TArray<Double>;
-  Zamanlar: TArray<TDateTime>;
+  Slots: TArray<TRotaZamanSlot>;
+  AktTar, BitTar: TDateTime;
 begin
   Result := 0;
   if FRotaId <= 0 then
     Exit;
   if FDuraklar.Count = 0 then
     Exit;
-  FGorevAyar := CrmRotaGorevAyarOku(frmDM.conAsya, Tmp.xSubeKodu);
+  FGorevAyar := GorevAyarBirlestir;
   PersistDuraklar;
   ReloadDurakIdsFromDb;
   N := FDuraklar.Count;
   SetLength(BacakKms, N);
   for I := 0 to N - 1 do
     BacakKms[I] := TRotaDurakItem(FDuraklar[I]).BacakKm;
-  Zamanlar := CrmRotaGorevZamanlariHesapla(FGorevAyar, dtPlan.DateTime, BacakKms);
+  Slots := CrmRotaZamanSlotlariHesapla(FGorevAyar, dtPlan.DateTime, BacakKms);
+  PlanSlotlariDuraklaraUygula(Slots);
   for I := 0 to N - 1 do
   begin
     It := TRotaDurakItem(FDuraklar[I]);
-    if GorevOlusturVeyaGuncelle(It, Zamanlar[I]) > 0 then
+    if I < Length(Slots) then
+    begin
+      AktTar := Slots[I].BasZaman;
+      BitTar := Slots[I].BitZaman;
+    end
+    else if It.PlanBasZaman > 0 then
+    begin
+      AktTar := It.PlanBasZaman;
+      BitTar := It.PlanBitZaman;
+    end
+    else
+    begin
+      AktTar := 0;
+      BitTar := 0;
+    end;
+    if GorevOlusturVeyaGuncelle(It, AktTar, BitTar) > 0 then
       Inc(Result);
   end;
-  PersistDuraklar;
+  ZamanPlaniPersist;
   GridYenile;
   if AShowMesaj then
     UniMainModule.saKaydet.Show(Format('%d durak i'#231'in g'#246'rev olu'#351'turuldu veya g'#252'ncellendi.', [Result]));
@@ -2186,6 +2668,12 @@ begin
   if FDuraklar.Count = 0 then
   begin
     UniMainModule.saHata.Show('G'#246'rev olu'#351'turmak i'#231'in en az bir durak ekleyin.');
+    Exit;
+  end;
+  if not FZamanPlanOnaylandi then
+  begin
+    UniMainModule.saHata.Show(#214'nce zaman plan'#305'n'#305' '#246'nizleyin ve onaylay'#305'n.');
+    ZamanPlaniOnizleGoster;
     Exit;
   end;
   try

@@ -28,7 +28,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       Left = 0
       Top = 0
       Width = 1020
-      Height = 232
+      Height = 256
       Hint = ''
       TabOrder = 0
       BorderStyle = ubsNone
@@ -138,9 +138,30 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         Caption = '(Rota eksenine g'#246're '#231'apraz sapma uyar'#305's'#305')'
         TabOrder = 17
       end
+      object lblRotaSablon: TUniLabel
+        Left = 12
+        Top = 156
+        Width = 72
+        Height = 13
+        Hint = ''
+        Caption = 'Rota '#246'n tan'#305'm'
+        TabOrder = 21
+      end
+      object cbRotaSubeSablon: TUniComboBox
+        Left = 96
+        Top = 152
+        Width = 220
+        Height = 27
+        Hint = ''
+        Style = csDropDownList
+        Text = ''
+        TabOrder = 11
+        IconItems = <>
+        OnSelect = cbRotaSubeSablonSelect
+      end
       object lblBasE: TUniLabel
         Left = 12
-        Top = 168
+        Top = 192
         Width = 83
         Height = 13
         Hint = ''
@@ -149,7 +170,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       end
       object edBasEnlem: TUniEdit
         Left = 120
-        Top = 164
+        Top = 188
         Width = 100
         Height = 27
         Hint = ''
@@ -158,7 +179,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       end
       object lblBasB: TUniLabel
         Left = 228
-        Top = 168
+        Top = 192
         Width = 37
         Height = 13
         Hint = ''
@@ -167,7 +188,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       end
       object edBasBoylam: TUniEdit
         Left = 276
-        Top = 164
+        Top = 188
         Width = 100
         Height = 27
         Hint = ''
@@ -176,7 +197,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       end
       object btnHarBas: TUniButton
         Left = 388
-        Top = 162
+        Top = 186
         Width = 120
         Height = 30
         Hint = ''
@@ -186,7 +207,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       end
       object lblBitE: TUniLabel
         Left = 520
-        Top = 168
+        Top = 192
         Width = 56
         Height = 13
         Hint = ''
@@ -195,7 +216,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       end
       object edBitEnlem: TUniEdit
         Left = 596
-        Top = 164
+        Top = 188
         Width = 100
         Height = 27
         Hint = ''
@@ -204,7 +225,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       end
       object lblBitB: TUniLabel
         Left = 704
-        Top = 168
+        Top = 192
         Width = 37
         Height = 13
         Hint = ''
@@ -213,7 +234,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       end
       object edBitBoylam: TUniEdit
         Left = 752
-        Top = 164
+        Top = 188
         Width = 100
         Height = 27
         Hint = ''
@@ -222,7 +243,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       end
       object btnHarBit: TUniButton
         Left = 864
-        Top = 162
+        Top = 186
         Width = 120
         Height = 30
         Hint = ''
@@ -233,7 +254,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
     end
     object panDurakBar: TUniPanel
       Left = 0
-      Top = 232
+      Top = 256
       Width = 1020
       Height = 76
       Hint = ''
@@ -327,7 +348,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         Top = 40
         Width = 160
         Height = 28
-        Hint = 'T'#252'm duraklar i'#231'in g'#246'rev olu'#351'tur veya g'#252'ncelle'
+        Hint = 'Zaman plan'#305' onayland'#305'ktan sonra g'#246'revleri olu'#351'turur'
         Caption = 'G'#246'revleri olu'#351'tur'
         TabOrder = 7
         OnClick = btnGorevOlusturClick
@@ -348,7 +369,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       Left = 0
       Top = 276
       Width = 1020
-      Height = 72
+      Height = 108
       Hint = ''
       TabOrder = 2
       BorderStyle = ubsNone
@@ -435,10 +456,96 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         TabOrder = 7
         OnClick = btnMesafeHesaplaClick
       end
+      object lblGorevZiyaret: TUniLabel
+        Left = 8
+        Top = 72
+        Width = 58
+        Height = 13
+        Hint = ''
+        Caption = 'Ziyaret dk'
+        TabOrder = 8
+      end
+      object edGorevZiyaretDk: TUniEdit
+        Left = 72
+        Top = 68
+        Width = 48
+        Height = 24
+        Hint = 'Her durak i'#231'in ziyaret s'#252'resi (dakika)'
+        Text = '45'
+        TabOrder = 9
+        OnChange = ZamanParamDegisti
+      end
+      object lblMesaiBas: TUniLabel
+        Left = 132
+        Top = 72
+        Width = 54
+        Height = 13
+        Hint = ''
+        Caption = 'Mesai ba'#351
+        TabOrder = 10
+      end
+      object edMesaiBasSaat: TUniEdit
+        Left = 192
+        Top = 68
+        Width = 52
+        Height = 24
+        Hint = ''
+        Text = '09:00'
+        TabOrder = 11
+        OnChange = ZamanParamDegisti
+      end
+      object lblMesaiBit: TUniLabel
+        Left = 252
+        Top = 72
+        Width = 40
+        Height = 13
+        Hint = ''
+        Caption = 'Mesai bit'
+        TabOrder = 12
+      end
+      object edMesaiBitSaat: TUniEdit
+        Left = 300
+        Top = 68
+        Width = 52
+        Height = 24
+        Hint = ''
+        Text = '18:00'
+        TabOrder = 13
+        OnChange = ZamanParamDegisti
+      end
+      object lblGorevHiz: TUniLabel
+        Left = 364
+        Top = 72
+        Width = 52
+        Height = 13
+        Hint = ''
+        Caption = 'H'#305'z km/h'
+        TabOrder = 14
+      end
+      object edGorevHizKmh: TUniEdit
+        Left = 424
+        Top = 68
+        Width = 48
+        Height = 24
+        Hint = 'Yol s'#252'resi hesab'#305' i'#231'in ortalama h'#305'z'
+        Text = '50'
+        TabOrder = 15
+        OnChange = ZamanParamDegisti
+      end
+      object btnZamanPlani: TUniButton
+        Left = 488
+        Top = 66
+        Width = 160
+        Height = 28
+        Hint = 'Mesai ve yol s'#252'resine g'#246're g'#246'rev zamanlar'#305'n'#305' takvimde '#246'nizle'
+        Caption = 'Zaman plan'#305' '#246'nizle'
+        TabOrder = 16
+        OnClick = btnZamanPlaniClick
+      end
     end
     object grdDurak: TUniDBGrid
       Left = 0
-      Top = 348
+      Top = 384
       Width = 1020
       Height = 300
       Hint = ''
@@ -517,6 +624,24 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
           FieldName = 'BACAK_KM'
           Title.Caption = 'Bacak km'
           Width = 70
+          ReadOnly = True
+        end
+        item
+          FieldName = 'PLAN_BAS'
+          Title.Caption = 'Plan ba'#351
+          Width = 110
+          ReadOnly = True
+        end
+        item
+          FieldName = 'PLAN_BIT'
+          Title.Caption = 'Plan bit'
+          Width = 110
+          ReadOnly = True
+        end
+        item
+          FieldName = 'GOREV_ID'
+          Title.Caption = 'G'#246'rev'
+          Width = 60
           ReadOnly = True
         end>
     end
