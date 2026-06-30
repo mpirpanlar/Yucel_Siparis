@@ -437,6 +437,28 @@ object frmCrmAktivite: TfrmCrmAktivite
             TabOrder = 15
             IconItems = <>
           end
+          object lblYapan: TUniLabel
+            Left = 330
+            Top = 487
+            Width = 32
+            Height = 13
+            Hint = ''
+            Caption = 'Yapan'
+            TabOrder = 30
+          end
+          object lblYapanDeger: TUniLabel
+            Left = 380
+            Top = 487
+            Width = 220
+            Height = 13
+            Hint = ''
+            Caption = ''
+            ParentFont = False
+            Font.Charset = TURKISH_CHARSET
+            Font.Color = clGray
+            Font.Height = -12
+            TabOrder = 31
+          end
         end
         object panEkler: TUniPanel
           Left = 0

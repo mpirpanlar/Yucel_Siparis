@@ -521,6 +521,29 @@ object frmCrmMenu: TfrmCrmMenu
         LayoutConfig.Margin = '8 2 2 2'
         OnClick = btnRotaKmRaporClick
       end
+      object btnPersonelPerformans: TUniButton
+        Left = 0
+        Top = 299
+        Width = 400
+        Height = 38
+        Hint = ''
+        Caption = 'Personel Performans Raporu'
+        ParentFont = False
+        Font.Charset = TURKISH_CHARSET
+        Font.Color = clWhite
+        Font.Height = -15
+        Font.Style = [fsItalic]
+        TabOrder = 7
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'    config.cl' +
+            's="btnAltMenu";'#13#10'}')
+        ScreenMask.Enabled = True
+        ScreenMask.Message = 'L'#252'tfen bekleyiniz...'
+        LayoutConfig.Width = '100%'
+        LayoutConfig.Margin = '8 2 2 2'
+        OnClick = btnPersonelPerformansClick
+      end
     end
   end
 end

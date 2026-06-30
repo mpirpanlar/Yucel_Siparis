@@ -9,7 +9,7 @@ uses
   DBAccess, Uni;
 
 const
-  CRM_SCHEMA_TARGET_VERSION = 32;
+  CRM_SCHEMA_TARGET_VERSION = 34;
 
 procedure CrmEnsureDatabase(AConn: TUniConnection);
 
@@ -1633,6 +1633,205 @@ begin
     'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (32, ''Rota zaman plani kolonlari ve onizleme formu (CrmRotaZamanPlan)'')');
 end;
 
+procedure CrmSchemaApplyMigration33(AConn: TUniConnection);
+begin
+  if CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''FormName'' AND schema_id = SCHEMA_ID(''dbo'')') > 0 then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.FormName (FormName, FormCaption) SELECT v.FN, v.FC FROM (VALUES ' +
+      '(''CrmPersonelPerformansRapor'', ''CRM - Personel Performans Raporu'')) AS v(FN, FC) ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.FormName f WHERE f.FormName = v.FN)');
+  end;
+
+  if (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''YETKI'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) and
+     (CrmScalarInt(AConn,
+    'SELECT COUNT(*) FROM sys.tables WHERE name = ''KULLANICIGRUP'' AND schema_id = SCHEMA_ID(''dbo'')') > 0) then
+  begin
+    CrmExec(AConn,
+      'INSERT INTO dbo.YETKI (KullaniciGrupID, FormName, Gor, Sil, Degistir, Kaydet) ' +
+      'SELECT g.KullaniciGrupID, ''CrmPersonelPerformansRapor'', 1, 1, 1, 1 FROM dbo.KULLANICIGRUP g ' +
+      'WHERE NOT EXISTS (SELECT 1 FROM dbo.YETKI y WHERE y.KullaniciGrupID = g.KullaniciGrupID AND y.FormName = ''CrmPersonelPerformansRapor'')');
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 33) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (33, ''Personel performans raporu (CrmPersonelPerformansRapor, FormName, YETKI)'')');
+end;
+
+function CrmAuditSqlColType(const ATypeName: string; AMaxLen, APrec, AScale: Integer): string;
+begin
+  if SameText(ATypeName, 'nvarchar') and (AMaxLen < 0) then
+    Result := 'NVARCHAR(MAX)'
+  else if SameText(ATypeName, 'varchar') and (AMaxLen < 0) then
+    Result := 'VARCHAR(MAX)'
+  else if SameText(ATypeName, 'varbinary') and (AMaxLen < 0) then
+    Result := 'VARBINARY(MAX)'
+  else if SameText(ATypeName, 'nvarchar') then
+    Result := 'NVARCHAR(' + IntToStr(AMaxLen div 2) + ')'
+  else if SameText(ATypeName, 'nchar') then
+    Result := 'NCHAR(' + IntToStr(AMaxLen div 2) + ')'
+  else if SameText(ATypeName, 'varchar') then
+    Result := 'VARCHAR(' + IntToStr(AMaxLen) + ')'
+  else if SameText(ATypeName, 'char') then
+    Result := 'CHAR(' + IntToStr(AMaxLen) + ')'
+  else if SameText(ATypeName, 'varbinary') then
+    Result := 'VARBINARY(' + IntToStr(AMaxLen) + ')'
+  else if SameText(ATypeName, 'binary') then
+    Result := 'BINARY(' + IntToStr(AMaxLen) + ')'
+  else if SameText(ATypeName, 'decimal') or SameText(ATypeName, 'numeric') then
+    Result := UpperCase(ATypeName) + '(' + IntToStr(APrec) + ',' + IntToStr(AScale) + ')'
+  else if SameText(ATypeName, 'datetime2') then
+    Result := 'DATETIME2(' + IntToStr(AScale) + ')'
+  else if SameText(ATypeName, 'datetimeoffset') then
+    Result := 'DATETIMEOFFSET(' + IntToStr(AScale) + ')'
+  else if SameText(ATypeName, 'time') then
+    Result := 'TIME(' + IntToStr(AScale) + ')'
+  else
+    Result := UpperCase(ATypeName);
+end;
+
+procedure CrmSchemaEnsureAuditForTable(AConn: TUniConnection; const ATable: string);
+var
+  Q: TUniQuery;
+  LogTbl, TrgName, Sql, ColDefs, InsCols, SelCols, Cn: string;
+begin
+  if (ATable = '') or SameText(ATable, 'CRM_SCHEMA_GECMIS') then
+    Exit;
+  LogTbl := ATable + '_Log';
+  TrgName := 'TR_' + ATable + '_Log_UD';
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.' + LogTbl + ''',''U'') IS NULL THEN 0 ELSE 1 END') = 0 then
+  begin
+    ColDefs := '';
+    InsCols := '';
+    SelCols := '';
+    Q := TUniQuery.Create(nil);
+    try
+      Q.Connection := AConn;
+      Q.SQL.Text :=
+        'SELECT c.name, t.name AS type_name, c.max_length, c.precision, c.scale ' +
+        'FROM sys.columns c INNER JOIN sys.types t ON c.user_type_id = t.user_type_id ' +
+        'WHERE c.object_id = OBJECT_ID(''dbo.' + ATable + ''') ORDER BY c.column_id';
+      Q.Open;
+      while not Q.Eof do
+      begin
+        Cn := Q.FieldByName('name').AsString;
+        if ColDefs <> '' then
+        begin
+          ColDefs := ColDefs + ', ';
+          InsCols := InsCols + ', ';
+          SelCols := SelCols + ', ';
+        end;
+        ColDefs := ColDefs + '[' + Cn + '] ' +
+          CrmAuditSqlColType(Q.FieldByName('type_name').AsString,
+            Q.FieldByName('max_length').AsInteger, Q.FieldByName('precision').AsInteger,
+            Q.FieldByName('scale').AsInteger) + ' NULL';
+        InsCols := InsCols + '[' + Cn + ']';
+        SelCols := SelCols + 'd.[' + Cn + ']';
+        Q.Next;
+      end;
+      Q.Close;
+    finally
+      Q.Free;
+    end;
+    if ColDefs = '' then
+      Exit;
+    { PK/DF adlari tablo adindan turetilmez: SQL Server case-insensitive oldugundan
+      PK_CRM_AKTIVITE_Log ile PK_CRM_AKTIVITE_LOG (DEGISIM_LOG tablosu) cakisir. }
+    Sql :=
+      'CREATE TABLE dbo.' + LogTbl + ' (' +
+      'LOG_ROW_ID BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT PK_AUD_' + ATable + ' PRIMARY KEY, ' +
+      'LOG_ACTION CHAR(1) NOT NULL, ' +
+      'LOG_UTC DATETIME2(3) NOT NULL CONSTRAINT DF_AUD_' + ATable + '_UTC DEFAULT (SYSUTCDATETIME()), ' +
+      'LOG_DB_USER SYSNAME NULL, LOG_APP_USER INT NULL, ' + ColDefs + ')';
+    CrmExec(AConn, Sql);
+  end;
+
+  CrmExec(AConn, 'IF OBJECT_ID(''dbo.' + TrgName + ''',''TR'') IS NOT NULL DROP TRIGGER dbo.' + TrgName);
+  InsCols := '';
+  SelCols := '';
+  Q := TUniQuery.Create(nil);
+  try
+    Q.Connection := AConn;
+    Q.SQL.Text :=
+      'SELECT c.name FROM sys.columns c ' +
+      'WHERE c.object_id = OBJECT_ID(''dbo.' + ATable + ''') ORDER BY c.column_id';
+    Q.Open;
+    while not Q.Eof do
+    begin
+      Cn := Q.FieldByName('name').AsString;
+      if InsCols <> '' then
+      begin
+        InsCols := InsCols + ', ';
+        SelCols := SelCols + ', ';
+      end;
+      InsCols := InsCols + '[' + Cn + ']';
+      SelCols := SelCols + 'd.[' + Cn + ']';
+      Q.Next;
+    end;
+    Q.Close;
+  finally
+    Q.Free;
+  end;
+  if InsCols = '' then
+    Exit;
+  Sql :=
+    'CREATE TRIGGER dbo.' + TrgName + ' ON dbo.' + ATable + ' AFTER UPDATE, DELETE AS ' +
+    'BEGIN SET NOCOUNT ON; IF TRIGGER_NESTLEVEL() > 1 RETURN; ' +
+    'INSERT INTO dbo.' + LogTbl + ' (LOG_ACTION, LOG_DB_USER, LOG_APP_USER, ' + InsCols + ') ' +
+    'SELECT CASE WHEN EXISTS(SELECT 1 FROM inserted) THEN ''U'' ELSE ''D'' END, ' +
+    'SUSER_SNAME(), TRY_CAST(SESSION_CONTEXT(N''CRM_APP_USER'') AS INT), ' + SelCols +
+    ' FROM deleted d; END';
+  CrmExec(AConn, Sql);
+end;
+
+procedure CrmSchemaFixAktiviteDegisimLogNames(AConn: TUniConnection);
+begin
+  if CrmScalarInt(AConn,
+    'SELECT CASE WHEN OBJECT_ID(''dbo.CRM_AKTIVITE_LOG'',''U'') IS NOT NULL ' +
+    'AND OBJECT_ID(''dbo.CRM_AKTIVITE_DEGISIM_LOG'',''U'') IS NULL THEN 1 ELSE 0 END') = 1 then
+    CrmExec(AConn, 'EXEC sp_rename ''dbo.CRM_AKTIVITE_LOG'', ''CRM_AKTIVITE_DEGISIM_LOG''');
+  CrmExec(AConn,
+    'IF EXISTS (SELECT 1 FROM sys.key_constraints k WHERE k.name = ''PK_CRM_AKTIVITE_LOG'' ' +
+    'AND k.parent_object_id = OBJECT_ID(''dbo.CRM_AKTIVITE_DEGISIM_LOG'')) ' +
+    'EXEC sp_rename ''PK_CRM_AKTIVITE_LOG'', ''PK_CRM_AKTIVITE_DEGISIM_LOG'', ''OBJECT''');
+end;
+
+procedure CrmSchemaApplyMigration34(AConn: TUniConnection);
+var
+  Q: TUniQuery;
+  Tbl: string;
+begin
+  CrmSchemaFixAktiviteDegisimLogNames(AConn);
+
+  Q := TUniQuery.Create(nil);
+  try
+    Q.Connection := AConn;
+    Q.SQL.Text :=
+      'SELECT t.name FROM sys.tables t WHERE t.schema_id = SCHEMA_ID(''dbo'') ' +
+      'AND t.name LIKE ''CRM[_]%'' ESCAPE ''\'' ' +
+      'AND t.name NOT LIKE ''%[_]Log'' ESCAPE ''\'' ' +
+      'AND t.name NOT LIKE ''%[_]DEGISIM_LOG'' ESCAPE ''\'' ' +
+      'AND t.name <> ''CRM_SCHEMA_GECMIS'' ORDER BY t.name';
+    Q.Open;
+    while not Q.Eof do
+    begin
+      Tbl := Q.FieldByName('name').AsString;
+      CrmSchemaEnsureAuditForTable(AConn, Tbl);
+      Q.Next;
+    end;
+    Q.Close;
+  finally
+    Q.Free;
+  end;
+
+  CrmExec(AConn,
+    'IF NOT EXISTS (SELECT 1 FROM dbo.CRM_SCHEMA_GECMIS WHERE SURUM_NO = 34) ' +
+    'INSERT INTO dbo.CRM_SCHEMA_GECMIS (SURUM_NO, ACIKLAMA) VALUES (34, ''CRM tablo audit: DEGISIM_LOG rename + CRM_*_Log trigger'')');
+end;
+
 procedure CrmSchemaApplyMigration(const AConn: TUniConnection; AVersion: Integer);
 begin
   case AVersion of
@@ -1668,6 +1867,8 @@ begin
     30: CrmSchemaApplyMigration30(AConn);
     31: CrmSchemaApplyMigration31(AConn);
     32: CrmSchemaApplyMigration32(AConn);
+    33: CrmSchemaApplyMigration33(AConn);
+    34: CrmSchemaApplyMigration34(AConn);
   else
     raise Exception.CreateFmt('CRM sema: bilinmeyen migrasyon surumu %d', [AVersion]);
   end;

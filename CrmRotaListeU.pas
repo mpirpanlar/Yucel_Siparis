@@ -48,7 +48,7 @@ implementation
 {$R *.dfm}
 
 uses
-  uniGUIApplication, MainModule, DMU, Main, Genel, CrmRotaU, CrmRotaGorevU;
+  uniGUIApplication, MainModule, DMU, Main, Genel, TmpU, CrmRotaU, CrmRotaGorevU;
 
 function frmCrmRotaListe: TfrmCrmRotaListe;
 begin
@@ -156,9 +156,15 @@ begin
     'ISNULL(R.TOPLAM_YOL_KM, 0) AS TOPLAM_KM, ' +
     'R.BASLANGIC_ENLEM, R.BASLANGIC_BOYLAM, R.BITIS_ENLEM, R.BITIS_BOYLAM ' +
     'FROM dbo.CRM_ROTA_PLAN R LEFT JOIN dbo.Kullanici KO ON KO.KullaniciID = R.OLUSTURAN_KULLANICI_ID WHERE 1 = 1';
+  if Tmp.xKullaniciAdmin <> 1 then
+    qList.SQL.Text := qList.SQL.Text +
+      ' AND EXISTS (SELECT 1 FROM dbo.CRM_ROTA_PLAN_PERSONEL RP ' +
+      'WHERE RP.ROTA_ID = R.ROTA_ID AND RP.KULLANICI_ID = :KUL)';
   if Trim(edFiltBaslik.Text) <> '' then
     qList.SQL.Text := qList.SQL.Text + ' AND R.BASLIK LIKE :BAS';
   qList.SQL.Text := qList.SQL.Text + ' ORDER BY R.ROTA_ID DESC';
+  if Tmp.xKullaniciAdmin <> 1 then
+    qList.ParamByName('KUL').AsInteger := Tmp.xKullaniciID;
   if Trim(edFiltBaslik.Text) <> '' then
     qList.ParamByName('BAS').AsString := '%' + Trim(edFiltBaslik.Text) + '%';
   qList.Open;

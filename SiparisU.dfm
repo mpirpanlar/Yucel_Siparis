@@ -1128,7 +1128,7 @@ object frmSiparis: TfrmSiparis
           object lblDurumEtiket: TUniLabel
             Left = 320
             Top = 3
-            Width = 38
+            Width = 35
             Height = 16
             Hint = ''
             Caption = 'Durum'
@@ -1160,7 +1160,7 @@ object frmSiparis: TfrmSiparis
           object lblKapanisEtiket: TUniLabel
             Left = 460
             Top = 3
-            Width = 90
+            Width = 81
             Height = 16
             Hint = ''
             Caption = 'Kapan'#305#351' Tarihi'
@@ -2382,23 +2382,25 @@ object frmSiparis: TfrmSiparis
   object saSor: TUniSweetAlert
     Title = 'Title'
     TitleText = 'S'#304'L'
-    Text = 'Silmek '#304'stiyor musunuz ?'
-    ConfirmButtonText = 'Tamam'
+    Text = 'Silmek istiyor musunuz?'
+    ConfirmButtonText = 'Evet'
     CancelButtonText = #304'ptal'
     AlertType = atQuestion
     Padding = 20
+    ShowCancelButton = True
     OnConfirm = saSorConfirm
     Left = 984
     Top = 80
   end
   object saSatirSor: TUniSweetAlert
-    Title = 'S'#304'L'
+    Title = 'Title'
     TitleText = 'S'#304'L'
-    Text = 'Silmek '#304'stiyor musunuz ?'
-    ConfirmButtonText = 'Tamam'
+    Text = 'Sat'#305'r silinsin mi?'
+    ConfirmButtonText = 'Evet'
     CancelButtonText = #304'ptal'
     AlertType = atQuestion
     Padding = 20
+    ShowCancelButton = True
     OnConfirm = saSatirSorConfirm
     Left = 984
     Top = 128
@@ -2407,13 +2409,35 @@ object frmSiparis: TfrmSiparis
     Title = 'Onay'
     TitleText = 'Onay'
     Text = 'Devam edilsin mi?'
-    ConfirmButtonText = 'Tamam'
+    ConfirmButtonText = 'Evet'
     CancelButtonText = #304'ptal'
     AlertType = atQuestion
     Padding = 20
+    ShowCancelButton = True
     OnConfirm = saAcikKapaliSorConfirm
     Left = 984
     Top = 176
+  end
+  object saSilOk: TUniSweetAlert
+    Title = 'Title'
+    TitleText = 'Silme '#304#351'lemi Ba'#351'ar'#305'l'#305'.'
+    Text = 'Sipari'#351' kayd'#305' silindi.'
+    ConfirmButtonText = 'Tamam'
+    CancelButtonText = 'Cancel'
+    Padding = 20
+    OnConfirm = saSilOkConfirm
+    Left = 984
+    Top = 224
+  end
+  object saSatirSilOk: TUniSweetAlert
+    Title = 'Title'
+    TitleText = 'Sat'#305'r Silindi'
+    Text = 'Sat'#305'r silme i'#351'lemi tamamland'#305'.'
+    ConfirmButtonText = 'Tamam'
+    CancelButtonText = 'Cancel'
+    Padding = 20
+    Left = 984
+    Top = 272
   end
   object qKosulKodu: TUniQuery
     Connection = frmDM.conNetsis

@@ -236,7 +236,57 @@ object frmCrmRotaKmRapor: TfrmCrmRotaKmRapor
           LayoutConfig.Flex = 1
           LayoutConfig.Height = '100%'
           LayoutConfig.Width = '100%'
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.force' +
+              'Fit = true;'#13#10'}')
           TabOrder = 0
+          Columns = <
+            item
+              FieldName = 'ROTA_ID'
+              Title.Caption = 'ID'
+              Width = 55
+            end
+            item
+              FieldName = 'BASLIK'
+              Title.Caption = 'Ba'#351'l'#305'k'
+              Width = 200
+            end
+            item
+              FieldName = 'DURUM'
+              Title.Caption = 'Durum'
+              Width = 70
+            end
+            item
+              FieldName = 'PLANLAMA_TARIHI'
+              Title.Caption = 'Plan tarihi'
+              Width = 100
+            end
+            item
+              FieldName = 'OLUSTURAN'
+              Title.Caption = 'Olu'#351'turan'
+              Width = 100
+            end
+            item
+              FieldName = 'ATANAN_PERSONEL'
+              Title.Caption = 'Personel'
+              Width = 120
+            end
+            item
+              FieldName = 'DURAK_SAY'
+              Title.Caption = 'Durak'
+              Width = 55
+            end
+            item
+              FieldName = 'TOPLAM_KM'
+              Title.Caption = 'Toplam km'
+              Width = 80
+            end
+            item
+              FieldName = 'MESAFE_HESAP'
+              Title.Caption = 'Mesafe hesap'
+              Width = 120
+            end>
         end
       end
       object tsBacak: TUniTabSheet
@@ -258,7 +308,47 @@ object frmCrmRotaKmRapor: TfrmCrmRotaKmRapor
           LayoutConfig.Flex = 1
           LayoutConfig.Height = '100%'
           LayoutConfig.Width = '100%'
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.force' +
+              'Fit = true;'#13#10'}')
           TabOrder = 0
+          Columns = <
+            item
+              FieldName = 'ROTA_ID'
+              Title.Caption = 'Rota ID'
+              Width = 60
+            end
+            item
+              FieldName = 'BASLIK'
+              Title.Caption = 'Ba'#351'l'#305'k'
+              Width = 160
+            end
+            item
+              FieldName = 'SIRA'
+              Title.Caption = 'S'#305'ra'
+              Width = 45
+            end
+            item
+              FieldName = 'DURAK'
+              Title.Caption = 'Durak'
+              Width = 200
+            end
+            item
+              FieldName = 'IL'
+              Title.Caption = #304'l'
+              Width = 80
+            end
+            item
+              FieldName = 'BACAK_KM'
+              Title.Caption = 'Km'
+              Width = 60
+            end
+            item
+              FieldName = 'GPS_EKSIK'
+              Title.Caption = 'GPS eksik'
+              Width = 70
+            end>
         end
       end
       object tsOzetPersonel: TUniTabSheet
@@ -280,7 +370,32 @@ object frmCrmRotaKmRapor: TfrmCrmRotaKmRapor
           LayoutConfig.Flex = 1
           LayoutConfig.Height = '100%'
           LayoutConfig.Width = '100%'
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.force' +
+              'Fit = true;'#13#10'}')
           TabOrder = 0
+          Columns = <
+            item
+              FieldName = 'PERSONEL'
+              Title.Caption = 'Personel'
+              Width = 180
+            end
+            item
+              FieldName = 'ROTA_SAY'
+              Title.Caption = 'Rota say'
+              Width = 70
+            end
+            item
+              FieldName = 'TOPLAM_KM'
+              Title.Caption = 'Toplam km'
+              Width = 90
+            end
+            item
+              FieldName = 'ORT_KM'
+              Title.Caption = 'Ort. km'
+              Width = 80
+            end>
         end
       end
       object tsOzetDonem: TUniTabSheet
@@ -302,7 +417,27 @@ object frmCrmRotaKmRapor: TfrmCrmRotaKmRapor
           LayoutConfig.Flex = 1
           LayoutConfig.Height = '100%'
           LayoutConfig.Width = '100%'
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.force' +
+              'Fit = true;'#13#10'}')
           TabOrder = 0
+          Columns = <
+            item
+              FieldName = 'DONEM'
+              Title.Caption = 'D'#246'nem'
+              Width = 90
+            end
+            item
+              FieldName = 'ROTA_SAY'
+              Title.Caption = 'Rota say'
+              Width = 80
+            end
+            item
+              FieldName = 'TOPLAM_KM'
+              Title.Caption = 'Toplam km'
+              Width = 100
+            end>
         end
       end
       object tsGpsEksik: TUniTabSheet
@@ -324,7 +459,42 @@ object frmCrmRotaKmRapor: TfrmCrmRotaKmRapor
           LayoutConfig.Flex = 1
           LayoutConfig.Height = '100%'
           LayoutConfig.Width = '100%'
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.force' +
+              'Fit = true;'#13#10'}')
           TabOrder = 0
+          Columns = <
+            item
+              FieldName = 'CARI_KOD'
+              Title.Caption = 'Cari kod'
+              Width = 90
+            end
+            item
+              FieldName = 'CARI_ISIM'
+              Title.Caption = #220'nvan'
+              Width = 220
+            end
+            item
+              FieldName = 'CARI_IL'
+              Title.Caption = #304'l'
+              Width = 80
+            end
+            item
+              FieldName = 'CARI_ILCE'
+              Title.Caption = #304'l'#231'e'
+              Width = 90
+            end
+            item
+              FieldName = 'GPS_X'
+              Title.Caption = 'GPS X'
+              Width = 80
+            end
+            item
+              FieldName = 'GPS_Y'
+              Title.Caption = 'GPS Y'
+              Width = 80
+            end>
         end
       end
     end

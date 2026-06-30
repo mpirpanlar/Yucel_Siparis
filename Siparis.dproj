@@ -481,6 +481,10 @@
             <Form>frmCrmRotaKmRapor</Form>
             <DesignClass>TUniForm</DesignClass>
         </DCCReference>
+        <DCCReference Include="CrmPersonelPerformansRaporU.pas">
+            <Form>frmCrmPersonelPerformansRapor</Form>
+            <DesignClass>TUniForm</DesignClass>
+        </DCCReference>
         <DCCReference Include="CrmPotSecU.pas">
             <Form>frmCrmPotSec</Form>
             <FormType>dfm</FormType>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>CRM - Aktivite Tarihçe</title>
+<link rel="stylesheet" href="help.css"/>
+</head>
+<body>
+<h1>CRM - Aktivite Tarihçe</h1>
+<p>**FormName:** `CrmAktiviteTarihce`</p>
+<h2>Bu ekran ne işe yarar?</h2>
+<p>Seçilen aktivite kaydının alan değişiklik geçmişini (audit log) listeler.</p>
+<h2>Ne zaman kullanılır?</h2>
+<ul>
+<li>Kim, ne zaman, hangi alanı değiştirdi sorusu</li>
+<li>Denetim ve destek</li>
+</ul>
+<h2>Grid kolonları</h2>
+<table>
+<thead><tr>
+<th>Sütun</th>
+<th>Açıklama</th>
+</tr></thead><tbody>
+<tr>
+<td>Tarih</td>
+<td>Değişim zamanı</td>
+</tr>
+<tr>
+<td>Kullanıcı</td>
+<td>İşlemi yapan</td>
+</tr>
+<tr>
+<td>Alan</td>
+<td>Değişen alan adı</td>
+</tr>
+<tr>
+<td>Eski / Yeni</td>
+<td>Önceki ve sonraki değer</td>
+</tr>
+</tbody></table>
+
+<h2>İş kuralları</h2>
+<ul>
+<li>Kayıt `CRM_AKTIVITE_DEGISIM_LOG` tablosundan okunur.</li>
+<li>Kart üzerindeki Tarihçe sekmesi ile aynı veri kaynağı.</li>
+</ul>
+<h2>İlgili ekranlar</h2>
+<ul>
+<li>CrmYeniAktivite, CrmYeniGorev</li>
+</ul>
+</body>
+</html>

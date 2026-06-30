@@ -48,9 +48,14 @@ object frmCrmRotaDurakSec: TfrmCrmRotaDurakSec
         Width = 160
         Height = 24
         Hint = ''
-        Style = csDropDownList
+        Style = csDropDown
         Text = ''
         TabOrder = 1
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.edita' +
+            'ble = true;'#13#10'  config.queryMode = '#39'local'#39';'#13#10'  config.forceSelecti' +
+            'on = true;'#13#10'  config.typeAhead = true;'#13#10'  config.minChars = 1;'#13#10'}')
         OnChange = cbIlChange
       end
       object lblIlce: TUniLabel
@@ -68,9 +73,14 @@ object frmCrmRotaDurakSec: TfrmCrmRotaDurakSec
         Width = 160
         Height = 24
         Hint = ''
-        Style = csDropDownList
+        Style = csDropDown
         Text = ''
         TabOrder = 3
+        ClientEvents.UniEvents.Strings = (
+          
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.edita' +
+            'ble = true;'#13#10'  config.queryMode = '#39'local'#39';'#13#10'  config.forceSelecti' +
+            'on = true;'#13#10'  config.typeAhead = true;'#13#10'  config.minChars = 1;'#13#10'}')
       end
       object chkSadeceGps: TUniCheckBox
         Left = 420

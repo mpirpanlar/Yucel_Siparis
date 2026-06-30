@@ -152,7 +152,7 @@ procedure TfrmCrmTeklif.btnYeniAktiviteClick(Sender: TObject);
 begin
   if FTeklifId <= 0 then
   begin
-    UniMainModule.saHata.Show('Önce teklifi kaydedin.');
+    UniMainModule.saHata.Show('ï¿½nce teklifi kaydedin.');
     Exit;
   end;
   Tmp.xCrmYeniAktiviteTeklifId := FTeklifId;
@@ -163,7 +163,7 @@ procedure TfrmCrmTeklif.btnYeniGorevClick(Sender: TObject);
 begin
   if FTeklifId <= 0 then
   begin
-    UniMainModule.saHata.Show('Önce teklifi kaydedin.');
+    UniMainModule.saHata.Show('ï¿½nce teklifi kaydedin.');
     Exit;
   end;
   Tmp.xCrmYeniGorevTeklifId := FTeklifId;
@@ -221,7 +221,7 @@ var
 begin
   if FTeklifId <= 0 then
   begin
-    UniMainModule.saHata.Show('Önce teklifi kaydedin.');
+    UniMainModule.saHata.Show('ï¿½nce teklifi kaydedin.');
     Exit;
   end;
   RecalcToplamDb;
@@ -235,7 +235,7 @@ begin
   if qLoad.IsEmpty then
   begin
     qLoad.Close;
-    UniMainModule.saHata.Show('Teklif veritabanýnda bulunamadý.');
+    UniMainModule.saHata.Show('Teklif veritabanï¿½nda bulunamadï¿½.');
     Exit;
   end;
 
@@ -278,15 +278,15 @@ begin
     Sl.Add('<p><b>Cari Kod:</b> ' + HtmlEsc(Cari) + '</p>');
     Sl.Add('<p><b>Teklif Tarihi:</b> ' + HtmlEsc(FormatDateTime('dd/MM/yyyy HH:nn', TTar)) + '</p>');
     if HasG then
-      Sl.Add('<p><b>Geçerlilik:</b> ' + HtmlEsc(FormatDateTime('dd/MM/yyyy HH:nn', GTar)) + '</p>');
+      Sl.Add('<p><b>Geï¿½erlilik:</b> ' + HtmlEsc(FormatDateTime('dd/MM/yyyy HH:nn', GTar)) + '</p>');
     if SipNo <> '' then
-      Sl.Add('<p><b>Sipariþ No:</b> ' + HtmlEsc(SipNo) + '</p>');
+      Sl.Add('<p><b>Sipariï¿½ No:</b> ' + HtmlEsc(SipNo) + '</p>');
     if Trim(Notlar) <> '' then
     begin
-      Sl.Add('<p><b>Açýklama</b></p><p>' + AciklamayiHtml(Notlar) + '</p>');
+      Sl.Add('<p><b>Aï¿½ï¿½klama</b></p><p>' + AciklamayiHtml(Notlar) + '</p>');
     end;
     Sl.Add('<table><thead><tr>');
-    Sl.Add('<th>Sýra</th><th>Stok Kod</th><th>Stok Ad</th><th class="sayi">Miktar</th><th>Birim</th>');
+    Sl.Add('<th>Sï¿½ra</th><th>Stok Kod</th><th>Stok Ad</th><th class="sayi">Miktar</th><th>Birim</th>');
     Sl.Add('<th class="sayi">Birim Fiyat</th><th class="sayi">Tutar</th></tr></thead><tbody>');
 
     qExec.Close;
@@ -320,7 +320,7 @@ begin
     end;
 
     Sl.Add('</tbody></table>');
-    Sl.Add('<p class="toplam">Satýr Toplamý (Net): ' + FormatFloat('#,##0.00', TopNet) + '</p>');
+    Sl.Add('<p class="toplam">Satï¿½r Toplamï¿½ (Net): ' + FormatFloat('#,##0.00', TopNet) + '</p>');
     Sl.Add('</body></html>');
 
     FullPath := TPath.Combine(UniServerModule.LocalCachePath, fn);
@@ -516,7 +516,7 @@ begin
   if qLoad.IsEmpty then
   begin
     qLoad.Close;
-    UniMainModule.saHata.Show('Teklif bulunamadý.');
+    UniMainModule.saHata.Show('Teklif bulunamadï¿½.');
     YeniKayit;
     Exit;
   end;
@@ -591,18 +591,18 @@ var
 begin
   if Trim(edBaslik.Text) = '' then
   begin
-    UniMainModule.saHata.Show('Baþlýk zorunludur.');
+    UniMainModule.saHata.Show('Baï¿½lï¿½k zorunludur.');
     Exit;
   end;
   if VarIsNull(lkDurum.KeyValue) or VarIsEmpty(lkDurum.KeyValue) then
   begin
-    UniMainModule.saHata.Show('Durum seçiniz.');
+    UniMainModule.saHata.Show('Durum seï¿½iniz.');
     Exit;
   end;
   DKod := DurumKodFromLookup;
   if DKod = '' then
   begin
-    UniMainModule.saHata.Show('Durum seçiniz.');
+    UniMainModule.saHata.Show('Durum seï¿½iniz.');
     Exit;
   end;
 
@@ -681,7 +681,7 @@ var
 begin
   if FTeklifId <= 0 then
   begin
-    UniMainModule.saHata.Show('Önce teklif baþlýðýný kaydedin.');
+    UniMainModule.saHata.Show('ï¿½nce teklif baï¿½lï¿½ï¿½ï¿½nï¿½ kaydedin.');
     Exit;
   end;
   Sk := Trim(edStokKod.Text);
@@ -694,7 +694,7 @@ begin
   Bf := ParseDecimal(edBirimFiyat.Text);
   if M <= 0 then
   begin
-    UniMainModule.saHata.Show('Miktar sýfýrdan büyük olmalýdýr.');
+    UniMainModule.saHata.Show('Miktar sï¿½fï¿½rdan bï¿½yï¿½k olmalï¿½dï¿½r.');
     Exit;
   end;
   Tut := M * Bf;

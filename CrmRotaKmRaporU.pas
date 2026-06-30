@@ -76,7 +76,7 @@ implementation
 {$R *.dfm}
 
 uses
-  uniGUIApplication, MainModule, DMU, Main, Genel, CrmRotaU, CrmRotaMesafeU;
+  uniGUIApplication, MainModule, DMU, Main, Genel, TmpU, CrmRotaU, CrmRotaMesafeU;
 
 function frmCrmRotaKmRapor: TfrmCrmRotaKmRapor;
 begin
@@ -85,7 +85,9 @@ end;
 
 function TfrmCrmRotaKmRapor.FiltreKulId: Integer;
 begin
-  if cbPersonel.ItemIndex <= 0 then
+  if Tmp.xKullaniciAdmin <> 1 then
+    Result := Tmp.xKullaniciID
+  else if cbPersonel.ItemIndex <= 0 then
     Result := 0
   else
     Result := Integer(cbPersonel.Items.Objects[cbPersonel.ItemIndex]);
@@ -125,8 +127,8 @@ begin
     Result := Result + ' AND R.DURUM = :DUR ';
   if KulId > 0 then
     Result := Result +
-      ' AND (R.OLUSTURAN_KULLANICI_ID = :KUL OR EXISTS (SELECT 1 FROM dbo.CRM_ROTA_PLAN_PERSONEL RP ' +
-      'WHERE RP.ROTA_ID = R.ROTA_ID AND RP.KULLANICI_ID = :KUL)) ';
+      ' AND EXISTS (SELECT 1 FROM dbo.CRM_ROTA_PLAN_PERSONEL RP ' +
+      'WHERE RP.ROTA_ID = R.ROTA_ID AND RP.KULLANICI_ID = :KUL) ';
   if Baslik <> '' then
     Result := Result + ' AND R.BASLIK LIKE :BASLIK ';
 end;
@@ -167,6 +169,8 @@ begin
   dtBas.DateTime := Trunc(Now) - 30;
   dtBit.DateTime := Trunc(Now);
   PersonelComboDoldur;
+  lblPersonel.Visible := Tmp.xKullaniciAdmin = 1;
+  cbPersonel.Visible := Tmp.xKullaniciAdmin = 1;
   btnGetirClick(Sender);
 end;
 
@@ -214,8 +218,8 @@ begin
     qBacak.SQL.Text := qBacak.SQL.Text + ' AND R.DURUM = :DUR ';
   if KulId > 0 then
     qBacak.SQL.Text := qBacak.SQL.Text +
-      ' AND (R.OLUSTURAN_KULLANICI_ID = :KUL OR EXISTS (SELECT 1 FROM dbo.CRM_ROTA_PLAN_PERSONEL RP ' +
-      'WHERE RP.ROTA_ID = R.ROTA_ID AND RP.KULLANICI_ID = :KUL)) ';
+      ' AND EXISTS (SELECT 1 FROM dbo.CRM_ROTA_PLAN_PERSONEL RP ' +
+      'WHERE RP.ROTA_ID = R.ROTA_ID AND RP.KULLANICI_ID = :KUL) ';
   if Baslik <> '' then
     qBacak.SQL.Text := qBacak.SQL.Text + ' AND R.BASLIK LIKE :BASLIK ';
   qBacak.SQL.Text := qBacak.SQL.Text + ' ORDER BY R.ROTA_ID DESC, D.SIRA';
@@ -241,8 +245,8 @@ begin
     qOzetPersonel.SQL.Text := qOzetPersonel.SQL.Text + ' AND R.DURUM = :DUR ';
   if KulId > 0 then
     qOzetPersonel.SQL.Text := qOzetPersonel.SQL.Text +
-      ' AND (R.OLUSTURAN_KULLANICI_ID = :KUL OR EXISTS (SELECT 1 FROM dbo.CRM_ROTA_PLAN_PERSONEL RP ' +
-      'WHERE RP.ROTA_ID = R.ROTA_ID AND RP.KULLANICI_ID = :KUL)) ';
+      ' AND EXISTS (SELECT 1 FROM dbo.CRM_ROTA_PLAN_PERSONEL RP ' +
+      'WHERE RP.ROTA_ID = R.ROTA_ID AND RP.KULLANICI_ID = :KUL) ';
   if Baslik <> '' then
     qOzetPersonel.SQL.Text := qOzetPersonel.SQL.Text + ' AND R.BASLIK LIKE :BASLIK ';
   qOzetPersonel.SQL.Text := qOzetPersonel.SQL.Text +
@@ -256,7 +260,7 @@ begin
     qOzetPersonel.SQL.Text := qOzetPersonel.SQL.Text + ' AND R.DURUM = :DUR ';
   if KulId > 0 then
     qOzetPersonel.SQL.Text := qOzetPersonel.SQL.Text +
-      ' AND (R.OLUSTURAN_KULLANICI_ID = :KUL OR RP.KULLANICI_ID = :KUL) ';
+      ' AND RP.KULLANICI_ID = :KUL ';
   if Baslik <> '' then
     qOzetPersonel.SQL.Text := qOzetPersonel.SQL.Text + ' AND R.BASLIK LIKE :BASLIK ';
   qOzetPersonel.SQL.Text := qOzetPersonel.SQL.Text +

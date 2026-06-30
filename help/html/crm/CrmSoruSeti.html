@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>CRM - Kontrol Listesi Tanımı</title>
+<link rel="stylesheet" href="help.css"/>
+</head>
+<body>
+<h1>CRM - Kontrol Listesi Tanımı</h1>
+<p>**FormName:** `CrmSoruSeti`</p>
+<h2>Bu ekran ne işe yarar?</h2>
+<p>Aktivite tiplerine bağlanacak kontrol listesi (soru seti) tanımlarını yönetir.</p>
+<h2>Ne zaman kullanılır?</h2>
+<ul>
+<li>Yeni aktivite tipi için zorunlu sorular eklerken</li>
+<li>Kapanış durumunda cevaplanması gereken maddeleri tanımlarken</li>
+</ul>
+<h2>Önemli alanlar</h2>
+<table>
+<thead><tr>
+<th>Alan</th>
+<th>Açıklama</th>
+</tr></thead><tbody>
+<tr>
+<td>Soru seti adı</td>
+<td>Tanım başlığı</td>
+</tr>
+<tr>
+<td>Aktivite tipi</td>
+<td>Hangi tipe bağlı</td>
+</tr>
+<tr>
+<td>Sorular</td>
+<td>Metin, zorunlu, sıra</td>
+</tr>
+</tbody></table>
+
+<h2>İş kuralları</h2>
+<ul>
+<li>`KAPANIS_MI` durumuna geçişte ilgili soru seti cevapları kontrol edilir.</li>
+<li>Kontrol raporu bu tanımlardan beslenir.</li>
+</ul>
+<h2>İlgili ekranlar</h2>
+<ul>
+<li>CrmKontrolRapor, CrmYeniAktivite</li>
+</ul>
+</body>
+</html>

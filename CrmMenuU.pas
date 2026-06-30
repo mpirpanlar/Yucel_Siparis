@@ -34,6 +34,7 @@ type
     btnAktiviteRapor: TUniButton;
     btnAktiviteTarihce: TUniButton;
     btnRotaKmRapor: TUniButton;
+    btnPersonelPerformans: TUniButton;
     procedure btnYeniAktiviteClick(Sender: TObject);
     procedure btnYeniGorevClick(Sender: TObject);
     procedure btnAktiviteListesiClick(Sender: TObject);
@@ -52,6 +53,7 @@ type
     procedure btnAktiviteRaporClick(Sender: TObject);
     procedure btnAktiviteTarihceClick(Sender: TObject);
     procedure btnRotaKmRaporClick(Sender: TObject);
+    procedure btnPersonelPerformansClick(Sender: TObject);
   private
   public
   end;
@@ -66,7 +68,8 @@ uses
   MainModule, uniGUIApplication, Genel, CrmAktiviteU, CrmGorevU,
   CrmAktiviteListeU, CrmGorevListeU, CrmTeklifU, CrmTeklifListeU, CrmCariOzetU,
   CrmPotansiyelU, CrmPotansiyelListeU, CrmRotaListeU, CrmRotaU, CrmCariGpsListeU,
-  CrmSoruSetiU, CrmKontrolRaporU, CrmTakvimU, CrmAktiviteRaporU, CrmAktiviteTarihceU, CrmRotaKmRaporU;
+  CrmSoruSetiU, CrmKontrolRaporU, CrmTakvimU, CrmAktiviteRaporU, CrmAktiviteTarihceU, CrmRotaKmRaporU,
+  CrmPersonelPerformansRaporU;
 
 function frmCrmMenu: TfrmCrmMenu;
 begin
@@ -161,6 +164,11 @@ end;
 procedure TfrmCrmMenu.btnRotaKmRaporClick(Sender: TObject);
 begin
   xFormShow(TfrmCrmRotaKmRapor, 'CrmRotaKmRapor', 1, '');
+end;
+
+procedure TfrmCrmMenu.btnPersonelPerformansClick(Sender: TObject);
+begin
+  xFormShow(TfrmCrmPersonelPerformansRapor, 'CrmPersonelPerformansRapor', 1, '');
 end;
 
 end.

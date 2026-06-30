@@ -21,6 +21,7 @@ object frmCrmTakvim: TfrmCrmTakvim
     TabOrder = 0
     BorderStyle = ubsNone
     Caption = ''
+    Layout = 'vbox'
     object panTop: TUniPanel
       Left = 0
       Top = 0
@@ -32,6 +33,7 @@ object frmCrmTakvim: TfrmCrmTakvim
       BorderStyle = ubsNone
       Caption = ''
       Color = 15790320
+      LayoutConfig.Width = '100%'
       object lblKaynak: TUniLabel
         Left = 12
         Top = 16
@@ -130,10 +132,12 @@ object frmCrmTakvim: TfrmCrmTakvim
       Width = 1100
       Height = 648
       Hint = ''
-      Align = alClient
       TabOrder = 1
       ParentColor = False
       Color = clBtnFace
+      LayoutConfig.Flex = 1
+      LayoutConfig.Height = '100%'
+      LayoutConfig.Width = '100%'
       ClientEvents.UniEvents.Strings = (
         
           'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.name' +

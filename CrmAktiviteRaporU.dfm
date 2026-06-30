@@ -281,7 +281,67 @@ object frmCrmAktiviteRapor: TfrmCrmAktiviteRapor
           LayoutConfig.Flex = 1
           LayoutConfig.Height = '100%'
           LayoutConfig.Width = '100%'
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.force' +
+              'Fit = true;'#13#10'}')
           TabOrder = 0
+          Columns = <
+            item
+              FieldName = 'AKTIVITE_ID'
+              Title.Caption = 'ID'
+              Width = 55
+            end
+            item
+              FieldName = 'KAYNAK'
+              Title.Caption = 'Kaynak'
+              Width = 70
+            end
+            item
+              FieldName = 'TIP'
+              Title.Caption = 'Tip'
+              Width = 60
+            end
+            item
+              FieldName = 'KONU'
+              Title.Caption = 'Konu'
+              Width = 200
+            end
+            item
+              FieldName = 'CARI_KOD'
+              Title.Caption = 'Cari'
+              Width = 80
+            end
+            item
+              FieldName = 'OLUSTURAN'
+              Title.Caption = 'Olu'#351'turan'
+              Width = 100
+            end
+            item
+              FieldName = 'ATANAN'
+              Title.Caption = 'Atanan'
+              Width = 100
+            end
+            item
+              FieldName = 'PLAN_TARIHI'
+              Title.Caption = 'Plan tarihi'
+              Width = 120
+            end
+            item
+              FieldName = 'DURUM'
+              Title.Caption = 'Durum'
+              Width = 80
+            end
+            item
+              FieldName = 'TAMAMLANMA_TARIHI'
+              Title.Caption = 'Tamamlanma'
+              Width = 120
+            end
+            item
+              FieldName = 'GECIKME_GUN'
+              Title.Caption = 'Gecikme'
+              Width = 65
+            end>
         end
       end
       object tsOzetDurum: TUniTabSheet
@@ -303,7 +363,22 @@ object frmCrmAktiviteRapor: TfrmCrmAktiviteRapor
           LayoutConfig.Flex = 1
           LayoutConfig.Height = '100%'
           LayoutConfig.Width = '100%'
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.force' +
+              'Fit = true;'#13#10'}')
           TabOrder = 0
+          Columns = <
+            item
+              FieldName = 'DURUM'
+              Title.Caption = 'Durum'
+              Width = 200
+            end
+            item
+              FieldName = 'ADET'
+              Title.Caption = 'Adet'
+              Width = 80
+            end>
         end
       end
       object tsOzetPersonel: TUniTabSheet
@@ -325,7 +400,32 @@ object frmCrmAktiviteRapor: TfrmCrmAktiviteRapor
           LayoutConfig.Flex = 1
           LayoutConfig.Height = '100%'
           LayoutConfig.Width = '100%'
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.force' +
+              'Fit = true;'#13#10'}')
           TabOrder = 0
+          Columns = <
+            item
+              FieldName = 'PERSONEL'
+              Title.Caption = 'Personel'
+              Width = 180
+            end
+            item
+              FieldName = 'ACIK'
+              Title.Caption = 'A'#231#305'k'
+              Width = 70
+            end
+            item
+              FieldName = 'TAMAMLANAN'
+              Title.Caption = 'Tamamlanan'
+              Width = 90
+            end
+            item
+              FieldName = 'GECIKEN'
+              Title.Caption = 'Geciken'
+              Width = 70
+            end>
         end
       end
       object tsYapilmayan: TUniTabSheet
@@ -347,7 +447,52 @@ object frmCrmAktiviteRapor: TfrmCrmAktiviteRapor
           LayoutConfig.Flex = 1
           LayoutConfig.Height = '100%'
           LayoutConfig.Width = '100%'
+          ClientEvents.UniEvents.Strings = (
+            
+              'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.force' +
+              'Fit = true;'#13#10'}')
           TabOrder = 0
+          Columns = <
+            item
+              FieldName = 'AKTIVITE_ID'
+              Title.Caption = 'ID'
+              Width = 55
+            end
+            item
+              FieldName = 'KAYNAK'
+              Title.Caption = 'Kaynak'
+              Width = 70
+            end
+            item
+              FieldName = 'KONU'
+              Title.Caption = 'Konu'
+              Width = 200
+            end
+            item
+              FieldName = 'CARI_KOD'
+              Title.Caption = 'Cari'
+              Width = 80
+            end
+            item
+              FieldName = 'ATANAN'
+              Title.Caption = 'Atanan'
+              Width = 100
+            end
+            item
+              FieldName = 'PLAN_TARIHI'
+              Title.Caption = 'Plan tarihi'
+              Width = 120
+            end
+            item
+              FieldName = 'DURUM'
+              Title.Caption = 'Durum'
+              Width = 80
+            end
+            item
+              FieldName = 'GECIKME_GUN'
+              Title.Caption = 'Gecikme'
+              Width = 65
+            end>
         end
       end
     end

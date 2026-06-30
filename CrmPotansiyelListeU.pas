@@ -69,6 +69,8 @@ type
     property CokluSecimModu: Boolean read FCokluSecimModu write FCokluSecimModu;
     procedure SecimToolbarYenile;
     procedure ListeSekmesineGeriAl(const AGizle: Boolean = True);
+    function NavGeriAlGerekli: Boolean;
+    procedure PotansiyelSecimSonrasiNavTemizle;
   end;
 
 function frmCrmPotansiyelListe: TfrmCrmPotansiyelListe;
@@ -309,7 +311,9 @@ end;
 procedure TfrmCrmPotansiyelListe.PotansiyelCokluSecVeKapat;
 var
   Liste: TStringList;
+  GeriAl: Boolean;
 begin
+  GeriAl := NavGeriAlGerekli;
   Liste := SeciliPotIdListesi;
   if Liste.Count = 0 then
   begin
@@ -325,6 +329,8 @@ begin
   OnPotansiyelSecildiCoklu := nil;
   HedefPotansiyelIdEdit := nil;
   FCokluSecimModu := False;
+  if GeriAl then
+    ListeSekmesineGeriAl(True);
   if KapatirkenSekmeKaldir then
   begin
     if (MainForm <> nil) and (MainForm.NavPage <> nil) and (MainForm.NavPage.ActivePage <> nil) then
@@ -337,12 +343,14 @@ end;
 procedure TfrmCrmPotansiyelListe.PotansiyelSecVeKapat;
 var
   PotId: Int64;
+  GeriAl: Boolean;
 begin
   if not PotSeciliPotansiyelId(PotId) then
   begin
     UniMainModule.saHata.Show('�nce listele yap�n ve bir sat�r se�in.');
     Exit;
   end;
+  GeriAl := NavGeriAlGerekli;
 //  if not SecimModuAktif then
 //  begin
 //    UniMainModule.saHata.Show(
@@ -367,6 +375,8 @@ begin
   OnPotansiyelSecildi := nil;
   HedefPotansiyelIdEdit := nil;
 
+  if GeriAl then
+    ListeSekmesineGeriAl(True);
   if KapatirkenSekmeKaldir then
   begin
     if (MainForm <> nil) and (MainForm.NavPage <> nil) and (MainForm.NavPage.ActivePage <> nil) then
@@ -445,6 +455,7 @@ procedure TfrmCrmPotansiyelListe.btnKapatClick(Sender: TObject);
 var
   MF: TMainForm;
 begin
+  PotansiyelSecimSonrasiNavTemizle;
   HedefPotansiyelIdEdit := nil;
   OnPotansiyelSecildi := nil;
   OnPotansiyelSecildiCoklu := nil;
@@ -525,6 +536,20 @@ begin
     else
       AcKayit;
   end;
+end;
+
+function TfrmCrmPotansiyelListe.NavGeriAlGerekli: Boolean;
+begin
+  Result :=
+    UniMainModule.CrmRotaDurakSecimAktif or
+    (UniMainModule.CrmPotListeSecimKaynakListe <> nil) or
+    (SecimModuAktif and (not GomuluNavSekmesiMi));
+end;
+
+procedure TfrmCrmPotansiyelListe.PotansiyelSecimSonrasiNavTemizle;
+begin
+  if NavGeriAlGerekli then
+    ListeSekmesineGeriAl(True);
 end;
 
 procedure TfrmCrmPotansiyelListe.ListeSekmesineGeriAl(const AGizle: Boolean);

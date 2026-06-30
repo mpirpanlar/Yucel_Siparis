@@ -701,6 +701,34 @@ begin
     end;
 end;
 
+procedure NavTabFormlariGizle(const ATabName: string);
+var
+  I, J, K: Integer;
+  Tab: TUniTabSheet;
+  Pnl: TUniPanel;
+  MF: TMainForm;
+begin
+  MF := MainForm;
+  if (MF = nil) or (MF.NavPage = nil) then
+    Exit;
+  for I := 0 to MF.NavPage.PageCount - 1 do
+    if SameText(MF.NavPage.Pages[I].Name, ATabName) then
+    begin
+      Tab := TUniTabSheet(MF.NavPage.Pages[I]);
+      for J := 0 to Tab.ControlCount - 1 do
+        if Tab.Controls[J] is TUniPanel then
+        begin
+          Pnl := TUniPanel(Tab.Controls[J]);
+          for K := 0 to Pnl.ControlCount - 1 do
+            if Pnl.Controls[K] is TUniForm then
+              TUniForm(Pnl.Controls[K]).Visible := False;
+        end;
+      if MF.NavPage.ActivePage = Tab then
+        NavPageMenuSec;
+      Exit;
+    end;
+end;
+
 procedure xNavListeKapat(AOwnerForm: TUniForm);
 var
   TabToClose: TUniTabSheet;
@@ -732,7 +760,9 @@ begin
   TabToClose.Close;
   NavPageMenuSec;
   try
-    frmCrmPotansiyelListe.ListeSekmesineGeriAl(True);
+    NavTabFormlariGizle('CrmPotansiyelListesi');
+    if frmCrmPotansiyelListe.Visible then
+      frmCrmPotansiyelListe.Visible := False;
   except
   end;
   if UniSession <> nil then

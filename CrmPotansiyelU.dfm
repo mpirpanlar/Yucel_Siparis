@@ -28,7 +28,7 @@ object frmCrmPotansiyel: TfrmCrmPotansiyel
       Width = 920
       Height = 588
       Hint = ''
-      ActivePage = tabKonum
+      ActivePage = tabFirma
       LayoutConfig.Flex = 1
       LayoutConfig.Height = '100%'
       LayoutConfig.Width = '100%'

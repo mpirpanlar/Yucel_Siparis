@@ -50,6 +50,8 @@ function CrmRotaZamanSlotlariHesapla(const AAyar: TRotaGorevAyar; APlanTarihi: T
   const ABacakKm: array of Double): TArray<TRotaZamanSlot>;
 function CrmRotaPersonelAtananId(const APersonelIds: array of Integer; ADurakSira: Integer): Integer;
 function CrmRotaGorevBitisTarihi(AAktiviteTarihi: TDateTime; APlanBitis: TDateTime = 0): TDateTime;
+function CrmKullaniciRotaGorebilir(AQ: TUniQuery; ARotaId, AKullaniciId, AAdmin: Integer): Boolean;
+function CrmKullaniciGorevGorebilir(AQ: TUniQuery; AAktiviteId, AKullaniciId, AAdmin: Integer): Boolean;
 
 implementation
 
@@ -383,10 +385,53 @@ end;
 
 function CrmRotaGorevBitisTarihi(AAktiviteTarihi: TDateTime; APlanBitis: TDateTime): TDateTime;
 begin
-  if APlanBitis > 0 then
+  if YearOf(APlanBitis) >= 2000 then
     Result := APlanBitis
+  else if YearOf(AAktiviteTarihi) >= 2000 then
+  begin
+    if Frac(AAktiviteTarihi) > 0 then
+      Result := IncMinute(AAktiviteTarihi, 30)
+    else
+      Result := DateOf(AAktiviteTarihi) + EncodeTime(17, 0, 0, 0);
+  end
   else
-    Result := DateOf(AAktiviteTarihi) + 7;
+    Result := IncMinute(Now, 30);
+end;
+
+function CrmKullaniciRotaGorebilir(AQ: TUniQuery; ARotaId, AKullaniciId, AAdmin: Integer): Boolean;
+begin
+  if (AAdmin = 1) or (ARotaId <= 0) then
+    Exit(True);
+  Result := False;
+  if (AQ = nil) or (AQ.Connection = nil) or not AQ.Connection.Connected then
+    Exit;
+  AQ.Close;
+  AQ.SQL.Text :=
+    'SELECT TOP 1 1 AS OK FROM dbo.CRM_ROTA_PLAN R WHERE R.ROTA_ID = :R ' +
+    'AND EXISTS (SELECT 1 FROM dbo.CRM_ROTA_PLAN_PERSONEL RP ' +
+    'WHERE RP.ROTA_ID = R.ROTA_ID AND RP.KULLANICI_ID = :K)';
+  AQ.ParamByName('R').AsLargeInt := ARotaId;
+  AQ.ParamByName('K').AsInteger := AKullaniciId;
+  AQ.Open;
+  Result := not AQ.IsEmpty;
+  AQ.Close;
+end;
+
+function CrmKullaniciGorevGorebilir(AQ: TUniQuery; AAktiviteId, AKullaniciId, AAdmin: Integer): Boolean;
+begin
+  if (AAdmin = 1) or (AAktiviteId <= 0) then
+    Exit(True);
+  Result := False;
+  if (AQ = nil) or (AQ.Connection = nil) or not AQ.Connection.Connected then
+    Exit;
+  AQ.Close;
+  AQ.SQL.Text :=
+    'SELECT TOP 1 1 AS OK FROM dbo.CRM_GOREV G WHERE G.AKTIVITE_ID = :A AND G.ATANAN_KULLANICI_ID = :K';
+  AQ.ParamByName('A').AsLargeInt := AAktiviteId;
+  AQ.ParamByName('K').AsInteger := AKullaniciId;
+  AQ.Open;
+  Result := not AQ.IsEmpty;
+  AQ.Close;
 end;
 
 end.

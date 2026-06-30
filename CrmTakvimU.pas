@@ -34,7 +34,7 @@ type
   private
     FRangeBas: TDateTime;
     FRangeBit: TDateTime;
-    procedure TakvimHtmlGoster;
+    procedure TakvimHtmlGoster(const AEventsJson: string);
     procedure TakvimWebKancalari;
     procedure PersonelComboYukle;
     function ParamsStr(const Params: TUniStrings; const Key: string): string;
@@ -42,6 +42,8 @@ type
     function JsonEscape(const S: string): string;
     function EtkinlikRengi(const AKaynak, ATip, ADurum: string; ATamamlandi: Boolean): string;
     function TarihIso(const ADt: TDateTime; AAllDay: Boolean): string;
+    procedure TakvimAraligiDuzenle(const AKaynak: string; var ABas, ABit: TDateTime;
+      out AAllDay, AHasBitis: Boolean);
     procedure EtkinlikleriYukle;
     procedure KayitAc(const AId: Int64; const AKind: string);
   public
@@ -66,10 +68,21 @@ end;
 procedure TfrmCrmTakvim.PersonelComboYukle;
 begin
   cbPersonel.Items.Clear;
-  cbPersonel.Items.Add('T' + #$00FC + 'm' + #$00FC);
-  cbPersonel.Items.Add('Bana atanan g' + #$00F6 + 'revler');
-  cbPersonel.Items.Add('Benim olu' + #$015F + 'turduklar' + #$0131 + 'm');
-  cbPersonel.ItemIndex := 0;
+  if Tmp.xKullaniciAdmin = 1 then
+  begin
+    cbPersonel.Items.Add('T' + #$00FC + 'm' + #$00FC);
+    cbPersonel.Items.Add('Bana atanan g' + #$00F6 + 'revler');
+    cbPersonel.Items.Add('Benim olu' + #$015F + 'turduklar' + #$0131 + 'm');
+    cbPersonel.ItemIndex := 0;
+    lblPersonel.Visible := True;
+    cbPersonel.Visible := True;
+  end
+  else
+  begin
+    lblPersonel.Visible := False;
+    cbPersonel.Visible := False;
+    cbPersonel.ItemIndex := 0;
+  end;
 end;
 
 function TfrmCrmTakvim.ParamsStr(const Params: TUniStrings; const Key: string): string;
@@ -149,11 +162,62 @@ begin
   Result := '#0277bd';
 end;
 
-procedure TfrmCrmTakvim.TakvimHtmlGoster;
+procedure TfrmCrmTakvim.TakvimAraligiDuzenle(const AKaynak: string; var ABas, ABit: TDateTime;
+  out AAllDay, AHasBitis: Boolean);
+const
+  GUN_FRAC = 1.0;
+  MAX_ZIYARET_DK = 480;
+var
+  SpanDk: Int64;
+begin
+  AHasBitis := False;
+  AAllDay := False;
+  if YearOf(ABas) < 2000 then
+    Exit;
+
+  if (YearOf(ABit) >= 2000) and (ABit > ABas) then
+  begin
+    SpanDk := Round((ABit - ABas) * 24 * 60);
+    if SpanDk > MAX_ZIYARET_DK then
+      ABit := IncMinute(ABas, 30)
+    else if (Frac(ABas) < 0.0001) and (Frac(ABit) < 0.0001) and (DateOf(ABit) > DateOf(ABas)) then
+      ABit := DateOf(ABas) + EncodeTime(17, 0, 0, 0)
+    else if (ABit - ABas) > GUN_FRAC then
+      ABit := IncMinute(ABas, 30);
+  end;
+
+  if (YearOf(ABit) < 2000) or (ABit <= ABas) then
+  begin
+    if Frac(ABas) > 0.0001 then
+      ABit := IncMinute(ABas, 30)
+    else
+      ABit := DateOf(ABas) + EncodeTime(17, 0, 0, 0);
+  end;
+
+  AHasBitis := ABit > ABas;
+
+  if Frac(ABas) > 0.0001 then
+    AAllDay := False
+  else if DateOf(ABit) > DateOf(ABas) then
+    AAllDay := False
+  else if SameText(AKaynak, 'GOREV') and AHasBitis then
+    AAllDay := False
+  else
+    AAllDay := (Frac(ABas) < 0.0001) and ((not AHasBitis) or
+      ((Frac(ABit) < 0.0001) and (DateOf(ABit) = DateOf(ABas))));
+end;
+
+procedure TfrmCrmTakvim.TakvimHtmlGoster(const AEventsJson: string);
 var
   Sl: TStringList;
-  Fn, Html: string;
+  Fn, Html, EvJson, InitialDate: string;
 begin
+  EvJson := AEventsJson;
+  if EvJson = '' then
+    EvJson := '[]';
+  InitialDate := FormatDateTime('yyyy-mm-dd', FRangeBas);
+  if YearOf(FRangeBas) < 2000 then
+    InitialDate := FormatDateTime('yyyy-mm-dd', Date);
   Fn := 'crm_cal_' + IntToStr(GetTickCount) + '_' + IntToStr(Random(99999)) + '.html';
   Html :=
     '<!DOCTYPE html><html><head><meta charset="utf-8"/>'#10 +
@@ -163,20 +227,19 @@ begin
     '<style>html,body,#cal{height:100%;margin:0;font-family:Segoe UI,sans-serif}</style>'#10 +
     '</head><body><div id="cal"></div>'#10 +
     '<script>'#10 +
+    'var initialEvents=' + EvJson + ';'#10 +
     'var calendar;'#10 +
     'document.addEventListener("DOMContentLoaded",function(){'#10 +
     'var el=document.getElementById("cal");'#10 +
     'calendar=new FullCalendar.Calendar(el,{'#10 +
-    'initialView:"dayGridMonth",locale:"tr",'#10 +
+    'initialView:"dayGridMonth",initialDate:"' + InitialDate + '",locale:"tr",'#10 +
     'headerToolbar:{left:"prev,next today",center:"title",right:"dayGridMonth,timeGridWeek,timeGridDay"},'#10 +
-    'height:"100%",events:[],'#10 +
-    'datesSet:function(arg){try{window.parent.postMessage({__crmCalRange:1,start:arg.startStr,end:arg.endStr},"*");}catch(e){}},'#10 +
+    'height:"100%",slotMinTime:"07:00:00",slotMaxTime:"21:00:00",'#10 +
+    'eventTimeFormat:{hour:"2-digit",minute:"2-digit",hour12:false},events:initialEvents,'#10 +
+    'datesSet:function(arg){var s=arg.startStr,e=arg.endStr;function pm(){try{window.parent.postMessage({__crmCalRange:1,start:s,end:e},"*");}catch(x){}}pm();setTimeout(pm,300);},'#10 +
     'eventClick:function(info){try{window.parent.postMessage({__crmCalClick:1,id:info.event.id,kind:(info.event.extendedProps.kind||"")},"*");}catch(e){}}'#10 +
     '}); calendar.render();'#10 +
-    'setTimeout(function(){if(window.crmCalLoadFromParent)window.crmCalLoadFromParent();},150);'#10 +
     '});'#10 +
-    'window.crmCalSetEvents=function(arr){if(calendar){calendar.removeAllEvents();if(arr&&arr.length)calendar.addEventSource(arr);}};'#10 +
-    'window.crmCalLoadFromParent=function(){try{var raw=window.parent.sessionStorage.getItem("crmCalEvents");if(raw)crmCalSetEvents(JSON.parse(raw));}catch(e){}};'#10 +
     '</script></body></html>';
 
   Sl := TStringList.Create;
@@ -214,8 +277,8 @@ begin
   PersonelComboYukle;
   FRangeBas := Trunc(StartOfTheMonth(Now));
   FRangeBit := Trunc(EndOfTheMonth(Now)) + 1;
-  TakvimHtmlGoster;
   TakvimWebKancalari;
+  EtkinlikleriYukle;
 end;
 
 procedure TfrmCrmTakvim.FiltreDegisti(Sender: TObject);
@@ -237,11 +300,14 @@ procedure TfrmCrmTakvim.btnCalHookAjaxEvent(Sender: TComponent; EventName: strin
   Params: TUniStrings);
 var
   S, E: string;
+  OldBas, OldBit: TDateTime;
 begin
   if SameText(EventName, 'calRange') then
   begin
     S := TNetEncoding.URL.Decode(ParamsStr(Params, 'start'));
     E := TNetEncoding.URL.Decode(ParamsStr(Params, 'end'));
+    OldBas := FRangeBas;
+    OldBit := FRangeBit;
     if S <> '' then
     begin
       if not ParseIsoDatePrefix(S, FRangeBas) then
@@ -254,6 +320,8 @@ begin
       else
         FRangeBit := Trunc(EndOfTheMonth(Now)) + 1;
     end;
+    if (Trunc(OldBas) = Trunc(FRangeBas)) and (Trunc(OldBit) = Trunc(FRangeBit)) then
+      Exit;
     EtkinlikleriYukle;
     Exit;
   end;
@@ -264,12 +332,12 @@ end;
 
 procedure TfrmCrmTakvim.EtkinlikleriYukle;
 var
-  Json, Baslik, Kaynak, Tip, Durum, Renk: string;
+  Json: string;
+  Baslik, Kaynak, Tip, Durum, Renk, EndIso: string;
   Aid: Int64;
-  Dt: TDateTime;
-  AllDay: Boolean;
-  IncAkt, IncGrv, IncTam, KulMod, KulId: Integer;
-  EncJson: string;
+  Dt, DtBit: TDateTime;
+  AllDay, HasBitis: Boolean;
+  IncAkt, IncGrv, IncTam, KulMod, KulId, Adm: Integer;
 begin
   if (FRangeBas = 0) or (FRangeBit <= FRangeBas) then
   begin
@@ -284,26 +352,38 @@ begin
   if KulMod < 0 then
     KulMod := 0;
   KulId := Tmp.xKullaniciID;
+  Adm := Tmp.xKullaniciAdmin;
 
   Json := '[';
   qEvt.Close;
   qEvt.SQL.Text :=
-    'SELECT A.AKTIVITE_ID, A.KONU, A.AKTIVITE_TARIHI AS ETKINLIK_TARIHI, ' +
+    'SELECT A.AKTIVITE_ID, A.KONU, A.AKTIVITE_TARIHI AS ETKINLIK_TARIHI, A.AKTIVITE_BITIS_TARIHI AS BITIS_TARIHI, ' +
     'N''AKTIVITE'' AS KAYNAK, A.TIP, A.DURUM, CAST(0 AS BIT) AS TAMAMLANDI ' +
     'FROM dbo.CRM_AKTIVITE A ' +
     'WHERE A.TIP <> ''TASK'' AND A.AKTIVITE_TARIHI >= :BAS AND A.AKTIVITE_TARIHI < :BIT ' +
     'AND (:IA = 1) ' +
-    'AND ((:KM <> 1) OR (A.OLUSTURAN_KULLANICI_ID = :KUL)) ' +
-    'AND ((:KM <> 2) OR (A.OLUSTURAN_KULLANICI_ID = :KUL)) ' +
+    'AND ((:ADM = 1) AND ((:KM <> 1) OR (A.OLUSTURAN_KULLANICI_ID = :KUL)) AND ((:KM <> 2) OR (A.OLUSTURAN_KULLANICI_ID = :KUL)) ' +
+    'OR ((:ADM <> 1) AND (A.OLUSTURAN_KULLANICI_ID = :KUL))) ' +
     'AND ((:IT = 1) OR (A.DURUM NOT IN (''TAMAMLANDI'',''IPTAL'',''BITTI''))) ' +
     'UNION ALL ' +
-    'SELECT A.AKTIVITE_ID, A.KONU, A.AKTIVITE_TARIHI AS ETKINLIK_TARIHI, N''GOREV'', N''TASK'', A.DURUM, G.TAMAMLANDI ' +
+    'SELECT A.AKTIVITE_ID, A.KONU, ' +
+    'COALESCE(RD.PLAN_BAS_ZAMAN, A.AKTIVITE_TARIHI) AS ETKINLIK_TARIHI, ' +
+    'COALESCE(' +
+    'CASE WHEN G.BITIS_TARIHI IS NOT NULL AND ' +
+    'DATEDIFF(minute, COALESCE(RD.PLAN_BAS_ZAMAN, A.AKTIVITE_TARIHI), G.BITIS_TARIHI) BETWEEN 1 AND 480 ' +
+    'THEN G.BITIS_TARIHI END, ' +
+    'A.AKTIVITE_BITIS_TARIHI, RD.PLAN_BIT_ZAMAN, ' +
+    'DATEADD(minute, 30, COALESCE(RD.PLAN_BAS_ZAMAN, A.AKTIVITE_TARIHI))) AS BITIS_TARIHI, ' +
+    'N''GOREV'', N''TASK'', A.DURUM, G.TAMAMLANDI ' +
     'FROM dbo.CRM_GOREV G ' +
     'INNER JOIN dbo.CRM_AKTIVITE A ON A.AKTIVITE_ID = G.AKTIVITE_ID ' +
-    'WHERE A.AKTIVITE_TARIHI IS NOT NULL AND A.AKTIVITE_TARIHI >= :BAS AND A.AKTIVITE_TARIHI < :BIT ' +
+    'LEFT JOIN dbo.CRM_ROTA_PLAN_DURAK RD ON RD.GOREV_ID = G.GOREV_ID ' +
+    'WHERE COALESCE(RD.PLAN_BAS_ZAMAN, A.AKTIVITE_TARIHI) IS NOT NULL ' +
+    'AND COALESCE(RD.PLAN_BAS_ZAMAN, A.AKTIVITE_TARIHI) >= :BAS ' +
+    'AND COALESCE(RD.PLAN_BAS_ZAMAN, A.AKTIVITE_TARIHI) < :BIT ' +
     'AND (:IG = 1) ' +
-    'AND ((:KM <> 1) OR (G.ATANAN_KULLANICI_ID = :KUL)) ' +
-    'AND ((:KM <> 2) OR (A.OLUSTURAN_KULLANICI_ID = :KUL OR G.ATANAN_KULLANICI_ID = :KUL)) ' +
+    'AND ((:ADM = 1) AND ((:KM <> 1) OR (G.ATANAN_KULLANICI_ID = :KUL)) AND ((:KM <> 2) OR (A.OLUSTURAN_KULLANICI_ID = :KUL OR G.ATANAN_KULLANICI_ID = :KUL)) ' +
+    'OR ((:ADM <> 1) AND (G.ATANAN_KULLANICI_ID = :KUL))) ' +
     'AND ((:IT = 1) OR (G.TAMAMLANDI = 0 AND A.DURUM NOT IN (''TAMAMLANDI'',''IPTAL'',''BITTI''))) ' +
     'ORDER BY ETKINLIK_TARIHI';
   qEvt.ParamByName('BAS').AsDateTime := FRangeBas;
@@ -311,6 +391,7 @@ begin
   qEvt.ParamByName('IA').AsInteger := IncAkt;
   qEvt.ParamByName('IG').AsInteger := IncGrv;
   qEvt.ParamByName('IT').AsInteger := IncTam;
+  qEvt.ParamByName('ADM').AsInteger := Adm;
   qEvt.ParamByName('KM').AsInteger := KulMod;
   qEvt.ParamByName('KUL').AsInteger := KulId;
   qEvt.Open;
@@ -323,40 +404,37 @@ begin
     Tip := qEvt.FieldByName('TIP').AsString;
     Durum := qEvt.FieldByName('DURUM').AsString;
     Dt := qEvt.FieldByName('ETKINLIK_TARIHI').AsDateTime;
-    AllDay := (Dt = Trunc(Dt));
+    DtBit := 0;
+    if (qEvt.FindField('BITIS_TARIHI') <> nil) and not qEvt.FieldByName('BITIS_TARIHI').IsNull then
+      DtBit := qEvt.FieldByName('BITIS_TARIHI').AsDateTime;
+    TakvimAraligiDuzenle(Kaynak, Dt, DtBit, AllDay, HasBitis);
     Renk := EtkinlikRengi(Kaynak, Tip, Durum, qEvt.FieldByName('TAMAMLANDI').AsBoolean);
 
     if Json <> '[' then
       Json := Json + ',';
     if SameText(Kaynak, 'GOREV') then
-      Baslik := '[G] ' + Baslik
+    begin
+      Baslik := '[G] ' + Baslik;
+      if Length(Baslik) > 48 then
+        Baslik := Copy(Baslik, 1, 45) + '...';
+    end
     else if Tip <> '' then
       Baslik := '[' + Tip + '] ' + Baslik;
 
+    EndIso := '';
+    if HasBitis then
+      EndIso := ',"end":"' + TarihIso(DtBit, AllDay) + '"';
+
     Json := Json + Format(
-      '{"id":"%d","title":"%s","start":"%s","allDay":%s,"backgroundColor":"%s","borderColor":"%s",' +
+      '{"id":"%d","title":"%s","start":"%s"%s,"allDay":%s,"backgroundColor":"%s","borderColor":"%s",' +
       '"extendedProps":{"kind":"%s"}}',
-      [Aid, JsonEscape(Baslik), TarihIso(Dt, AllDay),
+      [Aid, JsonEscape(Baslik), TarihIso(Dt, AllDay), EndIso,
        IfThen(AllDay, 'true', 'false'), Renk, Renk, JsonEscape(Kaynak)]);
     qEvt.Next;
   end;
   qEvt.Close;
   Json := Json + ']';
-
-  if UniSession = nil then
-    Exit;
-  EncJson := TNetEncoding.URL.Encode(Json);
-  UniSession.AddJS(
-    'try{' +
-    '(function(){var j=decodeURIComponent("' + EncJson + '");' +
-    'function push(){try{' +
-    'sessionStorage.setItem("crmCalEvents",j);' +
-    'var cmp=Ext.ComponentQuery.query("[name=urlCal]")[0];' +
-    'if(cmp&&cmp.getFrame()&&cmp.getFrame().contentWindow&&cmp.getFrame().contentWindow.crmCalSetEvents){' +
-    'cmp.getFrame().contentWindow.crmCalSetEvents(JSON.parse(j));return true;}' +
-    '}catch(e){}return false;}' +
-    'if(!push())Ext.defer(push,400);})();' +
-    '}catch(e){}');
+  TakvimHtmlGoster(Json);
 end;
 
 procedure TfrmCrmTakvim.KayitAc(const AId: Int64; const AKind: string);

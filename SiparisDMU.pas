@@ -162,28 +162,28 @@ begin
       qFisBas := Tuniquery.Create(nil);
       qFisBas.Connection := frmDM.conAsya;
 
-      // Siparis Baslik Hat˝rla
+      // Siparis Baslik Hatùrla
       qFisBas.Close;
       qFisBas.SQL.Clear;
       qFisBas.SQL.Add(' SELECT FisNo, OzelKod5,CariKod FROM SIPARIS_BASLIK WHERE (FisNo =:Fis) ');
       qFisBas.ParamByName('Fis').AsString := Fis;
       qFisBas.Open;
 
-      // Siparis Detay Hat˝rla
+      // Siparis Detay Hatùrla
       qFisDet.Close;
       qFisDet.SQL.Clear;
       qFisDet.SQL.Add(' SELECT * FROM SIPARIS_DETAY WHERE (FisNo =:Fis) ');
       qFisDet.ParamByName('Fis').AsString := Fis;
       qFisDet.Open;
 
-      // Ko˛ul detay˝n˝ hat˝rla
+      // Koùul detayùnù hatùrla
       q1.Close;
       q1.SQL.Clear;
       q1.SQL.Add(' SELECT KOSUL_KOD, ACIKLAMA, BASLANGICTAR, LISTEFIATI, VADEGUNU FROM TBLKOSGENEL WHERE KOSUL_KOD =:Kos ');
       q1.ParamByName('Kos').AsString := Kosul;
       q1.Open;
 
-      // Sipari˛ Sat˝rlar˝nda dˆnerek dei˛iklik yap...
+      // Sipariù Satùrlarùnda dùnerek deùiùiklik yap...
       qFisDetay.First;
       while not qFisDetay.Eof do
         begin
@@ -200,7 +200,7 @@ begin
           q.Open;
           if q.RecordCount = 1 then
             begin
-               // KOSGENEL TABLOSUNDA HANG› F›YAT OLDU–U YAZIYOR BURAYA BAKILACAK.
+               // KOSGENEL TABLOSUNDA HANGù FùYAT OLDUùU YAZIYOR BURAYA BAKILACAK.
               if q1.FieldByName('LISTEFIATI').AsInteger = 1 then BirimFiyat := q.FieldByName('FIYAT1').AsFloat;
               if q1.FieldByName('LISTEFIATI').AsInteger = 2 then BirimFiyat := q.FieldByName('FIYAT2').AsFloat;
               if q1.FieldByName('LISTEFIATI').AsInteger = 3 then BirimFiyat := q.FieldByName('FIYAT3').AsFloat;
@@ -215,7 +215,7 @@ begin
                 if (StokParaBirimi = '0') then
                   begin
 
-                     // KOSGENEL TABLOSUNDA HANG› F›YAT OLDU–U YAZIYOR BURAYA BAKILACAK.
+                     // KOSGENEL TABLOSUNDA HANGù FùYAT OLDUùU YAZIYOR BURAYA BAKILACAK.
                     if q1.FieldByName('LISTEFIATI').AsInteger = 1 then BirimFiyat := q.FieldByName('FIYAT1').AsFloat;
                     if q1.FieldByName('LISTEFIATI').AsInteger = 2 then BirimFiyat := q.FieldByName('FIYAT2').AsFloat;
                     if q1.FieldByName('LISTEFIATI').AsInteger = 3 then BirimFiyat := q.FieldByName('FIYAT3').AsFloat;
@@ -228,7 +228,7 @@ begin
 
             end else
             begin
-              // GENEL Fiyat grubundan bak˝larak fiyat bulunacak.
+              // GENEL Fiyat grubundan bakùlarak fiyat bulunacak.
               q.Close;
               q.SQL.Clear;
               q.SQL.Add(' SELECT TOP 1 * FROM TBLSTOKFIAT ');
@@ -241,11 +241,11 @@ begin
                 if q.RecordCount = 1 then
                   begin
 
-                    UniMainModule.saFiyat.Title:='F›YAT BUL';
-                    UniMainModule.saFiyat.Show('Sat˝˛ Fiyat˝ GENEL grubundan bulunmu˛tur.');
+                    UniMainModule.saFiyat.Title:='FùYAT BUL';
+                    UniMainModule.saFiyat.Show('Satùù Fiyatù GENEL grubundan bulunmuùtur.');
                     UniMainModule.saFiyat.Show();
 
-                     // KOSGENEL TABLOSUNDA HANG› F›YAT OLDU–U YAZIYOR BURAYA BAKILACAK.
+                     // KOSGENEL TABLOSUNDA HANGù FùYAT OLDUùU YAZIYOR BURAYA BAKILACAK.
                     if q1.FieldByName('LISTEFIATI').AsInteger = 1 then BirimFiyat := q.FieldByName('FIYAT1').AsFloat;
                     if q1.FieldByName('LISTEFIATI').AsInteger = 2 then BirimFiyat := q.FieldByName('FIYAT2').AsFloat;
                     if q1.FieldByName('LISTEFIATI').AsInteger = 3 then BirimFiyat := q.FieldByName('FIYAT3').AsFloat;
@@ -260,7 +260,7 @@ begin
                       if (StokParaBirimi = '0') then
                         begin
 
-                           // KOSGENEL TABLOSUNDA HANG› F›YAT OLDU–U YAZIYOR BURAYA BAKILACAK.
+                           // KOSGENEL TABLOSUNDA HANGù FùYAT OLDUùU YAZIYOR BURAYA BAKILACAK.
                           if q1.FieldByName('LISTEFIATI').AsInteger = 1 then BirimFiyat := q.FieldByName('FIYAT1').AsFloat;
                           if q1.FieldByName('LISTEFIATI').AsInteger = 2 then BirimFiyat := q.FieldByName('FIYAT2').AsFloat;
                           if q1.FieldByName('LISTEFIATI').AsInteger = 3 then BirimFiyat := q.FieldByName('FIYAT3').AsFloat;
@@ -282,7 +282,7 @@ begin
                     BirimFiyat := q.FieldByName('DOV_SATIS_FIAT').AsFloat;
                     StokParabirimi := q.FieldByName('SAT_DOV_TIP').Asstring;
 
-                    if qFisDet.FieldByName('DovizAdi').AsString = 'TL' then StokParabirimi := '0'; // Fi˛ Sat˝r˝ndaki Dˆviz Tipi, Asl˝nda STSABIT teki dir...
+                    if qFisDet.FieldByName('DovizAdi').AsString = 'TL' then StokParabirimi := '0'; // Fiù Satùrùndaki Dùviz Tipi, Aslùnda STSABIT teki dir...
 
                       if (StokParaBirimi = '0') then
                         begin
@@ -354,7 +354,7 @@ begin
   qStokSec.ParamByName('StokKod').AsString:=Stok;
   qStokSec.Open;
 
-  // iÁeride girilmi˛ stok var m˝
+  // iùeride girilmiù stok var mù
 
   if qFisDetay.Locate('StokKod',Stok,[]) = True then
     begin
@@ -382,7 +382,7 @@ begin
 //      q.ParamByName('Stk').AsString := Stok;
 //      q.Open;
 
-      // Ko˛ul detay˝n˝ hat˝rla
+      // Koùul detayùnù hatùrla
       q1.Close;
       q1.SQL.Clear;
       q1.SQL.Add(' SELECT KOSUL_KOD, ACIKLAMA, BASLANGICTAR, LISTEFIATI, VADEGUNU FROM TBLKOSGENEL WHERE KOSUL_KOD =:Kos ');
@@ -401,7 +401,7 @@ begin
       q.Open;
       if q.RecordCount = 1 then
         begin
-           // KOSGENEL TABLOSUNDA HANG› F›YAT OLDU–U YAZIYOR BURAYA BAKILACAK.
+           // KOSGENEL TABLOSUNDA HANGù FùYAT OLDUùU YAZIYOR BURAYA BAKILACAK.
           if q1.FieldByName('LISTEFIATI').AsInteger = 1 then BirimFiyat := q.FieldByName('FIYAT1').AsFloat;
           if q1.FieldByName('LISTEFIATI').AsInteger = 2 then BirimFiyat := q.FieldByName('FIYAT2').AsFloat;
           if q1.FieldByName('LISTEFIATI').AsInteger = 3 then BirimFiyat := q.FieldByName('FIYAT3').AsFloat;
@@ -416,7 +416,7 @@ begin
             if (StokParaBirimi = '0') then
               begin
 
-                 // KOSGENEL TABLOSUNDA HANG› F›YAT OLDU–U YAZIYOR BURAYA BAKILACAK.
+                 // KOSGENEL TABLOSUNDA HANGù FùYAT OLDUùU YAZIYOR BURAYA BAKILACAK.
                 if q1.FieldByName('LISTEFIATI').AsInteger = 1 then BirimFiyat := q.FieldByName('FIYAT1').AsFloat;
                 if q1.FieldByName('LISTEFIATI').AsInteger = 2 then BirimFiyat := q.FieldByName('FIYAT2').AsFloat;
                 if q1.FieldByName('LISTEFIATI').AsInteger = 3 then BirimFiyat := q.FieldByName('FIYAT3').AsFloat;
@@ -429,7 +429,7 @@ begin
 
         end else
         begin
-          // GENEL Fiyat grubundan bak˝larak fiyat bulunacak.
+          // GENEL Fiyat grubundan bakùlarak fiyat bulunacak.
           q.Close;
           q.SQL.Clear;
           q.SQL.Add(' SELECT TOP 1 * FROM TBLSTOKFIAT ');
@@ -442,11 +442,11 @@ begin
             if q.RecordCount = 1 then
               begin
 
-                UniMainModule.saFiyat.Title:='F›YAT BUL';
-                UniMainModule.saFiyat.Show('Sat˝˛ Fiyat˝ GENEL grubundan bulunmu˛tur.');
+                UniMainModule.saFiyat.Title:='FùYAT BUL';
+                UniMainModule.saFiyat.Show('Satùù Fiyatù GENEL grubundan bulunmuùtur.');
                 UniMainModule.saFiyat.Show();
 
-                 // KOSGENEL TABLOSUNDA HANG› F›YAT OLDU–U YAZIYOR BURAYA BAKILACAK.
+                 // KOSGENEL TABLOSUNDA HANGù FùYAT OLDUùU YAZIYOR BURAYA BAKILACAK.
                 if q1.FieldByName('LISTEFIATI').AsInteger = 1 then BirimFiyat := q.FieldByName('FIYAT1').AsFloat;
                 if q1.FieldByName('LISTEFIATI').AsInteger = 2 then BirimFiyat := q.FieldByName('FIYAT2').AsFloat;
                 if q1.FieldByName('LISTEFIATI').AsInteger = 3 then BirimFiyat := q.FieldByName('FIYAT3').AsFloat;
@@ -461,7 +461,7 @@ begin
                   if (StokParaBirimi = '0') then
                     begin
 
-                       // KOSGENEL TABLOSUNDA HANG› F›YAT OLDU–U YAZIYOR BURAYA BAKILACAK.
+                       // KOSGENEL TABLOSUNDA HANGù FùYAT OLDUùU YAZIYOR BURAYA BAKILACAK.
                       if q1.FieldByName('LISTEFIATI').AsInteger = 1 then BirimFiyat := q.FieldByName('FIYAT1').AsFloat;
                       if q1.FieldByName('LISTEFIATI').AsInteger = 2 then BirimFiyat := q.FieldByName('FIYAT2').AsFloat;
                       if q1.FieldByName('LISTEFIATI').AsInteger = 3 then BirimFiyat := q.FieldByName('FIYAT3').AsFloat;
@@ -543,7 +543,7 @@ begin
     qFisDetay.FieldByName('Miktar').AsFloat:=Miktar;
     qFisDetay.FieldByName('StokAciklama').AsString:=qStokSec.FieldByName('STOK_ADI').AsString;
     qFisDetay.FieldByName('ParaBirimi').AsString:=StokParaBirimi;
-//    qFisDetay.FieldByName('KdvDahil').AsString:='HariÁ';
+//    qFisDetay.FieldByName('KdvDahil').AsString:='Hariù';
     qFisDetay.FieldByName('DepoID').AsInteger:=Tmp.xKullaniciDepo;
     qFisDetay.FieldByName('CariParaBirimi').AsString:=Tmp.xParaBirimi;
     qFisDetay.FieldByName('ParaBirimi').AsString:=StokParaBirimi; //qStokSec.FieldByName('ParaBirimi').AsString;
@@ -552,11 +552,11 @@ begin
     qFisDetay.FieldByName('SatisKurBirimi').AsString:=StokParaBirimi;
     qFisDetay.FieldByName('DovizAdi').AsString := DovizAdi;
 
-    qFisDetay.FieldByName('IskYuzde_1').AsFloat := 0; // default deerdir. Sat˝r g¸ncelle de istenilen deer gelecektir.
+    qFisDetay.FieldByName('IskYuzde_1').AsFloat := 0; // default deùerdir. Satùr gùncelle de istenilen deùer gelecektir.
 
-    // Kuru Bulma rutini. Asya tablolar˝ndan
+    // Kuru Bulma rutini. Asya tablolarùndan
     if (Tmp.xParaBirimi <> StokParaBirimi) then begin
-      // Dˆviz Fiyat˝ al
+      // Dùviz Fiyatù al
 //      q.Close;
 //      q.SQL.Clear;
 //      q.SQL.Add(' SELECT * FROM NETSIS.DBO.DOVIZ WHERE TARIH =:Tar AND SIRA =:Dov  ');
@@ -591,7 +591,7 @@ begin
       DovizAdi := q.FieldByName('ISIM').AsString;
       qFisDetay.FieldByName('DovizAdi').AsString := DovizAdi;
 
-      // Doviz kurunun ekrandaki edit alnlardan al˝nmas˝...
+      // Doviz kurunun ekrandaki edit alnlardan alùnmasù...
       if (DovizAdi = 'USD') then
         begin
           qFisDetay.FieldByName('SatisKur').AsFloat:=1; //txtUsd.Value;
@@ -609,7 +609,7 @@ begin
     begin
       // = 1
       qFisDetay.FieldByName('SatisKur').AsFloat:=1;
-      DovizAdi := 'TL'; // Sat˝˛ Fiyat 1 den rakam al˝nd˝˝nda bu ˛ekilde...
+      DovizAdi := 'TL'; // Satùù Fiyat 1 den rakam alùndùùùnda bu ùekilde...
       qFisDetay.FieldByName('DovizAdi').AsString := DovizAdi;
     end;
 
@@ -622,19 +622,19 @@ begin
 //       qFisDetay.FieldByName('GercekMiktar').AsFloat:=qFisDetay.FieldByName('Miktar').AsFloat;
 //     end;
 
-    // 11.05 g¸ncellemesinde procedure dei˛tirildi. Deer d˝˛ar˝da hesaplanarak getiriliyor.
+    // 11.05 gùncellemesinde procedure deùiùtirildi. Deùer dùùarùda hesaplanarak getiriliyor.
     qFisDetay.FieldByName('GercekMiktar').AsFloat:=Miktar2;
 
     qFisDetay.FieldByName('OivYuzde').AsString:='0';
     qFisDetay.FieldByName('StokTip').AsString:='0';
 
         //Fatura Tipleri
-    if (qFisBaslik.FieldByName('FisTipID').AsInteger=60) then begin //Sat˝˛
+    if (qFisBaslik.FieldByName('FisTipID').AsInteger=60) then begin //Satùù
         qFisDetay.FieldByName('BirimFiyat').AsFloat:=BirimFiyat;
         qFisDetay.FieldByName('AlisMaliyet').AsFloat:=0;
     end;
 
-    // Netsis iÁin Stok Son Maliyet Bilgileri
+    // Netsis iùin Stok Son Maliyet Bilgileri
     qFisDetay.FieldByName('SonMaliyetFiyat').AsFloat := spStokMaliyetBul.FieldByName('SON_MALIYET_FIYAT').AsFloat;
     qFisDetay.FieldByName('SonMaliyetTarih').AsDateTime := spStokMaliyetBul.FieldByName('SON_MALIYET_TARIH').AsDateTime;
     qFisDetay.FieldByName('SonAlisFiyat').AsFloat := spStokMaliyetBul.FieldByName('SON_ALIS_FIYAT').AsFloat;
@@ -650,7 +650,7 @@ begin
   qFisDetay.FieldByName('SatirEK2').AsString := SatirEK2;
 
   qFisDetay.FieldByName('DovizAdi').AsString := DovizAdi;
-  if qFisDetay.FieldByName('SatisKur').AsFloat = 1 then qFisDetay.FieldByName('DovizAdi').AsString := 'TL'; // tembellikten yap˝ld˝...
+  if qFisDetay.FieldByName('SatisKur').AsFloat = 1 then qFisDetay.FieldByName('DovizAdi').AsString := 'TL'; // tembellikten yapùldù...
 
   q.Close;
   q1.Close;
@@ -690,7 +690,7 @@ begin
 //  q.Open;
 //  if q.RecordCount = 0 then
 //    begin
-//      UniMainModule.saHata.Show('Sat˝r YOK. Konrol ediniz...');
+//      UniMainModule.saHata.Show('Satùr YOK. Konrol ediniz...');
 //      Abort;
 //
 //    end else if q.RecordCount > 0 then
@@ -742,7 +742,7 @@ begin
     Cevrim := (q.FieldByName('PAY_1').AsFloat * q.FieldByName('PAYDA_1').AsFloat);
     Miktar2 := GelenMiktar;
     Birim2 := q.FieldByName('OLCU_BR2').AsString;
-    Birim := q.FieldByName('OLCU_BR1').AsString; // Gelen birim 2.Birimdi. Ancak sat˝r a giderken birinci birim olarak gitmeli.
+    Birim := q.FieldByName('OLCU_BR1').AsString; // Gelen birim 2.Birimdi. Ancak satùr a giderken birinci birim olarak gitmeli.
   end;
 
   if Birim=q.FieldByName('OLCU_BR3').AsString then
@@ -751,7 +751,7 @@ begin
     Cevrim := (q.FieldByName('PAY2').AsFloat * q.FieldByName('PAYDA2').AsFloat);
     Miktar2 := GelenMiktar;
     Birim2 := q.FieldByName('OLCU_BR3').AsString;
-    Birim := q.FieldByName('OLCU_BR1').AsString; // Gelen birim 2.Birimdi. Ancak sat˝r a giderken birinci birim olarak gitmeli.
+    Birim := q.FieldByName('OLCU_BR1').AsString; // Gelen birim 2.Birimdi. Ancak satùr a giderken birinci birim olarak gitmeli.
   end;
 
   q.Close;
@@ -793,7 +793,7 @@ begin
     qFisBaslik.Open;
     qFisBaslik.Insert;
     qFisBaslik.FieldByName('ParaBirimi').AsString:=Tmp.xParaBirimi;
-    qFisBaslik.FieldByName('FisTipID').AsInteger:=60; // Sat˝˛ Sipari˛i
+    qFisBaslik.FieldByName('FisTipID').AsInteger:=60; // Satùù Sipariùi
 
     qFisBaslik.FieldByName('tarih').Text:=datetostr(now);
     qFisBaslik.FieldByName('DovizTarih').Text:=datetostr(now);
@@ -810,7 +810,7 @@ begin
   except
     On E:Exception do
       begin
-        //LogMemo.Lines.Add('Hata Olu˛tu (YeniFatura). Hata AÁ˝klama : ' + E.Message);
+        //LogMemo.Lines.Add('Hata Oluùtu (YeniFatura). Hata Aùùklama : ' + E.Message);
       end;
 
   end;
@@ -839,7 +839,7 @@ begin
 
       CariBirimFiyat := qFisDetay.FieldByName('cCariBirimFiyat').AsFloat;
 
-//      _BrutToplam := xYuvarla((qFisDetay.FieldByName('Miktar').AsFloat * qFisDetay.FieldByName('cCariBirimFiyat').AsFloat),5); //--- buray˝ 2 den 4 e ald˝m
+//      _BrutToplam := xYuvarla((qFisDetay.FieldByName('Miktar').AsFloat * qFisDetay.FieldByName('cCariBirimFiyat').AsFloat),5); //--- burayù 2 den 4 e aldùm
       BrutToplam := xYuvarla((qFisDetay.FieldByName('Miktar').AsFloat * qFisDetay.FieldByName('cCariBirimFiyat').AsFloat),5); //
 
 //      _IskToplam :=  ((_BrutToplam * qFisDetay.FieldByName('IskYuzde_1').AsFloat) / 100) ;
@@ -857,7 +857,7 @@ begin
 
       qFisDetay.FieldByName('cIskTutar1').AsFloat := IskToplam;
 
-//      qFisDetay.FieldByName('cKdvTutar').AsFloat:= (NetToplam * qFisDetay.FieldByName('Kdv').AsFloat / 100 ) ;  // 06.10.2022 - Musan˝n talebii ile test ediliyor.
+//      qFisDetay.FieldByName('cKdvTutar').AsFloat:= (NetToplam * qFisDetay.FieldByName('Kdv').AsFloat / 100 ) ;  // 06.10.2022 - Musanùn talebii ile test ediliyor.
       qFisDetay.FieldByName('cKdvTutar').AsFloat:= RoundTo((NetToplam * qFisDetay.FieldByName('Kdv').AsFloat / 100 ),-2) ;
 
       if qFisDetay.FieldByName('Miktar').AsFloat > 0 then

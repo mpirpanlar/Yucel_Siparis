@@ -68,7 +68,7 @@ implementation
 
 uses
   System.DateUtils,
-  uniGUIApplication, DMU, Main, Genel, CrmAktiviteU, CrmCariSecU, CrmPotSecU;
+  uniGUIApplication, DMU, Main, Genel, TmpU, CrmAktiviteU, CrmCariSecU, CrmPotSecU;
 
 function frmCrmAktiviteListe: TfrmCrmAktiviteListe;
 begin
@@ -316,6 +316,8 @@ begin
     Sql := Sql +
       ' AND (A.POTANSIYEL_ID = :POT_ID OR EXISTS (SELECT 1 FROM dbo.CRM_POTANSIYEL_MUSTERI PM ' +
       'WHERE PM.POTANSIYEL_ID = :POT_ID AND PM.NETSIS_CARI_KOD IS NOT NULL AND PM.NETSIS_CARI_KOD = A.CARI_KOD))';
+  if Tmp.xKullaniciAdmin <> 1 then
+    Sql := Sql + ' AND A.OLUSTURAN_KULLANICI_ID = :KUL';
 
   Sql := Sql + ' ORDER BY A.AKTIVITE_ID DESC';
   qList.SQL.Text := Sql;
@@ -332,6 +334,8 @@ begin
   end;
   if PotId > 0 then
     qList.ParamByName('POT_ID').AsLargeInt := PotId;
+  if Tmp.xKullaniciAdmin <> 1 then
+    qList.ParamByName('KUL').AsInteger := Tmp.xKullaniciID;
 
   qList.Open;
 end;

@@ -1,7 +1,7 @@
 object frmCrmRotaPlan: TfrmCrmRotaPlan
   Left = 0
   Top = 0
-  ClientHeight = 700
+  ClientHeight = 713
   ClientWidth = 1020
   Caption = 'CRM - Rota plan'#305
   OnShow = UniFormShow
@@ -17,13 +17,14 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
     Left = 0
     Top = 0
     Width = 1020
-    Height = 700
+    Height = 713
     Hint = ''
     Align = alClient
     TabOrder = 0
     BorderStyle = ubsNone
     Caption = ''
     Layout = 'vbox'
+    ExplicitHeight = 700
     object panUst: TUniPanel
       Left = 0
       Top = 0
@@ -132,7 +133,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       object lblEsikAcik: TUniLabel
         Left = 660
         Top = 128
-        Width = 226
+        Width = 214
         Height = 13
         Hint = ''
         Caption = '(Rota eksenine g'#246're '#231'apraz sapma uyar'#305's'#305')'
@@ -141,11 +142,11 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       object lblRotaSablon: TUniLabel
         Left = 12
         Top = 156
-        Width = 72
+        Width = 73
         Height = 13
         Hint = ''
         Caption = 'Rota '#246'n tan'#305'm'
-        TabOrder = 21
+        TabOrder = 23
       end
       object cbRotaSubeSablon: TUniComboBox
         Left = 96
@@ -162,7 +163,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       object lblBasE: TUniLabel
         Left = 12
         Top = 192
-        Width = 83
+        Width = 81
         Height = 13
         Hint = ''
         Caption = 'Ba'#351'lang'#305#231' GPS X'
@@ -180,7 +181,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       object lblBasB: TUniLabel
         Left = 228
         Top = 192
-        Width = 37
+        Width = 28
         Height = 13
         Hint = ''
         Caption = 'GPS Y'
@@ -361,7 +362,8 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
         Hint = ''
         AutoSize = False
         Caption = 
-          'Uyar'#305': rota ekseninden sapma. Bacak km: onceki noktadan duraga mesafe (GPS eksikse 0).'
+          'Uyar'#305': rota ekseninden sapma. Bacak km: onceki noktadan duraga m' +
+          'esafe (GPS eksikse 0).'
         TabOrder = 9
       end
     end
@@ -379,7 +381,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       object lblAtanan: TUniLabel
         Left = 8
         Top = 8
-        Width = 90
+        Width = 85
         Height = 13
         Hint = ''
         Caption = 'Atanan personel'
@@ -429,7 +431,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       object lblToplamKm: TUniLabel
         Left = 660
         Top = 8
-        Width = 120
+        Width = 82
         Height = 13
         Hint = ''
         Caption = 'Toplam yol: - km'
@@ -459,7 +461,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       object lblGorevZiyaret: TUniLabel
         Left = 8
         Top = 72
-        Width = 58
+        Width = 50
         Height = 13
         Hint = ''
         Caption = 'Ziyaret dk'
@@ -478,7 +480,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       object lblMesaiBas: TUniLabel
         Left = 132
         Top = 72
-        Width = 54
+        Width = 51
         Height = 13
         Hint = ''
         Caption = 'Mesai ba'#351
@@ -497,7 +499,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       object lblMesaiBit: TUniLabel
         Left = 252
         Top = 72
-        Width = 40
+        Width = 47
         Height = 13
         Hint = ''
         Caption = 'Mesai bit'
@@ -516,7 +518,7 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
       object lblGorevHiz: TUniLabel
         Left = 364
         Top = 72
-        Width = 52
+        Width = 45
         Height = 13
         Hint = ''
         Caption = 'H'#305'z km/h'
@@ -741,8 +743,8 @@ object frmCrmRotaPlan: TfrmCrmRotaPlan
     AlertType = atQuestion
     Padding = 20
     ShowCancelButton = True
-    OnConfirm = saMukerrerConfirm
     OnDismiss = saMukerrerDismiss
+    OnConfirm = saMukerrerConfirm
     Left = 296
     Top = 640
   end

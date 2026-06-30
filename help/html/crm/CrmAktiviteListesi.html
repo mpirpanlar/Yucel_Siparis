@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>CRM - Aktivite Listesi</title>
+<link rel="stylesheet" href="help.css"/>
+</head>
+<body>
+<h1>CRM - Aktivite Listesi</h1>
+<p>**FormName:** `CrmAktiviteListesi`</p>
+<h2>Bu ekran ne işe yarar?</h2>
+<p>Kayıtlı CRM aktivitelerini (görev tipi hariç) filtreleyerek listeler. Satırdan veya **Kaydı Aç** ile aktivite kartına geçilir.</p>
+<h2>Ne zaman kullanılır?</h2>
+<ul>
+<li>Belirli tarih aralığındaki ziyaret, arama, toplantı vb. aktiviteleri görmek için</li>
+<li>Cari veya potansiyel müşteriye bağlı aktiviteleri aramak için</li>
+<li>Durum / tip / öncelik bazında takip için</li>
+</ul>
+<h2>Filtreler ve alanlar</h2>
+<table>
+<thead><tr>
+<th>Alan</th>
+<th>Zorunlu</th>
+<th>Açıklama</th>
+<th>Örnek</th>
+</tr></thead><tbody>
+<tr>
+<td>Tip</td>
+<td>Hayır</td>
+<td>Çoklu seçim; aktivite tipi (CRM parametrelerinden)</td>
+<td>ZIYARET, ARAMA</td>
+</tr>
+<tr>
+<td>Durum</td>
+<td>Hayır</td>
+<td>Çoklu seçim; aktivite durumu</td>
+<td>PLANLANDI, TAMAMLANDI</td>
+</tr>
+<tr>
+<td>Öncelik</td>
+<td>Hayır</td>
+<td>Çoklu seçim</td>
+<td>NORMAL, YUKSEK</td>
+</tr>
+<tr>
+<td>Tarih aralığı</td>
+<td>Hayır</td>
+<td>İşaretlenirse başlangıç–bitiş arası filtreler; varsayılan son 30 gün</td>
+<td>01.06.2026 – 30.06.2026</td>
+</tr>
+<tr>
+<td>Cari kod</td>
+<td>Hayır</td>
+<td>Netsis cari kodu; **Cari Bul** ile seçilir</td>
+<td>120.01.001</td>
+</tr>
+<tr>
+<td>Potansiyel</td>
+<td>Hayır</td>
+<td>Potansiyel müşteri ID; **Potansiyel Bul** ile seçilir</td>
+<td>42</td>
+</tr>
+</tbody></table>
+
+<h2>Grid sütunları</h2>
+<table>
+<thead><tr>
+<th>Sütun</th>
+<th>Açıklama</th>
+</tr></thead><tbody>
+<tr>
+<td>ID</td>
+<td>Aktivite kayıt numarası</td>
+</tr>
+<tr>
+<td>Tip</td>
+<td>Aktivite tipi kodu / açıklaması</td>
+</tr>
+<tr>
+<td>Konu</td>
+<td>Kısa başlık</td>
+</tr>
+<tr>
+<td>Cari Kod / Ünvan</td>
+<td>Bağlı Netsis cari</td>
+</tr>
+<tr>
+<td>Potansiyel</td>
+<td>Potansiyel müşteri unvanı</td>
+</tr>
+<tr>
+<td>Teklif No / Sipariş No</td>
+<td>ERP bağlantıları</td>
+</tr>
+<tr>
+<td>Tarih</td>
+<td>Planlanan aktivite tarihi</td>
+</tr>
+<tr>
+<td>Durum / Öncelik</td>
+<td>Güncel durum ve öncelik</td>
+</tr>
+</tbody></table>
+
+<h2>Butonlar</h2>
+<table>
+<thead><tr>
+<th>Buton</th>
+<th>Açıklama</th>
+</tr></thead><tbody>
+<tr>
+<td>Listele</td>
+<td>Seçili filtrelere göre gridi doldurur</td>
+</tr>
+<tr>
+<td>Kaydı Aç</td>
+<td>Seçili satırın aktivite kartını açar (çift tıklama da açar)</td>
+</tr>
+<tr>
+<td>Cari Bul / Potansiyel Bul</td>
+<td>Filtre alanlarına kayıt seçer</td>
+</tr>
+<tr>
+<td>Yardım</td>
+<td>Bu sayfayı gösterir</td>
+</tr>
+<tr>
+<td>Kapat</td>
+<td>Sekmeyi kapatır, ana menüye döner</td>
+</tr>
+</tbody></table>
+
+<h2>İş kuralları</h2>
+<ul>
+<li>Liste yalnızca `TIP &lt;&gt; TASK` aktiviteleri gösterir; görevler **Görev Listesi** ekranındadır.</li>
+<li>Admin olmayan kullanıcılar yalnızca yetkili oldukları kayıtları görür (yetki tanımına bağlı).</li>
+<li>Tarih filtresi kapalıyken son 30 gün varsayılan uygulanır.</li>
+</ul>
+<h2>İlgili ekranlar</h2>
+<ul>
+<li>**CrmYeniAktivite** — yeni aktivite kartı</li>
+<li>**CrmGorevListesi** — görev (TASK) kayıtları</li>
+<li>**CrmAktiviteRapor** — durum / gecikme raporu</li>
+<li>**CrmTakvim** — takvim görünümü</li>
+</ul>
+<h2>Sık sorulan sorular</h2>
+<p><strong>S:</strong> Görevler listede görünmüyor.</p>
+<p><strong>C:</strong> Görevler ayrı tiptir; **CRM - Görev Listesi** ekranını kullanın.</p>
+<p><strong>S:</strong> Potansiyel filtresi çalışmıyor.</p>
+<p><strong>C:</strong> Önce **Potansiyel Bul** ile geçerli bir potansiyel seçin, ardından **Listele** deyin.</p>
+</body>
+</html>

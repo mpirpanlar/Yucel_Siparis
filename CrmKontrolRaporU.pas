@@ -56,7 +56,7 @@ implementation
 {$R *.dfm}
 
 uses
-  uniGUIApplication, MainModule, DMU, Main;
+  uniGUIApplication, MainModule, DMU, Main, TmpU, Genel;
 
 function frmCrmKontrolRapor: TfrmCrmKontrolRapor;
 begin
@@ -129,11 +129,16 @@ begin
     'WHERE A.AKTIVITE_TARIHI >= :BAS AND A.AKTIVITE_TARIHI < :BIT ' +
     'AND ((:TID = 0) OR (A.AKTIVITE_TIP_ID = :TID)) ' +
     'AND ((:SID = 0) OR (CV.SET_ID = :SID)) ' +
+    'AND ((:ADM = 1) OR (A.TIP <> ''TASK'' AND A.OLUSTURAN_KULLANICI_ID = :KUL) ' +
+    'OR (A.TIP = ''TASK'' AND EXISTS (SELECT 1 FROM dbo.CRM_GOREV GX WHERE GX.AKTIVITE_ID = A.AKTIVITE_ID AND GX.ATANAN_KULLANICI_ID = :KUL)) ' +
+    'OR (CV.CEVAPLAYAN_KULLANICI_ID = :KUL)) ' +
     'ORDER BY A.AKTIVITE_TARIHI DESC, A.AKTIVITE_ID, CV.CEVAP_ID';
   qDetay.ParamByName('BAS').AsDateTime := Bas;
   qDetay.ParamByName('BIT').AsDateTime := Bit;
   qDetay.ParamByName('TID').AsLargeInt := FiltreTipId;
   qDetay.ParamByName('SID').AsLargeInt := FiltreSetId;
+  qDetay.ParamByName('ADM').AsInteger := Tmp.xKullaniciAdmin;
+  qDetay.ParamByName('KUL').AsInteger := Tmp.xKullaniciID;
   qDetay.Open;
 
   qOzet.Close;
@@ -149,18 +154,23 @@ begin
     'WHERE A.AKTIVITE_TARIHI >= :BAS AND A.AKTIVITE_TARIHI < :BIT ' +
     'AND ((:TID = 0) OR (A.AKTIVITE_TIP_ID = :TID)) ' +
     'AND ((:SID = 0) OR (CV.SET_ID = :SID)) ' +
+    'AND ((:ADM = 1) OR (A.TIP <> ''TASK'' AND A.OLUSTURAN_KULLANICI_ID = :KUL) ' +
+    'OR (A.TIP = ''TASK'' AND EXISTS (SELECT 1 FROM dbo.CRM_GOREV GX WHERE GX.AKTIVITE_ID = A.AKTIVITE_ID AND GX.ATANAN_KULLANICI_ID = :KUL)) ' +
+    'OR (CV.CEVAPLAYAN_KULLANICI_ID = :KUL)) ' +
     'GROUP BY S.BASLIK, CV.SORU_METNI_KOPYA, CV.CEVAP_TIPI ' +
     'ORDER BY S.BASLIK, CV.SORU_METNI_KOPYA';
   qOzet.ParamByName('BAS').AsDateTime := Bas;
   qOzet.ParamByName('BIT').AsDateTime := Bit;
   qOzet.ParamByName('TID').AsLargeInt := FiltreTipId;
   qOzet.ParamByName('SID').AsLargeInt := FiltreSetId;
+  qOzet.ParamByName('ADM').AsInteger := Tmp.xKullaniciAdmin;
+  qOzet.ParamByName('KUL').AsInteger := Tmp.xKullaniciID;
   qOzet.Open;
 end;
 
 procedure TfrmCrmKontrolRapor.btnKapatClick(Sender: TObject);
 begin
-  MainForm.NavPage.ActivePage.Close;
+  xNavListeKapat(Self);
 end;
 
 end.

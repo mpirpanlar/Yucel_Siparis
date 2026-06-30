@@ -49,6 +49,8 @@ type
     lkDurum: TUniDBLookupComboBox;
     lblOncelik: TUniLabel;
     cbOncelik: TUniComboBox;
+    lblYapan: TUniLabel;
+    lblYapanDeger: TUniLabel;
     panEkler: TUniPanel;
     lblEkler: TUniLabel;
     panEkBar: TUniPanel;
@@ -133,6 +135,7 @@ type
     procedure TeklifSecildi(Sender: TObject; const AFisNo: string);
     procedure YeniKayit;
     procedure YukleKayit;
+    procedure YapanEtiketiGuncelle(AKullaniciId: Integer);
     function TipKodFromLookup: string;
     function DurumKodFromLookup: string;
     procedure YukleOncelik;
@@ -406,6 +409,24 @@ begin
     cbOncelik.ItemIndex := 1;
 end;
 
+procedure TfrmCrmAktivite.YapanEtiketiGuncelle(AKullaniciId: Integer);
+begin
+  if AKullaniciId > 0 then
+  begin
+    qLoad.Close;
+    qLoad.SQL.Text := 'SELECT KullaniciAd FROM dbo.Kullanici WHERE KullaniciID = :K';
+    qLoad.ParamByName('K').AsInteger := AKullaniciId;
+    qLoad.Open;
+    if qLoad.IsEmpty then
+      lblYapanDeger.Caption := IntToStr(AKullaniciId)
+    else
+      lblYapanDeger.Caption := Trim(qLoad.Fields[0].AsString);
+    qLoad.Close;
+  end
+  else
+    lblYapanDeger.Caption := Trim(Tmp.xKullaniciAdi);
+end;
+
 procedure TfrmCrmAktivite.YeniKayit;
 begin
   FAktiviteId := 0;
@@ -429,6 +450,7 @@ begin
   YukleOncelik;
   EkListele;
   KontrolListesiYukle;
+  YapanEtiketiGuncelle(0);
 end;
 
 procedure TfrmCrmAktivite.YukleKayit;
@@ -439,7 +461,7 @@ begin
   qLoad.Close;
   qLoad.SQL.Text :=
     'SELECT A.AKTIVITE_TIP_ID, A.AKTIVITE_DURUM_ID, A.KONU, A.ACIKLAMA, A.CARI_KOD, A.POTANSIYEL_ID, ' +
-    'A.AKTIVITE_TARIHI, A.AKTIVITE_BITIS_TARIHI, A.DURUM, A.ONCELIK, A.TEKLIF_FISNO, A.TEKLIF_ID, A.SIPARIS_NO, ' +
+    'A.AKTIVITE_TARIHI, A.AKTIVITE_BITIS_TARIHI, A.DURUM, A.ONCELIK, A.TEKLIF_FISNO, A.TEKLIF_ID, A.SIPARIS_NO, A.OLUSTURAN_KULLANICI_ID, ' +
     'TK.KOD AS TIP_KOD, C.CARI_ISIM, P.FIRMA_UNVAN AS POT_UNVAN, T.TEKLIF_NO AS ESKI_TEKLIF_NO ' +
     'FROM dbo.CRM_AKTIVITE A ' +
     'LEFT JOIN dbo.CRM_AKTIVITE_TIP TK ON TK.TIP_ID = A.AKTIVITE_TIP_ID ' +
@@ -534,6 +556,10 @@ begin
     ComboSetOncelik(qLoad.FieldByName('ONCELIK').AsString)
   else
     ComboSetOncelik('ORTA');
+  if qLoad.FieldByName('OLUSTURAN_KULLANICI_ID').IsNull then
+    YapanEtiketiGuncelle(0)
+  else
+    YapanEtiketiGuncelle(qLoad.FieldByName('OLUSTURAN_KULLANICI_ID').AsInteger);
   qLoad.Close;
   EkListele;
   KontrolListesiYukle;

@@ -1,6 +1,6 @@
 unit CrmAktiviteLogU;
 
-{ CRM aktivite/gorev degisiklik logu (CRM_AKTIVITE_LOG). }
+{ CRM aktivite/gorev degisiklik logu (CRM_AKTIVITE_DEGISIM_LOG). }
 
 interface
 
@@ -81,7 +81,7 @@ begin
     Exit;
   AQ.Close;
   AQ.SQL.Text :=
-    'INSERT INTO dbo.CRM_AKTIVITE_LOG (AKTIVITE_ID, KAYNAK, ISLEM, ALAN_ADI, ESKI_DEGER, YENI_DEGER, ACIKLAMA, KULLANICI_ID) ' +
+    'INSERT INTO dbo.CRM_AKTIVITE_DEGISIM_LOG (AKTIVITE_ID, KAYNAK, ISLEM, ALAN_ADI, ESKI_DEGER, YENI_DEGER, ACIKLAMA, KULLANICI_ID) ' +
     'VALUES (:AID, :KAY, :ISL, :ALAN, :ESK, :YEN, :ACK, :KUL)';
   AQ.ParamByName('AID').AsLargeInt := AAktiviteId;
   AQ.ParamByName('KAY').AsString := AKaynak;
@@ -128,7 +128,7 @@ begin
     'SELECT L.LOG_ID, CONVERT(varchar(19), L.ISLEM_UTC, 120) AS ISLEM_ZAMANI, ' +
     'ISNULL(K.KullaniciAd, '''') AS KULLANICI, L.KAYNAK, L.ISLEM, L.ALAN_ADI, ' +
     'L.ESKI_DEGER, L.YENI_DEGER, L.ACIKLAMA ' +
-    'FROM dbo.CRM_AKTIVITE_LOG L ' +
+    'FROM dbo.CRM_AKTIVITE_DEGISIM_LOG L ' +
     'LEFT JOIN dbo.Kullanici K ON K.KullaniciID = L.KULLANICI_ID ' +
     'WHERE L.AKTIVITE_ID = :AID ' +
     'ORDER BY L.ISLEM_UTC DESC, L.LOG_ID DESC';

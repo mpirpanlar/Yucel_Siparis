@@ -40,6 +40,8 @@ type
     lblSiparisAcik: TUniLabel;
     lblGorevTar: TUniLabel;
     dtAktivite: TUniDateTimePicker;
+    lblSureDakika: TUniLabel;
+    edSureDakika: TUniEdit;
     lblBitis: TUniLabel;
     dtBitis: TUniDateTimePicker;
     lblOncelik: TUniLabel;
@@ -100,12 +102,17 @@ type
     procedure saBaglantiDurumConfirm(Sender: TObject);
     procedure grdEkAjaxEvent(Sender: TComponent; EventName: string; Params: TUniStrings);
     procedure btnKontrolKaydetClick(Sender: TObject);
+    procedure dtAktiviteChange(Sender: TObject);
+    procedure dtBitisChange(Sender: TObject);
+    procedure edSureDakikaExit(Sender: TObject);
   private
     FAktiviteId: Int64;
     FRotaId: Int64;
     FSoruSetId: Int64;
     FBaslangicTeklifId: Int64;
     FPendingDurumId: Int64;
+    FBitisTarihiAktif: Boolean;
+    FSureGuncelleniyor: Boolean;
     FCrmKontrol: TCrmAktiviteKontrolYonetici;
     fuEk: TUniFileUpload;
     procedure KontrolSekmesiGoster(Sender: TObject);
@@ -135,6 +142,10 @@ type
     procedure GorevLogKaydet(const IsNew: Boolean; const OldKonu, OldAcik, OldDurAd, OldAktTarStr, OldBitisStr,
       OldAtananAd: string; OldTamam: Boolean);
     function GorevKaydet: Boolean;
+    procedure GorevTarihPickerFormat;
+    function SureDakikaDegeri: Integer;
+    procedure SuredenBitisHesapla;
+    procedure BitisTarihindenSureHesapla;
     procedure EnsureEkUpload;
     procedure EkListele;
     procedure EkIndir;
@@ -151,6 +162,7 @@ implementation
 {$R *.dfm}
 
 uses
+  System.DateUtils,
   uniGUIApplication, MainModule, DMU, TmpU, CrmCariSecU, CrmSiparisSecU, CrmBaglantiDurumU,
   CrmAktiviteLogU, CrmPotSecU, CrmRotaGorevU, ServerModule, Main;
 
@@ -458,6 +470,7 @@ begin
   FRotaId := 0;
   FSoruSetId := 0;
   FBaslangicTeklifId := 0;
+  FBitisTarihiAktif := False;
   Caption := 'Yeni G' + #$00F6 + 'rev';
   edKonu.Text := '';
   mmAciklama.Text := '';
@@ -472,6 +485,7 @@ begin
   lblSiparisAcik.Caption := '';
   dtAktivite.DateTime := Now;
   dtBitis.DateTime := Now;
+  edSureDakika.Text := '';
   YukleOncelik;
   AcDurumLookup;
   VarsayilanDurum;
@@ -513,6 +527,17 @@ begin
   begin
     qLoad.Close;
     UniMainModule.saHata.Show('G' + #$00F6 + 'rev bulunamad' + #$0131 + '.');
+    FAktiviteId := 0;
+    KullanicilariAc;
+    YeniGorevState;
+    Exit;
+  end;
+  if (Tmp.xKullaniciAdmin <> 1) and
+     (qLoad.FieldByName('ATANAN_KULLANICI_ID').IsNull or
+      (qLoad.FieldByName('ATANAN_KULLANICI_ID').AsInteger <> Tmp.xKullaniciID)) then
+  begin
+    qLoad.Close;
+    UniMainModule.saHata.Show('Bu g' + #$00F6 + 'revi g' + #$00F6 + 'r' + #$00FC + 'nt' + #$00FC + 'leme yetkiniz yok.');
     FAktiviteId := 0;
     KullanicilariAc;
     YeniGorevState;
@@ -571,9 +596,20 @@ begin
   else
     dtAktivite.DateTime := qLoad.FieldByName('AKTIVITE_TARIHI').AsDateTime;
   if qLoad.FieldByName('BITIS_TARIHI').IsNull then
-    dtBitis.DateTime := Now
+  begin
+    dtBitis.DateTime := Now;
+    FBitisTarihiAktif := False;
+    edSureDakika.Text := '';
+  end
   else
+  begin
     dtBitis.DateTime := qLoad.FieldByName('BITIS_TARIHI').AsDateTime;
+    FBitisTarihiAktif := dtBitis.DateTime > dtAktivite.DateTime;
+    if FBitisTarihiAktif then
+      BitisTarihindenSureHesapla
+    else
+      edSureDakika.Text := '';
+  end;
   SetComboByText(cbOncelik, qLoad.FieldByName('ONCELIK').AsString);
   TamB := qLoad.FieldByName('TAMAMLANDI').AsBoolean;
   if qLoad.FieldByName('AKTIVITE_DURUM_ID').IsNull then
@@ -630,9 +666,9 @@ begin
   CrmLogAlanDegisti(qLogExec, FAktiviteId, 'GOREV', 'KONU_DEGIS', 'Konu', OldKonu, edKonu.Text, KulId);
   CrmLogAlanDegisti(qLogExec, FAktiviteId, 'GOREV', 'ACIKLAMA_DEGIS', 'Aciklama', OldAcik, mmAciklama.Text, KulId);
   CrmLogAlanDegisti(qLogExec, FAktiviteId, 'GOREV', 'DURUM_DEGIS', 'Durum', OldDurAd, Trim(lkDurum.Text), KulId);
-  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'GOREV', 'TARIH_DEGIS', 'Gorev Tarihi', OldAktTarStr,
+  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'GOREV', 'TARIH_DEGIS', 'Baslangic Tarihi', OldAktTarStr,
     CrmTarihMetin(dtAktivite.DateTime), KulId);
-  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'GOREV', 'TARIH_DEGIS', 'Termin Tarihi', OldBitisStr,
+  CrmLogAlanDegisti(qLogExec, FAktiviteId, 'GOREV', 'TARIH_DEGIS', 'Bitis Tarihi', OldBitisStr,
     CrmTarihMetin(dtBitis.DateTime), KulId);
   if VarIsEmpty(lkAtanan.KeyValue) or VarIsNull(lkAtanan.KeyValue) then
     YeniAtanan := ''
@@ -797,6 +833,7 @@ procedure TfrmCrmGorev.UniFormShow(Sender: TObject);
 var
   PrefTeklif, PrefPot: Int64;
 begin
+  GorevTarihPickerFormat;
   EnsureEkUpload;
   KullanicilariAc;
   FAktiviteId := StrToInt64Def(Trim(Hint), 0);
@@ -1104,6 +1141,90 @@ end;
 procedure TfrmCrmGorev.btnKontrolKaydetClick(Sender: TObject);
 begin
   GorevKaydet;
+end;
+
+procedure TfrmCrmGorev.GorevTarihPickerFormat;
+begin
+  CrmDateTimePickerFormat(dtAktivite);
+  CrmDateTimePickerFormat(dtBitis);
+end;
+
+function TfrmCrmGorev.SureDakikaDegeri: Integer;
+begin
+  Result := -1;
+  if Trim(edSureDakika.Text) = '' then
+    Exit;
+  if not TryStrToInt(Trim(edSureDakika.Text), Result) then
+    Result := -1;
+end;
+
+procedure TfrmCrmGorev.SuredenBitisHesapla;
+var
+  Dak: Integer;
+begin
+  if FSureGuncelleniyor then
+    Exit;
+  Dak := SureDakikaDegeri;
+  if Dak < 0 then
+  begin
+    FBitisTarihiAktif := False;
+    Exit;
+  end;
+  FSureGuncelleniyor := True;
+  try
+    dtBitis.DateTime := IncMinute(dtAktivite.DateTime, Dak);
+    FBitisTarihiAktif := True;
+  finally
+    FSureGuncelleniyor := False;
+  end;
+end;
+
+procedure TfrmCrmGorev.BitisTarihindenSureHesapla;
+var
+  Dak: Int64;
+begin
+  if FSureGuncelleniyor then
+    Exit;
+  FSureGuncelleniyor := True;
+  try
+    if not FBitisTarihiAktif then
+      edSureDakika.Text := ''
+    else
+    begin
+      Dak := Round((dtBitis.DateTime - dtAktivite.DateTime) * 24 * 60);
+      edSureDakika.Text := IntToStr(Dak);
+    end;
+  finally
+    FSureGuncelleniyor := False;
+  end;
+end;
+
+procedure TfrmCrmGorev.dtAktiviteChange(Sender: TObject);
+begin
+  if FSureGuncelleniyor then
+    Exit;
+  if SureDakikaDegeri >= 0 then
+    SuredenBitisHesapla
+  else if FBitisTarihiAktif then
+    BitisTarihindenSureHesapla;
+end;
+
+procedure TfrmCrmGorev.dtBitisChange(Sender: TObject);
+begin
+  if FSureGuncelleniyor then
+    Exit;
+  FBitisTarihiAktif := True;
+  BitisTarihindenSureHesapla;
+end;
+
+procedure TfrmCrmGorev.edSureDakikaExit(Sender: TObject);
+begin
+  if Trim(edSureDakika.Text) = '' then
+  begin
+    FBitisTarihiAktif := False;
+    Exit;
+  end;
+  SuredenBitisHesapla;
 end;
 
 destructor TfrmCrmGorev.Destroy;

@@ -1,6 +1,6 @@
 unit CrmAktiviteTarihceU;
 
-{ CRM aktivite / gorev degisiklik tarihcesi (CRM_AKTIVITE_LOG). }
+{ CRM aktivite / gorev degisiklik tarihcesi (CRM_AKTIVITE_DEGISIM_LOG). }
 
 interface
 
@@ -47,7 +47,7 @@ implementation
 {$R *.dfm}
 
 uses
-  uniGUIApplication, MainModule, DMU, Main, Genel, CrmAktiviteU, CrmGorevU;
+  uniGUIApplication, MainModule, DMU, Main, Genel, TmpU, CrmAktiviteU, CrmGorevU;
 
 function frmCrmAktiviteTarihce: TfrmCrmAktiviteTarihce;
 begin
@@ -94,19 +94,23 @@ begin
     'CONVERT(varchar(19), L.ISLEM_UTC, 120) AS ISLEM_ZAMANI, ' +
     'ISNULL(K.KullaniciAd, '''') AS KULLANICI, L.KAYNAK, L.ISLEM, L.ALAN_ADI, ' +
     'L.ESKI_DEGER, L.YENI_DEGER, L.ACIKLAMA ' +
-    'FROM dbo.CRM_AKTIVITE_LOG L ' +
+    'FROM dbo.CRM_AKTIVITE_DEGISIM_LOG L ' +
     'INNER JOIN dbo.CRM_AKTIVITE A ON A.AKTIVITE_ID = L.AKTIVITE_ID ' +
     'LEFT JOIN dbo.Kullanici K ON K.KullaniciID = L.KULLANICI_ID ' +
     'WHERE CAST(L.ISLEM_UTC AS date) >= CAST(:BAS AS date) AND CAST(L.ISLEM_UTC AS date) <= CAST(:BIT AS date) ' +
     'AND ((:KAY = '''') OR (L.KAYNAK = :KAY)) ' +
     'AND ((:AID = 0) OR (L.AKTIVITE_ID = :AID)) ' +
     'AND ((:CK = '''') OR (A.CARI_KOD = :CK)) ' +
+    'AND ((:ADM = 1) OR (A.TIP <> ''TASK'' AND A.OLUSTURAN_KULLANICI_ID = :KUL) ' +
+    'OR (A.TIP = ''TASK'' AND EXISTS (SELECT 1 FROM dbo.CRM_GOREV G WHERE G.AKTIVITE_ID = A.AKTIVITE_ID AND G.ATANAN_KULLANICI_ID = :KUL))) ' +
     'ORDER BY L.ISLEM_UTC DESC, L.LOG_ID DESC';
   qList.ParamByName('BAS').AsDateTime := BasT;
   qList.ParamByName('BIT').AsDateTime := BitT;
   qList.ParamByName('KAY').AsString := Kaynak;
   qList.ParamByName('AID').AsLargeInt := Aid;
   qList.ParamByName('CK').AsString := Ck;
+  qList.ParamByName('ADM').AsInteger := Tmp.xKullaniciAdmin;
+  qList.ParamByName('KUL').AsInteger := Tmp.xKullaniciID;
   qList.Open;
 end;
 

@@ -294,43 +294,68 @@ object frmCrmGorev: TfrmCrmGorev
           object lblGorevTar: TUniLabel
             Left = 16
             Top = 352
-            Width = 58
+            Width = 78
             Height = 13
             Hint = ''
-            Caption = 'G'#246'rev Tarihi'
+            Caption = 'Ba'#351'lang'#305#231' Tarihi'
             TabOrder = 20
           end
           object dtAktivite: TUniDateTimePicker
             Left = 120
             Top = 348
-            Width = 200
+            Width = 280
             Height = 27
             Hint = ''
             DateTime = 46132.000000000000000000
-            DateFormat = 'dd/MM/yyyy'
-            TimeFormat = 'HH:mm:ss'
+            Kind = tUniDateTime
+            DateFormat = 'dd.mm.yyyy'
+            TimeFormat = 'HH:mm'
             TabOrder = 21
+            UseSystemFormats = False
+            OnChange = dtAktiviteChange
             DisabledDates = <>
+          end
+          object lblSureDakika: TUniLabel
+            Left = 410
+            Top = 352
+            Width = 58
+            Height = 13
+            Hint = ''
+            Caption = 'S'#252're (dk)'
+            TabOrder = 32
+          end
+          object edSureDakika: TUniEdit
+            Left = 480
+            Top = 348
+            Width = 80
+            Height = 27
+            Hint = 'Sure dakika; bitis tarihi otomatik hesaplanir'
+            Text = ''
+            TabOrder = 33
+            OnExit = edSureDakikaExit
           end
           object lblBitis: TUniLabel
             Left = 16
             Top = 388
-            Width = 63
+            Width = 82
             Height = 13
             Hint = ''
-            Caption = 'Termin Tarihi'
+            Caption = 'Biti'#351' Tarihi'
             TabOrder = 22
           end
           object dtBitis: TUniDateTimePicker
             Left = 120
             Top = 384
-            Width = 200
+            Width = 280
             Height = 27
             Hint = ''
             DateTime = 46132.000000000000000000
-            DateFormat = 'dd/MM/yyyy'
-            TimeFormat = 'HH:mm:ss'
+            Kind = tUniDateTime
+            DateFormat = 'dd.mm.yyyy'
+            TimeFormat = 'HH:mm'
             TabOrder = 23
+            UseSystemFormats = False
+            OnChange = dtBitisChange
             DisabledDates = <>
           end
           object lblOncelik: TUniLabel

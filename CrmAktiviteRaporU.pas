@@ -110,12 +110,12 @@ begin
     'CONVERT(varchar(16), X.TAMAMLANMA_TARIHI, 120) AS TAMAMLANMA_TARIHI, X.GECIKME_GUN, X.TAMAMLANDI_MI ' +
     'FROM (' +
     'SELECT A.AKTIVITE_ID, N''AKTIVITE'' AS KAYNAK, A.TIP, A.KONU, A.CARI_KOD, ' +
-    'ISNULL(KO.KullaniciAd, '''') AS OLUSTURAN, N'''' AS ATANAN, A.AKTIVITE_TARIHI AS PLAN_TARIHI, ' +
+    'ISNULL(KO.KullaniciAd, '''') AS OLUSTURAN, ISNULL(KO.KullaniciAd, '''') AS ATANAN, A.AKTIVITE_TARIHI AS PLAN_TARIHI, ' +
     'ISNULL(D.KOD, A.DURUM) AS DURUM, ' +
     'CASE WHEN ISNULL(D.KAPANIS_MI, 0) = 1 THEN ISNULL(A.GUNCELLEME_UTC, A.OLUSTURMA_UTC) END AS TAMAMLANMA_TARIHI, ' +
     'CASE WHEN ISNULL(D.KAPANIS_MI, 0) = 0 AND A.AKTIVITE_TARIHI < CAST(GETDATE() AS date) ' +
     'THEN DATEDIFF(day, CAST(A.AKTIVITE_TARIHI AS date), CAST(GETDATE() AS date)) ELSE 0 END AS GECIKME_GUN, ' +
-    'CAST(ISNULL(D.KAPANIS_MI, 0) AS bit) AS TAMAMLANDI_MI, A.OLUSTURAN_KULLANICI_ID, CAST(NULL AS int) AS ATANAN_ID ' +
+    'CAST(ISNULL(D.KAPANIS_MI, 0) AS bit) AS TAMAMLANDI_MI, A.OLUSTURAN_KULLANICI_ID, A.OLUSTURAN_KULLANICI_ID AS ATANAN_ID ' +
     'FROM dbo.CRM_AKTIVITE A ' +
     'LEFT JOIN dbo.CRM_AKTIVITE_DURUM D ON D.DURUM_ID = A.AKTIVITE_DURUM_ID ' +
     'LEFT JOIN dbo.Kullanici KO ON KO.KullaniciID = A.OLUSTURAN_KULLANICI_ID ' +
@@ -180,6 +180,8 @@ begin
   lkTip.KeyValue := Null;
   lkDurum.KeyValue := Null;
   edCari.Text := '';
+  lblPersonel.Visible := Tmp.xKullaniciAdmin = 1;
+  cbPersonel.Visible := Tmp.xKullaniciAdmin = 1;
   btnGetirClick(Sender);
 end;
 
@@ -188,6 +190,7 @@ var
   Bas, Bit: TDateTime;
   SqlCore, SqlDetay, Wh, Kaynak, Ck: string;
   Tt, Pm, Dg, KulId: Integer;
+  KulFiltre: Boolean;
 begin
   Bas := Trunc(dtBas.DateTime);
   Bit := Trunc(dtBit.DateTime) + 1;
@@ -221,6 +224,9 @@ begin
     Wh := Wh + ' AND X.OLUSTURAN_KULLANICI_ID = :KUL ';
   if Pm = 2 then
     Wh := Wh + ' AND X.ATANAN_ID = :KUL ';
+  if Tmp.xKullaniciAdmin <> 1 then
+    Wh := Wh + ' AND ((X.KAYNAK = ''AKTIVITE'' AND X.OLUSTURAN_KULLANICI_ID = :KUL) ' +
+      'OR (X.KAYNAK = ''GOREV'' AND ISNULL(X.ATANAN_ID, 0) = :KUL)) ';
   if Dg = 1 then
     Wh := Wh + ' AND X.TAMAMLANDI_MI = 0 ';
   if Dg = 2 then
@@ -230,6 +236,7 @@ begin
 
   SqlCore := DetaySql + Wh;
   SqlDetay := SqlCore + ' ORDER BY X.PLAN_TARIHI DESC, X.AKTIVITE_ID DESC';
+  KulFiltre := (Pm = 1) or (Pm = 2) or (Tmp.xKullaniciAdmin <> 1);
 
   qDetay.Close;
   qDetay.SQL.Text := SqlDetay;
@@ -243,7 +250,7 @@ begin
     qDetay.ParamByName('DID').AsLargeInt := FiltreDurumId;
   if Ck <> '' then
     qDetay.ParamByName('CK').AsString := Ck;
-  if (Pm = 1) or (Pm = 2) then
+  if KulFiltre then
     qDetay.ParamByName('KUL').AsInteger := KulId;
   qDetay.Open;
 
@@ -256,7 +263,7 @@ begin
   if FiltreTipId > 0 then qOzetDurum.ParamByName('TID').AsLargeInt := FiltreTipId;
   if FiltreDurumId > 0 then qOzetDurum.ParamByName('DID').AsLargeInt := FiltreDurumId;
   if Ck <> '' then qOzetDurum.ParamByName('CK').AsString := Ck;
-  if (Pm = 1) or (Pm = 2) then qOzetDurum.ParamByName('KUL').AsInteger := KulId;
+  if KulFiltre then qOzetDurum.ParamByName('KUL').AsInteger := KulId;
   qOzetDurum.Open;
 
   qOzetPersonel.Close;
@@ -273,7 +280,7 @@ begin
   if FiltreTipId > 0 then qOzetPersonel.ParamByName('TID').AsLargeInt := FiltreTipId;
   if FiltreDurumId > 0 then qOzetPersonel.ParamByName('DID').AsLargeInt := FiltreDurumId;
   if Ck <> '' then qOzetPersonel.ParamByName('CK').AsString := Ck;
-  if (Pm = 1) or (Pm = 2) then qOzetPersonel.ParamByName('KUL').AsInteger := KulId;
+  if KulFiltre then qOzetPersonel.ParamByName('KUL').AsInteger := KulId;
   qOzetPersonel.Open;
 
   qYapilmayan.Close;
@@ -284,7 +291,7 @@ begin
   if FiltreTipId > 0 then qYapilmayan.ParamByName('TID').AsLargeInt := FiltreTipId;
   if FiltreDurumId > 0 then qYapilmayan.ParamByName('DID').AsLargeInt := FiltreDurumId;
   if Ck <> '' then qYapilmayan.ParamByName('CK').AsString := Ck;
-  if (Pm = 1) or (Pm = 2) then qYapilmayan.ParamByName('KUL').AsInteger := KulId;
+  if KulFiltre then qYapilmayan.ParamByName('KUL').AsInteger := KulId;
   qYapilmayan.Open;
 end;
 
@@ -319,7 +326,7 @@ end;
 
 procedure TfrmCrmAktiviteRapor.btnKapatClick(Sender: TObject);
 begin
-  MainForm.NavPage.ActivePage.Close;
+  xNavListeKapat(Self);
 end;
 
 end.

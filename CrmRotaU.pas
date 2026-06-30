@@ -9,7 +9,8 @@ uses
   uniGUIClasses, uniGUIForm, uniGUIBaseClasses, uniPanel, uniLabel,
   uniEdit, uniMemo, uniButton, uniComboBox, uniDateTimePicker,
   uniBasicGrid, uniDBGrid, Data.DB, MemDS, DBAccess, Uni, uniMultiItem,
-  uniDBLookupComboBox, uniListBox, CrmRotaMesafeU, uniSweetAlert, CrmRotaDurakSecU, CrmRotaGorevU;
+  uniDBLookupComboBox, uniListBox, CrmRotaMesafeU, uniSweetAlert, CrmRotaDurakSecU, CrmRotaGorevU,
+  uniDBComboBox;
 
 type
   TRotaDurakItem = class
@@ -769,6 +770,14 @@ begin
   begin
     qLoad.Close;
     UniMainModule.saHata.Show('Kay'#305't yok.');
+    YeniKayit;
+    Exit;
+  end;
+  if not CrmKullaniciRotaGorebilir(qExec, FRotaId, Tmp.xKullaniciID, Tmp.xKullaniciAdmin) then
+  begin
+    qLoad.Close;
+    UniMainModule.saHata.Show('Bu rota plan'#305'n'#305' g' + #$00F6 + 'r' + #$00FC + 'nt' + #$00FC + 'leme yetkiniz yok.');
+    FRotaId := 0;
     YeniKayit;
     Exit;
   end;
@@ -1686,6 +1695,11 @@ begin
     UniMainModule.saHata.Show('Rota onaylama yetkisi yaln'#305'zca y'#246'neticilerde.');
     Exit;
   end;
+  if lbPersonel.Items.Count = 0 then
+  begin
+    UniMainModule.saHata.Show('Rota plan'#305' kaydedilemez: en az bir personel atanmal'#305'd'#305'r.');
+    Exit;
+  end;
   OncekiDurum := FKayitDurum;
   HesaplaTumUyari;
 
@@ -2419,8 +2433,18 @@ begin
   PersonelIds := PersonelIdDizisi;
   AktTar := AAktTar;
   if YearOf(AktTar) < 2000 then
-    AktTar := CrmRotaGorevZamanHesapla(FGorevAyar, dtPlan.DateTime, AIt.Sira);
-  Bitis := CrmRotaGorevBitisTarihi(AktTar, APlanBit);
+  begin
+    if YearOf(AIt.PlanBasZaman) >= 2000 then
+      AktTar := AIt.PlanBasZaman
+    else
+      AktTar := CrmRotaGorevZamanHesapla(FGorevAyar, dtPlan.DateTime, AIt.Sira);
+  end;
+  if YearOf(APlanBit) >= 2000 then
+    Bitis := APlanBit
+  else if YearOf(AIt.PlanBitZaman) >= 2000 then
+    Bitis := AIt.PlanBitZaman
+  else
+    Bitis := CrmRotaGorevBitisTarihi(AktTar, 0);
   AtananId := CrmRotaPersonelAtananId(PersonelIds, AIt.Sira);
 
   Konu := Format('Rota: %s - Durak %d: %s', [Trim(edBaslik.Text), AIt.Sira, Trim(AIt.Unvan)]);
@@ -2446,13 +2470,14 @@ begin
       qExec.Close;
       qExec.SQL.Text :=
         'UPDATE dbo.CRM_AKTIVITE SET KONU = :KONU, ACIKLAMA = :ACIK, CARI_KOD = :CK, POTANSIYEL_ID = :PID, ' +
-        'AKTIVITE_TARIHI = :TAR, DURUM = ''ACIK'', AKTIVITE_DURUM_ID = :DID, ' +
+        'AKTIVITE_TARIHI = :TAR, AKTIVITE_BITIS_TARIHI = :ABITIS, DURUM = ''ACIK'', AKTIVITE_DURUM_ID = :DID, ' +
         'ROTA_ID = :RID, ROTA_DURAK_ID = :DID2, GUNCELLEME_UTC = SYSUTCDATETIME() ' +
         'WHERE AKTIVITE_ID = :AID AND TIP = ''TASK''';
       qExec.ParamByName('KONU').AsString := Konu;
       qExec.ParamByName('ACIK').AsString := Acik;
       BindCariPot;
       qExec.ParamByName('TAR').AsDateTime := AktTar;
+      qExec.ParamByName('ABITIS').AsDateTime := Bitis;
       qExec.ParamByName('DID').AsLargeInt := DurId;
       qExec.ParamByName('RID').AsLargeInt := FRotaId;
       if AIt.DurakId > 0 then
@@ -2476,13 +2501,14 @@ begin
 
   qExec.Close;
   qExec.SQL.Text :=
-    'INSERT INTO dbo.CRM_AKTIVITE (TIP, KONU, ACIKLAMA, CARI_KOD, POTANSIYEL_ID, AKTIVITE_TARIHI, DURUM, OLUSTURAN_KULLANICI_ID, ' +
+    'INSERT INTO dbo.CRM_AKTIVITE (TIP, KONU, ACIKLAMA, CARI_KOD, POTANSIYEL_ID, AKTIVITE_TARIHI, AKTIVITE_BITIS_TARIHI, DURUM, OLUSTURAN_KULLANICI_ID, ' +
     'AKTIVITE_TIP_ID, AKTIVITE_DURUM_ID, ROTA_ID, ROTA_DURAK_ID) OUTPUT INSERTED.AKTIVITE_ID ' +
-    'VALUES (''TASK'', :KONU, :ACIK, :CK, :PID, :TAR, ''ACIK'', :KUL, :TID, :DID, :RID, :DID2)';
+    'VALUES (''TASK'', :KONU, :ACIK, :CK, :PID, :TAR, :ABITIS, ''ACIK'', :KUL, :TID, :DID, :RID, :DID2)';
   qExec.ParamByName('KONU').AsString := Konu;
   qExec.ParamByName('ACIK').AsString := Acik;
   BindCariPot;
   qExec.ParamByName('TAR').AsDateTime := AktTar;
+  qExec.ParamByName('ABITIS').AsDateTime := Bitis;
   qExec.ParamByName('KUL').AsInteger := Tmp.xKullaniciID;
   qExec.ParamByName('TID').AsLargeInt := TaskTid;
   qExec.ParamByName('DID').AsLargeInt := DurId;

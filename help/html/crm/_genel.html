@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Genel yardım</title>
+<link rel="stylesheet" href="help.css"/>
+</head>
+<body>
+<h1>Genel yardım</h1>
+<p>**FormName:** `_genel`</p>
+<h2>Bu ekran ne işe yarar?</h2>
+<p>CRM modülü ekranları için bağlam yardımı. Ekrana özel içerik yoksa bu sayfa gösterilir.</p>
+<h2>Ne zaman kullanılır?</h2>
+<ul>
+<li>İlgili ekranın `help/html/crm/{FormName}.html` dosyası henüz oluşturulmadığında</li>
+<li>Yeni eklenen bir form için dokümantasyon beklenirken</li>
+</ul>
+<h2>İlgili ekranlar</h2>
+<ul>
+<li>CRM menüsündeki tüm liste, kart ve rapor ekranları</li>
+</ul>
+<h2>Sık sorulan sorular</h2>
+<p><strong>S:</strong> Yardım butonu görünmüyor.</p>
+<p><strong>C:</strong> Ekranın üst araç çubuğunda `Kapat` düğmesi olan formlarda otomatik eklenir. Form henüz güncellenmemiş olabilir.</p>
+<p><strong>S:</strong> İçerik güncel değil.</p>
+<p><strong>C:</strong> `docs/help/crm/` altındaki Markdown dosyasını güncelleyip `tools/help-build.ps1` çalıştırın ve `help/html/crm/` klasörünü sunucuya kopyalayın.</p>
+</body>
+</html>

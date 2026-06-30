@@ -325,6 +325,10 @@ object frmCrmAktiviteListe: TfrmCrmAktiviteListe
       LayoutConfig.Flex = 1
       LayoutConfig.Height = '100%'
       LayoutConfig.Width = '100%'
+      ClientEvents.UniEvents.Strings = (
+        
+            'beforeInit=function beforeInit(sender, config)'#13#10'{'#13#10'  config.force' +
+            'Fit = true;'#13#10'}')
       TabOrder = 2
       OnAjaxEvent = grdAjaxEvent
       Columns = <
